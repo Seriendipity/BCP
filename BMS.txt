@@ -1,0 +1,242 @@
+
+create database BMS;
+use BMS;
+
+create table Class(
+                      ClassNo varchar(10) primary key ,
+                      ClassName varchar(20),
+                      ClassDepartment varchar(20),
+                      ClassMajor varchar(20),
+                      StudentNumber int
+);
+
+create table Student(
+                        StudentNo varchar(8) primary key ,
+                        StudentName varchar(20),
+                        StudentSex varchar(2) check ( StudentSex = '男' or StudentSex = '女' ),
+                        StudentBirthday date,
+                        TotalCredit smallint default 0,
+                        ClassNo varchar(10),
+                        StudentEmail varchar(20),
+                        Password varchar(20) default '123456',
+                        FOREIGN KEY (ClassNo) REFERENCES Class(ClassNo)
+);
+
+create table Course(
+                       CourseNo varchar(8) primary key ,
+                       CourseName varchar(20) not null ,
+                       CourseCredit smallint
+);
+
+create table teacher(
+                        TeacherNo varchar(8) primary key ,
+                        TeacherName varchar(20) not null ,
+                        TeacherSex varchar(2) check ( TeacherSex = '男' or TeacherSex = '女' ),
+                        TeacherBirthday date,
+                        TeacherTitle varchar(10),
+                        TeacherEmail varchar(20),
+                        Password varchar(20) default '123456'
+);
+
+create table Teaching(
+                         TeacherNo varchar(8),
+                         CourseNo varchar(8),
+                         Cid varchar(10) unique ,
+                         CourseIntroduction text,
+                         Syllabus text,
+                         TeachingCalendar text,
+                         Language varchar(10) check(Language in ('中文','双语','英文')),
+                         primary key (TeacherNo,CourseNo),
+                         FOREIGN KEY (TeacherNo) REFERENCES teacher(TeacherNo),
+                         FOREIGN KEY (CourseNo) REFERENCES Course(CourseNo)
+);
+
+create table StudentCourse(
+                              StudentNo varchar(8),
+                              Cid varchar(10),
+                              Grade int,
+                              primary key (StudentNo,Cid),
+                              FOREIGN KEY (StudentNo) REFERENCES Student(StudentNo),
+                              FOREIGN KEY (Cid) REFERENCES Teaching(Cid)
+);
+
+create table Discussion(
+                           StudentNo varchar(8),
+                           Cid varchar(10),
+                           DiscussionId varchar(10),
+                           DiscussionInformation text,
+                           DiscussionPostingTime datetime,
+                           primary key (DiscussionId),
+                           Foreign Key (StudentNo) REFERENCES Student(StudentNo),
+                           FOREIGN KEY (Cid) REFERENCES Teaching(Cid)
+);
+
+create table Comment(
+                        CommentId varchar(8),
+                        DiscussionId varchar(10),
+                        CommentInformation text,
+                        LikesNumber int default 0,
+                        CommentPostingTime datetime,
+                        primary key (CommentId),
+                        Foreign Key (DiscussionId) references Discussion(DiscussionId)
+);
+create table Note(
+                     NoteNo varchar(10),
+                     StudentNo varchar(10),
+                     NoteInformation text,
+                     NotePath varchar(100),
+                     primary key (NoteNo),
+                     Foreign Key (StudentNo) REFERENCES Student(StudentNo)
+);
+
+create table Favorite(
+                         StudentNo varchar(10),
+                         FavoriteNo varchar(10),
+                         FavoriteInformationNO varchar(10),
+                         FavoriteTitle varchar(10),
+                         primary key (StudentNo,FavoriteNo),
+                         FOREIGN KEY (StudentNo) references Student(StudentNo)
+);
+
+create table Assistant(
+                          AssistantNo varchar(10) primary key ,
+                          Cid varchar(10) references Teaching(Cid)
+);
+
+create table Notification(
+                             NotificationNo varchar(10),
+                             Cid varchar(10),
+                             SendNo varchar(10),
+                             primary key (NotificationNo),
+                             FOREIGN KEY (Cid) references Teaching(Cid)
+);
+alter table Notification add column NotificationInformation TEXT;
+create table StudentNotification(
+                                    StudentNo varchar(10),
+                                    NotificationNo varchar(10),
+                                    NotificationDate datetime,
+                                    NotificationState varchar(10),
+                                    primary key (StudentNo,NotificationNo),
+                                    FOREIGN KEY (StudentNo) REFERENCES Student(StudentNo),
+                                    FOREIGN KEY (NotificationNo) REFERENCES Notification(NotificationNo)
+);
+
+create table CourseResource(
+                               Cid varchar(10),
+                               CourseResourceNo varchar(10),
+                               ResourceType varchar(10),
+                               CourseResourcePath varchar(100),
+                               primary key (CourseResourceNo),
+                               FOREIGN KEY (Cid) REFERENCES Teaching(Cid)
+);
+
+create table Homework(
+                         Cid varchar(10),
+                         HomeworkNo varchar(10),
+                         HomeworkDescription text,
+                         StartTime datetime,
+                         EndTime datetime,
+                         HomeworkGrade int,
+                         primary key (HomeworkNo) ,
+                         FOREIGN KEY (Cid) references Teaching(Cid)
+);
+
+Create table StudentHomework(
+                                StudentNo varchar(10),
+                                HomeworkNo varchar(10),
+                                SubmitDescription text,
+                                SubmitPath varchar(100),
+                                SubmitTime datetime,
+                                SubmitGrade int,
+                                primary key (StudentNo,HomeworkNo),
+                                FOREIGN KEY (StudentNo) references Student(StudentNo),
+                                FOREIGN KEY (HomeworkNo) references Homework(HomeworkNo)
+);
+#
+
+alter table Favorite add column authority boolean default false;
+alter table Note add column  authority boolean default false;
+alter table Favorite change column authority Authority boolean default false;
+alter table Note change column authority Authority boolean default false;
+
+-- 插入 Class 表数据
+INSERT INTO Class (ClassNo, ClassName, ClassDepartment, ClassMajor, StudentNumber) VALUES
+                                                                                       ('C001', '计算机科学', '计算机学院', '计算机科学与技术', 30),
+                                                                                       ('C002', '信息技术', '计算机学院', '信息管理与信息系统', 25);
+
+-- 插入 Student 表数据
+INSERT INTO Student (StudentNo, StudentName, StudentSex, StudentBirthday, TotalCredit, ClassNo, StudentEmail, Password) VALUES
+                                                                                                                            ('S001', '张三', '男', '2000-01-01', 15, 'C001', 'zhangsan@example.com', 'password123'),
+                                                                                                                            ('S002', '李四', '女', '2000-02-02', 18, 'C001', 'lisi@example.com', 'password123'),
+                                                                                                                            ('S003', '王五', '男', '2000-03-03', 12, 'C002', 'wangwu@example.com', 'password123');
+
+-- 插入 Course 表数据
+INSERT INTO Course (CourseNo, CourseName, CourseCredit) VALUES
+                                                            ('CS101', '数据结构', 4),
+                                                            ('CS102', '算法', 4);
+
+-- 插入 Teacher 表数据
+INSERT INTO teacher (TeacherNo, TeacherName, TeacherSex, TeacherBirthday, TeacherTitle, TeacherEmail, Password) VALUES
+                                                                                                                    ('T001', '张老师', '男', '1985-05-05', '讲师', 'zhangls@example.com', 'password123'),
+                                                                                                                    ('T002', '李老师', '女', '1988-06-06', '副教授', 'lilaoshi@example.com', 'password123');
+
+-- 插入 Teaching 表数据
+INSERT INTO Teaching (TeacherNo, CourseNo, Cid, CourseIntroduction, Syllabus, TeachingCalendar, Language) VALUES
+                                                                                                              ('T001', 'CS101', 'T001_CS101', '学习数据结构的基本概念', '数据结构大纲', '2024年秋季学期', '中文'),
+                                                                                                              ('T002', 'CS102', 'T002_CS102', '学习算法的基本概念', '算法大纲', '2024年春季学期', '英文');
+
+-- 插入 StudentCourse 表数据
+INSERT INTO StudentCourse (StudentNo, Cid, Grade) VALUES
+                                                      ('S001', 'T001_CS101', 85),
+                                                      ('S002', 'T001_CS101', 90),
+                                                      ('S003', 'T002_CS102', 75);
+
+-- 插入 Discussion 表数据
+INSERT INTO Discussion (StudentNo, Cid, DiscussionId, DiscussionInformation, DiscussionPostingTime) VALUES
+                                                                                                        ('S001', 'T001_CS101', 'D001', '关于数据结构的讨论', NOW()),
+                                                                                                        ('S002', 'T002_CS102', 'D002', '算法讨论', NOW());
+
+-- 插入 Comment 表数据
+INSERT INTO Comment (CommentId, DiscussionId, CommentInformation, LikesNumber, CommentPostingTime) VALUES
+                                                                                                       ('C001', 'D001', '这是一个很好的讨论', 5, NOW()),
+                                                                                                       ('C002', 'D002', '我同意这个观点', 3, NOW());
+
+-- 插入 Note 表数据
+INSERT INTO Note (NoteNo, StudentNo, NoteInformation, NotePath, Authority) VALUES
+                                                                               ('N001', 'S001', '数据结构学习笔记', '/notes/structure.pdf', false),
+                                                                               ('N002', 'S002', '算法学习笔记', '/notes/algorithm.pdf', true);
+
+-- 插入 Favorite 表数据
+INSERT INTO Favorite (StudentNo, FavoriteNo, FavoriteInformationNO, FavoriteTitle, Authority) VALUES
+                                                                                                  ('S001', 'F001', 'T001_CS101', '最喜欢的数据结构课程', false),
+                                                                                                  ('S002', 'F002', 'T002_CS102', '最喜欢的算法课程', true);
+
+-- 插入 Assistant 表数据
+INSERT INTO Assistant (AssistantNo, Cid) VALUES
+                                             ('A001', 'T001_CS101'),
+                                             ('A002', 'T002_CS102');
+
+-- 插入 Notification 表数据
+INSERT INTO Notification (NotificationNo, Cid, SendNo,NotificationInformation) VALUES
+                                                           ('N001', 'T001_CS101', 'T001','Test'),
+                                                           ('N002', 'T002_CS102', 'T002','Test');
+
+-- 插入 StudentNotification 表数据
+INSERT INTO StudentNotification (StudentNo, NotificationNo, NotificationDate, NotificationState) VALUES
+                                                                                                     ('S001', 'N001', NOW(), '未读'),
+                                                                                                     ('S002', 'N002', NOW(), '已读');
+
+-- 插入 CourseResource 表数据
+INSERT INTO CourseResource (Cid, CourseResourceNo, ResourceType, CourseResourcePath) VALUES
+                                                                                         ('T001_CS101', 'R001', '视频', '/resources/structure.mp4'),
+                                                                                         ('T002_CS102', 'R002', '文档', '/resources/algorithm.doc');
+
+-- 插入 Homework 表数据
+INSERT INTO Homework (Cid, HomeworkNo, HomeworkDescription, StartTime, EndTime, HomeworkGrade) VALUES
+                                                                                                   ('T001_CS101', 'H001', '完成数据结构作业', NOW(), NOW() + INTERVAL 7 DAY, 100),
+                                                                                                   ('T002_CS102', 'H002', '完成算法作业', NOW(), NOW() + INTERVAL 10 DAY, 100);
+
+-- 插入 StudentHomework 表数据
+INSERT INTO StudentHomework (StudentNo, HomeworkNo, SubmitDescription, SubmitPath, SubmitTime, SubmitGrade) VALUES
+                                                                                                                ('S001', 'H001', '我的数据结构作业', '/submissions/structure.pdf', NOW(), 90),
+                                                                                                                ('S002', 'H002', '我的算法作业', '/submissions/algorithm.pdf', NOW(), 85);
