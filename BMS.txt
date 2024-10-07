@@ -1,4 +1,4 @@
-
+drop database BMS;
 create database BMS;
 use BMS;
 
@@ -46,7 +46,8 @@ create table Teaching(
                          Syllabus text,
                          TeachingCalendar text,
                          Language varchar(10) check(Language in ('中文','双语','英文')),
-                         primary key (TeacherNo,CourseNo),
+                         Semester varchar(10),
+                         primary key (TeacherNo,CourseNo,Semester),
                          FOREIGN KEY (TeacherNo) REFERENCES teacher(TeacherNo),
                          FOREIGN KEY (CourseNo) REFERENCES Course(CourseNo)
 );
@@ -159,6 +160,7 @@ alter table Note add column  authority boolean default false;
 alter table Favorite change column authority Authority boolean default false;
 alter table Note change column authority Authority boolean default false;
 
+
 -- 插入 Class 表数据
 INSERT INTO Class (ClassNo, ClassName, ClassDepartment, ClassMajor, StudentNumber) VALUES
                                                                                        ('C001', '计算机科学', '计算机学院', '计算机科学与技术', 30),
@@ -181,9 +183,9 @@ INSERT INTO teacher (TeacherNo, TeacherName, TeacherSex, TeacherBirthday, Teache
                                                                                                                     ('T002', '李老师', '女', '1988-06-06', '副教授', 'lilaoshi@example.com', 'password123');
 
 -- 插入 Teaching 表数据
-INSERT INTO Teaching (TeacherNo, CourseNo, Cid, CourseIntroduction, Syllabus, TeachingCalendar, Language) VALUES
-                                                                                                              ('T001', 'CS101', 'T001_CS101', '学习数据结构的基本概念', '数据结构大纲', '2024年秋季学期', '中文'),
-                                                                                                              ('T002', 'CS102', 'T002_CS102', '学习算法的基本概念', '算法大纲', '2024年春季学期', '英文');
+INSERT INTO Teaching (TeacherNo, CourseNo, Cid, CourseIntroduction, Syllabus, TeachingCalendar, Language, Semester) VALUES
+                                                                                                                        ('T001', 'CS101', 'T001_CS101', '学习数据结构的基本概念', '数据结构大纲', '2024年秋季学期', '中文', '2024-1'),
+                                                                                                                        ('T002', 'CS102', 'T002_CS102', '学习算法的基本概念', '算法大纲', '2024年春季学期', '英文', '2024-2');
 
 -- 插入 StudentCourse 表数据
 INSERT INTO StudentCourse (StudentNo, Cid, Grade) VALUES
@@ -217,9 +219,9 @@ INSERT INTO Assistant (AssistantNo, Cid) VALUES
                                              ('A002', 'T002_CS102');
 
 -- 插入 Notification 表数据
-INSERT INTO Notification (NotificationNo, Cid, SendNo,NotificationInformation) VALUES
-                                                           ('N001', 'T001_CS101', 'T001','Test'),
-                                                           ('N002', 'T002_CS102', 'T002','Test');
+INSERT INTO Notification (NotificationNo, Cid, SendNo, NotificationInformation) VALUES
+                                                                                    ('N001', 'T001_CS101', 'T001', '测试通知1'),
+                                                                                    ('N002', 'T002_CS102', 'T002', '测试通知2');
 
 -- 插入 StudentNotification 表数据
 INSERT INTO StudentNotification (StudentNo, NotificationNo, NotificationDate, NotificationState) VALUES

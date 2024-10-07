@@ -14,6 +14,10 @@ public class Teaching {
     @Column(name = "CourseNo" , length = 8)
     private String CourseNo;
 
+    @Id
+    @Column(name = "Semester" , length = 10)
+    private String Semester;
+
     @Column(name = "Cid" , length = 10 , unique = true)
     private String Cid;
 
@@ -83,5 +87,13 @@ public class Teaching {
 
     public void setLanguage(String language) {
         Language = language;
+    }
+
+    public String getSemester() {
+        return Semester;
+    }
+
+    public void setSemester(String semester) {
+        Semester = semester;
     }
 }

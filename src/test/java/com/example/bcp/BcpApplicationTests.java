@@ -104,6 +104,7 @@ class BcpApplicationTests {
             System.out.print(t.getCid()+" ");
             System.out.print(t.getTeachingCalendar()+" ");
             System.out.print(t.getLanguage()+" ");
+            System.out.print(t.getSemester()+" ");
             System.out.println();
         }
     }
