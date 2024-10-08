@@ -18,4 +18,10 @@ public class StudentCourseController {
         List<StudentCourse> studentList = studentCourseService.selectByCid(Cid);
         return Result.success(studentList);
     }
+
+    @GetMapping("allStudent/{StudentNo}")
+    private Result allCourse(@PathVariable("StudentNo")String StudentNo) {
+        List<StudentCourse> courseList = studentCourseService.selectByStudentNo(StudentNo);
+        return Result.success(courseList);
+    }
 }
