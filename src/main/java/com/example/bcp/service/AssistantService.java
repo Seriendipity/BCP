@@ -21,12 +21,20 @@ public class AssistantService {
         return assistantMapper.selectByCid(Cid);
     }
 
+    public Assistant selectByAssistantNo(String assistantNo){
+        return assistantMapper.selectByAssistantNo(assistantNo);
+    }
+
     public void insertAssistant(String AssistantNo,String Cid){
         assistantMapper.insertAssistant(AssistantNo,Cid);
     }
 
     public void deleteAssistant(String AssistantNo){
         assistantMapper.deleteAssistant(AssistantNo);
+    }
+
+    public void updateAssistantPassword(String Password , String AssistantNo){
+        assistantMapper.updateAssistantPassword(Password,AssistantNo);
     }
 
 
