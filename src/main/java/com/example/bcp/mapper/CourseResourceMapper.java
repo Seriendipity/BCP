@@ -24,4 +24,8 @@ public interface CourseResourceMapper {
     @Update("Update CourseResource Set CourseResourcePath = #{CourseResourcePath} Where CourseResourceNo = #{CourseResourceNo}")
     void updateCourseResource(String CourseResourcePath,String CourseResourceNo);
 
+    @Select("select MAX(CAST(CourseResourceNo AS UNSIGNED)) from CourseResource")
+    int maxNo();
+
+
 }
