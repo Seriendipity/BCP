@@ -19,6 +19,7 @@ create table Student(
                         ClassNo varchar(10),
                         StudentEmail varchar(20),
                         Password varchar(20) default '123456',
+                        PicturePath varchar(100),
                         FOREIGN KEY (ClassNo) REFERENCES Class(ClassNo)
 );
 
@@ -35,6 +36,7 @@ create table teacher(
                         TeacherBirthday date,
                         TeacherTitle varchar(10),
                         TeacherEmail varchar(20),
+                        PicturePath varchar(100),
                         Password varchar(20) default '123456'
 );
 
@@ -102,6 +104,7 @@ create table Favorite(
 create table Assistant(
                           AssistantNo varchar(10) primary key ,
                           Cid varchar(10) references Teaching(Cid),
+                          PicturePath varchar(100),
                           Password varchar(20) default 'password123'
 );
 
