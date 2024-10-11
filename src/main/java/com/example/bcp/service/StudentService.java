@@ -28,4 +28,8 @@ public class StudentService {
         studentMapper.updateStudentPassword(Password,StudentNo);
     }
 
+    public void updateStudentPicturePath(String PicturePath, String StudentNo){
+        studentMapper.updateStudentPicturePath(PicturePath,StudentNo);
+    }
+
 }

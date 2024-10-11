@@ -37,5 +37,7 @@ public class AssistantService {
         assistantMapper.updateAssistantPassword(Password,AssistantNo);
     }
 
-
+    public void updateAssistantPicturePath(String PicturePath , String AssistantNo){
+        assistantMapper.updateAssistantPicturePath(PicturePath,AssistantNo);
+    }
 }

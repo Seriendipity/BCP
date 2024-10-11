@@ -35,6 +35,9 @@ public class Student {
     @Column(name = "password" , length = 20)
     private String password="password123";
 
+    @Column(name = "PicturePath" ,length = 100)
+    private String PicturePath;
+
     public String getStudentNo() {
         return StudentNo;
     }
@@ -97,5 +100,13 @@ public class Student {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getPicturePath() {
+        return PicturePath;
+    }
+
+    public void setPicturePath(String picturePath) {
+        PicturePath = picturePath;
     }
 }
