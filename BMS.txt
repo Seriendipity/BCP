@@ -101,7 +101,8 @@ create table Favorite(
 
 create table Assistant(
                           AssistantNo varchar(10) primary key ,
-                          Cid varchar(10) references Teaching(Cid)
+                          Cid varchar(10) references Teaching(Cid),
+                          Password varchar(20) default 'password123'
 );
 
 create table Notification(
