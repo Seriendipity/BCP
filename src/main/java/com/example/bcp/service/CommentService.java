@@ -21,6 +21,10 @@ public class CommentService {
         return commentMapper.selectByDiscussionId(DiscussionId);
     }
 
+    public Comment selectByCommentId(String CommentId){
+        return commentMapper.selectByCommentId(CommentId);
+    }
+
     public void insertComment(String CommentId , String DiscussionId ,
                               String CommentInformation , int LikesNumber ,
                               LocalDateTime CommentPostingTime){
@@ -30,5 +34,13 @@ public class CommentService {
 
     public void deleteComment(String CommentId){
         commentMapper.deleteComment(CommentId);
+    }
+
+    public void updateCommentLikes(int LikesNumber,String CommentId){
+        commentMapper.updateCommentLikes(LikesNumber,CommentId);
+    }
+
+    public void updateCommentInfo(String CommentInformation,String CommentId){
+        commentMapper.updateCommentInfo(CommentInformation,CommentId);
     }
 }

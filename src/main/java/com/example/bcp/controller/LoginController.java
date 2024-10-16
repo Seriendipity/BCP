@@ -34,6 +34,7 @@ public class LoginController {
         }
 
         String token = JwtUtils.createToken(userName, password);
+        System.out.println(token);
         return Result.success(token);
     }
 
