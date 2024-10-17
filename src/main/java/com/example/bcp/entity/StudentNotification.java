@@ -19,8 +19,16 @@ public class StudentNotification {
     @Column(name = "NotificationDate")
     private LocalDateTime NotificationDate;
 
-    @Column(name = "NotificationState" , length = 10)
-    private String NotificationState;
+    public boolean isNotificationState() {
+        return NotificationState;
+    }
+
+    public void setNotificationState(boolean notificationState) {
+        NotificationState = notificationState;
+    }
+
+    @Column(name = "NotificationState")
+    private boolean NotificationState = false;
 
     public String getStudentNo() {
         return StudentNo;
@@ -46,11 +54,11 @@ public class StudentNotification {
         NotificationDate = notificationDate;
     }
 
-    public String getNotificationState() {
-        return NotificationState;
-    }
+//    public String getNotificationState() {
+//        return NotificationState;
+//    }
 
-    public void setNotificationState(String notificationState) {
-        NotificationState = notificationState;
-    }
+//    public void setNotificationState(String notificationState) {
+//        NotificationState = notificationState;
+//    }
 }

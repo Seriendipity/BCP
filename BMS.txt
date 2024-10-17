@@ -102,7 +102,7 @@ create table Favorite(
 );
 
 create table Assistant(
-                          AssistantNo varchar(10) primary key ,
+                          AssistantNo varchar(8) primary key ,
                           Cid varchar(10) references Teaching(Cid),
                           PicturePath varchar(100),
                           Password varchar(20) default 'password123'
@@ -120,7 +120,7 @@ create table StudentNotification(
                                     StudentNo varchar(10),
                                     NotificationNo varchar(10),
                                     NotificationDate datetime,
-                                    NotificationState varchar(10),
+                                    NotificationState boolean default false,
                                     primary key (StudentNo,NotificationNo),
                                     FOREIGN KEY (StudentNo) REFERENCES Student(StudentNo),
                                     FOREIGN KEY (NotificationNo) REFERENCES Notification(NotificationNo)

@@ -15,6 +15,10 @@ public class StudentCourseService {
     public List<StudentCourse> selectAllStudentCourse(){
         return studentCourseMapper.selectAllStudentCourse();
     }
+    public List<String> selectAllStudentNo(String cid){
+        return studentCourseMapper.selectAllStudentNo(cid);
+    }
+
 
     public List<StudentCourse> selectByStudentNo(String StudentNo){
         return studentCourseMapper.selectByStudentNo(StudentNo);

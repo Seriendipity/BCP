@@ -1,10 +1,7 @@
 package com.example.bcp.mapper;
 
 import com.example.bcp.entity.Notification;
-import org.apache.ibatis.annotations.Delete;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -30,4 +27,10 @@ public interface NotificationMapper {
 
     @Delete("Delete From Notification Where NotificationNo = #{NotificationNo}")
     void deleteNotification(String NotificationNo);
+
+    @Select("Select * from Notification Where NotificationInformation LIKE CONCAT('%',#{keyword},'%')")
+    List <Notification> selectByNotificationInformation(String keyword);
+
+    @Update("Update Notification set  NotificationInformation = #{NotificationInformation} where NotificationNo = #{NotificationNo}")
+    void updateNotificationInformation(String NotificationNo,String NotificationInformation);
 }
