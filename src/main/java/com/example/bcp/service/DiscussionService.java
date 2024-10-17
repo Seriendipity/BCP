@@ -21,6 +21,10 @@ public class DiscussionService {
         return discussionMapper.selectByStudentNo(StudentNo);
     }
 
+    public Discussion selectByDiscussionId(String DiscussionId){
+        return discussionMapper.selectByDiscussionId(DiscussionId);
+    }
+
     public List<Discussion> selectByCid(String Cid){
         return discussionMapper.selectByCid(Cid);
     }
@@ -38,5 +42,9 @@ public class DiscussionService {
 
     public void deleteDiscussion(String DiscussionId){
         discussionMapper.deleteDiscussion(DiscussionId);
+    }
+
+    public void updateDiscussionInfo(String DiscussionInformation,String DiscussionId){
+        discussionMapper.updateDiscussionInfo(DiscussionInformation,DiscussionId);
     }
 }

@@ -10,6 +10,8 @@ public class JwtFilterConfig {
         FilterRegistrationBean<JwtFilter> registrationBean = new FilterRegistrationBean<>();
         registrationBean.setFilter(new JwtFilter());
         registrationBean.addUrlPatterns("/secure/*");
+        registrationBean.addUrlPatterns("/comment/*");
+        registrationBean.addUrlPatterns("/discussion/*");
         return registrationBean;
     }
 }

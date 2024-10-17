@@ -23,7 +23,7 @@ public class JwtUtils {
     //生成用户token
     public static String createToken(String userName, String password){
         //过期时间
-        Date expireDate = new Date(System.currentTimeMillis() + EXPIRATION * 1000);
+        Date expireDate = new Date(System.currentTimeMillis() + EXPIRATION * 1000*12);//6 Hour
         Map<String,Object> map = new HashMap<>();
         map.put("alg","HS256");
         map.put("typ","JWT");

@@ -23,7 +23,7 @@ public class JwtFilter implements Filter {
 
         //获取header的token
         final String token = ((HttpServletRequest) request).getHeader("Authorization");
-
+       // System.out.println(token);
         if("OPTIONS".equals(req.getMethod())){
             res.setStatus(HttpServletResponse.SC_OK);
             chain.doFilter(req,res);
@@ -48,9 +48,15 @@ public class JwtFilter implements Filter {
                 //拦截器，拿到用户信息，放到req中
                 req.setAttribute("username",userName);
                 req.setAttribute("password",password);
-                chain.doFilter(request,response);
-            }
 
+            }
+            if(path.startsWith("/comment/*")){
+                System.out.println("调用Comment/拦截器");
+            }
+            if(path.startsWith("/discussion/*")){
+                System.out.println("调用Discussion/拦截器");
+            }
+            chain.doFilter(request,response);
         }
     }
 
