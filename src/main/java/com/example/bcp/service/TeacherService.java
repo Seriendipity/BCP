@@ -27,4 +27,8 @@ public class TeacherService {
     public void updateTeacherPassword(String Password , String TeacherNo){
         teacherMapper.updateTeacherPassword(Password,TeacherNo);
     }
+
+    public void updateTeacherPicturePath(String PicturePath , String TeacherNo){
+        teacherMapper.updateTeacherPicturePath(PicturePath,TeacherNo);
+    }
 }

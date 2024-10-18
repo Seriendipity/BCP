@@ -32,6 +32,9 @@ public class Teacher {
     @Column(name = "Password" , length = 20)
     private String Password= "123456";
 
+    @Column(name = "PicturePath" ,length = 100)
+    private String PicturePath;
+
     public String getTeacherNo() {
         return TeacherNo;
     }
@@ -86,5 +89,13 @@ public class Teacher {
 
     public void setPassword(String password) {
         Password = password;
+    }
+
+    public String getPicturePath() {
+        return PicturePath;
+    }
+
+    public void setPicturePath(String picturePath) {
+        PicturePath = picturePath;
     }
 }

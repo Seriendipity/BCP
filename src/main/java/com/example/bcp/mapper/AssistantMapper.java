@@ -25,4 +25,8 @@ public interface AssistantMapper {
 
     @Update("Update Assistant Set Password = #{Password} Where AssistantNo = #{AssistantNo}")
     void updateAssistantPassword(String Password , String AssistantNo);
+
+    @Update("Update Assistant Set PicturePath = #{PicturePath} Where AssistantNo = #{AssistantNo}")
+    void updateAssistantPicturePath(String PicturePath, String AssistantNo);
+
 }

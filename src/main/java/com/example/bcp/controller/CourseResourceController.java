@@ -31,49 +31,54 @@ public class CourseResourceController {
     private static final String ROOT_PATH = System.getProperty("user.dir") + File.separator + "files";
 
     @PostMapping("/upload")
-    public Result upload(@RequestParam("file") MultipartFile file,
-                         @RequestParam("Cid") String Cid) {
+    public Result upload(@RequestParam("file") MultipartFile file) {
         if (file.isEmpty()) {
             return Result.error("上传文件不能为空");
         }
-        String originalFilename = file.getOriginalFilename();  // 文件的原始名称
-        // aaa.png
-        String mainName = FileUtil.mainName(originalFilename);  // 获取文件主名称aaa
-        String extName = FileUtil.extName(originalFilename); // 获取文件扩展名png
-        System.out.println("文件的原始名称：" + originalFilename);
-        System.out.println("文件的主名称：" + mainName);
+
         try {
-
-            if (!FileUtil.exist(ROOT_PATH)) {
-                FileUtil.mkdir(ROOT_PATH);  // 如果当前文件的父级目录不存在，就创建
-            }
-
+            // 调用文件上传逻辑
+            String savedFilePath = uploadFile(file);
+            // 获取新文件的 ID（这里假设你有一个方法获取最大 ID）
             int newId = courseResourceService.maxNo() + 1;
-            if (FileUtil.exist(ROOT_PATH + File.separator + originalFilename)) {
-                // 如果当前上传的文件已经存在了，那么这个时候就要重名一个文件名称
-                originalFilename = newId + "." + extName;
-            }
 
-            File saveFile = new File(ROOT_PATH + File.separator + originalFilename);
-            System.out.println("文件的保存路径：" + saveFile.getAbsolutePath());
-            file.transferTo(saveFile);  // 存储文件到本地的磁盘里面去
-            String url = "http://" + ip + ":" + port + "/file/download/" + originalFilename;
+            // 插入文件记录到数据库
+            String Cid = ""; // 根据需要设置 Cid
+            String url = "http://" + ip + ":" + port + "/file/download/" + savedFilePath;
+            courseResourceService.insertCourseResource(Integer.toString(newId), Cid, FileUtil.extName(file.getOriginalFilename()), url);
 
-
-            courseResourceService.insertCourseResource(Integer.toString(newId), Cid, extName, url);
-
-            return Result.success(url);  //返回文件的链接，这个链接就是文件的下载地址，这个下载地址是后台提供出来的
-
-            //另外一种思路
-//            file.transferTo(new File(UPLOAD_DIR + fileName));
-//            // 返回文件的下载链接
-//            String fileDownloadUri = "/file/download?fileName=" + fileName;
-//            return javax.xml.transform.Result.success(fileDownloadUri);
+            return Result.success(url);  //返回文件的链接
         } catch (IOException e) {
             e.printStackTrace();
             return Result.error("上传文件失败");
         }
     }
+
+    // 文件上传逻辑
+    public String uploadFile(MultipartFile file) throws IOException {
+        if (!FileUtil.exist(ROOT_PATH)) {
+            FileUtil.mkdir(ROOT_PATH);  // 如果当前文件的父级目录不存在，就创建
+        }
+
+        String originalFilename = file.getOriginalFilename();  // 文件的原始名称
+        String extName = FileUtil.extName(originalFilename); // 获取文件扩展名png
+        System.out.println("文件的原始名称：" + originalFilename);
+
+        // 检查文件是否存在并处理重命名
+        if (FileUtil.exist(ROOT_PATH + File.separator + originalFilename)) {
+            // 如果当前上传的文件已经存在了，那么这个时候就要重命名一个文件名称
+            originalFilename = courseResourceService.maxNo() + 1 + "." + extName;
+        }
+
+        // 保存文件到本地
+        File saveFile = new File(ROOT_PATH + File.separator + originalFilename);
+        System.out.println("文件的保存路径：" + saveFile.getAbsolutePath());
+        file.transferTo(saveFile);  // 存储文件到本地的磁盘里面去
+
+        // 返回保存的文件名
+        return originalFilename;
+    }
+
 
     @GetMapping("/download/{fileName}")
     public Result download(@PathVariable("fileName") String fileName, HttpServletResponse response) throws IOException {

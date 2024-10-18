@@ -15,6 +15,9 @@ public class Assistant {
     @Column(name = "Cid" ,length = 10)
     private String Cid;
 
+    @Column(name = "PicturePath" ,length = 100)
+    private String PicturePath;
+
     @Column(name = "password" , length = 20)
     private String password="password123";
 
@@ -40,5 +43,13 @@ public class Assistant {
 
     public void setPassword(String password) {
         password = password;
+    }
+
+    public String getPicturePath() {
+        return PicturePath;
+    }
+
+    public void setPicturePath(String picturePath) {
+        PicturePath = picturePath;
     }
 }

@@ -16,6 +16,10 @@ public class NotificationService {
         return notificationMapper.selectAllNotification();
     }
 
+    public List<Notification> selectByNotificationInformation(String keyword){
+        return notificationMapper.selectByNotificationInformation(keyword);
+    }
+
     public List<Notification> selectByCid(String Cid){
         return notificationMapper.selectByCid(Cid);
     }
@@ -32,6 +36,8 @@ public class NotificationService {
                                    String SendNo,String NotificationInformation){
         notificationMapper.insertNotification(NotificationNo,Cid,SendNo,NotificationInformation);
     }
+
+    public void updateNotificationInformation(String NotificationNo,String NotificationInformation){notificationMapper.updateNotificationInformation(NotificationNo,NotificationInformation);}
 
     public void deleteNotification(String NotificationNo){
         notificationMapper.deleteNotification(NotificationNo);

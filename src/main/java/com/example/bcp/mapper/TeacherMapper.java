@@ -20,4 +20,7 @@ public interface TeacherMapper {
 
     @Update("Update Teacher Set Password = #{Password} Where TeacherNo = #{TeacherNo}")
     void updateTeacherPassword(String Password , String TeacherNo);
+
+    @Update("Update Teacher Set PicturePath = #{PicturePath} Where TeacherNo = #{TeacherNo}")
+    void updateTeacherPicturePath(String PicturePath , String TeacherNo);
 }

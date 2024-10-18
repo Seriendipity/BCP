@@ -30,13 +30,14 @@ public class StudentNotificationService {
         return studentNotificationMapper.selectByNotificationState(NotificationState);
     }
 
-    public void insertStudentNotification(String StudentNo, String NotificationNo,
-                                          LocalDateTime NotificationDate , String NotificationState){
-        studentNotificationMapper.insertStudentNotification(StudentNo,NotificationNo,
-                                            NotificationDate,NotificationState);
+    public void insertStudentNotification(String StudentNo, String NotificationNo, LocalDateTime NotificationDate) {
+        studentNotificationMapper.insertStudentNotification(StudentNo, NotificationNo, NotificationDate);
     }
 
     public void deleteStudentNotification(String StudentNo , String NotificationNo){
         studentNotificationMapper.deleteStudentNotification(StudentNo , NotificationNo);
     }
+
+    public void updateStudentNotificationState(String StudentNo , String NotificationNo){studentNotificationMapper.updateNotificationState(StudentNo,NotificationNo);}
+
 }
