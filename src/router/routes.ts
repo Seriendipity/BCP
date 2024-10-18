@@ -13,40 +13,40 @@ export const constantRoute = [
     }
   },
   {
-     path: '/firstpage',
-        component: () => import('@/views/firstpage/firstpage.vue'),
-        name: 'firstpage',
-        meta: {
-          title: '首页面',
-          hidden: true,//是否在菜单隐藏
-          icon: 'CircleCloseFilled',
-          key: 'unique-key'
-        },
-      },
-      {
-          path: '/myinformation',
-          component: () => import('@/views/firstpage/myinformation.vue'),
-          name: 'myinformation',
-          meta: {
-            title: '个人信息',
-            hidden: false,
-            icon: 'FolderAdd',
-            key: 'unique-key'
-          }
-          
-        },
-      {
-        path: '/changepwd',
-        component: () => import('@/views/firstpage/changepwd.vue'),
-        name: 'changepwd',
-        meta: {
-          title: '修改密码',
-          hidden: false,
-          icon: 'FolderAdd',
-          key: 'unique-key'
-        }
-         
-      },
+    path: '/firstpage',
+    component: () => import('@/views/firstpage/firstpage.vue'),
+    name: 'firstpage',
+    meta: {
+      title: '首页面',
+      hidden: true,//是否在菜单隐藏
+      icon: 'CircleCloseFilled',
+      key: 'unique-key'
+    },
+  },
+  {
+    path: '/myinformation',
+    component: () => import('@/views/firstpage/myinformation.vue'),
+    name: 'myinformation',
+    meta: {
+      title: '个人信息',
+      hidden: true,
+      icon: 'FolderAdd',
+      key: 'unique-key'
+    }
+
+  },
+  {
+    path: '/changepwd',
+    component: () => import('@/views/firstpage/changepwd.vue'),
+    name: 'changepwd',
+    meta: {
+      title: '修改密码',
+      hidden: true,
+      icon: 'FolderAdd',
+      key: 'unique-key'
+    }
+
+  },
   {
     path: '/CourseInfo',
     component: () => import("@/layout/index.vue"),
