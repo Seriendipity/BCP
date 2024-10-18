@@ -56,6 +56,12 @@ public class JwtFilter implements Filter {
             if(path.startsWith("/discussion/*")){
                 System.out.println("调用Discussion/拦截器");
             }
+            if(path.startsWith("/note/*")){
+                System.out.println("调用note/拦截器");
+            }
+            if(path.startsWith("/favorite/*")){
+                System.out.println("调用favorite/拦截器");
+            }
             chain.doFilter(request,response);
         }
     }

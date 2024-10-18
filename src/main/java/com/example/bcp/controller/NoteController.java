@@ -12,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/note")
@@ -19,31 +20,41 @@ public class NoteController {
     @Autowired
     NoteService noteService;
 
-    @GetMapping("/getStudentALlNote")
-    public Result getStudentALlNote(@RequestParam("studentNo") String studentNo) {
+    @PostMapping("/getStudentAllNote")
+    public Result getStudentAllNote(@RequestBody Map<String, String> requestData) {
+        String studentNo = requestData.get("studentNo");
+
         List<Note> selectByStudentNo = noteService.selectByStudentNo(studentNo);
         return Result.success(selectByStudentNo);
     }
 
     @PostMapping("/deleteNote")
-    public Result deleteNote(@RequestParam("noteNo") String noteNo) {
+    public Result deleteNote(@RequestBody Map<String, String> requestData) {
+        String noteNo = requestData.get("noteNo");
+
         noteService.deleteNote(noteNo);
         return Result.success();
     }
 
     @PostMapping("/updateNoteAuthority")
-    public Result updateNoteAuthority(@RequestParam("NoteNo") String noteNo,
-                                      @RequestParam("authority") boolean authority) {
+    public Result updateNoteAuthority(@RequestBody Map<String, Object> requestData) {
+        String noteNo = (String) requestData.get("NoteNo");
+        boolean authority = (Boolean) requestData.get("authority");
+
         noteService.updateNoteAuthority(noteNo, authority);
         return Result.success();
     }
 
+
     @PostMapping("/updateNoteInformation")
-    public Result updateNoteInformation(@RequestParam("NoteNo") String noteNo,
-                                        @RequestParam("noteInformation") String noteInformation) {
+    public Result updateNoteInformation(@RequestBody Map<String, String> requestData) {
+        String noteNo = requestData.get("NoteNo");
+        String noteInformation = requestData.get("noteInformation");
+
         noteService.updateNoteInformation(noteInformation, noteNo);
         return Result.success();
     }
+
 
 
     //---------------------------笔记上传--------------------------------------------
@@ -57,10 +68,11 @@ public class NoteController {
     private static final String ROOT_PATH = System.getProperty("user.dir") + File.separator + "files";
 
     @PostMapping("/upload")
-    public Result upload(@RequestParam("file") MultipartFile file,
-                         @RequestParam("studentNO") String studentNo,
-                         @RequestParam("information") String information,
-                         @RequestParam("authority") boolean authority) {
+    public Result upload(@RequestPart("file") MultipartFile file,
+                         @RequestPart("studentNo") String studentNo,
+                         @RequestPart("information") String information,
+                         @RequestPart("authority") boolean authority) {
+
         if (file.isEmpty()) {
             return Result.error("上传文件不能为空");
         }

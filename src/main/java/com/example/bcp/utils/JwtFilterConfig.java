@@ -12,6 +12,8 @@ public class JwtFilterConfig {
         registrationBean.addUrlPatterns("/secure/*");
         registrationBean.addUrlPatterns("/comment/*");
         registrationBean.addUrlPatterns("/discussion/*");
+        registrationBean.addUrlPatterns("/note/*");
+        registrationBean.addUrlPatterns("/favorite/*");
         return registrationBean;
     }
 }
