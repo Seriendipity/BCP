@@ -31,7 +31,8 @@ public class CourseResourceController {
     private static final String ROOT_PATH = System.getProperty("user.dir") + File.separator + "files";
 
     @PostMapping("/upload")
-    public Result upload(@RequestParam("file") MultipartFile file) {
+    public Result upload(@RequestParam("file") MultipartFile file,
+                         @RequestParam("Cid") String Cid) {
         if (file.isEmpty()) {
             return Result.error("上传文件不能为空");
         }
@@ -42,7 +43,6 @@ public class CourseResourceController {
         System.out.println("文件的原始名称：" + originalFilename);
         System.out.println("文件的主名称：" + mainName);
         try {
-
 
             if (!FileUtil.exist(ROOT_PATH)) {
                 FileUtil.mkdir(ROOT_PATH);  // 如果当前文件的父级目录不存在，就创建
@@ -60,10 +60,9 @@ public class CourseResourceController {
             String url = "http://" + ip + ":" + port + "/file/download/" + originalFilename;
 
 
-            String Cid = "";
             courseResourceService.insertCourseResource(Integer.toString(newId), Cid, extName, url);
 
-            return Result.success(url);  //返回文件的链接，这个链接就是文件的下载地址，这个下载地址就是我的后台提供出来的
+            return Result.success(url);  //返回文件的链接，这个链接就是文件的下载地址，这个下载地址是后台提供出来的
 
             //另外一种思路
 //            file.transferTo(new File(UPLOAD_DIR + fileName));

@@ -26,4 +26,7 @@ public interface NoteMapper {
 
     @Update("Update Note Set NoteInformation = #{NoteInformation} where NoteNo = #{NoteNo}")
     void updateNoteInformation(String NoteInformation , String NoteNo);
+
+    @Select("select MAX(CAST(noteNo AS UNSIGNED)) from Note")
+    int maxNo();
 }

@@ -16,7 +16,8 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/discussion")
-public class DiscussionController {
+public class
+DiscussionController {
     @Autowired
     private DiscussionService discussionService;
 

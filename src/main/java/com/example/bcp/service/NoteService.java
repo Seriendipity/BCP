@@ -36,4 +36,7 @@ public class NoteService {
     public void updateNoteInformation(String NoteInformation , String NoteNo){
         noteMapper.updateNoteInformation(NoteInformation,NoteNo);
     }
+    public int maxNo(){
+        return noteMapper.maxNo();
+    }
 }
