@@ -32,7 +32,7 @@ import { ElNotification } from "element-plus";
 
 let $router = useRouter();
 let useStore = userUserStore();
-const loginForm = reactive({ username: 'admin', password: '111111' });
+const loginForm = reactive({ username: 'S001', password: 'password123' });
 const loading = ref(false);
 let loginforms = ref();
 

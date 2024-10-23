@@ -23,8 +23,8 @@ let useUserStore = defineStore('User', {
       console.log(result);
       //console.log(result);
       if (result.code == 0) {
-        this.token = (result);
-        SET_TOKEN(result)
+        this.token = (result.data);
+        SET_TOKEN(result.data)
         //console.log('success');
         return 'ok';
       }
