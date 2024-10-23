@@ -41,9 +41,7 @@ const login = async () => {
   //开始加载的效果
   loading.value = true;
   try {
-    const response = await useStore.userLogin(loginForm);
-    const token = response.data.token;
-    localStorage.setItem('token', token);
+    await useStore.userLogin(loginForm);
     $router.push('/firstpage');
     ElNotification({
       type: 'success',
