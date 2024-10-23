@@ -41,19 +41,21 @@ const login = async () => {
   //开始加载的效果
   loading.value = true;
   try {
-    await useStore.userLogin(loginForm);
-    $router.push('/');
+    const response = await useStore.userLogin(loginForm);
+    const token = response.data.token;
+    localStorage.setItem('token', token);
+    $router.push('/firstpage');
     ElNotification({
       type: 'success',
       message: '登陆成功'
     })
-    loading.value = false;
   } catch (error) {
-    loading.value = false;
     ElNotification({
       type: 'error',
       message: (error as Error).message
     })
+  } finally {
+    loading.value = false;
   }
 
 }

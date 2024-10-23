@@ -30,11 +30,11 @@
             <h1 style="text-align: left; font-weight: bold;margin-bottom: 5px;">个人信息</h1>
             <div style="margin-top: 20px;text-align: center; "><el-avatar :size="100" :src="circleUrl"></el-avatar>
             </div>
-            <h1 class="ziti01">{{ student[0].identity }}</h1>
-            <h1 class="ziti02" style="text-align: left;padding-left: 15px;">姓名：{{ student[0].name }}</h1>
-                    <h1 class="ziti02" style="text-align: left;padding-left: 15px;">学号：{{ student[0].id }}</h1>
-                    <h1 class="ziti02" style="text-align: left;padding-left: 15px;">学院：{{ student[0].college }}</h1>
-                    <h1 class="ziti02" style="text-align: left;padding-left: 15px;">邮箱：{{ student[0].email }}</h1>
+            <h1 class="ziti01">{{ 学生 }}</h1>
+            <h1 class="ziti02" style="text-align: left;padding-left: 15px;">姓名：{{ student.studentName }}</h1>
+                    <h1 class="ziti02" style="text-align: left;padding-left: 15px;">学号：{{ student.studentNo }}</h1>
+                    <h1 class="ziti02" style="text-align: left;padding-left: 15px;">学院：{{ student.dept }}</h1>
+                    <h1 class="ziti02" style="text-align: left;padding-left: 15px;">邮箱：{{ student.email }}</h1>
           </div>
           <!-- 课程提醒 -->
           <div class="whiteback2">
@@ -48,11 +48,11 @@
             <el-row :gutter="20">
               <el-col :span="8" v-for="course in courses" :key="course.id">
                 <div class="grid-content bg-white">
-                  <h1 class="ziti03">{{ course.name }}</h1>
-                  <h1 class="ziti04">课程号: {{ course.courseNumber }}</h1>
-                  <h1 class="ziti04">课序号: {{ course.courseSequence }}</h1>
+                  <h1 class="ziti03">{{ course.courseName }}</h1>
+                  <h1 class="ziti04">课程号: {{ course.courseNo }}</h1>
+                  <h1 class="ziti04">课序号: {{ course.cid }}</h1>
                   <div class="avatar-container">
-                    <el-image style="width: 94%; height: 100%;margin-top: 10%;margin-left:3%" :src="courseImageUrl"
+                    <el-image style="width: 94%; height: 100%;margin-top: 10%;margin-left:3%" :src="course.picture"
                       :fit="fit">
                     </el-image>
                   </div>
@@ -72,30 +72,42 @@
   </el-container>
 </template>
 
-
 <script>
+import { ref, onMounted } from 'vue';
+import { reqUserInfo, reqCourseInfo } from '@/api/user';
+import { ElNotification } from 'element-plus';
+
 export default {
   data() {
     return {
-      circleUrl: 'src\\assets\\images\\example.jpg', // 示例头像URL
-      sizeList: [50, 80, 100], // 示例头像大小列表
-      courseImageUrl: 'src\\assets\\images\\classpicture.png', // 课程图片URL
-      courses: [
-        { id: 1, name: '软件项目管理与产品', courseNumber: 'M31000', courseSequence: '02' },
-        { id: 2, name: '机器学习', courseNumber: 'M31000', courseSequence: '02' },
-        { id: 3, name: '计算机组成原理', courseNumber: 'M31000', courseSequence: '02' },
-        { id: 4, name: '软件测试与质量保证', courseNumber: 'M31000', courseSequence: '03' },
-        { id: 5, name: '计算机网络', courseNumber: 'M31000', courseSequence: '02' },
-        { id: 6, name: '科技论文写作', courseNumber: 'C110002B', courseSequence: '02' },
-        { id: 7, name: '专业实训', courseNumber: 'P310002B', courseSequence: '02' }
-      ],
-      student: [
-        { id: 22300000, name: '爱学习', identity: '学生', college: '软件学院', email: '22300000@bjtu.edu.cn' }
-      ]
+      courses: [],
+      student: {},
     };
+  },
+  async mounted() {
+    try {
+      const token = localStorage.getItem('token'); // 获取存储的token
+      if (!token) {
+        this.$router.push('/login'); // 如果没有token，跳转回登录页
+        return;
+      }
+
+      const userResponse = await reqUserInfo(); // 请求用户信息
+      const courseResponse = await reqCourseInfo(); // 请求课程列表
+
+      this.student = userResponse.data; // 设置用户信息
+      this.courses = courseResponse.data; // 设置课程列表
+
+    } catch (error) {
+      ElNotification({
+        type: 'error',
+        message: '获取信息失败'
+      });
+    }
   }
 }
 </script>
+
 
 <style>
 .head {
