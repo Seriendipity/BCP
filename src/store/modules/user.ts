@@ -22,15 +22,15 @@ let useUserStore = defineStore('User', {
       let result: any = await reqLogin(data);
       console.log(result);
       //console.log(result);
-      if (result.code == 200) {
-        this.token = (result.data as string);
-        SET_TOKEN((result.data as string))
+      if (result.code == 0) {
+        this.token = (result);
+        SET_TOKEN(result)
         //console.log('success');
         return 'ok';
       }
-      else {
-        return Promise.reject(new Error(result.data));
-      }
+      // else {
+      //   return Promise.reject(new Error(result.data));
+      // }
     },
     //获取用户信息
     async userInfo() {
