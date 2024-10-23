@@ -16,7 +16,8 @@
         </el-col>
         <el-col :span="2">
           <router-link to="/myinformation" style="text-decoration: none;">
-            <h1 style="font-size: medium;margin-top: 21px;color: aliceblue;font-weight: 550;">{{ student.studentName }}</h1>
+            <h1 style="font-size: medium;margin-top: 21px;color: aliceblue;font-weight: 550;">{{ student.studentName }}
+            </h1>
           </router-link>
         </el-col>
       </el-row>
@@ -76,6 +77,8 @@
 import { ref, onMounted } from 'vue';
 import { reqUserInfo, reqCourseInfo } from '@/api/user';
 import { ElNotification } from 'element-plus';
+import { SelectProps } from 'element-plus/es/components/select/src/select.mjs';
+import { timeStamp } from 'console';
 
 export default {
   data() {
@@ -86,12 +89,6 @@ export default {
   },
   async mounted() {
     try {
-      const token = localStorage.getItem('token'); // 获取存储的token
-      if (!token) {
-        this.$router.push('/login'); // 如果没有token，跳转回登录页
-        return;
-      }
-
       const userResponse = await reqUserInfo(); // 请求用户信息
       const courseResponse = await reqCourseInfo(); // 请求课程列表
 
