@@ -50,18 +50,29 @@ public class JwtFilter implements Filter {
                 req.setAttribute("password",password);
 
             }
-            if(path.startsWith("/comment/*")){
+            if(path.startsWith("/comment")){
                 System.out.println("调用Comment/拦截器");
             }
-            if(path.startsWith("/discussion/*")){
+            if(path.startsWith("/discussion")){
                 System.out.println("调用Discussion/拦截器");
             }
-            if(path.startsWith("/note/*")){
+            if(path.startsWith("/note")){
                 System.out.println("调用note/拦截器");
             }
-            if(path.startsWith("/favorite/*")){
+            if(path.startsWith("/favorite")){
                 System.out.println("调用favorite/拦截器");
             }
+            if(path.startsWith("/StudentCourse")){
+                System.out.println("调用StudentCourse/拦截器");
+            }
+            String userName = userData.get("userName").asString();
+            String password = userData.get("password").asString();
+
+            System.out.println("UserData: "+userName+ " " + password);
+            System.out.println("---------------------------------");
+            //拦截器，拿到用户信息，放到req中
+            req.setAttribute("username",userName);
+            req.setAttribute("password",password);
             chain.doFilter(request,response);
         }
     }

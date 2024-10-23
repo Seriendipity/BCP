@@ -164,6 +164,7 @@ alter table Note add column  authority boolean default false;
 alter table Favorite change column authority Authority boolean default false;
 alter table Note change column authority Authority boolean default false;
 
+alter table Teaching add column picture varchar(100);
 
 -- 插入 Class 表数据
 INSERT INTO Class (ClassNo, ClassName, ClassDepartment, ClassMajor, StudentNumber) VALUES

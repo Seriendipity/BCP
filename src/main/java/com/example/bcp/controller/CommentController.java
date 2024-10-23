@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -21,14 +22,29 @@ public class CommentController {
     /**
      * 查询某个帖子的所有评论
      * */
-    @RequestMapping(value = "/all" , method = RequestMethod.POST)
-    public Result<List<Comment>> getAllComments(@RequestBody Map<String,String> requestData){
-        System.out.println(1);
-        String discussionId = requestData.get("discussionId");
+    @GetMapping(value = "/all")
+    public Result getAllComments(@RequestParam String discussionId,HttpServletRequest request){
         List<Comment> comments = commentService.selectByDiscussionId(discussionId);
-        return Result.success(comments);
-    }
+        String username = request.getAttribute("username").toString();
 
+        Map<String, Object> responseData = new HashMap<>();
+        int i = 1;
+
+        for(Comment c : comments){
+            Map<String, Object> commentInfo = new HashMap<>();
+            commentInfo.put("Index",i);
+            commentInfo.put("CommentId",c.getCommentId());
+            commentInfo.put("Information",c.getCommentInformation());
+            commentInfo.put("PostingTime",c.getCommentPostingTime());
+            commentInfo.put("Likes",c.getLikesNumber());
+            commentInfo.put("DiscussionId",c.getDiscussionId());
+
+            responseData.put("comment"+i,commentInfo);
+            i++;
+        }
+        responseData.put("username", username);
+        return Result.success(responseData);
+    }
 
     @RequestMapping(value = "/insert" , method = RequestMethod.POST)
     public Result insertComment(@RequestBody Map<String,String> requestData){

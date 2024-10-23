@@ -4,13 +4,12 @@ import com.example.bcp.entity.Comment;
 import com.example.bcp.entity.Discussion;
 import com.example.bcp.entity.Result;
 import com.example.bcp.service.DiscussionService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -24,22 +23,47 @@ DiscussionController {
     /**
     * 查询某门课程的所有帖子
     * */
-    @RequestMapping(value = "/all" , method = RequestMethod.POST)
-    public Result<List<Discussion>> getAllDiscussion(@RequestBody Map<String,String> requestData){
-      String cid = requestData.get("cid");
-      List<Discussion> discussions = discussionService.selectByCid(cid);
-      return Result.success(discussions);
-    }
+    @GetMapping(value = "/all" )
+    public Result getAllDiscussion(@RequestParam String cid, HttpServletRequest request){
+        List<Discussion> discussions = discussionService.selectByCid(cid);
+        String username = request.getAttribute("username").toString();
 
+        Map<String, Object> responseData = new HashMap<>();
+        int i = 1;
+        for(Discussion d : discussions){
+            Map<String , Object> discussionInfo = new HashMap<>();
+            discussionInfo.put("index",i);
+            discussionInfo.put("DiscussionId",d.getDiscussionId());
+            discussionInfo.put("Information",d.getDiscussionInformation());
+            discussionInfo.put("PostingTime",d.getDiscussionPostingTime());
+            discussionInfo.put("studentNo",d.getStudentNo());
+            responseData.put("discussion" + i,discussionInfo);
+            i++;
+        }
+        responseData.put("username", username);
+        return Result.success(responseData);
+    }
     /**
      * 查询某个学生某门课程的所有帖子
      * */
-    @RequestMapping(value = "/student_all" , method = RequestMethod.POST)
-    public Result<List<Discussion>> getStudentAllDiscussion(@RequestBody Map<String,String> requestData) {
-        String cid = requestData.get("cid");
-        String studentNo = requestData.get("studentNo");
+    @GetMapping(value = "/student_all")
+    public Result getStudentAllDiscussion(@RequestParam String cid, HttpServletRequest request) {
+        String studentNo = request.getAttribute("username").toString();
         List<Discussion> discussions = discussionService.selectByCidAndStudentNo(studentNo,cid);
-        return Result.success(discussions);
+        Map<String, Object> responseData = new HashMap<>();
+        int i = 1;
+        for(Discussion d : discussions){
+            Map<String , Object> discussionInfo = new HashMap<>();
+            discussionInfo.put("index",i);
+            discussionInfo.put("DiscussionId",d.getDiscussionId());
+            discussionInfo.put("Information",d.getDiscussionInformation());
+            discussionInfo.put("PostingTime",d.getDiscussionPostingTime());
+            discussionInfo.put("studentNo",d.getStudentNo());
+            responseData.put("discussion" + i,discussionInfo);
+            i++;
+        }
+        responseData.put("username", request.getAttribute("username").toString());
+        return Result.success(responseData);
     }
 
     @RequestMapping(value = "/insert" , method = RequestMethod.POST)

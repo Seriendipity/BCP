@@ -33,6 +33,17 @@ public class Teaching {
     @Column(name = "Language" , length = 10)
     private String Language;
 
+    @Column(name = "picture",length = 100)
+    private String picture;
+
+    public String getPicture() {
+        return picture;
+    }
+
+    public void setPicture(String picture) {
+        this.picture = picture;
+    }
+
     public String getTeacherNo() {
         return TeacherNo;
     }
