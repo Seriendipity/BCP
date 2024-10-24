@@ -1,14 +1,14 @@
 <template>
   <div class="notification-container">
-    <el-table :data="notifications" style="width: 1180px;" border>
-      <!-- 通知主题列，宽度固定为900px -->
-      <el-table-column prop="title" label="通知主题" width="680"></el-table-column>
+    <el-table :data="notifications" style="width: 200vh;" border>
+      <!-- 通知主题列，宽度固定为55% -->
+      <el-table-column prop="title" label="通知主题" width="680%"></el-table-column>
 
-      <!-- 通知发布时间列，宽度固定为200px -->
-      <el-table-column prop="timestamp" label="发布时间" width="200"></el-table-column>
+      <!-- 通知发布时间列，宽度固定为25% -->
+      <el-table-column prop="timestamp" label="发布时间" width="200%"></el-table-column>
 
-      <!-- 通知状态列，宽度固定为150px -->
-      <el-table-column label="状态" width="150">
+      <!-- 通知状态列，宽度固定为10% -->
+      <el-table-column label="状态" width="100%">
         <template #default="{ row }">
           <el-tag :type="row.viewed ? 'success' : 'warning'">
             {{ row.viewed ? '已查看' : '未查看' }}
@@ -16,8 +16,8 @@
         </template>
       </el-table-column>
 
-      <!-- 操作列，宽度固定为150px -->
-      <el-table-column label="操作" width="150">
+      <!-- 操作列，宽度固定为10% -->
+      <el-table-column label="操作" width="100%">
         <template #default="{ row }">
           <el-button type="primary" @click="viewNotification(row)" size="small">查看通知</el-button>
         </template>
@@ -25,7 +25,7 @@
     </el-table>
 
     <!-- 查看通知的弹出框 -->
-    <el-dialog :visible="dialogVisible" title="查看通知" width="500px" @close="closeDialog">
+    <el-dialog :visible="dialogVisible" title="查看通知" width="600px" @close="closeDialog">
       <p><strong>主题:</strong> {{ currentNotification.title }}</p>
       <p><strong>内容:</strong> {{ currentNotification.message }}</p>
       <span slot="footer" class="dialog-footer">
@@ -82,15 +82,19 @@ export default {
   background-color: #fff;
   border-radius: 15px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  /* 设置容器宽度为百分比 */
+  margin: 0 auto;
+  /* 居中对齐 */
 }
 
 .el-table {
   margin-bottom: 20px;
-  width: 1400px;
-  /* 固定表格宽度为1400px，考虑到新增发布时间列 */
+  width: 100vh;
+  /* 设置表格宽度为100% */
 }
 
 .el-dialog {
-  width: 500px;
+  width: 800px;
 }
 </style>

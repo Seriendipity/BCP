@@ -1,26 +1,27 @@
 <template>
   <div class="common-layout">
     <el-container style="height: 100vh;">
-      <el-header class="header">
+      <el-header class="header" style="height: 8%;">
         <el-row>
-          <el-col>
+          <el-col :span="24">
             <span>1</span>
           </el-col>
         </el-row>
-        <el-row :gutter="40">
+        <el-row :gutter="40" class="row1">
           <el-col :span="20">
-            <!-- 使用传递过来的课程名 -->
             <span class="lesson-name">{{ courseName }}</span>
           </el-col>
-          <el-col :span="4">
-            <!-- 使用传递过来的学院名 -->
+          <el-col :span="4" class="right-align">
             <span class="school-text">{{ establishCollege }}</span>
           </el-col>
         </el-row>
-        <el-row :gutter="20">
+        <!-- 添加的空行 -->
+        <el-row class="empty-row" :gutter="20">
+          <el-col :span="24" style="height: 10px;"></el-col>
+        </el-row>
+        <el-row :gutter="20" class="row2">
           <el-col :span="16">
             <div class="teacherName-number">
-              <!-- 使用传递过来的教师名、课程编号和课序号 -->
               <span>主讲教师：{{ teacherName }}</span>
               <el-divider direction="vertical" border-style="dashed" />
               <span>课程编号: {{ courseNo }}</span>
@@ -28,17 +29,16 @@
               <span>课序号：{{ cid }}</span>
             </div>
           </el-col>
-          <el-col :span="8">
+          <el-col :span="8" class="right-align">
             <div class="semester">
-              <!-- 使用传递过来的学期和教学周 -->
               <span>学期：{{ semester }}</span>
-              <span>教学周：{{ week }}</span>
+              <span style="margin-left: 10px;">教学周：第{{ week }}周</span>
             </div>
           </el-col>
         </el-row>
       </el-header>
       <el-container>
-        <el-aside width="200px" style="height: calc(100vh - 64px);">
+        <el-aside width="20%" style="height: 100%;">
           <div>
             <div class="layout_slidder" :class="{ fold: LayOutSettingStore.fold }" background-color="#005bac">
               <logo></logo>
@@ -51,7 +51,7 @@
             </div>
           </div>
         </el-aside>
-        <el-main>
+        <el-main style="width: 100%;">
           <div class="layout_tabbar" :class="{ fold: LayOutSettingStore.fold }">
             <Tabbar></Tabbar>
           </div>
@@ -76,24 +76,17 @@ let LayOutSettingStore = useLayOutSettingStore();
 let $route = useRoute();
 let userStore = useUserStore();
 
+// 计算教学周的函数
 function calculateTeachingWeek(startDate: any, currentDate = new Date()) {
-  // 将开学日期转为 Date 对象
   const start = new Date(startDate);
-
-  // 计算当前日期与开学日期之间的天数差
   const timeDiff = currentDate.getTime() - start.getTime();
-  const dayDiff = Math.floor(timeDiff / (1000 * 3600 * 24)); // 将毫秒数转为天数
-
-  // 计算教学周数，dayDiff / 7 表示当前处于第几周，向上取整
+  const dayDiff = Math.floor(timeDiff / (1000 * 3600 * 24));
   const weekNumber = Math.ceil(dayDiff / 7);
-
-  // 如果当前日期早于开学日期，返回第 0 周
   return weekNumber > 0 ? weekNumber : 0;
 }
 
-
-const startDate = '2024-09-09';  // 开学日期为2024年9月9日
-const currentDate = new Date();  // 当前日期为今天
+const startDate = '2024-09-09';
+const currentDate = new Date();
 const currentWeek = calculateTeachingWeek(startDate, currentDate);
 
 // 获取从 URL 传递的 query 参数
@@ -123,8 +116,8 @@ export default {
 .common-layout .el-aside {
   color: var(--el-text-color-primary);
   background-color: #005bac;
-  height: calc(100vh - 64px);
-  /* 假设header高度为64px */
+  height: 90%;
+  /* 高度百分比 */
 }
 
 .common-layout .el-menu {
@@ -135,40 +128,32 @@ export default {
   padding: 20px;
   background-color: #E5EAF3;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  /* 添加阴影 */
   border-radius: 10px;
-  /* 圆角边框 */
 }
 
 .layout_tabbar {
-  width: 1240px;
+  width: 100%;
+  /* 100%宽度 */
   display: flex;
   align-items: center;
   justify-content: space-between;
   background-color: #ffffff;
   padding: 10px;
   border-radius: 10px;
-  /* 圆角边框 */
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-  /* 轻微阴影 */
-
 }
 
 .layout_main {
   padding: 16px;
-  /* 根据需要调整内边距 */
-
 }
 
 .scrollbar {
-  height: 100%;
-  /* 确保滚动条占满空间 */
+  height: 90%;
 }
 
 .layout_slidder {
   display: flex;
   flex-direction: column;
-  height: 100%;
   font-weight: bold;
 }
 
@@ -179,16 +164,26 @@ export default {
 
 .school-text {
   font-family: "宋体";
-  color: #fafafa
+  color: #fafafa;
 }
 
 .teacherName-number {
   font-family: "宋体";
-  color: #fafafa
+  color: #fafafa;
 }
 
 .semester {
   font-family: "宋体";
-  color: #fafafa
+  color: #fafafa;
+}
+
+.right-align {
+  text-align: right;
+  /* 确保内容右对齐 */
+}
+
+.empty-row {
+  height: 10px;
+  /* 可以根据需要调整空行的高度 */
 }
 </style>

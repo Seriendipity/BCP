@@ -1,5 +1,5 @@
 <template>
-  <iframe class="calendar" :src="previewSrc" width="100%" height="600px" style="border:none;"></iframe>
+  <iframe class="calendar" :src="previewSrc" width="100%" height="100%" style="border:none;"></iframe>
 </template>
 
 <script setup>

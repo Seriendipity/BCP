@@ -20,22 +20,27 @@
       </el-descriptions-item>
     </el-descriptions>
   </div>
-  <div>
-
-  </div>
-
 </template>
 
 <script>
-
+export default {
+  name: "TeacherInfo"
+}
 </script>
 
-<style>
+<style scoped>
 .teacherInfo {
   border-radius: 20px;
   box-shadow: --el-box-shadow-light;
   background-color: #FFFFFF;
-  height: 570px;
+  width: 100%;
+  /* 设置容器宽度为百分比 */
+  height: auto;
+  /* 高度自适应内容 */
   border: groove;
+  margin: 0 auto;
+  /* 居中对齐 */
+  padding: 20px;
+  /* 添加内边距 */
 }
 </style>

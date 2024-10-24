@@ -25,15 +25,23 @@ onMounted(() => {
   border-radius: 20px;
   box-shadow: --el-box-shadow-light;
   background-color: #FFFFFF;
-  height: 580px;
+  height: 100%;
+  /* 修改高度为百分比 */
+  width: 100%;
+  /* 修改宽度为百分比 */
+  margin: 0 auto;
+  /* 居中对齐 */
   border: groove;
+  position: relative;
+  /* 相对定位 */
+  top: 25%;
+  /* 从顶部占据25%的空间 */
 }
 
 .content {
   font-family: 'Helvetica', 'Arial', sans-serif;
-  /* 使用现代无衬线字体 */
   font-size: 18px;
-  /* 设置适中的字体大小 */
+  /* 保持原来的绝对值 */
   color: #333333;
   /* 文字颜色为深灰色，易于阅读 */
   line-height: 1.6;
