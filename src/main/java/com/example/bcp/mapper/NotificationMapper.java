@@ -20,10 +20,11 @@ public interface NotificationMapper {
     @Select("Select * from Notification Where NotificationNo = #{NotificationNo}")
     Notification selectByNotificationNo(String NotificationNo);
 
-    @Insert("Insert into Notification(NotificationNo,Cid,SendNo,NotificationInformation)" +
-            " values(#{NotificationNo},#{Cid},#{SendNo},#{NotificationInformation})")
+    @Insert("Insert into Notification(NotificationNo,Cid,SendNo,NotificationInformation,NotificationTitle)" +
+            " values(#{NotificationNo},#{Cid},#{SendNo},#{NotificationInformation},#{NotificationTitle})")
     void insertNotification(String NotificationNo,String Cid,
-                            String SendNo,String NotificationInformation);
+                            String SendNo,String NotificationInformation,
+                            String NotificationTitle);
 
     @Delete("Delete From Notification Where NotificationNo = #{NotificationNo}")
     void deleteNotification(String NotificationNo);
@@ -31,6 +32,6 @@ public interface NotificationMapper {
     @Select("Select * from Notification Where NotificationInformation LIKE CONCAT('%',#{keyword},'%')")
     List <Notification> selectByNotificationInformation(String keyword);
 
-    @Update("Update Notification set  NotificationInformation = #{NotificationInformation} where NotificationNo = #{NotificationNo}")
-    void updateNotificationInformation(String NotificationNo,String NotificationInformation);
+    @Update("Update Notification set  NotificationInformation = #{NotificationInformation},NotificationTitle =#{NotificationTitle} where NotificationNo = #{NotificationNo}")
+    void updateNotificationInformation(String NotificationNo,String NotificationInformation,String NotificationTitle);
 }

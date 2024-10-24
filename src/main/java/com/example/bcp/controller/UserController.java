@@ -4,8 +4,10 @@ import com.example.bcp.entity.Assistant;
 import com.example.bcp.entity.Student;
 import com.example.bcp.entity.Teacher;
 import com.example.bcp.service.AssistantService;
+import com.example.bcp.service.ClassService;
 import com.example.bcp.service.StudentService;
 import com.example.bcp.service.TeacherService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
@@ -13,6 +15,8 @@ import com.example.bcp.entity.Result;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/users")
@@ -25,6 +29,8 @@ public class UserController {
     private AssistantService assistantService;
     @Autowired
     private TeacherService teacherService;
+    @Autowired
+    private ClassService classService;
 
     @Value("${ip:localhost}")
     String ip;
@@ -148,5 +154,19 @@ public class UserController {
             e.printStackTrace();
             return Result.error("头像上传失败");
         }
+    }
+
+    @GetMapping(value = "/userInfo")
+    public Result getUserInfo(HttpServletRequest request){
+        String studentNo = request.getAttribute("username").toString();
+        Student s = studentService.selectByStudentNo(studentNo);
+        Map<String, Object> responseData = new HashMap<>();
+        responseData.put("studentNo",s.getStudentNo());
+        responseData.put("studentName",s.getStudentName());
+        responseData.put("email",s.getStudentEmail());
+        String classNo = s.getClassNo();
+        String classDept = classService.selectByClassNo(classNo).getClassDepartment();
+        responseData.put("dept",classDept);
+        return Result.success(responseData);
     }
 }

@@ -1,16 +1,20 @@
 package com.example.bcp.controller;
 
 import com.example.bcp.entity.StudentNotification;
+import com.example.bcp.entity.Teaching;
 import com.example.bcp.service.NotificationService;
 import com.example.bcp.service.StudentNotificationService;
 import com.example.bcp.service.StudentCourseService;
 import com.example.bcp.entity.Notification;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import com.example.bcp.entity.Result;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/notifications")
@@ -28,7 +32,8 @@ public class NotificationController {
     @PostMapping("/send")
     public void sendNotification(@RequestParam String cid,
                                  @RequestParam String sendNo,
-                                 @RequestBody String notificationInformation) {
+                                 @RequestBody String notificationInformation,
+                                 @RequestBody String notificationTitle) {
 
         int size = notificationService.selectAllNotification().size()+1;
         String notificationNo = "N"+size;
@@ -37,7 +42,8 @@ public class NotificationController {
                 notificationNo,
                 cid,
                 sendNo,
-                notificationInformation
+                notificationInformation,
+                notificationTitle
         );
 
         // 插入学生通知记录
@@ -54,10 +60,12 @@ public class NotificationController {
     // 教师/助教修改通知
     @PutMapping("/update/{notificationNo}")
     public void updateNotification(@PathVariable String notificationNo,
-                                   @RequestBody String notificationInformation) {
+                                   @RequestBody String notificationInformation,
+                                   @RequestBody String notificationTitle) {
         notificationService.updateNotificationInformation(
                 notificationNo,
-                notificationInformation
+                notificationInformation,
+                notificationTitle
         );
     }
 
@@ -72,6 +80,44 @@ public class NotificationController {
     @GetMapping("/student/{studentNo}")
     public List<StudentNotification> getStudentNotifications(@PathVariable String studentNo) {
         return studentNotificationService.selectByStudentNo(studentNo);
+    }
+    @GetMapping("/getNotification")
+    public Result getNotification(@RequestParam String cid , HttpServletRequest request){
+        String username = request.getAttribute("username").toString();
+        Map<String,Object> responseData = new HashMap<>();
+        if (username.startsWith("S")){
+            List<Notification> notifications = notificationService.selectByCid(cid);
+            int i = 1;
+            for(Notification n : notifications){
+                Map<String,Object> notification = new HashMap<>();
+                String notificationNo = n.getNotificationNo();
+                StudentNotification se = studentNotificationService.selectByStudentNoAndNotificationNo(username,notificationNo);
+                if(se != null){
+                    notification.put("index",i);
+                    notification.put("NotificationInfo",n);
+                    String state = "未读";
+                    if(se.isNotificationState()) state = "已读";
+                    notification.put("NotificationState",state);
+                    responseData.put("Notification"+i,notification);
+                    i++;
+                }
+            }
+           return Result.success(responseData);
+        }
+        if(username.startsWith("T")){
+            System.out.println("T users");
+            List<Notification> notifications = notificationService.selectByCid(cid);
+            int i = 1;
+            for(Notification n : notifications){
+                Map<String,Object> notification = new HashMap<>();
+                notification.put("Index",i);
+                notification.put("Notification",n);
+                responseData.put("Notification"+i,notification);
+                i++;
+            }
+            return Result.success(responseData);
+        }
+        return Result.error("错误用户");
     }
 
     // 教师/助教查看自己发送的通知

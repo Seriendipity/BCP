@@ -65,6 +65,9 @@ public class JwtFilter implements Filter {
             if(path.startsWith("/StudentCourse")){
                 System.out.println("调用StudentCourse/拦截器");
             }
+            if (path.startsWith("/users")){
+                System.out.println("调用Users拦截器");
+            }
             String userName = userData.get("userName").asString();
             String password = userData.get("password").asString();
 

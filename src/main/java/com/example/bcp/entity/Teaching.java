@@ -36,6 +36,17 @@ public class Teaching {
     @Column(name = "picture",length = 100)
     private String picture;
 
+    public String getEstablishCollege() {
+        return EstablishCollege;
+    }
+
+    public void setEstablishCollege(String establishCollege) {
+        EstablishCollege = establishCollege;
+    }
+
+    @Column(name = "EstablishCollege", length = 15)
+    private String EstablishCollege;
+
     public String getPicture() {
         return picture;
     }

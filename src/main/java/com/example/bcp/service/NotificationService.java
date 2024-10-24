@@ -33,11 +33,11 @@ public class NotificationService {
     }
 
     public void insertNotification(String NotificationNo,String Cid,
-                                   String SendNo,String NotificationInformation){
-        notificationMapper.insertNotification(NotificationNo,Cid,SendNo,NotificationInformation);
+                                   String SendNo,String NotificationInformation , String NotificationTitle){
+        notificationMapper.insertNotification(NotificationNo,Cid,SendNo,NotificationInformation,NotificationTitle);
     }
 
-    public void updateNotificationInformation(String NotificationNo,String NotificationInformation){notificationMapper.updateNotificationInformation(NotificationNo,NotificationInformation);}
+    public void updateNotificationInformation(String NotificationNo,String NotificationInformation,String NotificationTitle){notificationMapper.updateNotificationInformation(NotificationNo,NotificationInformation,NotificationTitle);}
 
     public void deleteNotification(String NotificationNo){
         notificationMapper.deleteNotification(NotificationNo);

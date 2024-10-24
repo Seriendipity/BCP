@@ -15,6 +15,9 @@ public class JwtFilterConfig {
         registrationBean.addUrlPatterns("/note/*");
         registrationBean.addUrlPatterns("/favorite/*");
         registrationBean.addUrlPatterns("/StudentCourse/*");
+        registrationBean.addUrlPatterns("/users/*");
+        registrationBean.addUrlPatterns("/teaching/*");
+        registrationBean.addUrlPatterns("/notifications/*");
         return registrationBean;
     }
 }
