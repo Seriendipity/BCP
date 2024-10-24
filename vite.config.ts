@@ -39,7 +39,7 @@ export default defineConfig(({ command })=> {
       proxy:{
         // 使用 proxy 实例
       '/api': {
-        target: 'http://sph-api.atguigu.cn',
+        target: 'http://localhost:8081',
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, ''),
       },

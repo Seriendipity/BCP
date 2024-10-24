@@ -4,9 +4,9 @@ import request from '@/utils/request'
 
 //请求地址
 enum API {
-  LOGIN_URL = "http://localhost:8081/login",
-  STUDENTINFO_URL = "http://localhost:8081/users/userlnfo",
-  COURSEINFO = "http://localhost:8081/StudentCourse/allCourse"
+  LOGIN_URL = "/login",
+  STUDENTINFO_URL = "/users/userInfo",
+  COURSEINFO = "/StudentCourse/allCourse"
 
 }
 //登录接口

@@ -27,7 +27,7 @@
       <el-container>
         <el-aside class="backleft">
           <!-- 学生信息 -->
-          <div class="whiteback">
+          <div class="whiteback":data="student">
             <h1 style="text-align: left; font-weight: bold;margin-bottom: 5px;">个人信息</h1>
             <!-- <div style="margin-top: 20px;text-align: center; "><el-avatar :size="100" :src="circleUrl"></el-avatar>
             </div> -->
@@ -81,19 +81,22 @@ import { ElNotification } from 'element-plus';
 export default {
   data() {
     return {
-      courses: [],
-      student: {},
+      courses: ref([]),
+      student: ref([]),
     };
   },
   async mounted() {
     try {
       const userResponse = await reqUserInfo(); // 请求用户信息
       const courseResponse = await reqCourseInfo(); // 请求课程列表
-
+      console.log(userResponse)
+      console.log(courseResponse)
       this.student = userResponse.data; // 设置用户信息
       this.courses = courseResponse.data; // 设置课程列表
-
+      console.log(this.student)
+      console.log(this.courses)
     } catch (error) {
+      console.log(error)
       ElNotification({
         type: 'error',
         message: '获取信息失败'
