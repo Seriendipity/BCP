@@ -69,12 +69,15 @@
 
 <script setup>
 import { ref, onMounted } from 'vue';
+import { useRouter } from 'vue-router'; // 引入 useRouter 钩子
 import { reqUserInfo, reqCourseList, reqCourseIntro } from '@/api/api';
 import { ElNotification } from 'element-plus';
 
 const courses = ref([]);
 const student = ref([]);
+const router = useRouter(); // 使用 useRouter 获取路由实例
 
+// 获取用户信息和课程列表
 onMounted(async () => {
   try {
     const userResponse = await reqUserInfo();
@@ -84,17 +87,18 @@ onMounted(async () => {
   } catch (error) {
     ElNotification({
       type: 'error',
-      message: '获取信息失败'
+      message: '获取信息失败',
     });
   }
 });
 
+// 跳转到课程信息页面
 const goToCourseInfo = async (courseId) => {
   try {
     const response = await reqCourseIntro(courseId);
     if (response && response.data) {
-      // 跳转到CourseInfo页面，并传递课程信息
-      this.$router.push({
+      // 跳转到 CourseInfo 页面，并传递课程信息
+      router.push({
         path: '/CourseInfo',
         query: {
           courseId,
@@ -104,17 +108,18 @@ const goToCourseInfo = async (courseId) => {
           teacherName: response.data.teacherName,
           establishCollege: response.data.establishCollege,
           semester: response.data.semester,
-        }
+        },
       });
     }
   } catch (error) {
     ElNotification({
       type: 'error',
-      message: '获取课程信息失败'
+      message: '获取课程信息失败',
     });
   }
 };
 </script>
+
 
 <style>
 .head {
