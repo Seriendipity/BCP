@@ -17,6 +17,6 @@ export const reqUserInfo = () => request.get<any, any>(API.STUDENTINFO_URL);
 //获取课程列表
 export const reqCourseList = () => request.get<any, any>(API.COURSELIST);
 //获取课程介绍
-export const reqCourseIntro = (courseId: any) => request.get<any, any>(API.COURSEINTRO + `&?cid=${courseId}`)
+export const reqCourseIntro = (courseId: any) => request.get<any, any>(API.COURSEINTRO + `?cid=${courseId}`)
 // export const awardInfo = () => request.get<any, any>(API.AWARD_GET);
 // export const awardPost = (data: any) => request.post<any>(API.AWARD_POST, data);
