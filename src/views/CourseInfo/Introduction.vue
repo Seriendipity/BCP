@@ -4,18 +4,20 @@
   </div>
 </template>
 
-<script>
-export default {
-  data() {
-    return {
-      courseIntro: '', // 用于存储课程介绍的变量
-    };
-  },
-  mounted() {
-    // 获取传递过来的课程介绍
-    this.courseIntro = this.$route.query.courseIntro || '暂无课程介绍';
-  },
-};
+<script setup>
+import { ref, onMounted } from 'vue';
+import { useRoute } from 'vue-router';
+
+// 创建一个响应式变量用于存储课程介绍
+const courseIntro = ref('');
+
+// 获取路由信息
+const route = useRoute();
+
+onMounted(() => {
+  // 获取传递过来的课程介绍
+  courseIntro.value = route.query.courseIntro || '暂无课程介绍';
+});
 </script>
 
 <style>

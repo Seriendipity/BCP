@@ -91,7 +91,7 @@ function calculateTeachingWeek(startDate: any, currentDate = new Date()) {
   return weekNumber > 0 ? weekNumber : 0;
 }
 
-// 示例使用
+
 const startDate = '2024-09-09';  // 开学日期为2024年9月9日
 const currentDate = new Date();  // 当前日期为今天
 const currentWeek = calculateTeachingWeek(startDate, currentDate);
