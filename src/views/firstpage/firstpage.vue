@@ -86,11 +86,11 @@ export default {
   },
   async mounted() {
     try {
-      const token = localStorage.getItem('token'); // 获取存储的token
-      if (!token) {
-        this.$router.push('/login'); // 如果没有token，跳转回登录页
-        return;
-      }
+      // const token = localStorage.getItem('token'); // 获取存储的token
+      // if (!token) {
+      //   this.$router.push('/login'); // 如果没有token，跳转回登录页
+      //   return;
+      // }
 
       const userResponse = await reqUserInfo(); // 请求用户信息
       const courseResponse = await reqCourseInfo(); // 请求课程列表
