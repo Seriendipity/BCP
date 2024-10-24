@@ -116,74 +116,131 @@ const goToCourseInfo = async (courseId) => {
 };
 </script>
 
-<style scoped>
-.header {
-  position: relative;
-  background: url(head-background.png) no-repeat;
-  background-size: cover;
-  box-shadow: --el-box-shadow-light;
-}
-
-.common-layout .el-aside {
-  color: var(--el-text-color-primary);
+<style>
+.head {
   background-color: #005bac;
-  height: calc(100vh - 64px);
+
 }
 
-.common-layout .el-menu {
-  border-right: none;
+.backmain1 {
+  height: 770px;
+  background-color: #eaf6ff;
 }
 
-.common-layout .el-main {
-  padding: 20px;
-  background-color: #E5EAF3;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  border-radius: 10px;
+.zitihead {
+  text-align: left;
+  font-weight: bold;
+  font-size: 24px;
+  margin-top: 15px;
+  color: #ffffff;
 }
 
-.layout_tabbar {
-  width: 1240px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+.ziti01 {
+  text-align: center;
+  font-weight: 400;
+  font-size: 14px;
+  margin-bottom: 25px;
+  margin-top: 10px;
+}
+
+.ziti02 {
+  text-align: center;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.ziti03 {
+  text-align: left;
+  font-weight: bold;
+  margin-bottom: 5px;
+  font-size: 16px;
+  margin-left: 10px;
+  padding-top: 10px;
+}
+
+.ziti04 {
+  text-align: left;
+  font-weight: 400;
+  margin-bottom: 2px;
+  font-size: 14px;
+  margin-left: 10px;
+}
+
+.backleft {
+  width: "350px";
+  max-height: "550px";
+  background-color: #eaf6ff;
+}
+
+.backright {
+  width: "350px";
+  height: "600px";
+  background-color: #eaf6ff;
+}
+
+.whiteback {
+  border-radius: 4px;
+  max-height: 350px;
   background-color: #ffffff;
   padding: 10px;
-  border-radius: 10px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+
 }
 
-.layout_main {
-  padding: 16px;
+.whiteback2 {
+  margin-top: 20px;
+  border-radius: 4px;
+  height: 200px;
+  background-color: #ffffff;
+  padding: 10px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
 }
 
-.scrollbar {
-  height: 100%;
+.whiteback3 {
+  /* margin-top: 20px; */
+  border-radius: 4px;
+  height: 400px;
+  background-color: #ffffff;
+  padding: 10px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
 }
 
-.layout_slidder {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  font-weight: bold;
+.scrollable {
+  height: 690px;
+  /* 固定高度 */
+  overflow-y: auto;
+  /* 垂直方向上的滚动条 */
+  overflow-x: hidden;
+  padding-right: 10px;
 }
 
-.lesson-name {
-  font-family: "宋体";
-  color: #fafafa;
+.el-row {
+  margin-bottom: 20px;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
 }
 
-.school-text {
-  font-family: "宋体";
-  color: #fafafa;
+.el-col {
+  border-radius: 4px;
 }
 
-.teacher-number {
-  font-family: "宋体";
-  color: #fafafa;
+.bg-white {
+  background: #ffffff;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+  border-radius: 30px
 }
 
-.semester {
-  font-family: "宋体";
-  color: #fafafa;
+.grid-content {
+  border-radius: 4px;
+  min-height: 36px;
+  height: 250px;
+  margin-bottom: 10px;
+
+}
+
+body>.el-container {
+  margin-bottom: 40px;
 }
 </style>
