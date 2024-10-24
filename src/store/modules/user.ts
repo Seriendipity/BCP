@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { reqLogin, reqUserInfo } from "@/api/user";
+import { reqLogin, reqUserInfo } from "@/api/api";
 
 import type { UserState } from "./types/type";
 import { GET_TOKEN, SET_TOKEN } from "@/utils/token";

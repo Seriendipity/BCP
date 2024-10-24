@@ -1,11 +1,21 @@
 <template>
   <div class="Intro">
-    <p class="content">这里是课程介绍 吧啦吧啦吧啦
-    </p>
+    <p class="content">{{ courseIntro }}</p>
   </div>
 </template>
 
 <script>
+export default {
+  data() {
+    return {
+      courseIntro: '', // 用于存储课程介绍的变量
+    };
+  },
+  mounted() {
+    // 获取传递过来的课程介绍
+    this.courseIntro = this.$route.query.courseIntro || '暂无课程介绍';
+  },
+};
 </script>
 
 <style>
