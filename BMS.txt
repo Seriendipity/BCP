@@ -233,8 +233,8 @@ INSERT INTO Notification (NotificationNo, Cid, SendNo, NotificationInformation) 
 
 -- 插入 StudentNotification 表数据
 INSERT INTO StudentNotification (StudentNo, NotificationNo, NotificationDate, NotificationState) VALUES
-                                                                                                     ('S001', 'N001', NOW(), '未读'),
-                                                                                                     ('S002', 'N002', NOW(), '已读');
+                                                                                                     ('S001', 'N001', NOW(),false),
+                                                                                                     ('S002', 'N002', NOW(),true);
 
 -- 插入 CourseResource 表数据
 INSERT INTO CourseResource (Cid, CourseResourceNo, ResourceType, CourseResourcePath) VALUES
