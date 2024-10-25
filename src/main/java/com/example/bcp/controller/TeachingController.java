@@ -114,6 +114,7 @@ public class TeachingController {
         responseData.put("teacherTitle",t.getTeacherTitle());
         responseData.put("teacherPhone",t.getTeacherPhone());
         responseData.put("teacherInfo",t.getTeacherInfo());
+        responseData.put("TeacherStation",t.getTeacherStation());
         responseData.put("establishCollege",teaching.getEstablishCollege());
         responseData.put("teacherEmail",t.getTeacherEmail());
         responseData.put("teacherBirthday",t.getTeacherBirthday());
