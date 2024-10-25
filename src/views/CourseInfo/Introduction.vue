@@ -7,6 +7,7 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
+import { reqCourseIntro } from '@/api/api';
 
 // 创建一个响应式变量用于存储课程介绍
 const courseIntro = ref('');
@@ -14,9 +15,17 @@ const courseIntro = ref('');
 // 获取路由信息
 const route = useRoute();
 
-onMounted(() => {
-  // 获取传递过来的课程介绍
-  courseIntro.value = route.query.courseIntro || '暂无课程介绍';
+onMounted(async () => {
+  try {
+    const storedCourseId = localStorage.getItem('courseId');
+    const response = await reqCourseIntro(storedCourseId); // 获取教师信息
+    courseIntro.value = response.data.courseInfo
+  } catch (error) {
+    ElNotification({
+      type: 'error',
+      message: '获取课程介绍失败',
+    });
+  }
 });
 </script>
 

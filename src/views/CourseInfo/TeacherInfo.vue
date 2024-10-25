@@ -23,7 +23,7 @@
 
 <script setup>
 import { ref, onMounted } from 'vue';
-import { reqTeacherInfo } from '@/api/api'; // 确保你有这个API接口
+import { reqTeacherInfo } from '@/api/api';
 import { ElNotification } from 'element-plus';
 
 const teacher = ref({
@@ -42,7 +42,8 @@ const defaultPicture = 'https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e
 
 onMounted(async () => {
   try {
-    const response = await reqTeacherInfo(); // 获取教师信息
+    const storedCourseId = localStorage.getItem('courseId');
+    const response = await reqTeacherInfo(storedCourseId); // 获取教师信息
     teacher.value = { ...teacher.value, ...response.data }; // 合并后端数据
   } catch (error) {
     ElNotification({
