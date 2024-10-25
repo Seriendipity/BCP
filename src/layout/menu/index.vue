@@ -47,16 +47,9 @@ let $router = useRouter();
 defineProps(['menuList'])
 
 const goRoute = (vc: { index: RouteLocationRaw; }) => {
-  $router.push(vc.index);
+  $router.push(vc.index + `?cid=${$router.currentRoute.value.query.courseId}`);
 }
 
-// const goRoute = (path: string) => {
-//   const currentQuery = $router.currentRoute.value.query; // 获取当前查询参数
-//   $router.push({
-//     path,
-//     query: { ...currentQuery }, // 保留当前查询参数
-//   });
-// }
 </script>
 
 <script lang="ts">
