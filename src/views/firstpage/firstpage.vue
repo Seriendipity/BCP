@@ -8,15 +8,10 @@
           </div>
         </el-col>
         <el-col :span="1">
-<<<<<<< HEAD
           <div class="grid-content ">
             <router-link to="/myinformation" style="text-decoration: none;">
               <div style="margin-top: 10px"><el-avatar :size="40" :src="circleUrl"></el-avatar></div>
             </router-link>
-=======
-          <div class="grid-content">
-            <router-link to="/myinformation" style="text-decoration: none;"></router-link>
->>>>>>> e3825cebd2da90331734163710dbcdf5cc8d9ee0
           </div>
         </el-col>
         <el-col :span="2">
@@ -85,13 +80,10 @@ const courses = ref([]);
 const student = ref([]);
 const router = useRouter();
 
-<<<<<<< HEAD
 
 const circleUrl = ref('src/assets/images/example.jpg');
 
 // 获取用户信息和课程列表
-=======
->>>>>>> e3825cebd2da90331734163710dbcdf5cc8d9ee0
 onMounted(async () => {
   try {
     const userResponse = await reqUserInfo();
