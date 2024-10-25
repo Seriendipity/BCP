@@ -21,7 +21,7 @@ onMounted(async () => {
   try {
     const storedCourseId = localStorage.getItem('courseId');
     const response = await reqSyllabus(storedCourseId); // 获取后端课程大纲URL
-    syllabusUrl.value = response.data.url || syllabusUrl.value; // 更新URL或保持默认
+    syllabusUrl.value = response.data.Syllabus || syllabusUrl.value; // 更新URL或保持默认
   } catch (error) {
     ElNotification({
       type: 'error',
