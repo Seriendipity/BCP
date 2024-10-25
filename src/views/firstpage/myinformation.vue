@@ -28,8 +28,13 @@
     <div class="whiteback5" >
         <h1 style="text-align: left; font-weight: bold;margin-bottom: 5px; font-size: larger;">个人信息</h1>
         <el-row :gutter="20">
-        <el-col :span="12">
-            <div style="margin-top: 80px;text-align: center; "><el-avatar :size="200" :src="circleUrl"></el-avatar></div>
+        <el-col :span="12"><div>
+              <div style="margin-top: 80px;text-align: center; ">
+                <el-avatar :size="200" :src="circleUrl"></el-avatar>
+              </div>
+              <el-button type="big" style="margin-top: 15px;margin-left: 43%;" @click="dialogVisible = true">更改头像</el-button>
+          </div>
+
         </el-col>
         <el-col :span="12">
             <div class="grid-content " style="margin-top: 15%;">
@@ -48,6 +53,24 @@
         </router-link>
 
     </div>
+
+      <!-- 上传文件的对话框 -->
+      <el-dialog
+        title="更改头像"
+        :visible.sync="dialogVisible"
+        width="30%"
+        @close="handleClose">
+        <el-upload
+          class="avatar-uploader"
+          action="https://jsonplaceholder.typicode.com/posts/" 
+          
+          :on-success="handleAvatarSuccess"
+          :before-upload="beforeAvatarUpload">
+          <el-button size="small" type="primary">点击上传</el-button>
+          <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+        </el-upload>
+      </el-dialog>
+
 </el-main>
 </el-container>
 </template>
@@ -59,10 +82,39 @@ export default {
       circleUrl: 'src\\assets\\images\\example.jpg', // 头像URL
       student:[
         {id:22300000,name:'爱学习',identity:'学生',class:'软件2299',college:'软件学院',email:'22300000@bjtu.edu.cn'}
-      ]
+      ],
+      dialogVisible: false // 控制对话框的显示
     };
+  },
+  methods: {
+    handleAvatarSuccess(res, file) {
+      // 上传成功后的回调
+      this.circleUrl = URL.createObjectURL(file.raw);
+      this.dialogVisible = false;
+    },
+    beforeAvatarUpload(file) {
+      const isJPG = file.type === 'image/jpeg';
+      const isPNG = file.type === 'image/png';
+      const isLt2M = file.size / 1024 / 1024 < 0.5;
+
+      if (!isJPG && !isPNG) {
+        this.$message.error('上传头像图片只能是 JPG/PNG 格式!');
+      }
+      if (!isLt2M) {
+        this.$message.error('上传头像图片大小不能超过 500KB!');
+      }
+      return (isJPG || isPNG) && isLt2M;
+    },
+    handleClose() {
+      // 对话框关闭时的回调
+      this.dialogVisible = false;
+    }
   }
+
 }
+
+
+
 </script>
 
 <style>
@@ -148,6 +200,16 @@ export default {
 
   body > .el-container {
     margin-bottom: 40px;
+  }
+  .avatar-uploader .el-upload {
+    border: 1px dashed #d9d9d9;
+    border-radius: 6px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+  .avatar-uploader .el-upload:hover {
+    border-color: #409EFF;
   }
 
   
