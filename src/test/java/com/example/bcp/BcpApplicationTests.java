@@ -229,7 +229,7 @@ class BcpApplicationTests {
         for(StudentNotification sn : sns){
             System.out.print(sn.getNotificationNo()+" ");
             System.out.print(sn.getStudentNo()+" ");
-            System.out.print(sn.getNotificationState()+" ");
+            System.out.print(sn.isNotificationState()+" ");
             System.out.print(sn.getNotificationDate()+" ");
             System.out.println();
         }

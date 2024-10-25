@@ -33,8 +33,8 @@ public class CourseResourceService {
     public void updateCourseResource(String CourseResourcePath , String CourseResourceNo){
         courseResourceMapper.updateCourseResource(CourseResourcePath,CourseResourceNo);
     }
-    public int maxNo(){
-        return courseResourceMapper.maxNo();
-    }
+//    public int maxNo(){
+//        return courseResourceMapper.maxNo();
+//    }
 
 }

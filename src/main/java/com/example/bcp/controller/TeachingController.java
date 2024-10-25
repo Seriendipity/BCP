@@ -25,33 +25,33 @@ public class TeachingController {
     @Autowired
     CourseService courseService;
 
-    @GetMapping("allTeaching")
+    @GetMapping("/allTeaching")
     private Result allTeaching() {
         List<Teaching> allTeaching = teachingMapper.selectAllTeaching();
         return Result.success(allTeaching);
     }
 
-    @GetMapping("selectByTeacherNo/{TeacherNo}")
-    private Result selectByTeacherNo(@PathVariable("TeacherNo") String TeacherNo) {
+    @GetMapping("/selectByTeacherNo")
+    private Result selectByTeacherNo(@RequestParam String TeacherNo) {
         List<Teaching> selectByTeacherNo = teachingMapper.selectByTeacherNo(TeacherNo);
         return Result.success(selectByTeacherNo);
     }
 
-    @GetMapping("selectByCourseNo/{CourseNo}")
-    private Result selectByCourseNo(@PathVariable("CourseNo") String CourseNo) {
+    @GetMapping("/selectByCourseNo")
+    private Result selectByCourseNo(@RequestParam String CourseNo) {
         List<Teaching> selectByCourseNo = teachingMapper.selectByCourseNo(CourseNo);
         return Result.success(selectByCourseNo);
     }
 
-    @GetMapping("selectByCid/{Cid}")
-    private Result selectByCid(@PathVariable("Cid") String Cid) {
+    @GetMapping("/selectByCid")
+    private Result selectByCid(@RequestParam String Cid) {
         Teaching selectByCid = teachingMapper.selectByCid(Cid);
         return Result.success(selectByCid);
     }
 
-    @GetMapping("selectByTeacherNoAndCourseNo/{TeacherNo}/{CourseNo}")
-    private Result selectByTeacherNoAndCourseNo(@PathVariable("TeacherNo") String TeacherNo,
-                                                @PathVariable("CourseNo") String CourseNo) {
+    @GetMapping("/selectByTeacherNoAndCourseNo")
+    private Result selectByTeacherNoAndCourseNo(@RequestParam String TeacherNo,
+                                                @RequestParam String CourseNo) {
         List<Teaching> selectByTeacherNoAndCourseNo = teachingMapper.selectByTeacherNoAndCourseNo(TeacherNo, CourseNo);
         return Result.success(selectByTeacherNoAndCourseNo);
     }

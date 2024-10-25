@@ -20,9 +20,8 @@ public class NoteController {
     @Autowired
     NoteService noteService;
 
-    @PostMapping("/getStudentAllNote")
-    public Result getStudentAllNote(@RequestBody Map<String, String> requestData) {
-        String studentNo = requestData.get("studentNo");
+    @GetMapping("/getStudentAllNote")
+    public Result getStudentAllNote(@RequestParam String studentNo) {
 
         List<Note> selectByStudentNo = noteService.selectByStudentNo(studentNo);
         return Result.success(selectByStudentNo);
