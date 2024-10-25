@@ -28,7 +28,8 @@
         <el-aside class="backleft">
           <div class="whiteback" :data="student">
             <h1 style="text-align: left; font-weight: bold;margin-bottom: 5px;">个人信息</h1>
-            <div style="margin-top: 20px;text-align: center; "><el-avatar :size="100" :src="circleUrl"></el-avatar></div>
+            <div style="margin-top: 20px;text-align: center; "><el-avatar :size="100" :src="circleUrl"></el-avatar>
+            </div>
             <h1 class="ziti01">学生</h1>
             <h1 class="ziti02" style="text-align: left;padding-left: 15px;">姓名：{{ student.studentName }}</h1>
             <h1 class="ziti02" style="text-align: left;padding-left: 15px;">学号：{{ student.studentNo }}</h1>
