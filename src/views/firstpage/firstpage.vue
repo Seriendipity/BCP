@@ -3,15 +3,20 @@
     <el-header class="head">
       <el-row :gutter="20">
         <el-col :span="21">
-          <div class="grid-content ">
+          <div class="grid-content">
             <h1 class="zitihead">智慧课程平台</h1>
           </div>
         </el-col>
         <el-col :span="1">
+<<<<<<< HEAD
           <div class="grid-content ">
             <router-link to="/myinformation" style="text-decoration: none;">
               <div style="margin-top: 10px"><el-avatar :size="40" :src="circleUrl"></el-avatar></div>
             </router-link>
+=======
+          <div class="grid-content">
+            <router-link to="/myinformation" style="text-decoration: none;"></router-link>
+>>>>>>> e3825cebd2da90331734163710dbcdf5cc8d9ee0
           </div>
         </el-col>
         <el-col :span="2">
@@ -72,18 +77,21 @@
 
 <script setup>
 import { ref, onMounted } from 'vue';
-import { useRouter } from 'vue-router'; // 引入 useRouter 钩子
+import { useRouter } from 'vue-router';
 import { reqUserInfo, reqCourseList, reqCourseIntro } from '@/api/api';
 import { ElNotification } from 'element-plus';
 
 const courses = ref([]);
 const student = ref([]);
-const router = useRouter(); // 使用 useRouter 获取路由实例
+const router = useRouter();
 
+<<<<<<< HEAD
 
 const circleUrl = ref('src/assets/images/example.jpg');
 
 // 获取用户信息和课程列表
+=======
+>>>>>>> e3825cebd2da90331734163710dbcdf5cc8d9ee0
 onMounted(async () => {
   try {
     const userResponse = await reqUserInfo();
@@ -98,15 +106,16 @@ onMounted(async () => {
   }
 });
 
-// 跳转到课程信息页面
 const goToCourseInfo = async (courseId) => {
   try {
     const response = await reqCourseIntro(courseId);
     if (response && response.data) {
-      // 跳转到 CourseInfo 页面，并传递课程信息
+      const currentQuery = router.currentRoute.value.query; // 获取当前查询参数
+      localStorage.setItem('courseId', courseId);
       router.push({
         path: '/CourseInfo',
         query: {
+          ...currentQuery, // 保留当前查询参数
           courseId,
           courseIntro: response.data.courseInfo,
           courseName: response.data.courseName,

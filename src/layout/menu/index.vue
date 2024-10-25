@@ -40,15 +40,17 @@ import { useRouter } from 'vue-router';
 </template>
 
 <script setup lang='ts'>
-import { RouteLocationRaw, useRouter } from 'vue-router'
+import { useRouter, RouteLocationRaw } from 'vue-router'
 
 let $router = useRouter();
 //获取父组件传递的全部路由
 defineProps(['menuList'])
 
 const goRoute = (vc: { index: RouteLocationRaw; }) => {
-  $router.push(vc.index);
+  const storedCourseId = localStorage.getItem('courseId');
+  $router.push(vc.index + `?cid=${storedCourseId}`);
 }
+
 </script>
 
 <script lang="ts">
