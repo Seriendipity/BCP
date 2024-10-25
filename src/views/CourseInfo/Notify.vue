@@ -1,14 +1,14 @@
 <template>
   <div class="notification-container">
-    <el-table :data="notifications" style="width: 200vh;" border>
-      <!-- 通知主题列，宽度固定为55% -->
-      <el-table-column prop="title" label="通知主题" width="680%"></el-table-column>
+    <el-table :data="notifications" style="width: 100%;" border>
+      <!-- 通知主题列 -->
+      <el-table-column prop="title" label="通知主题" width="55%"></el-table-column>
 
-      <!-- 通知发布时间列，宽度固定为25% -->
-      <el-table-column prop="timestamp" label="发布时间" width="200%"></el-table-column>
+      <!-- 通知发布时间列 -->
+      <el-table-column prop="timestamp" label="发布时间" width="25%"></el-table-column>
 
-      <!-- 通知状态列，宽度固定为10% -->
-      <el-table-column label="状态" width="100%">
+      <!-- 通知状态列 -->
+      <el-table-column label="状态" width="10%">
         <template #default="{ row }">
           <el-tag :type="row.viewed ? 'success' : 'warning'">
             {{ row.viewed ? '已查看' : '未查看' }}
@@ -16,8 +16,8 @@
         </template>
       </el-table-column>
 
-      <!-- 操作列，宽度固定为10% -->
-      <el-table-column label="操作" width="100%">
+      <!-- 操作列 -->
+      <el-table-column label="操作" width="10%">
         <template #default="{ row }">
           <el-button type="primary" @click="viewNotification(row)" size="small">查看通知</el-button>
         </template>
@@ -36,42 +36,52 @@
 </template>
 
 <script>
+import { ref, onMounted } from 'vue';
+import { reqNotifications } from '@/api/api'; // 确保有这个API接口
+import { ElNotification } from 'element-plus';
+
 export default {
-  data() {
-    return {
-      dialogVisible: false, // 弹出框是否可见
-      currentNotification: {}, // 当前查看的通知
-      notifications: [
-        {
-          id: 1,
-          title: '期中考试安排',
-          message: '期中考试将在下周进行，请做好准备。',
-          viewed: false, // 未查看状态
-          timestamp: '2024-10-01 10:00', // 通知发布时间
-        },
-        {
-          id: 2,
-          title: '实验报告提交',
-          message: '请于本周五之前提交实验报告。',
-          viewed: true, // 已查看状态
-          timestamp: '2024-10-05 15:30', // 通知发布时间
-        },
-      ],
+  setup() {
+    const dialogVisible = ref(false); // 弹出框是否可见
+    const currentNotification = ref({}); // 当前查看的通知
+    const notifications = ref([]); // 存储通知数据
+
+    // 获取通知数据
+    const fetchNotifications = async () => {
+      try {
+        const response = await reqNotifications(); // 获取通知数据
+        notifications.value = response.data || []; // 更新通知数据
+      } catch (error) {
+        ElNotification({
+          type: 'error',
+          message: '获取通知失败',
+        });
+      }
     };
-  },
-  methods: {
+
+    onMounted(() => {
+      fetchNotifications(); // 组件挂载时获取通知数据
+    });
+
     // 查看通知详情
-    viewNotification(notification) {
-      this.currentNotification = notification; // 设置当前通知
-      this.dialogVisible = true; // 打开弹出框
-      this.$nextTick(() => {
-        notification.viewed = true; // 将通知标记为已查看
-      });
-    },
+    const viewNotification = (notification) => {
+      currentNotification.value = notification; // 设置当前通知
+      dialogVisible.value = true; // 打开弹出框
+      notification.viewed = true; // 将通知标记为已查看
+    };
+
     // 关闭弹出框
-    closeDialog() {
-      this.dialogVisible = false; // 关闭弹出框
-    }
+    const closeDialog = () => {
+      dialogVisible.value = false; // 关闭弹出框
+    };
+
+    return {
+      dialogVisible,
+      currentNotification,
+      notifications,
+      viewNotification,
+      closeDialog,
+    };
   },
 };
 </script>
@@ -83,15 +93,12 @@ export default {
   border-radius: 15px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   width: 100%;
-  /* 设置容器宽度为百分比 */
   margin: 0 auto;
-  /* 居中对齐 */
 }
 
 .el-table {
   margin-bottom: 20px;
-  width: 100vh;
-  /* 设置表格宽度为100% */
+  width: 100%; /* 设置表格宽度为100% */
 }
 
 .el-dialog {

@@ -3,12 +3,29 @@
 </template>
 
 <script setup>
-// 获取父组件传递的资源url
+import { ref, onMounted } from 'vue';
+import { reqSyllabus } from '@/api/api'; // 确保你有这个API接口
+import { ElNotification } from 'element-plus';
+
 const props = defineProps({
   previewSrc: {
     type: String,
     required: false,
     default: () => 'https://book.yunzhan365.com/tnhkz/uvaj/mobile/index.html'
+  }
+});
+
+const syllabusUrl = ref(props.previewSrc); // 使用ref保存课程大纲的URL
+
+onMounted(async () => {
+  try {
+    const response = await reqSyllabus(); // 获取后端课程大纲URL
+    syllabusUrl.value = response.data.url || syllabusUrl.value; // 更新URL或保持默认
+  } catch (error) {
+    ElNotification({
+      type: 'error',
+      message: '获取课程大纲失败',
+    });
   }
 });
 </script>

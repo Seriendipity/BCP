@@ -40,7 +40,7 @@ import { useRouter } from 'vue-router';
 </template>
 
 <script setup lang='ts'>
-import { RouteLocationRaw, useRouter } from 'vue-router'
+import { useRouter, RouteLocationRaw } from 'vue-router'
 
 let $router = useRouter();
 //获取父组件传递的全部路由
@@ -49,6 +49,14 @@ defineProps(['menuList'])
 const goRoute = (vc: { index: RouteLocationRaw; }) => {
   $router.push(vc.index);
 }
+
+// const goRoute = (path: string) => {
+//   const currentQuery = $router.currentRoute.value.query; // 获取当前查询参数
+//   $router.push({
+//     path,
+//     query: { ...currentQuery }, // 保留当前查询参数
+//   });
+// }
 </script>
 
 <script lang="ts">
