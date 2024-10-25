@@ -35,6 +35,38 @@ public class Teacher {
     @Column(name = "PicturePath" ,length = 100)
     private String PicturePath;
 
+    @Column(name = "TeacherInfo",columnDefinition = "text")
+    private String TeacherInfo;
+
+    @Column(name = "TeacherStation" , length = 30)
+    private String TeacherStation;
+
+    @Column(name = "TeacherPhone",length = 20)
+    private String TeacherPhone;
+
+    public String getTeacherInfo() {
+        return TeacherInfo;
+    }
+
+    public void setTeacherInfo(String teacherInfo) {
+        TeacherInfo = teacherInfo;
+    }
+
+    public String getTeacherStation() {
+        return TeacherStation;
+    }
+
+    public void setTeacherStation(String teacherStation) {
+        TeacherStation = teacherStation;
+    }
+
+    public String getTeacherPhone() {
+        return TeacherPhone;
+    }
+
+    public void setTeacherPhone(String teacherPhone) {
+        TeacherPhone = teacherPhone;
+    }
     public String getTeacherNo() {
         return TeacherNo;
     }

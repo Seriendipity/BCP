@@ -41,6 +41,7 @@ public class LoginController {
             if (student.getPassword().equals(password)) {
                 String token = JwtUtils.createToken(userName, password);
                 System.out.println(token);
+                System.out.println("Yes");
                 return Result.success(token);
             } else {
                 return Result.error("用户名或密码错误");
