@@ -96,6 +96,7 @@ const goToCourseInfo = async (courseId) => {
     const response = await reqCourseIntro(courseId);
     if (response && response.data) {
       const currentQuery = router.currentRoute.value.query; // 获取当前查询参数
+      localStorage.setItem('courseId', courseId);
       router.push({
         path: '/CourseInfo',
         query: {

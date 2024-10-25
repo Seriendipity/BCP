@@ -47,7 +47,8 @@ let $router = useRouter();
 defineProps(['menuList'])
 
 const goRoute = (vc: { index: RouteLocationRaw; }) => {
-  $router.push(vc.index + `?cid=${$router.currentRoute.value.query.courseId}`);
+  const storedCourseId = localStorage.getItem('courseId');
+  $router.push(vc.index + `?cid=${storedCourseId}`);
 }
 
 </script>
