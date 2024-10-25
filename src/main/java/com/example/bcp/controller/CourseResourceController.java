@@ -31,7 +31,8 @@ public class CourseResourceController {
     private static final String ROOT_PATH = System.getProperty("user.dir") + File.separator + "files";
 
     @PostMapping("/upload")
-    public Result upload(@RequestParam("file") MultipartFile file) {
+    public Result upload(@RequestParam("file") MultipartFile file,
+                         @RequestParam("Cid") String Cid) {
         if (file.isEmpty()) {
             return Result.error("上传文件不能为空");
         }
@@ -40,12 +41,15 @@ public class CourseResourceController {
             // 调用文件上传逻辑
             String savedFilePath = uploadFile(file);
             // 获取新文件的 ID（这里假设你有一个方法获取最大 ID）
-            int newId = courseResourceService.maxNo() + 1;
+//            int newId = courseResourceService.maxNo() + 1;
+
+            int size = courseResourceService.selectAllCourseResource().size() + 1;
+            String newCRId = "R" + size;
+
 
             // 插入文件记录到数据库
-            String Cid = ""; // 根据需要设置 Cid
             String url = "http://" + ip + ":" + port + "/file/download/" + savedFilePath;
-            courseResourceService.insertCourseResource(Integer.toString(newId), Cid, FileUtil.extName(file.getOriginalFilename()), url);
+            courseResourceService.insertCourseResource(newCRId, Cid, FileUtil.extName(file.getOriginalFilename()), url);
 
             return Result.success(url);  //返回文件的链接
         } catch (IOException e) {
@@ -67,7 +71,7 @@ public class CourseResourceController {
         // 检查文件是否存在并处理重命名
         if (FileUtil.exist(ROOT_PATH + File.separator + originalFilename)) {
             // 如果当前上传的文件已经存在了，那么这个时候就要重命名一个文件名称
-            originalFilename = courseResourceService.maxNo() + 1 + "." + extName;
+            originalFilename = courseResourceService.selectAllCourseResource().size() + 1 + "." + extName;
         }
 
         // 保存文件到本地
@@ -80,8 +84,8 @@ public class CourseResourceController {
     }
 
 
-    @GetMapping("/download/{fileName}")
-    public Result download(@PathVariable("fileName") String fileName, HttpServletResponse response) throws IOException {
+    @GetMapping("/download")
+    public Result download(@RequestParam String fileName, HttpServletResponse response) throws IOException {
 
         // response.addHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode(fileFullName, "UTF-8"));  // 附件下载
         String filePath = ROOT_PATH + File.separator + fileName;

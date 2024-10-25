@@ -17,36 +17,31 @@ public class FavoriteController {
     @Autowired
     FavoriteService favoriteService;
 
-    @PostMapping("/selectByStudentNo")
-    public Result selectByStudentNo(@RequestBody Map<String, String> requestData) {
-        String studentNo = requestData.get("studentNo");
-
+    @GetMapping("/selectByStudentNo")
+    public Result selectByStudentNo(@RequestParam String studentNo) {
         List<Favorite> selectByStudentNo = favoriteService.selectByStudentNo(studentNo);
         return Result.success(selectByStudentNo);
     }
 
 
-    @PostMapping("/selectByStudentNoAndFavoriteTitle")
-    public Result selectByStudentNoAndFavoriteTitle(@RequestBody Map<String, String> requestData) {
-        String studentNo = requestData.get("studentNo");
-        String favoriteTitle = requestData.get("favoriteTitle");
-
+    @GetMapping("/selectByStudentNoAndFavoriteTitle")
+    public Result selectByStudentNoAndFavoriteTitle(@RequestParam String studentNo,
+                                                    @RequestParam String favoriteTitle) {
         List<Favorite> selectByStudentNoAndFavoriteTitle = favoriteService.selectByStudentNoAndFavoriteTitle(studentNo, favoriteTitle);
         return Result.success(selectByStudentNoAndFavoriteTitle);
     }
 
 
-    @PostMapping("/selectByStudentNoAndFavoriteNo")
-    public Result selectByStudentNoAndFavoriteNo(@RequestBody Map<String, String> requestData) {
-        String studentNo = requestData.get("studentNo");
-        String favoriteNo = requestData.get("favoriteNo");
+    @GetMapping("/selectByStudentNoAndFavoriteNo")
+    public Result selectByStudentNoAndFavoriteNo(@RequestParam String studentNo,
+                                                 @RequestParam String favoriteNo) {
 
         List<Favorite> selectByStudentNoAndFavoriteNo = favoriteService.selectByStudentNoAndFavoriteNo(studentNo, favoriteNo);
         return Result.success(selectByStudentNoAndFavoriteNo);
     }
 
 
-    @PostMapping("/insertFavorite")
+    @GetMapping("/insertFavorite")
     public Result insertFavorite(@RequestBody Map<String, String> requestData) {
         String favoriteNo = requestData.get("favoriteNo");
         String studentNo = requestData.get("studentNo");
