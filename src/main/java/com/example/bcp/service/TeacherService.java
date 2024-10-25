@@ -31,4 +31,8 @@ public class TeacherService {
     public void updateTeacherPicturePath(String PicturePath , String TeacherNo){
         teacherMapper.updateTeacherPicturePath(PicturePath,TeacherNo);
     }
+
+    public void updateTeacherStation(String TeacherStation,String TeacherNo){
+        teacherMapper.updateTeacherStation(TeacherStation,TeacherNo);
+    }
 }
