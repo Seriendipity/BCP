@@ -174,6 +174,7 @@ alter table Teacher add column TeacherInfo TEXT;
 alter table Teacher add column TeacherStation VARCHAR(30);
 alter table teacher add column TeacherPhone varchar(20);
 
+alter table notification add column PostingTime DateTime ;
 -- 插入 Class 表数据
 INSERT INTO Class (ClassNo, ClassName, ClassDepartment, ClassMajor, StudentNumber) VALUES
                                                                                        ('C001', '计算机科学', '计算机学院', '计算机科学与技术', 30),

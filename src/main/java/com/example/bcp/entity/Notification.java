@@ -5,6 +5,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Table(name = "Notification")
 public class Notification {
@@ -20,6 +22,28 @@ public class Notification {
 
     @Column(name = "NotificationInformation" , columnDefinition = "text")
     private String NotificationInformation;
+
+    @Column(name = "NotificationTitle",length = 30)
+    private String NotificationTitle;
+
+    @Column(name = "PostingTime")
+    private LocalDateTime PostingTime;
+
+    public LocalDateTime getPostingTime() {
+        return PostingTime;
+    }
+
+    public void setPostingTime(LocalDateTime postingTime) {
+        PostingTime = postingTime;
+    }
+
+    public String getNotificationTitle() {
+        return NotificationTitle;
+    }
+
+    public void setNotificationTitle(String notificationTitle) {
+        NotificationTitle = notificationTitle;
+    }
 
     public String getNotificationInformation() {
         return NotificationInformation;

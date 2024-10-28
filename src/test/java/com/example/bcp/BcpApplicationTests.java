@@ -207,17 +207,18 @@ class BcpApplicationTests {
     private NotificationService notificationService;
     @Test
     void TestNotification(){
-       notificationService.deleteNotification("N003");
-        List<Notification> notifications = notificationService.selectAllNotification();
-//        List<Notification> notifications = new ArrayList<>();
+//       notificationService.deleteNotification("N003");
+//        List<Notification> notifications = notificationService.selectAllNotification();
+        notificationService.insertNotification("N004","T001_CS101","T002","New Test","New Title");
+        //        List<Notification> notifications = new ArrayList<>();
 //         notifications.add(notificationService.selectByNotificationNo("N002"));
-        for(Notification n : notifications){
-            System.out.print(n.getCid()+" ");
-            System.out.print(n.getNotificationNo()+" ");
-            System.out.print(n.getSendNo()+" ");
-            System.out.print(n.getNotificationInformation());
-            System.out.println();
-        }
+//        for(Notification n : notifications){
+//            System.out.print(n.getCid()+" ");
+//            System.out.print(n.getNotificationNo()+" ");
+//            System.out.print(n.getSendNo()+" ");
+//            System.out.print(n.getNotificationInformation());
+//            System.out.println();
+//        }
     }
 
     @Autowired

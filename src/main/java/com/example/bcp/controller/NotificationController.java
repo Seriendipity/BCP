@@ -94,11 +94,14 @@ public class NotificationController {
                 StudentNotification se = studentNotificationService.selectByStudentNoAndNotificationNo(username,notificationNo);
                 if(se != null){
                     notification.put("index",i);
-                    notification.put("NotificationInfo",n);
+                    notification.put("notificationInfo",n.getNotificationInformation());
+                    notification.put("notificationTitle",n.getNotificationTitle());
+                    notification.put("sendNo",n.getSendNo());
+                    notification.put("notificationPostingTime",n.getPostingTime());
                     String state = "未读";
                     if(se.isNotificationState()) state = "已读";
-                    notification.put("NotificationState",state);
-                    responseData.put("Notification"+i,notification);
+                    notification.put("notificationState",state);
+                    responseData.put("notification"+i,notification);
                     i++;
                 }
             }
@@ -110,8 +113,11 @@ public class NotificationController {
             int i = 1;
             for(Notification n : notifications){
                 Map<String,Object> notification = new HashMap<>();
-                notification.put("Index",i);
-                notification.put("Notification",n);
+                notification.put("index",i);
+                notification.put("notificationInfo",n.getNotificationInformation());
+                notification.put("notificationTitle",n.getNotificationTitle());
+                notification.put("notificationPostingTime",n.getPostingTime());
+                notification.put("sendNo",n.getSendNo());
                 responseData.put("Notification"+i,notification);
                 i++;
             }

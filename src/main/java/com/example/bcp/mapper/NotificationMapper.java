@@ -20,8 +20,8 @@ public interface NotificationMapper {
     @Select("Select * from Notification Where NotificationNo = #{NotificationNo}")
     Notification selectByNotificationNo(String NotificationNo);
 
-    @Insert("Insert into Notification(NotificationNo,Cid,SendNo,NotificationInformation,NotificationTitle)" +
-            " values(#{NotificationNo},#{Cid},#{SendNo},#{NotificationInformation},#{NotificationTitle})")
+    @Insert("Insert into Notification(NotificationNo,Cid,SendNo,NotificationInformation,NotificationTitle,PostingTime)" +
+            " values(#{NotificationNo},#{Cid},#{SendNo},#{NotificationInformation},#{NotificationTitle},NOW())")
     void insertNotification(String NotificationNo,String Cid,
                             String SendNo,String NotificationInformation,
                             String NotificationTitle);
