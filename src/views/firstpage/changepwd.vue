@@ -16,7 +16,7 @@
         </el-col>
         <el-col :span="2">
             <router-link to="/myinformation" style="text-decoration: none; " >
-          <h1 style="font-size: medium;margin-top: 21px;color: aliceblue;font-weight: 550;">{{ student[0].name }}</h1></router-link>
+          <h1 style="font-size:x-large;margin-top: 17px;color: white;text-shadow: 2px 3px rgba(0, 0, 0, 0.5);font-weight: 550;">{{ student[0].name }}</h1></router-link>
         </el-col>
       </el-row>
   

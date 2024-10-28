@@ -2,21 +2,32 @@
   <el-container>
     <el-header class="head">
       <el-row :gutter="20">
-        <el-col :span="21">
+        <el-col :span="18">
           <div class="grid-content">
             <h1 class="zitihead">智慧课程平台</h1>
           </div>
         </el-col>
         <el-col :span="1">
-<<<<<<< HEAD
+          <div class="grid-content ">
+            <router-link to="/notes" style="text-decoration: none;">
+              <h1 style="font-size:larger;margin-top: 21px;color: aliceblue;font-weight: 550;">笔记
+              </h1>
+            </router-link>
+          </div>
+        </el-col>
+        <el-col :span="2">
+          <div class="grid-content ">
+            <router-link to="/bookmarks" style="text-decoration: none;">
+              <h1 style="font-size:larger;margin-top: 21px;color: aliceblue;font-weight: 550;">收藏夹
+              </h1>
+            </router-link>
+          </div>
+        </el-col>
+        <el-col :span="1">
           <div class="grid-content ">
             <router-link to="/myinformation" style="text-decoration: none;">
               <div style="margin-top: 10px"><el-avatar :size="40" :src="circleUrl"></el-avatar></div>
             </router-link>
-=======
-          <div class="grid-content">
-            <router-link to="/myinformation" style="text-decoration: none;"></router-link>
->>>>>>> e3825cebd2da90331734163710dbcdf5cc8d9ee0
           </div>
         </el-col>
         <el-col :span="2">
@@ -85,13 +96,10 @@ const courses = ref([]);
 const student = ref([]);
 const router = useRouter();
 
-<<<<<<< HEAD
 
 const circleUrl = ref('src/assets/images/example.jpg');
 
 // 获取用户信息和课程列表
-=======
->>>>>>> e3825cebd2da90331734163710dbcdf5cc8d9ee0
 onMounted(async () => {
   try {
     const userResponse = await reqUserInfo();
