@@ -4,7 +4,7 @@
 
 <script setup>
 import { ref, onMounted } from 'vue';
-import { reqCalendar } from '@/api/api'; // 确保你有这个API接口
+import { reqCalendar } from '@/api/api';
 import { ElNotification } from 'element-plus';
 
 const props = defineProps({
@@ -19,8 +19,9 @@ const calendarSrc = ref(props.previewSrc); // 使用ref保存日历的URL
 
 onMounted(async () => {
   try {
-    const response = await reqCalendar(); // 获取后端日历URL
-    calendarSrc.value = response.data.url || calendarSrc.value; // 更新URL或保持默认
+    const storedCourseId = localStorage.getItem('courseId');
+    const response = await reqCalendar(storedCourseId); // 获取后端日历URL
+    calendarSrc.value = response.data.Calendar || calendarSrc.value; // 更新URL或保持默认
   } catch (error) {
     ElNotification({
       type: 'error',

@@ -61,88 +61,55 @@
           <el-main height="600px">
             <el-row >
                 <el-col :span="4">
+                    <router-link to="/notes" style="text-decoration: none;">
                     <!-- <h1 style="text-align: left; font-weight: bold;font-size: large;margin-top:-12px;"> 我的笔记</h1> -->
-                    <el-button type="primary" style="text-align: left; font-weight: bold;font-size: large;">我的笔记</el-button>
+                    <el-button type="primary" style="text-align: left; font-weight: bold;font-size: large;" plain>我的笔记</el-button>
+                </router-link>
                 </el-col>
                 <el-col :span="20">
-                    <router-link to="/othersnotes" style="text-decoration: none;">
                     <!-- <h1 style="text-align: left; font-weight: bold;font-size: large;margin-top:-12px;"> 我的笔记</h1> -->
-                    <el-button type="primary" style="text-align: left; font-weight: bold;font-size: large;" plain>浏览笔记</el-button>
-                </router-link></el-col>
-                <div style="margin-left: 87%;">
+                    <el-button type="primary" style="text-align: left; font-weight: bold;font-size: large;" >浏览笔记</el-button>
+                </el-col>
+                <!-- <div style="margin-left: 87%;">
                 <el-button type="primary" round style="width: 80px;font-size: large; font-weight: bold;margin-bottom: -5px;">上传</el-button>
-                </div>
+                </div> -->
             </el-row>
             <!-- <div class="scrollable"> -->
-                <div class="grid-content bg-white" style="height: 75px;">
+                <div class="grid-content bg-white" style="height: 80px;">
                     <el-row :gutter="20">
-                        <el-col :span="11">
+                        <el-col :span="19">
                             <h1 class="ziti03" style="margin-top: 5px;">数据结构第一次课程笔记</h1>
-                            <h1 class="ziti04" style="color: gray;margin-top: 15px;">2024年10月5日上传</h1>
+                            <h1 class="ziti04" style="margin-top: 5px;">姜天亦</h1>
+                            <h1 class="ziti04" style="color: gray;margin-top: 5px;">2024年10月5日上传</h1>
                         </el-col>
-                        <el-col :span="4">
-                            <h1 class="ziti04" style="color: gray;margin-top: 28px;text-align: right;">是否公开</h1>
-                        </el-col>
-                        <el-col :span="2">
-                            <el-switch
-                                style="margin-top: 20px;"
-                                v-model="value"
-                                active-color="#13ce66"
-                                inactive-color="#ff4949">
-                            </el-switch>
-                        </el-col>
-                        <el-col :span="2">
-                        <el-button type="primary" style="margin-top: 20px;" plain>更新</el-button></el-col>
+                        
                         <el-col :span="2">
                         <el-button type="primary" style="margin-top: 20px;" plain>预览</el-button></el-col>
                         <el-col :span="3">
                         <el-button type="primary" style="margin-top: 20px;" plain>下载</el-button></el-col>
                     </el-row>
                 </div>
-                <div class="grid-content bg-white" style="height: 75px;">
+                <div class="grid-content bg-white" style="height: 80px;">
                     <el-row :gutter="20">
-                        <el-col :span="11">
+                        <el-col :span="19">
                             <h1 class="ziti03" style="margin-top: 5px;">算法第3次作业答案</h1>
-                            <h1 class="ziti04" style="color: gray;margin-top: 15px;">2023年9月5日上传</h1>
+                            <h1 class="ziti04" style="margin-top: 5px;">郑宇煊</h1>
+                            <h1 class="ziti04" style="color: gray;margin-top: 5px;">2023年9月5日上传</h1>
                         </el-col>
-                        <el-col :span="4">
-                            <h1 class="ziti04" style="color: gray;margin-top: 28px;text-align: right;">是否公开</h1>
-                        </el-col>
-                        <el-col :span="2">
-                            <el-switch
-                                style="margin-top: 20px;"
-                                v-model="value"
-                                active-color="#13ce66"
-                                inactive-color="#ff4949">
-                            </el-switch>
-                        </el-col>
-                        <el-col :span="2">
-                            <el-button type="primary" style="margin-top: 20px;" plain>更新</el-button></el-col>
                         <el-col :span="2">
                         <el-button type="primary" style="margin-top: 20px;" plain>预览</el-button></el-col>
                         <el-col :span="3">
                         <el-button type="primary" style="margin-top: 20px;" plain>下载</el-button></el-col>
                     </el-row>
                 </div>
-                <div class="grid-content bg-white" style="height: 75px;">
+                <div class="grid-content bg-white" style="height: 80px;">
                     <el-row :gutter="20">
-                        <el-col :span="11">
+                        <el-col :span="19">
                             <h1 class="ziti03" style="margin-top: 5px;">软件测试小测原题</h1>
-                            <h1 class="ziti04" style="color: gray;margin-top: 15px;">2022年8月5日上传</h1>
+                            <h1 class="ziti04" style="margin-top: 5px;">刘艺凡</h1>
+                            <h1 class="ziti04" style="color: gray;margin-top: 5px;">2022年8月5日上传</h1>
                         </el-col>
-                        <el-col :span="4">
-                            <h1 class="ziti04" style="color: gray;margin-top: 28px;text-align: right;">是否公开</h1>
-                        </el-col>
-                        <el-col :span="2">
-                            <el-switch
-                                style="margin-top: 20px;"
-                                v-model="value"
-                                active-color="#13ce66"
-                                inactive-color="#ff4949">
-                            </el-switch>
-                        </el-col>
-                        <el-col :span="2">
-                            <el-button type="primary" style="margin-top: 20px;" plain>更新</el-button></el-col>
+                        
                         <el-col :span="2">
                         <el-button type="primary" style="margin-top: 20px;" plain>预览</el-button></el-col>
                         <el-col :span="3">

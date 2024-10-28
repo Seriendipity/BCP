@@ -4,7 +4,7 @@
 
 <script setup>
 import { ref, onMounted } from 'vue';
-import { reqSyllabus } from '@/api/api'; // 确保你有这个API接口
+import { reqSyllabus } from '@/api/api';
 import { ElNotification } from 'element-plus';
 
 const props = defineProps({
@@ -19,8 +19,9 @@ const syllabusUrl = ref(props.previewSrc); // 使用ref保存课程大纲的URL
 
 onMounted(async () => {
   try {
-    const response = await reqSyllabus(); // 获取后端课程大纲URL
-    syllabusUrl.value = response.data.url || syllabusUrl.value; // 更新URL或保持默认
+    const storedCourseId = localStorage.getItem('courseId');
+    const response = await reqSyllabus(storedCourseId); // 获取后端课程大纲URL
+    syllabusUrl.value = response.data.Syllabus || syllabusUrl.value; // 更新URL或保持默认
   } catch (error) {
     ElNotification({
       type: 'error',
