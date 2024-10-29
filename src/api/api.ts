@@ -9,8 +9,8 @@ enum API {
   COURSELIST = "/StudentCourse/allCourse",
   COURSEINTRO = "/teaching/getCourseInfo",
   TEACHERINFO = "/teaching/getTeacherInfo",
-  CALENDAR_URL = "teaching/getCalendar",
-  SYLLABUS_URL = "teaching/getSyllabus",
+  CALENDAR_URL = "/teaching/getCalendar",
+  SYLLABUS_URL = "/teaching/getSyllabus",
 
 
 }

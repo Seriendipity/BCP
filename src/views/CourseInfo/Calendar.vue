@@ -21,7 +21,9 @@ onMounted(async () => {
   try {
     const storedCourseId = localStorage.getItem('courseId');
     const response = await reqCalendar(storedCourseId); // 获取后端日历URL
+    console.log(response)
     calendarSrc.value = response.data.Calendar || calendarSrc.value; // 更新URL或保持默认
+    console.log(calendarSrc.value)
   } catch (error) {
     ElNotification({
       type: 'error',
