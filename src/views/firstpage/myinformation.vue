@@ -59,7 +59,7 @@
       </div>
 
       <!-- 上传文件的对话框 -->
-      <el-dialog title="更改头像" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
+      <el-dialog title="更改头像" v-model="dialogVisible" width="30%" :before-close="handleClose">
         <el-upload class="avatar-uploader" action=" " :on-success="handleAvatarSuccess"
           :before-upload="beforeAvatarUpload">
           <el-button size="small" type="primary">点击上传</el-button>
