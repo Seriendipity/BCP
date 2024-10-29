@@ -2,16 +2,16 @@
   <div class="notification-container">
     <el-table :data="notifications" style="width: 100%;" border>
       <!-- 通知主题列 -->
-      <el-table-column prop="title" label="通知主题" width="55%"></el-table-column>
+      <el-table-column prop="notificationTitle" label="通知主题" width="55%"></el-table-column>
 
       <!-- 通知发布时间列 -->
-      <el-table-column prop="timestamp" label="发布时间" width="25%"></el-table-column>
+      <el-table-column prop="notificationPostingTime" label="发布时间" width="25%"></el-table-column>
 
       <!-- 通知状态列 -->
       <el-table-column label="状态" width="10%">
         <template #default="{ row }">
-          <el-tag :type="row.viewed ? 'success' : 'warning'">
-            {{ row.viewed ? '已查看' : '未查看' }}
+          <el-tag :type="row.NotificationState === '已读' ? 'success' : 'warning'">
+            {{ row.NotificationState }}
           </el-tag>
         </template>
       </el-table-column>
@@ -26,8 +26,8 @@
 
     <!-- 查看通知的弹出框 -->
     <el-dialog :visible="dialogVisible" title="查看通知" width="600px" @close="closeDialog">
-      <p><strong>主题:</strong> {{ currentNotification.title }}</p>
-      <p><strong>内容:</strong> {{ currentNotification.message }}</p>
+      <p><strong>主题:</strong> {{ currentNotification.notificationTitle }}</p>
+      <p><strong>内容:</strong> {{ currentNotification.notificationInfo }}</p>
       <span slot="footer" class="dialog-footer">
         <el-button @click="closeDialog">关闭</el-button>
       </span>
@@ -37,7 +37,7 @@
 
 <script>
 import { ref, onMounted } from 'vue';
-import { reqNotifications } from '@/api/api'; // 确保有这个API接口
+import { reqNotificationStudent } from '@/api/api'; // 确保有这个API接口
 import { ElNotification } from 'element-plus';
 
 export default {
@@ -49,7 +49,8 @@ export default {
     // 获取通知数据
     const fetchNotifications = async () => {
       try {
-        const response = await reqNotifications(); // 获取通知数据
+        const storedCourseId = localStorage.getItem('courseId');
+        const response = await reqNotificationStudent(storedCourseId); // 获取通知数据
         notifications.value = response.data || []; // 更新通知数据
       } catch (error) {
         ElNotification({
@@ -98,7 +99,8 @@ export default {
 
 .el-table {
   margin-bottom: 20px;
-  width: 100%; /* 设置表格宽度为100% */
+  width: 100%;
+  /* 设置表格宽度为100% */
 }
 
 .el-dialog {

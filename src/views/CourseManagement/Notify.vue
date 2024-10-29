@@ -20,17 +20,18 @@
 </template>
 
 <script>
+import { postNotification } from "@/api/api";
 import axios from "axios";
 import { ElMessage } from "element-plus";
 
 export default {
   data() {
     return {
-      // 表单数据
       form: {
-        title: "",  // 通知主题
-        message: "",  // 通知内容
-        time: "",  // 通知发布时间
+        title: "",        // 通知主题
+        message: "",      // 通知内容
+        time: "",         // 通知发布时间
+        publisherName: "" // 通知发布人姓名
       },
     };
   },
@@ -42,17 +43,23 @@ export default {
         return;
       }
 
-      // 自动获取当前发布时间
+      // 获取当前时间作为发布时间
       this.form.time = new Date().toLocaleString();
 
+      // 从 localStorage 获取发布人姓名
+      const storedName = localStorage.getItem('publisherName');
+      this.form.publisherName = storedName || "未知发布人"; // 如果为空则设置默认值
+
       try {
-        // 推送通知到后端 (假设后端接口为 /api/notifications)
-        const response = await axios.post("/api/notifications", this.form);
+        // 发送通知到后端
+        const response = await axios.post(postNotification, this.form);
         if (response.status === 200) {
           ElMessage.success("通知发布成功");
           // 清空表单
           this.form.title = "";
           this.form.message = "";
+          this.form.time = "";
+          this.form.publisherName = "";
         } else {
           ElMessage.error("通知发布失败，请重试");
         }
@@ -62,18 +69,23 @@ export default {
       }
     },
   },
+  mounted() {
+    // 在组件加载时尝试获取发布人姓名
+    const storedName = localStorage.getItem('userName');
+    if (storedName) {
+      this.form.publisherName = storedName;
+    }
+  },
 };
 </script>
 
 <style scoped>
 /* 父容器 */
 .Intro {
-
   display: flex;
   justify-content: center;
   align-items: center;
   background-color: #f5f5f5;
-  /* 背景颜色柔和 */
   padding: 20px;
 }
 
@@ -81,11 +93,9 @@ export default {
 .notification-form {
   height: 550px;
   width: 1200px;
-  /* 限制表单最大宽度，保持美观 */
   background-color: #fff;
   border-radius: 15px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  /* 轻微阴影效果 */
   padding: 40px;
 }
 
