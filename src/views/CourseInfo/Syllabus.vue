@@ -1,5 +1,5 @@
 <template>
-  <iframe class="Syllabus" :src="previewSrc" width="100%" height="100%" style="border:none;"></iframe>
+  <iframe class="syllabus" :src="syllabusSrc" width="100%" height="100%" style="border:none;"></iframe>
 </template>
 
 <script setup>
@@ -15,13 +15,15 @@ const props = defineProps({
   }
 });
 
-const syllabusUrl = ref(props.previewSrc); // 使用ref保存课程大纲的URL
+const syllabusSrc = ref(props.previewSrc); // 使用ref保存课程大纲的URL
 
 onMounted(async () => {
   try {
     const storedCourseId = localStorage.getItem('courseId');
     const response = await reqSyllabus(storedCourseId); // 获取后端课程大纲URL
-    syllabusUrl.value = response.data.Syllabus || syllabusUrl.value; // 更新URL或保持默认
+    console.log(response)
+    syllabusSrc.value = response.data.Syllabus || Syllabus.value; // 更新URL或保持默认
+    console.log(syllabusSrc)
   } catch (error) {
     ElNotification({
       type: 'error',
@@ -32,7 +34,7 @@ onMounted(async () => {
 </script>
 
 <style>
-.Syllabus {
+.syllabus {
   border-radius: 20px;
   box-shadow: --el-box-shadow-light;
   background-color: #FFFFFF;
