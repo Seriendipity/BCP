@@ -52,6 +52,7 @@ export default {
         const storedCourseId = localStorage.getItem('courseId');
         const response = await reqNotificationStudent(storedCourseId); // 获取通知数据
         notifications.value = response.data || []; // 更新通知数据
+        console.log(notifications.value)
       } catch (error) {
         ElNotification({
           type: 'error',
