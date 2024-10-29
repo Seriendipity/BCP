@@ -1,4 +1,5 @@
 <template>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
     <el-container>
       <el-header class="head">
         <el-row :gutter="20">
@@ -77,12 +78,15 @@
             <!-- <div class="scrollable"> -->
                 <div class="grid-content bg-white" style="height: 80px;">
                     <el-row :gutter="20">
-                        <el-col :span="19">
-                            <h1 class="ziti03" style="margin-top: 5px;">数据结构第一次课程笔记</h1>
-                            <h1 class="ziti04" style="margin-top: 5px;">姜天亦</h1>
+                        <el-col :span="18">
+                            <h1 class="ziti03" style="margin-top: 0px;">数据结构第一次课程笔记</h1>
+                            <h1 class="ziti04" style="margin-top: 10px;">姜天亦</h1>
                             <h1 class="ziti04" style="color: gray;margin-top: 5px;">2024年10月5日上传</h1>
                         </el-col>
-                        
+                        <el-col :span="1">
+                            <!-- 未收藏状态 -->
+                            <i class="fas fa-star" style="color: lightslategrey; cursor: pointer;margin-top: 28px;" @click="toggleFavorite(this);"></i> <!-- 可点击的收藏状态 -->
+                        </el-col>
                         <el-col :span="2">
                         <el-button type="primary" style="margin-top: 20px;" plain>预览</el-button></el-col>
                         <el-col :span="3">
@@ -91,11 +95,15 @@
                 </div>
                 <div class="grid-content bg-white" style="height: 80px;">
                     <el-row :gutter="20">
-                        <el-col :span="19">
-                            <h1 class="ziti03" style="margin-top: 5px;">算法第3次作业答案</h1>
-                            <h1 class="ziti04" style="margin-top: 5px;">郑宇煊</h1>
+                        <el-col :span="18">
+                            <h1 class="ziti03" style="margin-top: 0px;">算法第3次作业答案</h1>
+                            <h1 class="ziti04" style="margin-top: 10px;">郑宇煊</h1>
                             <h1 class="ziti04" style="color: gray;margin-top: 5px;">2023年9月5日上传</h1>
                         </el-col>
+                        <el-col :span="1">
+                            <!-- 未收藏状态 -->
+                            <i class="fas fa-star" style="color: lightslategrey; cursor: pointer;margin-top: 28px;" @click="toggleFavorite(this);"></i> <!-- 可点击的收藏状态 -->
+                        </el-col>
                         <el-col :span="2">
                         <el-button type="primary" style="margin-top: 20px;" plain>预览</el-button></el-col>
                         <el-col :span="3">
@@ -104,12 +112,15 @@
                 </div>
                 <div class="grid-content bg-white" style="height: 80px;">
                     <el-row :gutter="20">
-                        <el-col :span="19">
-                            <h1 class="ziti03" style="margin-top: 5px;">软件测试小测原题</h1>
-                            <h1 class="ziti04" style="margin-top: 5px;">刘艺凡</h1>
+                        <el-col :span="18">
+                            <h1 class="ziti03" style="margin-top: 0px;">软件测试小测原题</h1>
+                            <h1 class="ziti04" style="margin-top: 10px;">刘艺凡</h1>
                             <h1 class="ziti04" style="color: gray;margin-top: 5px;">2022年8月5日上传</h1>
                         </el-col>
-                        
+                        <el-col :span="1">
+                            <!-- 未收藏状态 -->
+                            <i class="fas fa-star" style="color: lightslategrey; cursor: pointer;margin-top: 28px;" @click="toggleFavorite(this);"></i> <!-- 可点击的收藏状态 -->
+                        </el-col>
                         <el-col :span="2">
                         <el-button type="primary" style="margin-top: 20px;" plain>预览</el-button></el-col>
                         <el-col :span="3">
@@ -196,6 +207,11 @@
       });
     }
   };
+
+  function toggleFavorite(element) {
+  // 切换星星的样式
+  element.classList.toggle('favorite'); // 半星样式，表示收藏状态的变化
+}
   </script>
   
   
@@ -327,4 +343,8 @@
   body>.el-container {
     margin-bottom: 40px;
   }
+
+  .favorite {
+            color: gold;
+        }
   </style>
