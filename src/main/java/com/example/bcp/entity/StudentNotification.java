@@ -54,11 +54,11 @@ public class StudentNotification {
         NotificationDate = notificationDate;
     }
 
-//    public String getNotificationState() {
-//        return NotificationState;
-//    }
+    public boolean getNotificationState() {
+        return NotificationState;
+    }
 
-//    public void setNotificationState(String notificationState) {
+//    public void setNotificationState(boolean notificationState) {
 //        NotificationState = notificationState;
 //    }
 }
