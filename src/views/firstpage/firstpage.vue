@@ -91,6 +91,7 @@ onMounted(async () => {
     const courseResponse = await reqCourseList();
     student.value = userResponse.data;
     courses.value = courseResponse.data;
+    localStorage.setItem('userName', student.value.studentName);
   } catch (error) {
     ElNotification({
       type: 'error',

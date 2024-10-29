@@ -130,16 +130,6 @@ export const constantRoute = [
           hidden: false,
           icon: 'Files',
         }
-      },
-      {
-        path: '/CourseResource/Like',
-        component: () => import('@/views/CourseResource/Like.vue'),
-        name: 'Like',
-        meta: {
-          title: '收藏夹',
-          hidden: false,
-          icon: 'StarFilled',
-        }
       }
     ]
   },
@@ -155,7 +145,7 @@ export const constantRoute = [
     },
     children: [
       {
-        path: '/CourseManagement/Students',
+        path: '/CourseManagement/Student',
         component: () => import('@/views/CourseManagement/Student.vue'),
         name: 'Students',
         meta: {

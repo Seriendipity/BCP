@@ -9,8 +9,11 @@ enum API {
   COURSELIST = "/StudentCourse/allCourse",
   COURSEINTRO = "/teaching/getCourseInfo",
   TEACHERINFO = "/teaching/getTeacherInfo",
-  CALENDAR_URL = "teaching/getCalendar",
-  SYLLABUS_URL = "teaching/getSyllabus",
+  CALENDAR_URL = "/teaching/getCalendar",
+  SYLLABUS_URL = "/teaching/getSyllabus",
+  NOTIFICATION_STUDENT = "/notifications/getNotification",
+  STUDENT_DATA = "/StudentCourse/allStudent",
+  NOTIFICATION_POST = ""
 
 
 }
@@ -28,5 +31,12 @@ export const reqTeacherInfo = (courseId: any) => request.get<any, any>(API.TEACH
 export const reqCalendar = (courseId: any) => request.get<any, any>(API.CALENDAR_URL + `?cid=${courseId}`)
 //获取教学大纲
 export const reqSyllabus = (courseId: any) => request.get<any, any>(API.SYLLABUS_URL + `?cid=${courseId}`)
+//获取学生通知
+export const reqNotificationStudent = (courseId: any) => request.get<any, any>(API.NOTIFICATION_STUDENT + `?cid=${courseId}`)
+//获取学生选课列表
+export const reqStudentData = (courseId: any) => request.get<any, any>(API.NOTIFICATION_STUDENT + `?cid=${courseId}`)
 // export const awardInfo = () => request.get<any, any>(API.AWARD_GET);
+
+//发布通知
+export const postNotification = (data: any) => request.post<any>(API.NOTIFICATION_POST, data);
 // export const awardPost = (data: any) => request.post<any>(API.AWARD_POST, data);
