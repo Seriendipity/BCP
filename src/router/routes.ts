@@ -24,6 +24,39 @@ export const constantRoute = [
     },
   },
   {
+    path: '/bookmarks',
+    component: () => import('@/views/Bookmarks/bookmarks.vue'),
+    name: 'bookmarks',
+    meta: {
+      title: '收藏夹',
+      hidden: true,//是否在菜单隐藏
+      icon: 'CircleCloseFilled',
+      key: 'unique-key'
+    },
+  },
+  {
+    path: '/notes',
+    component: () => import('@/views/Bookmarks/notes.vue'),
+    name: 'notes',
+    meta: {
+      title: '笔记',
+      hidden: true,//是否在菜单隐藏
+      icon: 'CircleCloseFilled',
+      key: 'unique-key'
+    },
+  },
+  {
+    path: '/othersnotes',
+    component: () => import('@/views/Bookmarks/othersnotes.vue'),
+    name: 'othersnotes',
+    meta: {
+      title: '浏览笔记',
+      hidden: true,//是否在菜单隐藏
+      icon: 'CircleCloseFilled',
+      key: 'unique-key'
+    },
+  },
+  {
     path: '/myinformation',
     component: () => import('@/views/firstpage/myinformation.vue'),
     name: 'myinformation',

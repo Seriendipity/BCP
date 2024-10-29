@@ -19,8 +19,10 @@
           </div>
         </el-col>
         <el-col :span="2">
-          <router-link to="/firstpage" style="text-decoration: none;">
-            <h1 style="font-size: medium;margin-top: 21px;color: aliceblue;font-weight: 550;">{{ student[0].name }}</h1>
+          <router-link to="/firstpage" style="text-decoration: none; ">
+            <h1
+              style="font-size:x-large;margin-top: 17px;color: white;text-shadow: 2px 3px rgba(0, 0, 0, 0.5);font-weight: 550;">
+              {{ student[0].name }}</h1>
           </router-link>
         </el-col>
       </el-row>
@@ -57,11 +59,12 @@
       </div>
 
       <!-- 上传文件的对话框 -->
-      <el-dialog title="更改头像" v-model="dialogVisible" width="30%" @close="handleClose">
-        <el-upload class="avatar-uploader" action="https://jsonplaceholder.typicode.com/posts/"
-          :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload">
+      <el-dialog title="更改头像" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
+        <el-upload class="avatar-uploader" action=" " :on-success="handleAvatarSuccess"
+          :before-upload="beforeAvatarUpload">
           <el-button size="small" type="primary">点击上传</el-button>
-          <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+          <el-button @click="dialogVisible = false">取 消</el-button>
+          <div slot="tip" class="el-upload__tip">只能上传jpg/png文件 且不超过500kb</div>
         </el-upload>
       </el-dialog>
     </el-main>
