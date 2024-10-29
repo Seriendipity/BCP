@@ -40,6 +40,9 @@ public class StudentCourseController {
     @Autowired
     ClassService classService;
 
+    /**
+     *  返回选修某门课的所有学生
+     */
     @GetMapping("/allStudent")
     public Result allStudent(@RequestParam String Cid,HttpServletRequest request) {
         List<StudentCourse> studentList = studentCourseService.selectByCid(Cid);
@@ -70,7 +73,9 @@ public class StudentCourseController {
         return Result.success(responseData);
     }
 
-
+    /**
+     *  导出选修某门课程的学生名单
+     */
 
     @GetMapping("/exportStudentList")
     public ResponseEntity<byte[]> exportStudentList(@RequestParam String Cid) {
@@ -122,7 +127,9 @@ public class StudentCourseController {
         }
     }
 
-
+    /**
+     *  查询某学生选修的所有课程
+     */
     @GetMapping(value = "/allCourse")
     public Result allCourse( HttpServletRequest request) {
         Map<String, Object> responseData = new HashMap<>();

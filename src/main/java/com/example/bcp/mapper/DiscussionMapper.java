@@ -23,11 +23,21 @@ public interface DiscussionMapper {
     @Select("Select * from Discussion Where StudentNo = #{StudentNo} and Cid = #{Cid}")
     List<Discussion> selectByCidAndStudentNo(String StudentNo , String Cid);
 
-    @Insert("Insert into Discussion(StudentNo,Cid,DiscussionId,DiscussionInformation,DiscussionPostingTime)"+
-    " values(#{StudentNo} , #{Cid} , #{DiscussionId} , #{DiscussionInformation} , #{DiscussionPostingTime})")
-    void insertDiscussion(String StudentNo , String Cid ,
-                          String DiscussionId , String DiscussionInformation,
-                          LocalDateTime DiscussionPostingTime);
+    @Select("Select * from Discussion Where topic = #{topic} and Cid = #{Cid}")
+    List<Discussion> selectByCidAndTopic(String topic,String Cid);
+
+    @Select("Select * from Discussion Where mentionedUser like concat('%', #{StudentNo}, '%') and Cid = #{Cid}")
+    List<Discussion> selectByCidAndMentioned(String StudentNo,String Cid);
+
+    @Select("Select * from Discussion Where mentionedUser like concat('%',#{StudentNo},'%')")
+    List<Discussion> selectByMentioned(String StudentNo);
+
+    @Insert("INSERT INTO Discussion (StudentNo, Cid, DiscussionId, DiscussionInformation, DiscussionPostingTime, mentionedUser, imgUrl, topic) " +
+            "VALUES (#{StudentNo}, #{Cid}, #{DiscussionId}, #{DiscussionInformation}, #{DiscussionPostingTime}, #{mentionedUser}, #{imgUrl}, #{topic})")
+    void insertDiscussion(String StudentNo, String Cid, String DiscussionId,
+                          String DiscussionInformation, LocalDateTime DiscussionPostingTime,
+                          String mentionedUser, String imgUrl, String topic);
+
 
     @Delete("Delete From Discussion Where DiscussionId = #{DiscussionId}")
     void deleteDiscussion(String DiscussionId);

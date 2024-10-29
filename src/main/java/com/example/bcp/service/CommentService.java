@@ -27,9 +27,10 @@ public class CommentService {
 
     public void insertComment(String CommentId , String DiscussionId ,
                               String CommentInformation , int LikesNumber ,
-                              LocalDateTime CommentPostingTime){
+                              LocalDateTime CommentPostingTime,String imgUrl,
+                              String mentionedUser){
         commentMapper.insertComment(CommentId,DiscussionId,CommentInformation,
-                LikesNumber, CommentPostingTime);
+                LikesNumber, CommentPostingTime,imgUrl,mentionedUser);
     }
 
     public void deleteComment(String CommentId){
