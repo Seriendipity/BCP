@@ -9,8 +9,8 @@
               <h2 class="notification-title">{{ notification.notificationTitle }}</h2>
               <p class="notification-time">发布时间: {{ notification.notificationPostingTime }}</p>
             </div>
-            <el-tag :type="notification.NotificationState === '已读' ? 'success' : 'warning'">
-              {{ notification.NotificationState }}
+            <el-tag :type="notification.notificationState === '已读' ? 'success' : 'warning'">
+              {{ notification.notificationState }}
             </el-tag>
             <el-button class="view-button" type="primary" size="small"
               @click="viewNotification(notification)">查看通知</el-button>
@@ -49,19 +49,19 @@ export default {
         notificationTitle: '课程调整通知',
         notificationInfo: '由于特殊情况，本周的课程时间将调整，请查看具体时间安排。',
         notificationPostingTime: '2024-10-28 14:00',
-        NotificationState: '未读',
+        notificationState: '未读',
       },
       {
         notificationTitle: '期末考试安排',
         notificationInfo: '请注意，期末考试将在12月1日举行，请提前做好复习准备。',
         notificationPostingTime: '2024-10-29 09:00',
-        NotificationState: '已读',
+        notificationState: '已读',
       },
       {
         notificationTitle: '社团活动通知',
         notificationInfo: '下周五有社团活动，欢迎大家参加！',
         notificationPostingTime: '2024-10-30 11:00',
-        NotificationState: '未读',
+        notificationState: '未读',
       },
     ];
 
@@ -89,10 +89,10 @@ export default {
     const viewNotification = (notification) => {
       currentNotification.value = notification; // 设置当前通知
       dialogVisible.value = true; // 打开弹出框
-      if (notification.NotificationState === '未读') {
-        notification.NotificationState = '已读';
+      if (notification.notificationState === '未读') {
+        notification.notificationState = '已读';
         notifications.value[index] = { ...notification }; // 更新本地数据
-        updateNotificationState(notification); // 调用后端API更新状态
+        updateNotificationState(notification.notificationId); // 调用后端API更新状态
       }
     };
 

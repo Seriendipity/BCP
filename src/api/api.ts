@@ -14,7 +14,7 @@ enum API {
   NOTIFICATION_STUDENT = "/notifications/getNotification",
   STUDENT_DATA = "/StudentCourse/allStudent",
   NOTIFICATION_POST = "",
-  NOTIFICATION_STATECHANGE = ""
+  NOTIFICATION_STATECHANGE = "/notifications/change_status"
 
 
 }
