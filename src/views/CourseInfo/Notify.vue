@@ -86,13 +86,31 @@ export default {
     });
 
     // 查看通知详情
-    const viewNotification = (notification) => {
+    const viewNotification = async (notification) => {
       currentNotification.value = notification; // 设置当前通知
       dialogVisible.value = true; // 打开弹出框
-      if (notification.notificationState === '未读') {
-        notification.notificationState = '已读';
-        notifications.value[index] = { ...notification }; // 更新本地数据
-        updateNotificationState(notification.notificationId); // 调用后端API更新状态
+
+      if (notification.NotificationState === '未读') {
+        // 将状态更新为已读
+        notification.NotificationState = '已读';
+
+        // 调用后端API更新状态
+        try {
+          await updateNotificationState({
+            notificationId: notification.notificationId, // 传递通知ID
+          });
+          // 更新本地数据
+          const index = notifications.value.findIndex(n => n.notificationId === notification.notificationId);
+          if (index !== -1) {
+            notifications.value[index] = { ...notification }; // 更新本地通知数据
+          }
+        } catch (error) {
+          console.error('更新通知状态失败:', error);
+          ElNotification({
+            type: 'error',
+            message: '更新通知状态失败，请重试。',
+          });
+        }
       }
     };
 
