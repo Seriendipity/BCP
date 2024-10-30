@@ -13,7 +13,8 @@ enum API {
   SYLLABUS_URL = "/teaching/getSyllabus",
   NOTIFICATION_STUDENT = "/notifications/getNotification",
   STUDENT_DATA = "/StudentCourse/allStudent",
-  NOTIFICATION_POST = ""
+  NOTIFICATION_POST = "",
+  NOTIFICATION_STATECHANGE = ""
 
 
 }
@@ -38,5 +39,7 @@ export const reqStudentData = (courseId: any) => request.get<any, any>(API.NOTIF
 // export const awardInfo = () => request.get<any, any>(API.AWARD_GET);
 
 //发布通知
-export const postNotification = (data: any) => request.post<any>(API.NOTIFICATION_POST, data);
+export const postNotification = (data: any) => request.post<any, any>(API.NOTIFICATION_POST, data);
+//通知已读
+export const updateNotificationState = (data: any) => request.post<any, any>(API.NOTIFICATION_STATECHANGE, data);
 // export const awardPost = (data: any) => request.post<any>(API.AWARD_POST, data);
