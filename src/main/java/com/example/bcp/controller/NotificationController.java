@@ -30,13 +30,26 @@ public class NotificationController {
 
     // 教师/助教发送通知
     @PostMapping("/send")
-    public void sendNotification(@RequestParam String cid,
-                                 @RequestParam String sendNo,
-                                 @RequestBody String notificationInformation,
-                                 @RequestBody String notificationTitle) {
+    public Result sendNotification(@RequestBody Map<String, Object> requestData,HttpServletRequest request) {
+//        String noteNo = (String) requestData.get("NoteNo");
+//        boolean authority = (Boolean) requestData.get("authority");
+        String cid = (String) requestData.get("cid");
+        String notificationInformation = (String) requestData.get("notificationInformation");
+        String notificationTitle = (String) requestData.get("notificationTitle");
 
+        String sendNo = request.getAttribute("username").toString();
         int size = notificationService.selectAllNotification().size()+1;
+        System.out.println(size);
         String notificationNo = "N"+size;
+
+        while (true){
+            if(notificationService.selectByNotificationNo(notificationNo) != null){
+                size += 1;
+                notificationNo = "N" +size;
+            }else{
+                break;
+            }
+        }
 
         notificationService.insertNotification(
                 notificationNo,
@@ -55,32 +68,48 @@ public class NotificationController {
                     LocalDateTime.now()
             );
         }
+        return Result.success();
     }
 
     // 教师/助教修改通知
-    @PutMapping("/update/{notificationNo}")
-    public void updateNotification(@PathVariable String notificationNo,
-                                   @RequestBody String notificationInformation,
-                                   @RequestBody String notificationTitle) {
+    @PostMapping("/update")
+    public Result updateNotification(@RequestBody Map<String, Object> requestData) {
+//        @PathVariable String notificationNo,
+//        @RequestParam String notificationInformation,
+//        @RequestParam String notificationTitle
+        String notificationNo = (String) requestData.get("notificationNo");
+        String notificationInformation= (String) requestData.get("notificationInformation");
+        String notificationTitle= (String) requestData.get("notificationTitle");
+
+        Map<String, Object> responseData = new HashMap<>();
+        responseData.put("notificationNo",notificationNo);
         notificationService.updateNotificationInformation(
                 notificationNo,
                 notificationInformation,
                 notificationTitle
         );
+        responseData.put("notificationInformation",notificationInformation);
+        responseData.put("notificationTitle",notificationTitle);
+        return Result.success(responseData);
     }
 
     // 学生打开通知，更新状态
-    @PutMapping("/student/updateState/{studentNo}/{notificationNo}")
-    public void updateStudentNotificationState(@PathVariable String studentNo,
-                                               @PathVariable String notificationNo) {
-        studentNotificationService.updateStudentNotificationState(studentNo, notificationNo);
+    @PostMapping("/student/updateState")
+    public Result updateStudentNotificationState(@RequestParam String notificationNo , HttpServletRequest request) {
+//        @PathVariable String studentNo,
+//        @PathVariable String notificationNo
+        String username = request.getAttribute("username").toString();
+        studentNotificationService.updateStudentNotificationState(username, notificationNo);
+        return Result.success();
     }
 
-    // 学生查看所有通知
+    // 学生查看所有通知(弃用，新版见下）
     @GetMapping("/student/{studentNo}")
     public List<StudentNotification> getStudentNotifications(@PathVariable String studentNo) {
         return studentNotificationService.selectByStudentNo(studentNo);
     }
+
+    //某门课程的所有通知
     @GetMapping("/getNotification")
     public Result getNotification(@RequestParam String cid , HttpServletRequest request){
         String username = request.getAttribute("username").toString();
