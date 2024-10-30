@@ -21,6 +21,10 @@ public class StudentHomeworkService {
         return studentHomeworkMapper.selectByStudentNo(StudentNo);
     }
 
+    public List<StudentHomework> selectByHomeworkNo(String HomeworkNo){
+        return studentHomeworkMapper.selectByHomeworkNo(HomeworkNo);
+    }
+
     public StudentHomework selectByStudentNoAndHomeworkNo(String StudentNo, String HomeworkNo){
         return studentHomeworkMapper.selectByStudentNoAndHomeworkNo(StudentNo,HomeworkNo);
     }

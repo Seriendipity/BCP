@@ -17,6 +17,9 @@ public interface StudentHomeworkMapper {
     @Select("Select * from StudentHomework Where StudentNo = #{StudentNo}")
     List<StudentHomework> selectByStudentNo(String StudentNo);
 
+    @Select("Select * from StudentHomework Where HomeworkNo = #{HomeworkNo}")
+    List<StudentHomework> selectByHomeworkNo(String HomeworkNo);
+
     @Select("Select * from StudentHomework Where StudentNo = #{StudentNo} and HomeworkNo = #{HomeworkNo}")
     StudentHomework selectByStudentNoAndHomeworkNo(String StudentNo, String HomeworkNo);
 

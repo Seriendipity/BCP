@@ -60,7 +60,7 @@ public class NotificationController {
         );
 
         // 插入学生通知记录
-        List<String > studentNos = studentCourseService.selectAllStudentNo(cid);
+        List<String> studentNos = studentCourseService.selectAllStudentNo(cid);
         for (String studentNo : studentNos) {
             studentNotificationService.insertStudentNotification(
                     studentNo,
