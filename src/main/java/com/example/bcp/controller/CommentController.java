@@ -46,12 +46,17 @@ public class CommentController {
         return Result.success(responseData);
     }
 
+    /**
+     *  给某条帖子插入评论
+     */
     @RequestMapping(value = "/insert" , method = RequestMethod.POST)
     public Result insertComment(@RequestBody Map<String,String> requestData){
         int size = commentService.selectAllComments().size()+1;
         String CommentId = "C"+size;
         String DiscussionId = requestData.get("discussionId");
         String CommentInfo = requestData.get("commentInfo");
+        String imgUrl = requestData.get("imgUrl");
+        String mentionedUser = requestData.get("mentionedUser");
         int LikesNumber = 0;
         LocalDateTime postingTime = LocalDateTime.now();
 
@@ -67,7 +72,7 @@ public class CommentController {
         String message;
         try {
             commentService.insertComment(CommentId,DiscussionId,CommentInfo,
-                    LikesNumber,postingTime);
+                    LikesNumber,postingTime,imgUrl,mentionedUser);
             message = "评论成功！";
         }catch (Exception e){
             message = "评论失败，请重试！";
@@ -76,21 +81,33 @@ public class CommentController {
         return Result.success(message);
     }
 
+    /**
+     *  删除指定帖子下面的评论
+     */
     @RequestMapping(value = "/delete" , method = RequestMethod.POST)
-    public Result deleteComment(@RequestBody Map<String,String> requestData){
-        String CommentId = requestData.get("commentId");
-        String message ;
-        try {
-            commentService.deleteComment(CommentId);
-            message = "删除评论成功！";
-        }catch (Exception e){
-            message = "删除评论失败，请重试！";
-            return Result.error(message);
+    public Result deleteComment(@RequestBody Map<String,String> requestData ,HttpServletRequest request){
+        String username = request.getAttribute("username").toString();
+        if (username.startsWith("T")){
+            String CommentId = requestData.get("commentId");
+            String message ;
+            try {
+                commentService.deleteComment(CommentId);
+                message = "删除评论成功！";
+            }catch (Exception e){
+                message = "删除评论失败，请重试！";
+                return Result.error(message);
+            }
+            return Result.success(message);
+        }else{
+            String log = "无权限操作，请联系管理员";
+            return Result.error(log);
         }
-        return Result.success(message);
+
     }
 
-
+    /**
+     *  更新评论信息
+     */
     @RequestMapping(value = "/updateInfo" , method = RequestMethod.POST)
     public Result updateInfo(@RequestBody Map<String,String> requestData){
         String newInfo = requestData.get("updateInfo");
@@ -106,6 +123,9 @@ public class CommentController {
         return Result.success(message);
     }
 
+    /**
+     *  给评论点赞
+     */
     @RequestMapping(value = "/increaseLikes" , method = RequestMethod.POST)
     public Result increaseLikes(@RequestBody Map<String,String> requestData){
         String commentId = requestData.get("commentId");
@@ -123,6 +143,9 @@ public class CommentController {
        return Result.success(message);
     }
 
+    /**
+     *  删除点赞
+     */
     @RequestMapping(value = "/deleteLikes" , method = RequestMethod.POST)
     public Result deleteLikes(@RequestBody Map<String,String> requestData){
         String commentId = requestData.get("commentId");

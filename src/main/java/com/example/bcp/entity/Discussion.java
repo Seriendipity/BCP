@@ -26,6 +26,39 @@ public class Discussion {
     @Column(name = "DiscussionPostingTime")
     private LocalDateTime DiscussionPostingTime;
 
+    @Column(name = "imgUrl" , length = 100)
+    private String imageUrl ;
+
+    @Column(name = "mentionedUser" , columnDefinition = "TEXT")
+    private String mentionedUser;
+
+    @Column(name = "topic" , length = 20)
+    private String topic;
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    public String getMentionedUser() {
+        return mentionedUser;
+    }
+
+    public void setMentionedUser(String mentionedUser) {
+        this.mentionedUser = mentionedUser;
+    }
+
+    public String getTopic() {
+        return topic;
+    }
+
+    public void setTopic(String topic) {
+        this.topic = topic;
+    }
+
     public String getDiscussionId() {
         return DiscussionId;
     }

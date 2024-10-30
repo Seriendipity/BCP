@@ -123,8 +123,8 @@ class BcpApplicationTests {
     @Test
     void TestDiscussion(){
 //        discussionService.insertDiscussion("S003","T001_CS101","D003","test", LocalDateTime.now());
-        discussionService.deleteDiscussion("D003");
-        List<Discussion> discussions = discussionService.selectAllDiscussion();
+//        discussionService.deleteDiscussion("D003");
+        List<Discussion> discussions = discussionService.selectByMentioned("S001");
         for(Discussion d : discussions){
             System.out.print(d.getCid() + " ");
             System.out.print(d.getDiscussionId()+" ");

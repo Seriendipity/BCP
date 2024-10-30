@@ -17,11 +17,13 @@ public interface CommentMapper {
     @Select("Select * from Comment Where CommentId = #{CommentId}")
     Comment selectByCommentId(String CommentId);
 
-    @Insert("Insert into Comment(CommentId,DiscussionId,CommentInformation,LikesNumber,CommentPostingTime)"+
-    " values(#{CommentId},#{DiscussionId},#{CommentInformation} , #{LikesNumber} , #{CommentPostingTime})")
+
+    @Insert("Insert into Comment(CommentId,DiscussionId,CommentInformation,LikesNumber,CommentPostingTime,imgUrl,mentionedUser)"+
+    " values(#{CommentId},#{DiscussionId},#{CommentInformation} , #{LikesNumber} , #{CommentPostingTime},#{imgUrl},#{mentionedUser})")
     void insertComment(String CommentId , String DiscussionId ,
                        String CommentInformation , int LikesNumber ,
-                       LocalDateTime CommentPostingTime);
+                       LocalDateTime CommentPostingTime,String imgUrl,
+                       String mentionedUser);
 
 
     @Delete("Delete from Comment Where CommentId = #{CommentId}")

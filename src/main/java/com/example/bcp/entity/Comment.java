@@ -27,6 +27,28 @@ public class Comment {
     @Column(name = "CommentPostingTime")
     private LocalDateTime CommentPostingTime;
 
+    @Column(name = "imgUrl" , length = 100)
+    private String imageUrl ;
+
+    @Column(name = "mentionedUser" , columnDefinition = "TEXT")
+    private String mentionedUser;
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    public String getMentionedUser() {
+        return mentionedUser;
+    }
+
+    public void setMentionedUser(String mentionedUser) {
+        this.mentionedUser = mentionedUser;
+    }
+
     public String getCommentId() {
         return CommentId;
     }
