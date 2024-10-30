@@ -101,6 +101,7 @@ public class NotificationController {
                     String state = "未读";
                     if(se.isNotificationState()) state = "已读";
                     notification.put("notificationState",state);
+                    notification.put("notificationId",n.getNotificationNo());
                     responseData.put("notification"+i,notification);
                     i++;
                 }
@@ -118,6 +119,7 @@ public class NotificationController {
                 notification.put("notificationTitle",n.getNotificationTitle());
                 notification.put("notificationPostingTime",n.getPostingTime());
                 notification.put("sendNo",n.getSendNo());
+                notification.put("notificationId",n.getNotificationNo());
                 responseData.put("Notification"+i,notification);
                 i++;
             }
@@ -130,6 +132,20 @@ public class NotificationController {
     @GetMapping("/teacher/sendNo/{sendNo}")
     public List<Notification> getNotificationsBySendNo(@PathVariable String sendNo) {
         return notificationService.selectBySendNo(sendNo);
+    }
+
+    @PostMapping("/change_status")
+    public Result changeNotificationStatus(@RequestBody Map<String,String> responseData,HttpServletRequest request){
+        String username = request.getAttribute("username").toString();
+        String NotificationId = responseData.get("notificationId");
+        System.out.println("-----------------");
+        System.out.println(NotificationId);
+        StudentNotification sn = studentNotificationService.selectByStudentNoAndNotificationNo(username,NotificationId);
+        if(!sn.isNotificationState()){
+            studentNotificationService.updateStudentNotificationState(username,NotificationId);
+            responseData.put("notificationState","已读");
+        }
+        return Result.success(responseData);
     }
 
     // 查看所有通知
