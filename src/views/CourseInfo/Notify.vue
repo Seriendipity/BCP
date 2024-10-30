@@ -1,15 +1,11 @@
 <template>
   <div class="notification-container">
-    <el-table :data="notifications" style="width: 100%;" border>
-      <!-- 通知主题列 -->
-      <el-table-column prop="notificationTitle" label="通知主题" width="55%"></el-table-column>
-
-      <!-- 通知发布时间列 -->
-      <el-table-column prop="notificationPostingTime" label="发布时间" width="25%"></el-table-column>
-
-      <!-- 通知状态列 -->
-      <el-table-column label="状态" width="10%">
-        <template #default="{ row }">
+    <el-table :data="notifications" style="width: 150vh;" border>
+      <!-- 动态生成表格列 -->
+      <el-table-column v-for="(column, index) in tableColumns" :key="index" :prop="column.prop" :label="column.label"
+        :width="column.width">
+        <template v-if="column.slot" #default="{ row }">
+          <!-- 状态列的自定义内容 -->
           <el-tag :type="row.NotificationState === '已读' ? 'success' : 'warning'">
             {{ row.NotificationState }}
           </el-tag>
@@ -17,7 +13,7 @@
       </el-table-column>
 
       <!-- 操作列 -->
-      <el-table-column label="操作" width="10%">
+      <el-table-column label="操作" width="100%">
         <template #default="{ row }">
           <el-button type="primary" @click="viewNotification(row)" size="small">查看通知</el-button>
         </template>
@@ -25,7 +21,7 @@
     </el-table>
 
     <!-- 查看通知的弹出框 -->
-    <el-dialog :visible="dialogVisible" title="查看通知" width="600px" @close="closeDialog">
+    <el-dialog :v-model="dialogVisible" title="查看通知" width="600px" @close="closeDialog">
       <p><strong>主题:</strong> {{ currentNotification.notificationTitle }}</p>
       <p><strong>内容:</strong> {{ currentNotification.notificationInfo }}</p>
       <span slot="footer" class="dialog-footer">
@@ -37,7 +33,7 @@
 
 <script>
 import { ref, onMounted } from 'vue';
-import { reqNotificationStudent } from '@/api/api'; // 确保有这个API接口
+import { reqNotificationStudent } from '@/api/api';
 import { ElNotification } from 'element-plus';
 
 export default {
@@ -45,6 +41,35 @@ export default {
     const dialogVisible = ref(false); // 弹出框是否可见
     const currentNotification = ref({}); // 当前查看的通知
     const notifications = ref([]); // 存储通知数据
+
+    // 模拟数据
+    const mockData = [
+      {
+        notificationTitle: '课程调整通知',
+        notificationInfo: '由于特殊情况，本周的课程时间将调整，请查看具体时间安排。',
+        notificationPostingTime: '2024-10-28 14:00',
+        NotificationState: '未读',
+      },
+      {
+        notificationTitle: '期末考试安排',
+        notificationInfo: '请注意，期末考试将在12月1日举行，请提前做好复习准备。',
+        notificationPostingTime: '2024-10-29 09:00',
+        NotificationState: '已读',
+      },
+      {
+        notificationTitle: '社团活动通知',
+        notificationInfo: '下周五有社团活动，欢迎大家参加！',
+        notificationPostingTime: '2024-10-30 11:00',
+        NotificationState: '未读',
+      },
+    ];
+
+    // 动态生成表格列配置
+    const tableColumns = ref([
+      { prop: 'notificationTitle', label: '通知主题', width: '650%' },
+      { prop: 'notificationPostingTime', label: '发布时间', width: '200%' },
+      { label: '状态', width: '100%', slot: true }, // 状态列包含自定义内容
+    ]);
 
     // 获取通知数据
     const fetchNotifications = async () => {
@@ -56,31 +81,33 @@ export default {
       } catch (error) {
         ElNotification({
           type: 'error',
-          message: '获取通知失败',
+          message: '获取通知失败，使用默认数据。',
         });
+        notifications.value = mockData; // 使用模拟数据
       }
     };
 
     onMounted(() => {
-      fetchNotifications(); // 组件挂载时获取通知数据
+      fetchNotifications();
     });
 
     // 查看通知详情
     const viewNotification = (notification) => {
-      currentNotification.value = notification; // 设置当前通知
-      dialogVisible.value = true; // 打开弹出框
+      currentNotification = notification;
+      dialogVisible = true;
       notification.viewed = true; // 将通知标记为已查看
     };
 
     // 关闭弹出框
     const closeDialog = () => {
-      dialogVisible.value = false; // 关闭弹出框
+      dialogVisible.value = false;
     };
 
     return {
       dialogVisible,
       currentNotification,
       notifications,
+      tableColumns,
       viewNotification,
       closeDialog,
     };
@@ -101,7 +128,6 @@ export default {
 .el-table {
   margin-bottom: 20px;
   width: 100%;
-  /* 设置表格宽度为100% */
 }
 
 .el-dialog {
