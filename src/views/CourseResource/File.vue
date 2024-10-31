@@ -14,7 +14,7 @@
       <el-col :span="24" v-for="(resource, index) in fileList" :key="index">
         <div class="file-row">
           <div class="file-info">
-            <h2 class="file-name">{{ resource.filename }}</h2>
+            <h2 class="file-name">{{ resource.name }}</h2>
           </div>
           <el-button class="download-button" type="primary" size="small" @click="() => {
             if (resource) {
@@ -43,18 +43,18 @@ import type { UploadProps, UploadUserFile } from 'element-plus';
 import { reqFileDownload, reqFileList, reqUploadFile } from '@/api/api'; // 引入 API
 import { ElNotification } from 'element-plus';
 
-const fileList = ref<any[]>([]);
+const fileList = ref<UploadUserFile[]>([]);
 const uploadUrl = 'https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15'; // 上传接口
 
 // 默认模拟数据
 const defaultFiles = [
   {
-    filename: 'food.jpeg',
-    path: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100',
+    name: 'food.jpeg',
+    url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100',
   },
   {
-    filename: 'food2.jpeg',
-    path: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100',
+    name: 'food2.jpeg',
+    url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100',
   },
 ];
 
@@ -79,8 +79,8 @@ const handleChange: UploadProps['onChange'] = async (uploadFile) => {
   try {
     const response = await reqUploadFile(uploadFile); // 连接后端上传文件
     const newFile = {
-      path: response.data.path,
-      filename: response.data.filename,
+      url: response.data.url,
+      name: response.data.name,
       index: fileList.value.length + 1,
       type: response.data.type,
     };
@@ -97,7 +97,7 @@ const handleChange: UploadProps['onChange'] = async (uploadFile) => {
 // 下载文件
 const downloadFile = async (resource: any) => {
   try {
-    const response = await reqFileDownload(resource.filename);
+    const response = await reqFileDownload(resource.name);
     window.open(response.url); // 打开文件链接
   } catch (error) {
     ElNotification({
