@@ -70,7 +70,7 @@
                     <el-button type="primary" style="text-align: left; font-weight: bold;font-size: large;" plain>浏览笔记</el-button>
                 </router-link></el-col>
                 <div style="margin-left: 87%;">
-                <el-button type="primary" round style="width: 80px;font-size: large; font-weight: bold;margin-bottom: -5px;">上传</el-button>
+                <el-button type="primary" round @click="dialogVisible = true style="width: 80px;font-size: large; font-weight: bold;margin-bottom: -5px;">上传</el-button>
                 </div>
             </el-row>
             <!-- <div class="scrollable"> -->
@@ -184,6 +184,7 @@
   const student = ref([]);
   const router = useRouter();
   const value = true;
+  const dialogVisible = false // 控制对话框的显示
   
   const circleUrl = ref('src/assets/images/example.jpg');
   
@@ -229,6 +230,7 @@
       });
     }
   };
+  
   </script>
   
   

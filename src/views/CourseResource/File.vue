@@ -39,11 +39,12 @@
 
 <script lang="ts" setup>
 import { ref, onMounted } from 'vue';
-import { reqFileDownload, reqFileList, reqUploadFile } from '@/api/api'; // 引入 API
-import { ElNotification } from 'element-plus';
+import { reqFileList, reqUploadFile } from '@/api/api'; // 引入 API
+import { ElMessage, ElNotification } from 'element-plus';
 
 const fileList = ref<any[]>([]);
 const selectedFile = ref<File | null>(null); // 存储选中的文件
+
 
 // 默认模拟数据
 const defaultFiles = [
@@ -107,14 +108,9 @@ const handleSubmit = async () => {
 
   try {
     const response = await reqUploadFile(formData); // 连接后端上传文件
-    const newFile = {
-      url: response.data.url,
-      name: response.data.name,
-      index: fileList.value.length + 1,
-      type: response.data.type,
-    };
-    fileList.value.push(newFile); // 将新文件添加到 fileList
     selectedFile.value = null; // 上传后清空选择的文件
+    if (response.code === 0) {
+      ElMessage.success("文件上传成功");}
   } catch (error) {
     console.error('上传文件失败', error);
     ElNotification({
@@ -125,10 +121,9 @@ const handleSubmit = async () => {
 };
 
 // 下载文件
-const downloadFile = async (resource: any) => {
+const downloadFile =  (resource: any) => {
   try {
-    const response = await reqFileDownload(resource.name);
-    window.open(response.url); // 打开文件链接
+    window.open(resource.url); // 打开文件链接
   } catch (error) {
     ElNotification({
       message: '下载文件失败，请重试',

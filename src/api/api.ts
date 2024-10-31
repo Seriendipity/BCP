@@ -17,7 +17,6 @@ enum API {
   NOTIFICATION_STATECHANGE = "/notifications/change_status",
   COURSERESOURCE_UPLOAD = "/file/upload",
   COURSERESOURCE_GET = "/file/allCourseSource",
-  COURSERESOURCE_DOWNLOAD = "/file/download"
 
 }
 //登录接口
@@ -40,8 +39,6 @@ export const reqNotificationStudent = (courseId: any) => request.get<any, any>(A
 export const reqStudentData = (courseId: any) => request.get<any, any>(API.STUDENT_DATA + `?cid=${courseId}`)
 //获取课程资源
 export const reqFileList = (courseId: any) => request.get<any, any>(API.COURSERESOURCE_GET + `?cid=${courseId}`)
-//课程资源下载
-export const reqFileDownload = (fileName: any) => request.get<any, any>(API.COURSERESOURCE_DOWNLOAD + `?fileName=${fileName}`)
 // export const awardInfo = () => request.get<any, any>(API.AWARD_GET);
 
 //发布通知
