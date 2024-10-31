@@ -196,6 +196,39 @@ export const constantRoute = [
           hidden: false,
           icon: 'Notification',
         }
+      },
+      {
+        path: '/CourseManagement/sendHomework',
+        component: () => import('@/views/CourseManagement/sendHomework.vue'),
+        name: 'sendHomework',
+        meta: {
+          title: '作业布置',
+          hidden: false,
+          icon: 'Reading',
+        }
+      },
+    ]
+  },
+  {
+    path: '/homework',
+    component: () => import("@/layout/index.vue"),
+    name: 'homework',
+    redirect: '/homework/homeworkList',
+    meta: {
+      title: '作业',
+      hidden: false,
+      icon: 'Folder',
+    },
+    children: [
+      {
+        path: '/homework/homeworkList',
+        component: () => import('@/views/homework/homeworkList.vue'),
+        name: 'homeworkList',
+        meta: {
+          title: '作业列表',
+          hidden: false,
+          icon: 'Files',
+        }
       }
     ]
   },
