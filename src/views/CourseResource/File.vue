@@ -1,13 +1,13 @@
 <template>
   <div class="file-layout">
     <el-row :gutter="20">
-      <el-col :span="6" :offset="18">
-        <el-upload class="upload" :action="uploadUrl" :on-change="handleChange">
-          <el-button type="primary">点击上传文件</el-button>
-          <template #tip>
-            <div class="el-upload__tip">一次只上传一个文件</div>
-          </template>
-        </el-upload>
+      <el-col :span="6" :offset="18" class="upload-col">
+        <form id="uploadForm" @submit.prevent="handleSubmit">
+          <div class="file-input-container">
+            <input type="file" id="fileInput" @change="handleChange" />
+            <button type="submit" class="upload-button">上传文件</button>
+          </div>
+        </form>
       </el-col>
     </el-row>
     <el-row :gutter="20">
@@ -75,51 +75,17 @@ onMounted(async () => {
 });
 
 // 上传文件处理
-const handleChange: UploadProps['onChange'] = async (uploadFile) => {
-  if (uploadFile.status === 'success') {
-    const formData = new FormData();
-    const storedCourseId = localStorage.getItem('courseId');
+const handleChange = (event: Event) => {
+  const target = event.target as HTMLInputElement;
+  if (target.files && target.files.length > 0) {
+    // 处理文件选择
+  }
+};
 
-    // 确保上传的文件是 File 类型
-    if (uploadFile.raw && uploadFile.raw instanceof File) {
-      formData.append('file', uploadFile.raw); // 传递文件
-    } else {
-      ElNotification({
-        message: '上传文件格式不正确，请重试',
-        type: 'error',
-      });
-      return;
-    }
+const handleSubmit = async () => {
+  // 处理上传逻辑
+};
 
-    // 确保 cid 不是 null
-    if (storedCourseId) {
-      formData.append('cid', storedCourseId); // 传递 cid
-    } else {
-      ElNotification({
-        message: '课程ID无效，请重试',
-        type: 'error',
-      });
-      return;
-    }
-    try {
-      const response = await reqUploadFile(formData); // 连接后端上传文件
-      const newFile = {
-        url: response.data.url,
-        name: response.data.name,
-        index: fileList.value.length + 1,
-        type: response.data.type,
-      };
-      fileList.value.push(newFile); // 将新文件添加到 fileList
-    } catch (error) {
-      console.error('上传文件失败', error);
-      ElNotification({
-        message: '上传文件失败，请重试',
-        type: 'error',
-      });
-    }
-  };
-}
-// 下载文件
 const downloadFile = async (resource: any) => {
   try {
     const response = await reqFileDownload(resource.name);
@@ -130,7 +96,7 @@ const downloadFile = async (resource: any) => {
       type: 'error',
     });
   }
-}
+};
 </script>
 
 <style scoped>
@@ -149,20 +115,52 @@ const downloadFile = async (resource: any) => {
   overflow-y: auto;
 }
 
+.upload-col {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.file-input-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+input[type="file"] {
+  margin-bottom: 10px;
+  border: 2px dashed #409eff;
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  width: 100%;
+  max-width: 250px;
+}
+
+.upload-button {
+  background-color: #409eff;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.upload-button:hover {
+  background-color: #66b1ff;
+}
+
 .file-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 10px;
   margin-bottom: 10px;
-  /* 行与行之间的间距 */
   border: 1px solid #ebeef5;
   border-radius: 10px;
-  /* 圆角边框 */
   background-color: #ffffff;
-  /* 背景色 */
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  /* 阴影效果 */
 }
 
 .file-info {
@@ -175,11 +173,6 @@ const downloadFile = async (resource: any) => {
   margin: 0;
 }
 
-.file-type {
-  font-size: 14px;
-  color: #999;
-}
-
 .download-button {
   transition: background-color 0.3s, color 0.3s;
 }
@@ -187,17 +180,5 @@ const downloadFile = async (resource: any) => {
 .download-button:hover {
   background-color: #409eff;
   color: #fff;
-}
-
-.el-upload__tip {
-  font-size: 12px;
-  color: #999;
-}
-
-.el-button {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 5px;
 }
 </style>
