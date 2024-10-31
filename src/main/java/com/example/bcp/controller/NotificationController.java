@@ -34,7 +34,12 @@ public class NotificationController {
         String cid = (String) requestData.get("cid");
         String notificationInformation = (String) requestData.get("notificationInformation");
         String notificationTitle = (String) requestData.get("notificationTitle");
-        String users = requestData.get("users").toString();
+        String users;
+        if(requestData.get("users") == null){
+            users = null;
+        }else{
+            users = requestData.get("users").toString();
+        }
 
         String sendNo = request.getAttribute("username").toString();
         int size = notificationService.selectAllNotification().size()+1;
@@ -57,6 +62,47 @@ public class NotificationController {
                 notificationInformation,
                 notificationTitle
         );
+
+        // 插入学生通知记录
+        try{
+            if(users != null){
+                if(users.contains("all")){
+                    List<String > studentNos = studentCourseService.selectAllStudentNo(cid);
+                    for (String studentNo : studentNos) {
+                        if(studentNotificationService.selectByStudentNoAndNotificationNo(studentNo,notificationNo) != null) continue;
+                        studentNotificationService.insertStudentNotification(
+                                studentNo,
+                                notificationNo
+                        );
+                    }
+                }else{
+                    List<String> userList = new ArrayList<>(Arrays.asList(users.split(",")));
+                    for(String studentNo : userList){
+                        if(studentNotificationService.selectByStudentNoAndNotificationNo(studentNo,notificationNo) != null) continue;
+                        studentNotificationService.insertStudentNotification(
+                                studentNo,
+                                notificationNo
+                        );
+                    }
+                }
+                return Result.success("通知发送成功");
+            }else{
+                return Result.success("仅发出通知，还未通知给学生");
+            }
+        }catch (Exception e){
+            return Result.error("通知发送失败，请重新发送");
+        }
+    }
+
+    /**
+     *  教师或助教将还未转发给学生的通知进行转发
+     */
+    @PostMapping("/send_toStudent")
+    public Result sendNotificationToStudent(@RequestBody  Map<String,Object> requestData,HttpServletRequest request){
+        String notificationNo = requestData.get("notificationNo").toString();
+        String users = requestData.get("users").toString();
+        Notification n = notificationService.selectByNotificationNo(notificationNo);
+        String cid = n.getCid();
 
         // 插入学生通知记录
         try{
@@ -154,8 +200,8 @@ public class NotificationController {
             }
            return Result.success(responseData);
         }
-        if(username.startsWith("T")){
-            System.out.println("T users");
+        if(username.startsWith("T") || username.startsWith("A")){
+            System.out.println("T or A users");
             List<Notification> notifications = notificationService.selectByCid(cid);
             int i = 1;
             for(Notification n : notifications){
