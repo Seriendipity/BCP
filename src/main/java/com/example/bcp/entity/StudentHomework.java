@@ -28,6 +28,17 @@ public class StudentHomework {
     @Column(name = "SubmitGrade")
     private int SubmitGrade;
 
+    @Column(name = "Comment",columnDefinition = "Text")
+    private String Comment;
+
+    public String getComment() {
+        return Comment;
+    }
+
+    public void setComment(String comment) {
+        Comment = comment;
+    }
+
     public String getStudentNo() {
         return StudentNo;
     }
