@@ -46,8 +46,8 @@ export default {
 
       try {
         // 发送通知到后端
-        const response = await axios.post(postNotification, this.form);
-        if (response.status === 200) {
+        const response = await postNotification(this.form);
+        if (response.code === 0) {
           ElMessage.success("通知发布成功");
           // 清空表单
           this.form.notificationTitle = "";
