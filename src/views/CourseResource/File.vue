@@ -76,24 +76,49 @@ onMounted(async () => {
 
 // 上传文件处理
 const handleChange: UploadProps['onChange'] = async (uploadFile) => {
-  try {
-    const response = await reqUploadFile(uploadFile); // 连接后端上传文件
-    const newFile = {
-      url: response.data.url,
-      name: response.data.name,
-      index: fileList.value.length + 1,
-      type: response.data.type,
-    };
-    fileList.value.push(newFile); // 将新文件添加到 fileList
-  } catch (error) {
-    console.error('上传文件失败', error);
-    ElNotification({
-      message: '上传文件失败，请重试',
-      type: 'error',
-    });
-  }
-};
+  if (uploadFile.status === 'success') {
+    const formData = new FormData();
+    const storedCourseId = localStorage.getItem('courseId');
 
+    // 确保上传的文件是 File 类型
+    if (uploadFile.raw && uploadFile.raw instanceof File) {
+      formData.append('file', uploadFile.raw); // 传递文件
+    } else {
+      ElNotification({
+        message: '上传文件格式不正确，请重试',
+        type: 'error',
+      });
+      return;
+    }
+
+    // 确保 cid 不是 null
+    if (storedCourseId) {
+      formData.append('cid', storedCourseId); // 传递 cid
+    } else {
+      ElNotification({
+        message: '课程ID无效，请重试',
+        type: 'error',
+      });
+      return;
+    }
+    try {
+      const response = await reqUploadFile(formData); // 连接后端上传文件
+      const newFile = {
+        url: response.data.url,
+        name: response.data.name,
+        index: fileList.value.length + 1,
+        type: response.data.type,
+      };
+      fileList.value.push(newFile); // 将新文件添加到 fileList
+    } catch (error) {
+      console.error('上传文件失败', error);
+      ElNotification({
+        message: '上传文件失败，请重试',
+        type: 'error',
+      });
+    }
+  };
+}
 // 下载文件
 const downloadFile = async (resource: any) => {
   try {
@@ -105,7 +130,7 @@ const downloadFile = async (resource: any) => {
       type: 'error',
     });
   }
-};
+}
 </script>
 
 <style scoped>
