@@ -35,7 +35,7 @@ export const reqSyllabus = (courseId: any) => request.get<any, any>(API.SYLLABUS
 //获取学生通知
 export const reqNotificationStudent = (courseId: any) => request.get<any, any>(API.NOTIFICATION_STUDENT + `?cid=${courseId}`)
 //获取学生选课列表
-export const reqStudentData = (courseId: any) => request.get<any, any>(API.NOTIFICATION_STUDENT + `?cid=${courseId}`)
+export const reqStudentData = (courseId: any) => request.get<any, any>(API.STUDENT_DATA + `?cid=${courseId}`)
 // export const awardInfo = () => request.get<any, any>(API.AWARD_GET);
 
 //发布通知
