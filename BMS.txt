@@ -183,6 +183,8 @@ alter table discussion add column topic varchar(20);
 
 alter table comment add column imgUrl VARCHAR(100);
 alter table comment add column mentionedUser TEXT;
+
+alter table studenthomework add column Comment Text;
 -- 插入 Class 表数据
 INSERT INTO Class (ClassNo, ClassName, ClassDepartment, ClassMajor, StudentNumber) VALUES
                                                                                        ('C001', '计算机科学', '计算机学院', '计算机科学与技术', 30),

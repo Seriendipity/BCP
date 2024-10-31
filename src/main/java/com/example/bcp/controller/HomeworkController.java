@@ -58,11 +58,17 @@ public class HomeworkController {
     //对某student的作业打分
     @PostMapping("/updateGrade")
     public Result updateGrade(@RequestBody Map<String, Object> requestData){
-        int submitGrade = (int)requestData.get("SubmitGrade");
+        int submitGrade = Integer.parseInt(requestData.get("SubmitGrade").toString());
         String studentNo = (String)requestData.get("StudentNo");
         String homeworkNo = (String)requestData.get("HomeworkNo");
-        studentHomeworkMapper.updateStudentHomeworkSubmitGrade(submitGrade,studentNo,homeworkNo);
-        return Result.success();
+        String comment = requestData.get("comment").toString();
+        try{
+            studentHomeworkMapper.updateStudentHomeworkSubmitGrade(submitGrade,studentNo,homeworkNo,comment);
+            return Result.success("成功批改");
+        }catch (Exception e){
+            return Result.success("批改失败");
+        }
+
     }
 
 

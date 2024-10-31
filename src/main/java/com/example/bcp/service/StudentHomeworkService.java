@@ -30,16 +30,16 @@ public class StudentHomeworkService {
     }
 
     public void insertStudentHomework(String StudentNo, String HomeworkNo, String SubmitDescription,
-                                      String SubmitPath , LocalDateTime SubmitTime, int SubmitGrade){
+                                      String SubmitPath , LocalDateTime SubmitTime, int SubmitGrade,String Comment){
         studentHomeworkMapper.insertStudentHomework(StudentNo,HomeworkNo,SubmitDescription,
-                                                SubmitPath,SubmitTime,SubmitGrade);
+                                                SubmitPath,SubmitTime,SubmitGrade,Comment);
     }
 
     public void updateStudentHomeworkPath(String SubmitPath , String StudentNo , String HomeworkNo){
         studentHomeworkMapper.updateStudentHomeworkPath(SubmitPath,StudentNo,HomeworkNo);
     }
 
-    public void updateStudentHomeworkSubmitGrade(int SubmitGrade,String StudentNo,String HomeworkNo){
-        studentHomeworkMapper.updateStudentHomeworkSubmitGrade(SubmitGrade,StudentNo,HomeworkNo);
+    public void updateStudentHomeworkSubmitGrade(int SubmitGrade,String StudentNo,String HomeworkNo,String Comment){
+        studentHomeworkMapper.updateStudentHomeworkSubmitGrade(SubmitGrade,StudentNo,HomeworkNo ,Comment);
     }
 }
