@@ -149,17 +149,6 @@ const downloadFile =  (resource: any) => {
   overflow-y: auto;
 }
 
-.upload-col {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.file-input-container {
-  display: flex;
-  align-items: center;
-  /* 将按钮和输入框放在同一行 */
-}
 
 input[type="file"] {
   margin-right: 10px;
@@ -171,17 +160,39 @@ input[type="file"] {
 }
 
 .upload-button {
-  background-color: #409eff;
+  background: linear-gradient(90deg, #66b1ff, #409eff);
   color: white;
   border: none;
   padding: 10px 20px;
   border-radius: 5px;
   cursor: pointer;
-  transition: background-color 0.3s;
+  transition: background-color 0.3s, transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  writing-mode: horizontal-tb;
+  /* 横向显示文字 */
 }
 
 .upload-button:hover {
-  background-color: #66b1ff;
+  background: linear-gradient(90deg, #409eff, #66b1ff);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+.download-button {
+  background: linear-gradient(90deg, #66b1ff, #409eff);
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.download-button:hover {
+  background: linear-gradient(90deg, #409eff, #66b1ff);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
 }
 
 .file-row {
@@ -204,14 +215,5 @@ input[type="file"] {
   font-size: 16px;
   color: #333;
   margin: 0;
-}
-
-.download-button {
-  transition: background-color 0.3s, color 0.3s;
-}
-
-.download-button:hover {
-  background-color: #409eff;
-  color: #fff;
 }
 </style>
