@@ -14,8 +14,9 @@ enum API {
   NOTIFICATION_STUDENT = "/notifications/getNotification",
   STUDENT_DATA = "/StudentCourse/allStudent",
   NOTIFICATION_POST = "/notifications/send",
-  NOTIFICATION_STATECHANGE = "/notifications/change_status"
-
+  NOTIFICATION_STATECHANGE = "/notifications/change_status",
+  COURSERESOURCE_UPLOAD = "/file/upload",
+  COURSERESOURCE_GET = "/file/allCourseSource"
 
 }
 //登录接口
@@ -36,10 +37,14 @@ export const reqSyllabus = (courseId: any) => request.get<any, any>(API.SYLLABUS
 export const reqNotificationStudent = (courseId: any) => request.get<any, any>(API.NOTIFICATION_STUDENT + `?cid=${courseId}`)
 //获取学生选课列表
 export const reqStudentData = (courseId: any) => request.get<any, any>(API.STUDENT_DATA + `?cid=${courseId}`)
+//获取课程资源
+export const reqFileList = (courseId: any) => request.get<any, any>(API.COURSERESOURCE_GET + `?cid=${courseId}`)
 // export const awardInfo = () => request.get<any, any>(API.AWARD_GET);
 
 //发布通知
 export const postNotification = (data: any) => request.post<any, any>(API.NOTIFICATION_POST, data);
 //通知已读
 export const updateNotificationState = (data: any) => request.post<any, any>(API.NOTIFICATION_STATECHANGE, data);
+//课程资源上传
+export const reqUploadFile = (data: any) => request.post<any, any>(API.COURSERESOURCE_UPLOAD, data)
 // export const awardPost = (data: any) => request.post<any>(API.AWARD_POST, data);
