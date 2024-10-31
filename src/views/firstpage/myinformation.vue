@@ -60,12 +60,15 @@
 
       <!-- 上传文件的对话框 -->
       <el-dialog title="更改头像" v-model="dialogVisible" width="30%" :before-close="handleClose">
+        <el-row :gutter="20">
+          <el-col :span="18">
         <el-upload class="avatar-uploader" action=" " :on-success="handleAvatarSuccess"
           :before-upload="beforeAvatarUpload">
-          <el-button size="small" type="primary">点击上传</el-button>
-          <el-button @click="dialogVisible = false">取 消</el-button>
-          <div slot="tip" class="el-upload__tip">只能上传jpg/png文件 且不超过500kb</div>
-        </el-upload>
+          <el-button size="normal" type="primary">点击上传</el-button></el-upload></el-col>
+          <el-col :span="6">
+          <el-button @click="dialogVisible = false" >取 消</el-button></el-col>
+          <div slot="tip" class="el-upload__tip" >只能上传jpg/png文件 且不超过500kb</div>
+        </el-row>
       </el-dialog>
     </el-main>
   </el-container>
