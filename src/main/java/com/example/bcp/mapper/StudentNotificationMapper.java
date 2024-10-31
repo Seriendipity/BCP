@@ -20,10 +20,9 @@ public interface StudentNotificationMapper {
     @Select("Select * from StudentNotification Where NotificationState = #{NotificationState}")
     List<StudentNotification> selectByNotificationState(String NotificationState);
 
-    @Insert("Insert into StudentNotification(StudentNo,NotificationNo,NotificationDate)" +
-            " values(#{StudentNo} , #{NotificationNo} , #{NotificationDate})")
-    void insertStudentNotification(String StudentNo, String NotificationNo,
-                                   LocalDateTime NotificationDate );
+    @Insert("Insert into StudentNotification(StudentNo,NotificationNo,NotificationDate,NotificationState)" +
+            " values(#{StudentNo} , #{NotificationNo} , NOW(),false)")
+    void insertStudentNotification(String StudentNo, String NotificationNo);
 
     @Delete("Delete from StudentNotification Where StudentNo = #{StudentNo} and NotificationNo = #{NotificationNo}")
     void deleteStudentNotification(String StudentNo , String NotificationNo);

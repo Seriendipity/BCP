@@ -12,9 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import com.example.bcp.entity.Result;
 
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @RestController
 @RequestMapping("/notifications")
@@ -36,6 +34,7 @@ public class NotificationController {
         String cid = (String) requestData.get("cid");
         String notificationInformation = (String) requestData.get("notificationInformation");
         String notificationTitle = (String) requestData.get("notificationTitle");
+        String users = requestData.get("users").toString();
 
         String sendNo = request.getAttribute("username").toString();
         int size = notificationService.selectAllNotification().size()+1;
@@ -60,15 +59,30 @@ public class NotificationController {
         );
 
         // 插入学生通知记录
-        List<String > studentNos = studentCourseService.selectAllStudentNo(cid);
-        for (String studentNo : studentNos) {
-            studentNotificationService.insertStudentNotification(
-                    studentNo,
-                    notificationNo,
-                    LocalDateTime.now()
-            );
+        try{
+            if(users.contains("all")){
+                List<String > studentNos = studentCourseService.selectAllStudentNo(cid);
+                for (String studentNo : studentNos) {
+                    if(studentNotificationService.selectByStudentNoAndNotificationNo(studentNo,notificationNo) != null) continue;
+                    studentNotificationService.insertStudentNotification(
+                            studentNo,
+                            notificationNo
+                    );
+                }
+            }else{
+                List<String> userList = new ArrayList<>(Arrays.asList(users.split(",")));
+                for(String studentNo : userList){
+                    if(studentNotificationService.selectByStudentNoAndNotificationNo(studentNo,notificationNo) != null) continue;
+                    studentNotificationService.insertStudentNotification(
+                            studentNo,
+                            notificationNo
+                    );
+                }
+            }
+            return Result.success("通知发送成功");
+        }catch (Exception e){
+            return Result.error("通知发送失败，请重新发送");
         }
-        return Result.success();
     }
 
     // 教师/助教修改通知
@@ -109,7 +123,10 @@ public class NotificationController {
         return studentNotificationService.selectByStudentNo(studentNo);
     }
 
-    //某门课程的所有通知
+    /**
+     *  学生查看的是这门课程与自己有关的所有通知
+     *  教师查看的是这门课程的所有通知
+     */
     @GetMapping("/getNotification")
     public Result getNotification(@RequestParam String cid , HttpServletRequest request){
         String username = request.getAttribute("username").toString();
