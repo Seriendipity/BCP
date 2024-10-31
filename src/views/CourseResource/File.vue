@@ -39,12 +39,11 @@
 
 <script lang="ts" setup>
 import { ref, onMounted } from 'vue';
-import type { UploadProps, UploadUserFile } from 'element-plus';
 import { reqFileDownload, reqFileList, reqUploadFile } from '@/api/api'; // 引入 API
 import { ElNotification } from 'element-plus';
 
-const fileList = ref<UploadUserFile[]>([]);
-const uploadUrl = 'https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15'; // 上传接口
+const fileList = ref<any[]>([]);
+const selectedFile = ref<File | null>(null); // 存储选中的文件
 
 // 默认模拟数据
 const defaultFiles = [
@@ -74,18 +73,58 @@ onMounted(async () => {
   }
 });
 
-// 上传文件处理
+// 处理文件选择
 const handleChange = (event: Event) => {
   const target = event.target as HTMLInputElement;
   if (target.files && target.files.length > 0) {
-    // 处理文件选择
+    selectedFile.value = target.files[0]; // 存储选中的文件
   }
 };
 
+// 上传文件处理
 const handleSubmit = async () => {
-  // 处理上传逻辑
+  if (!selectedFile.value) {
+    ElNotification({
+      message: '请选择一个文件',
+      type: 'error',
+    });
+    return;
+  }
+
+  const formData = new FormData();
+  const storedCourseId = localStorage.getItem('courseId');
+
+  if (storedCourseId) {
+    formData.append('cid', storedCourseId); // 传递 cid
+    formData.append('file', selectedFile.value); // 传递文件
+  } else {
+    ElNotification({
+      message: '课程ID无效，请重试',
+      type: 'error',
+    });
+    return;
+  }
+
+  try {
+    const response = await reqUploadFile(formData); // 连接后端上传文件
+    const newFile = {
+      url: response.data.url,
+      name: response.data.name,
+      index: fileList.value.length + 1,
+      type: response.data.type,
+    };
+    fileList.value.push(newFile); // 将新文件添加到 fileList
+    selectedFile.value = null; // 上传后清空选择的文件
+  } catch (error) {
+    console.error('上传文件失败', error);
+    ElNotification({
+      message: '上传文件失败，请重试',
+      type: 'error',
+    });
+  }
 };
 
+// 下载文件
 const downloadFile = async (resource: any) => {
   try {
     const response = await reqFileDownload(resource.name);
@@ -123,18 +162,17 @@ const downloadFile = async (resource: any) => {
 
 .file-input-container {
   display: flex;
-  flex-direction: column;
   align-items: center;
+  /* 将按钮和输入框放在同一行 */
 }
 
 input[type="file"] {
-  margin-bottom: 10px;
+  margin-right: 10px;
+  /* 增加输入框和按钮之间的间距 */
   border: 2px dashed #409eff;
   padding: 10px;
   border-radius: 5px;
   cursor: pointer;
-  width: 100%;
-  max-width: 250px;
 }
 
 .upload-button {
