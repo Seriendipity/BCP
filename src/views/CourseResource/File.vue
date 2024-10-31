@@ -11,14 +11,14 @@
       </el-col>
     </el-row>
     <el-row :gutter="20">
-      <el-col :span="24" v-for="(file, index) in fileList" :key="index">
+      <el-col :span="24" v-for="(resource, index) in fileList" :key="index">
         <div class="file-row">
           <div class="file-info">
-            <h2 class="file-name">{{ file.name }}</h2>
+            <h2 class="file-name">{{ resource.filename }}</h2>
           </div>
           <el-button class="download-button" type="primary" size="small" @click="() => {
-            if (file.url) {
-              downloadFile(file.url);
+            if (resource.path) {
+              downloadFile(resource.path);
             } else {
               ElNotification({
                 message: '文件链接无效',
@@ -39,22 +39,22 @@
 
 <script lang="ts" setup>
 import { ref, onMounted } from 'vue';
-import type { UploadProps, UploadUserFile } from 'element-plus';
+import type { UploadProps } from 'element-plus';
 import { reqFileList, reqUploadFile } from '@/api/api'; // 引入 API
 import { ElNotification } from 'element-plus';
 
-const fileList = ref<UploadUserFile[]>([]);
+const fileList = ref<any[]>([]);
 const uploadUrl = 'https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15'; // 上传接口
 
 // 默认模拟数据
 const defaultFiles = [
   {
-    name: 'food.jpeg',
-    url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100',
+    filename: 'food.jpeg',
+    path: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100',
   },
   {
-    name: 'food2.jpeg',
-    url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100',
+    filename: 'food2.jpeg',
+    path: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100',
   },
 ];
 
@@ -79,8 +79,10 @@ const handleChange: UploadProps['onChange'] = async (uploadFile) => {
   try {
     const response = await reqUploadFile(uploadFile); // 连接后端上传文件
     const newFile = {
-      name: response.data.filename,
-      url: response.data.path,
+      path: response.data.path,
+      filename: response.data.filename,
+      index: fileList.value.length + 1,
+      type: response.data.type,
     };
     fileList.value.push(newFile); // 将新文件添加到 fileList
   } catch (error) {
@@ -138,6 +140,11 @@ const downloadFile = (url: string) => {
   font-size: 16px;
   color: #333;
   margin: 0;
+}
+
+.file-type {
+  font-size: 14px;
+  color: #999;
 }
 
 .download-button {
