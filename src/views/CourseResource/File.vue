@@ -2,7 +2,7 @@
   <div class="file-layout">
     <el-row :gutter="20">
       <el-col :span="6" :offset="18">
-        <el-upload class="upload" :action="uploadUrl" :on-change="handleChange" :file-list="fileList">
+        <el-upload class="upload" :action="uploadUrl" :on-change="handleChange">
           <el-button type="primary">点击上传文件</el-button>
           <template #tip>
             <div class="el-upload__tip">一次只上传一个文件</div>
@@ -14,9 +14,18 @@
       <el-col :span="24" v-for="(resource, index) in fileList" :key="index">
         <div class="file-row">
           <div class="file-info">
-            <h2 class="file-name">{{ resource.name }}</h2>
+            <h2 class="file-name">{{ resource.filename }}</h2>
           </div>
-          <el-button class="download-button" type="primary" size="small" @click="() => downloadFile(resource)">
+          <el-button class="download-button" type="primary" size="small" @click="() => {
+            if (resource) {
+              downloadFile(resource);
+            } else {
+              ElNotification({
+                message: '文件链接无效',
+                type: 'error',
+              });
+            }
+          }">
             下载
             <el-icon>
               <Download />
@@ -30,57 +39,52 @@
 
 <script lang="ts" setup>
 import { ref, onMounted } from 'vue';
-import type { UploadProps } from 'element-plus';
+import type { UploadProps, UploadUserFile } from 'element-plus';
 import { reqFileDownload, reqFileList, reqUploadFile } from '@/api/api'; // 引入 API
 import { ElNotification } from 'element-plus';
 
-// 定义 UploadUserFile 类型
-interface UploadUserFile {
-  name: string;
-  url: string;
-}
-
-const fileList = ref<UploadUserFile[]>([]);
+const fileList = ref<any[]>([]);
 const uploadUrl = 'https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15'; // 上传接口
 
-const defaultFiles: UploadUserFile[] = [
+// 默认模拟数据
+const defaultFiles = [
   {
-    name: 'food.jpeg',
-    url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100',
+    filename: 'food.jpeg',
+    path: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100',
   },
   {
-    name: 'food2.jpeg',
-    url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100',
+    filename: 'food2.jpeg',
+    path: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100',
   },
 ];
 
 onMounted(async () => {
+  // 获取初始文件列表
   try {
     const storedCourseId = localStorage.getItem('courseId');
     const response = await reqFileList(storedCourseId);
-    fileList.value = response.data.map((file: any) => ({
-      name: file.filename,
-      url: file.path || '', // 确保 url 至少为一个空字符串
-    })) || defaultFiles;
+    fileList.value = response.data || defaultFiles; // 使用后端数据或默认数据
   } catch (error) {
     console.error('获取文件列表失败', error);
     ElNotification({
       message: '获取文件列表失败，请重试',
       type: 'error',
     });
-    fileList.value = defaultFiles;
+    fileList.value = defaultFiles; // 若获取失败，使用默认数据
   }
 });
 
 // 上传文件处理
 const handleChange: UploadProps['onChange'] = async (uploadFile) => {
   try {
-    const response = await reqUploadFile(uploadFile);
-    const newFile: UploadUserFile = {
-      name: response.data.filename,
-      url: response.data.path || '', // 确保 url 至少为一个空字符串
+    const response = await reqUploadFile(uploadFile); // 连接后端上传文件
+    const newFile = {
+      path: response.data.path,
+      filename: response.data.filename,
+      index: fileList.value.length + 1,
+      type: response.data.type,
     };
-    fileList.value.push(newFile);
+    fileList.value.push(newFile); // 将新文件添加到 fileList
   } catch (error) {
     console.error('上传文件失败', error);
     ElNotification({
@@ -91,10 +95,10 @@ const handleChange: UploadProps['onChange'] = async (uploadFile) => {
 };
 
 // 下载文件
-const downloadFile = async (resource: UploadUserFile) => {
+const downloadFile = async (resource: any) => {
   try {
-    const response = await reqFileDownload(resource.name);
-    window.open(response.url);
+    const response = await reqFileDownload(resource.filename);
+    window.open(response.url); // 打开文件链接
   } catch (error) {
     ElNotification({
       message: '下载文件失败，请重试',
@@ -126,10 +130,14 @@ const downloadFile = async (resource: UploadUserFile) => {
   align-items: center;
   padding: 10px;
   margin-bottom: 10px;
+  /* 行与行之间的间距 */
   border: 1px solid #ebeef5;
   border-radius: 10px;
+  /* 圆角边框 */
   background-color: #ffffff;
+  /* 背景色 */
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  /* 阴影效果 */
 }
 
 .file-info {
@@ -140,6 +148,11 @@ const downloadFile = async (resource: UploadUserFile) => {
   font-size: 16px;
   color: #333;
   margin: 0;
+}
+
+.file-type {
+  font-size: 14px;
+  color: #999;
 }
 
 .download-button {
