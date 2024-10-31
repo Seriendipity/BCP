@@ -13,7 +13,7 @@ enum API {
   SYLLABUS_URL = "/teaching/getSyllabus",
   NOTIFICATION_STUDENT = "/notifications/getNotification",
   STUDENT_DATA = "/StudentCourse/allStudent",
-  NOTIFICATION_POST = "",
+  NOTIFICATION_POST = "/notifications/send",
   NOTIFICATION_STATECHANGE = "/notifications/change_status"
 
 

@@ -4,11 +4,11 @@
       <el-form :model="form" label-width="80px">
         <!-- 主题输入 -->
         <el-form-item label="通知主题">
-          <el-input v-model="form.title" placeholder="请输入通知主题"></el-input>
+          <el-input v-model="form.notificationTitle" placeholder="请输入通知主题"></el-input>
         </el-form-item>
         <!-- 内容输入 -->
         <el-form-item label="通知内容">
-          <el-input type="textarea" v-model="form.message" placeholder="请输入通知内容" rows="10"></el-input>
+          <el-input type="textarea" v-model="form.notificationInformation" placeholder="请输入通知内容" rows="10"></el-input>
         </el-form-item>
         <!-- 发布按钮 -->
         <el-form-item>
@@ -28,27 +28,21 @@ export default {
   data() {
     return {
       form: {
-        title: "",        // 通知主题
-        message: "",      // 通知内容
-        time: "",         // 通知发布时间
-        publisherName: "" // 通知发布人姓名
+        cid: "",                  //课程序号
+        notificationTitle: "",        // 通知主题
+        notificationInformation: "",      // 通知内容
+        users: "all"
       },
     };
   },
   methods: {
     // 发布通知
     async publishNotification() {
-      if (!this.form.title || !this.form.message) {
+      if (!this.form.notificationTitle || !this.form.notificationInformation) {
         ElMessage.error("请填写通知的主题和内容");
         return;
       }
 
-      // 获取当前时间作为发布时间
-      this.form.time = new Date().toLocaleString();
-
-      // 从 localStorage 获取发布人姓名
-      const storedName = localStorage.getItem('publisherName');
-      this.form.publisherName = storedName || "未知发布人"; // 如果为空则设置默认值
 
       try {
         // 发送通知到后端
@@ -56,10 +50,9 @@ export default {
         if (response.status === 200) {
           ElMessage.success("通知发布成功");
           // 清空表单
-          this.form.title = "";
-          this.form.message = "";
-          this.form.time = "";
-          this.form.publisherName = "";
+          this.form.notificationTitle = "";
+          this.form.notificationInformation = "";
+          this.form.cid = "";
         } else {
           ElMessage.error("通知发布失败，请重试");
         }
@@ -70,10 +63,10 @@ export default {
     },
   },
   mounted() {
-    // 在组件加载时尝试获取发布人姓名
-    const storedName = localStorage.getItem('userName');
-    if (storedName) {
-      this.form.publisherName = storedName;
+    // 在组件加载时尝试获取发布课程序号
+    const cid = localStorage.getItem('courseId');
+    if (cid) {
+      this.form.cid = cid
     }
   },
 };
