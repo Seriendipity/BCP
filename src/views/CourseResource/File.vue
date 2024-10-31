@@ -39,26 +39,37 @@
 
 <script lang="ts" setup>
 import { ref, onMounted } from 'vue';
-import type { UploadUserFile } from 'element-plus';
 import { reqFileDownload, reqFileList, reqUploadFile } from '@/api/api'; // 引入 API
 import { ElNotification } from 'element-plus';
 
-const fileList = ref<UploadUserFile[]>([]); // 确保初始化为数组
+const fileList = ref<any[]>([]);
 const selectedFile = ref<File | null>(null); // 存储选中的文件
+
+// 默认模拟数据
+const defaultFiles = [
+  {
+    name: 'food.jpeg',
+    url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100',
+  },
+  {
+    name: 'food2.jpeg',
+    url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100',
+  },
+];
 
 onMounted(async () => {
   // 获取初始文件列表
   try {
     const storedCourseId = localStorage.getItem('courseId');
     const response = await reqFileList(storedCourseId);
-    fileList.value = Array.isArray(response.data) ? response.data : []; // 确保是数组
+    fileList.value = response.data || defaultFiles; // 使用后端数据或默认数据
   } catch (error) {
     console.error('获取文件列表失败', error);
     ElNotification({
       message: '获取文件列表失败，请重试',
       type: 'error',
     });
-    fileList.value = []; // 若获取失败，清空文件列表
+    fileList.value = defaultFiles; // 若获取失败，使用默认数据
   }
 });
 
