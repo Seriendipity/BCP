@@ -207,6 +207,16 @@ export const constantRoute = [
           icon: 'Reading',
         }
       },
+      {
+        path: '/CourseManagement/editHomework',
+        component: () => import('@/views/CourseManagement/editHomework.vue'),
+        name: 'editHomework',
+        meta: {
+          title: '编辑作业信息',
+          hidden: false,
+          icon: 'Reading',
+        }
+      },
     ]
   },
   {
