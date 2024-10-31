@@ -1,5 +1,7 @@
 package com.example.bcp.controller;
 
+import com.example.bcp.entity.CourseResource;
+import com.example.bcp.entity.Favorite;
 import com.example.bcp.entity.Result;
 import cn.hutool.core.io.FileUtil;
 import com.example.bcp.service.CourseResourceService;
@@ -12,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 @RestController
 @CrossOrigin
@@ -19,6 +22,14 @@ import java.io.IOException;
 public class CourseResourceController {
     @Autowired
     private CourseResourceService courseResourceService;
+
+    @GetMapping("/allCourseSource")
+    public Result selectAllCourseResource(@RequestParam String Cid){
+        List<CourseResource> selectByCid = courseResourceService.selectByCid(Cid);
+        return Result.success(selectByCid);
+    }
+
+
 
     //-------------------------------文件上传下载---------------------------------
 
