@@ -2,9 +2,7 @@ package com.example.bcp.controller;
 
 import com.example.bcp.entity.StudentNotification;
 import com.example.bcp.entity.Teaching;
-import com.example.bcp.service.NotificationService;
-import com.example.bcp.service.StudentNotificationService;
-import com.example.bcp.service.StudentCourseService;
+import com.example.bcp.service.*;
 import com.example.bcp.entity.Notification;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +23,19 @@ public class NotificationController {
 
     @Autowired
     private StudentCourseService studentCourseService;
+
+    @Autowired
+    private TeacherService teacherService;
+
+    @Autowired
+    private AssistantService assistantService;
+
+    @Autowired
+    private TeachingService teachingService;
+
+    @Autowired
+    private CourseService courseService;
+
 
     // 教师/助教发送通知
     @PostMapping("/send")
@@ -168,6 +179,50 @@ public class NotificationController {
     public List<StudentNotification> getStudentNotifications(@PathVariable String studentNo) {
         return studentNotificationService.selectByStudentNo(studentNo);
     }
+
+    /**
+     * 学生查看跟自己有关的所有通知
+     */
+    @GetMapping("/getAllNotification")
+    public Result getAllNotificationOfStudent(HttpServletRequest request){
+        String studentNo = request.getAttribute("username").toString();
+        Map<String,Object> responseData = new HashMap<>();
+        List<StudentNotification> sns = studentNotificationService.selectByStudentNo(studentNo);
+        int i = 1;
+        for(StudentNotification sn : sns){
+            Map<String,Object> notification = new HashMap<>();
+            notification.put("index",i);
+            Notification n = notificationService.selectByNotificationNo(sn.getNotificationNo());
+            notification.put("notificationInfo",n.getNotificationInformation());
+            notification.put("notificationTitle",n.getNotificationTitle());
+//            notification.put("sendNo",n.getSendNo());
+            String sendNo = n.getSendNo();
+            String sendName;
+            String cid,courseNo,courseName;
+
+            cid = n.getCid();
+            courseNo = teachingService.selectByCid(cid).getCourseNo();
+            courseName = courseService.selectByCourseNo(courseNo).getCourseName();
+
+            if (sendNo.startsWith("T")){
+                sendName = teacherService.selectByTeacherNo(sendNo).getTeacherName();
+            }else{
+                sendName = courseName+"助教";
+            }
+            notification.put("sendName",sendName);
+            notification.put("courseName",courseName);
+            notification.put("notificationPostingTime",n.getPostingTime());
+            String state = "未读";
+            if(sn.isNotificationState()) state = "已读";
+            notification.put("notificationState",state);
+            notification.put("notificationId",n.getNotificationNo());
+
+            responseData.put("notification"+i,notification);
+            i++;
+        }
+        return Result.success(responseData);
+    }
+
 
     /**
      *  学生查看的是这门课程与自己有关的所有通知
