@@ -21,7 +21,7 @@ public class Qwen {
         Generation gen = new Generation();
         Message systemMsg = Message.builder()
                 .role(Role.SYSTEM.getValue())
-                .content("You are a helpful assistant.")
+                .content("You are a helpful assistant to help users with their course-related questions.")
                 .build();
         Message userMsg = Message.builder()
                 .role(Role.USER.getValue())
