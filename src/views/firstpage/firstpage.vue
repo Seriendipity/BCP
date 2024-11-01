@@ -80,26 +80,26 @@
         <el-aside class="backright">
           <div class="whiteback3">
             <h1 style="text-align: left; font-weight: bold;margin-bottom: 10px;">通知公告</h1>
-            
-      <el-row :gutter="20">
-        <el-col :span="24" v-for="(notification, index) in notifications" :key="index">
-          <div class="notification-bar" >
-            <div class="notification-info"  @click="viewNotification(notification)">
-              <h2 class="notification-lesson" >{{ notification.notificationLesson }}</h2>
-              <h2 class="notification-title" >{{ notification.notificationTitle }}</h2>
-              <p class="notification-time" >{{ notification.notificationPostingTime }}</p>
-            </div>
-            <el-tag :type="notification.notificationState === '已读' ? 'success' : 'warning'">
-              {{ notification.notificationState }}
-            </el-tag>
-          </div>
-        </el-col>
-      </el-row>
-    </div>
-      
-            
 
-          
+            <el-row :gutter="20">
+              <el-col :span="24" v-for="(notification, index) in notifications" :key="index">
+                <div class="notification-bar">
+                  <div class="notification-info" @click="viewNotification(notification)">
+                    <h2 class="notification-lesson">{{ notification.courseName }}</h2>
+                    <h2 class="notification-title">{{ notification.notificationTitle }}</h2>
+                    <p class="notification-time">{{ notification.notificationPostingTime }}</p>
+                  </div>
+                  <el-tag :type="notification.notificationState === '已读' ? 'success' : 'warning'">
+                    {{ notification.notificationState }}
+                  </el-tag>
+                </div>
+              </el-col>
+            </el-row>
+          </div>
+
+
+
+
         </el-aside>
       </el-container>
     </el-main>
@@ -107,107 +107,106 @@
 
   <!-- 查看通知的弹出框 -->
   <el-dialog v-model="dialogVisible" title="查看通知" width="600px" class="notification-dialog">
-      <div class="dialog-content">
-        <p class="dialog-title"><strong>主题:</strong> {{ currentNotification.notificationTitle }}</p>
-        <p class="dialog-info"><strong>内容:</strong> {{ currentNotification.notificationInfo }}</p>
-      </div>
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="closeDialog" type="primary">关闭</el-button>
-      </span>
-    </el-dialog>
+    <div class="dialog-content">
+      <p class="dialog-title"><strong>主题:</strong> {{ currentNotification.notificationTitle }}</p>
+      <p class="dialog-info"><strong>内容:</strong> {{ currentNotification.notificationInfo }}</p>
+    </div>
+    <span slot="footer" class="dialog-footer">
+      <el-button @click="closeDialog" type="primary">关闭</el-button>
+    </span>
+  </el-dialog>
 
 </template>
 
 <script setup>
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
-import { reqUserInfo, reqCourseList, reqCourseIntro } from '@/api/api';
+import { reqUserInfo, reqCourseList, reqCourseIntro, reqNotificationAll } from '@/api/api';
 import { ElNotification } from 'element-plus';
 
 const courses = ref([]);
 const student = ref([]);
 const router = useRouter();
 const dialogVisible = ref(false);
-    const currentNotification = ref({});
-    const notifications = ref([]);
+const currentNotification = ref({});
+const notifications = ref([]);
 
 
 const circleUrl = ref('src/assets/images/example.jpg');
 
 // 模拟数据
 const mockData = [
-      {
-        notificationLesson:'数据库系统',
-        notificationTitle: '课程调整通知',
-        notificationInfo: '由于特殊情况，本周的课程时间将调整，请查看具体时间安排。',
-        notificationPostingTime: '2024-10-28 14:00',
-        notificationState: '未读',
-      },
-      {
-        notificationLesson:'人工智能基础',
-        notificationTitle: '期末考试安排',
-        notificationInfo: '请注意，期末考试将在12月1日举行，请提前做好复习准备。',
-        notificationPostingTime: '2024-10-29 09:00',
-        notificationState: '已读',
-      },
-      {
-        notificationLesson:'软件学院团委宣传部',
-        notificationTitle: '社团活动通知',
-        notificationInfo: '下周五有社团活动，欢迎大家参加！',
-        notificationPostingTime: '2024-10-30 11:00',
-        notificationState: '未读',
-      },
-    ];
+  {
+    courseName: '数据库系统',
+    notificationTitle: '课程调整通知',
+    notificationInfo: '由于特殊情况，本周的课程时间将调整，请查看具体时间安排。',
+    notificationPostingTime: '2024-10-28 14:00',
+    notificationState: '未读',
+  },
+  {
+    courseName: '人工智能基础',
+    notificationTitle: '期末考试安排',
+    notificationInfo: '请注意，期末考试将在12月1日举行，请提前做好复习准备。',
+    notificationPostingTime: '2024-10-29 09:00',
+    notificationState: '已读',
+  },
+  {
+    courseName: '软件学院团委宣传部',
+    notificationTitle: '社团活动通知',
+    notificationInfo: '下周五有社团活动，欢迎大家参加！',
+    notificationPostingTime: '2024-10-30 11:00',
+    notificationState: '未读',
+  },
+];
 
 // 获取通知数据
 const fetchNotifications = async () => {
-      try {
-        const storedCourseId = localStorage.getItem('courseId');
-        const response = await reqNotificationStudent(storedCourseId); // 获取通知数据
-        notifications.value = response.data || []; // 更新通知数据
-      } catch (err) {
-        // 捕获错误并使用模拟数据
-        notifications.value = mockData;
-        ElNotification({
-          message: '获取通知失败',
-          type: 'error',
-        });
-      }
-    };
-
-    onMounted(() => {
-      fetchNotifications(); // 组件挂载时获取通知数据
+  try {
+    const response = await reqNotificationAll(); // 获取通知数据
+    notifications.value = response.data || []; // 更新通知数据
+  } catch (err) {
+    // 捕获错误并使用模拟数据
+    notifications.value = mockData;
+    ElNotification({
+      message: '获取通知失败',
+      type: 'error',
     });
+  }
+};
+
+onMounted(() => {
+  fetchNotifications(); // 组件挂载时获取通知数据
+});
 
 // 查看通知详情
 const viewNotification = async (notification) => {
-      currentNotification.value = notification; // 设置当前通知
-      dialogVisible.value = true; // 打开弹出框
+  currentNotification.value = notification; // 设置当前通知
+  dialogVisible.value = true; // 打开弹出框
 
-      if (notification.notificationState === '未读') {
-        // 将状态更新为已读
-        notification.notificationState = '已读';
+  if (notification.notificationState === '未读') {
+    // 将状态更新为已读
+    notification.notificationState = '已读';
 
-        // 调用后端API更新状态
-        try {
-          await updateNotificationState({
-            notificationId: notification.notificationId, // 传递通知ID
-          });
-        } catch (error) {
-          console.error('更新通知状态失败:', error);
-          ElNotification({
-            type: 'error',
-            message: '更新通知状态失败，请重试。',
-          });
-        }
-      }
-    };
+    // 调用后端API更新状态
+    try {
+      await updateNotificationState({
+        notificationId: notification.notificationId, // 传递通知ID
+      });
+    } catch (error) {
+      console.error('更新通知状态失败:', error);
+      ElNotification({
+        type: 'error',
+        message: '更新通知状态失败，请重试。',
+      });
+    }
+  }
+};
 
 
 // 关闭弹出框
 const closeDialog = () => {
-      dialogVisible.value = false; // 关闭弹出框
-    };
+  dialogVisible.value = false; // 关闭弹出框
+};
 
 // 获取用户信息和课程列表
 onMounted(async () => {
@@ -419,7 +418,7 @@ body>.el-container {
 
 .notification-lesson {
   font-size: 16px;
-  font-weight:bold;
+  font-weight: bold;
   margin-bottom: 5px;
 }
 
