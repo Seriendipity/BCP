@@ -32,7 +32,7 @@ public class Qwen {
                 //.apiKey(System.getenv("DASHSCOPE_API_KEY"))
                 .apiKey("sk-5568e0006f834f3099a822f751b41691")
                 // 模型列表：https://help.aliyun.com/zh/model-studio/getting-started/models
-                .model("qwen-plus")
+                .model("qwen-turbo")
                 .messages(Arrays.asList(systemMsg, userMsg))
                 .resultFormat(GenerationParam.ResultFormat.MESSAGE)
                 .build();
