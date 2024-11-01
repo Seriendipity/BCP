@@ -4,11 +4,7 @@
       <el-row :gutter="20">
         <el-col :span="17">
           <div class="grid-content">
-<<<<<<< HEAD
-            <router-link to="/firstpage" style="text-decoration: none;">
-=======
             <router-link to="/firstpage" style="text-decoration: none; ">
->>>>>>> b2e62df70f6cc98d58db297e7dfc57b3d93cdd7e
               <h1 class="zitihead">智慧课程平台</h1>
             </router-link>
           </div>
@@ -16,37 +12,23 @@
         <el-col :span="2">
           <div class="grid-content" style="text-align: right;">
             <router-link to="/firstpage" style="text-decoration: none;">
-<<<<<<< HEAD
-              <h1 style="font-size:x-large;margin-top: 17px;color: white;text-shadow: 2px 3px rgba(0, 0, 0, 0.5);font-weight: 550;">笔记</h1>
-=======
               <h1
                 style="font-size:x-large;margin-top: 17px;color: white;text-shadow: 2px 3px rgba(0, 0, 0, 0.5);font-weight: 550;">
                 笔记
               </h1>
->>>>>>> b2e62df70f6cc98d58db297e7dfc57b3d93cdd7e
             </router-link>
           </div>
         </el-col>
         <el-col :span="2">
-<<<<<<< HEAD
-          <div class="grid-content">
-            <router-link to="/bookmarks" style="text-decoration: none;">
-              <h1 style="font-size:larger;margin-top: 21px;color: aliceblue;font-weight: 550;">收藏夹</h1>
-=======
           <div class="grid-content ">
             <router-link to="/bookmarks" style="text-decoration: none;">
               <h1 style="font-size:larger;margin-top: 21px;color: aliceblue;font-weight: 550;">收藏夹
               </h1>
->>>>>>> b2e62df70f6cc98d58db297e7dfc57b3d93cdd7e
             </router-link>
           </div>
         </el-col>
         <el-col :span="1">
-<<<<<<< HEAD
           <div class="grid-content">
-=======
-          <div class="grid-content ">
->>>>>>> b2e62df70f6cc98d58db297e7dfc57b3d93cdd7e
             <router-link to="/myinformation" style="text-decoration: none;">
               <div style="margin-top: 10px"><el-avatar :size="40" :src="circleUrl"></el-avatar></div>
             </router-link>
@@ -54,12 +36,7 @@
         </el-col>
         <el-col :span="2">
           <router-link to="/myinformation" style="text-decoration: none;">
-<<<<<<< HEAD
             <h1 style="font-size: medium;margin-top: 21px;color: aliceblue;font-weight: 550;">爱学习</h1>
-=======
-            <h1 style="font-size: medium;margin-top: 21px;color: aliceblue;font-weight: 550;">爱学习
-            </h1>
->>>>>>> b2e62df70f6cc98d58db297e7dfc57b3d93cdd7e
           </router-link>
         </el-col>
       </el-row>
@@ -70,7 +47,6 @@
         <el-aside class="backleft">
           <div class="whiteback" :data="student">
             <h1 style="text-align: left; font-weight: bold;margin-bottom: 5px;">个人信息</h1>
-<<<<<<< HEAD
             <div style="margin-top: 20px;text-align: center;"><el-avatar :size="100" :src="circleUrl"></el-avatar></div>
             <h1 class="ziti01">学生</h1>
             <h1 class="ziti02" style="text-align: left;padding-left: 15px;">姓名：{{ student.studentName }}</h1>
@@ -102,50 +78,11 @@
               <el-col :span="13">
                 <h1 class="ziti03" style="margin-top: 5px;">{{ note.title }}</h1>
                 <h1 class="ziti04" style="color: gray;margin-top: 15px;">{{ note.uploadDate }}上传</h1>
-=======
-            <div style="margin-top: 20px;text-align: center; "><el-avatar :size="100" :src="circleUrl"></el-avatar>
-            </div>
-            <h1 class="ziti01">学生</h1>
-            <h1 class="ziti02" style="text-align: left;padding-left: 15px;">姓名：{{ student.studentName }}</h1>
-            <h1 class="ziti02" style="text-align: left;padding-left: 15px;">学号：{{ student.studentNo }}</h1>
-            <h1 class="ziti02" style="text-align: left;padding-left: 15px;">学院：{{ student.dept }}</h1>
-            <h1 class="ziti02" style="text-align: left;padding-left: 15px;">邮箱：{{ student.email }}</h1>
-          </div>
-          <div class="whiteback2">
-            <h1 style="text-align: left; font-weight: bold;margin-bottom: 5px;">课程提醒</h1>
-          </div>
-        </el-aside>
-
-        <el-main height="600px">
-          <el-row>
-            <el-col :span="4">
-              <!-- <h1 style="text-align: left; font-weight: bold;font-size: large;margin-top:-12px;"> 我的笔记</h1> -->
-              <el-button type="primary" style="text-align: left; font-weight: bold;font-size: large;">我的笔记</el-button>
-            </el-col>
-            <el-col :span="20">
-              <router-link to="/othersnotes" style="text-decoration: none;">
-                <!-- <h1 style="text-align: left; font-weight: bold;font-size: large;margin-top:-12px;"> 我的笔记</h1> -->
-                <el-button type="primary" style="text-align: left; font-weight: bold;font-size: large;"
-                  plain>浏览笔记</el-button>
-              </router-link></el-col>
-            <div style="margin-left: 87%;">
-              <el-button type="primary" round @click="dialogVisible = true" style=" width: 80px;font-size: large;
-                font-weight: bold;margin-bottom: -5px;">上传</el-button>
-            </div>
-          </el-row>
-          <!-- <div class="scrollable"> -->
-          <div class="grid-content bg-white" style="height: 75px;">
-            <el-row :gutter="20">
-              <el-col :span="11">
-                <h1 class="ziti03" style="margin-top: 5px;">数据结构第一次课程笔记</h1>
-                <h1 class="ziti04" style="color: gray;margin-top: 15px;">2024年10月5日上传</h1>
->>>>>>> b2e62df70f6cc98d58db297e7dfc57b3d93cdd7e
               </el-col>
               <el-col :span="4">
                 <h1 class="ziti04" style="color: gray;margin-top: 28px;text-align: right;">是否公开</h1>
               </el-col>
               <el-col :span="2">
-<<<<<<< HEAD
                 <el-switch
                   style="margin-top: 20px;"
                   v-model="note.isPublic"
@@ -288,146 +225,7 @@ const goToNoteInfo = async (noteNo) => {//TODO
 </script>
 
   
-  
-  <style>
-=======
-                <el-switch style="margin-top: 20px;" v-model="value" active-color="#13ce66" inactive-color="#ff4949">
-                </el-switch>
-              </el-col>
-              <el-col :span="2">
-                <el-button type="primary" style="margin-top: 20px;" plain>更新</el-button></el-col>
-              <el-col :span="2">
-                <el-button type="primary" style="margin-top: 20px;" plain>预览</el-button></el-col>
-              <el-col :span="3">
-                <el-button type="primary" style="margin-top: 20px;" plain>下载</el-button></el-col>
-            </el-row>
-          </div>
-          <div class="grid-content bg-white" style="height: 75px;">
-            <el-row :gutter="20">
-              <el-col :span="11">
-                <h1 class="ziti03" style="margin-top: 5px;">算法第3次作业答案</h1>
-                <h1 class="ziti04" style="color: gray;margin-top: 15px;">2023年9月5日上传</h1>
-              </el-col>
-              <el-col :span="4">
-                <h1 class="ziti04" style="color: gray;margin-top: 28px;text-align: right;">是否公开</h1>
-              </el-col>
-              <el-col :span="2">
-                <el-switch style="margin-top: 20px;" v-model="value" active-color="#13ce66" inactive-color="#ff4949">
-                </el-switch>
-              </el-col>
-              <el-col :span="2">
-                <el-button type="primary" style="margin-top: 20px;" plain>更新</el-button></el-col>
-              <el-col :span="2">
-                <el-button type="primary" style="margin-top: 20px;" plain>预览</el-button></el-col>
-              <el-col :span="3">
-                <el-button type="primary" style="margin-top: 20px;" plain>下载</el-button></el-col>
-            </el-row>
-          </div>
-          <div class="grid-content bg-white" style="height: 75px;">
-            <el-row :gutter="20">
-              <el-col :span="11">
-                <h1 class="ziti03" style="margin-top: 5px;">软件测试小测原题</h1>
-                <h1 class="ziti04" style="color: gray;margin-top: 15px;">2022年8月5日上传</h1>
-              </el-col>
-              <el-col :span="4">
-                <h1 class="ziti04" style="color: gray;margin-top: 28px;text-align: right;">是否公开</h1>
-              </el-col>
-              <el-col :span="2">
-                <el-switch style="margin-top: 20px;" v-model="value" active-color="#13ce66" inactive-color="#ff4949">
-                </el-switch>
-              </el-col>
-              <el-col :span="2">
-                <el-button type="primary" style="margin-top: 20px;" plain>更新</el-button></el-col>
-              <el-col :span="2">
-                <el-button type="primary" style="margin-top: 20px;" plain>预览</el-button></el-col>
-              <el-col :span="3">
-                <el-button type="primary" style="margin-top: 20px;" plain>下载</el-button></el-col>
-            </el-row>
-          </div>
-          <!-- <el-col :span="8" v-for="course in courses" :key="course.cid"> -->
-          <!-- <div class="grid-content bg-white" @click="goToCourseInfo(course.cid)">
-                    <h1 class="ziti03">{{ course.courseName }}</h1>
-                    <h1 class="ziti04">课程号: {{ course.courseNo }}</h1>
-                    <h1 class="ziti04">课序号: {{ course.cid }}</h1>
-                    <div class="avatar-container">
-                      <el-image style="width: 94%; height: 100%;margin-top: 10%;margin-left:3%" :src="course.picture"
-                        :fit="fit"></el-image>
-                    </div>
-                  </div> -->
-          <!-- </el-col> -->
-          <!-- </div> -->
-        </el-main>
->>>>>>> b2e62df70f6cc98d58db297e7dfc57b3d93cdd7e
-
-        <el-aside class="backright">
-          <div class="whiteback3">
-            <h1 style="text-align: left; font-weight: bold;margin-bottom: 5px;">通知公告</h1>
-          </div>
-        </el-aside>
-      </el-container>
-    </el-main>
-  </el-container>
-</template>
-
-<script setup>
-
-import { ref, onMounted } from 'vue';
-import { useRouter } from 'vue-router';
-import { reqUserInfo, reqCourseList, reqCourseIntro } from '@/api/api';
-import { ElNotification } from 'element-plus';
-
-const courses = ref([]);
-const student = ref([]);
-const router = useRouter();
-const value = true;
-const dialogVisible = false // 控制对话框的显示
-
-const circleUrl = ref('src/assets/images/example.jpg');
-
-// 获取用户信息和课程列表
-onMounted(async () => {
-  try {
-    const userResponse = await reqUserInfo();
-    const courseResponse = await reqCourseList();
-    student.value = userResponse.data;
-    courses.value = courseResponse.data;
-  } catch (error) {
-    ElNotification({
-      type: 'error',
-      message: '获取信息失败',
-    });
-  }
-});
-
-const goToCourseInfo = async (courseId) => {
-  try {
-    const response = await reqCourseIntro(courseId);
-    if (response && response.data) {
-      const currentQuery = router.currentRoute.value.query; // 获取当前查询参数
-      localStorage.setItem('courseId', courseId);
-      router.push({
-        path: '/CourseInfo',
-        query: {
-          ...currentQuery, // 保留当前查询参数
-          courseId,
-          courseIntro: response.data.courseInfo,
-          courseName: response.data.courseName,
-          courseNo: response.data.courseNo,
-          teacherName: response.data.teacherName,
-          establishCollege: response.data.establishCollege,
-          semester: response.data.semester,
-        },
-      });
-    }
-  } catch (error) {
-    ElNotification({
-      type: 'error',
-      message: '获取课程信息失败',
-    });
-  }
-};
-
-</script>
+ 
 
 
 <style>
