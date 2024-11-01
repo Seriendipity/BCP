@@ -239,7 +239,19 @@ export const constantRoute = [
           hidden: false,
           icon: 'Files',
         }
-      }
+      } ,
+          {
+            path: '/homework/homeworkInfo',
+            component: () => import('@/views/homework/homeworkInfo.vue'),
+            name: 'homeworkInfo',
+            meta: {
+              title: '作业详情',
+              hidden: false,
+              icon: 'Files',
+            }
+          }
+      
+      
     ]
   },
   {
