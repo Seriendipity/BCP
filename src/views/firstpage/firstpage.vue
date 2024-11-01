@@ -40,7 +40,7 @@
     </el-header>
 
     <el-main class="backmain1">
-      <el-container>
+      <el-container class="main">
         <el-aside class="backleft">
           <div class="whiteback" :data="student">
             <h1 style="text-align: left; font-weight: bold;margin-bottom: 5px;">个人信息</h1>
@@ -119,7 +119,7 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
-import { reqUserInfo, reqCourseList, reqCourseIntro, reqNotificationAll } from '@/api/api';
+import { reqUserInfo, reqCourseList, reqCourseIntro, reqNotificationAll,updateNotificationState } from '@/api/api';
 import { ElNotification } from 'element-plus';
 
 const courses = ref([]);
@@ -253,13 +253,17 @@ const goToCourseInfo = async (courseId) => {
 
 
 <style>
+.main {
+  height:600px;
+}
+
 .head {
   background-color: #005bac;
 
 }
 
 .backmain1 {
-  height: 770px;
+  height: 700px;
   background-color: #eaf6ff;
 }
 
@@ -310,7 +314,7 @@ const goToCourseInfo = async (courseId) => {
 
 .backright {
   width: "350px";
-  height: "600px";
+  max-height: "550px";
   background-color: #eaf6ff;
 }
 
@@ -339,13 +343,9 @@ const goToCourseInfo = async (courseId) => {
   background-color: #ffffff;
   padding: 10px;
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
-  overflow-y: auto;
-  /* 垂直方向上的滚动条 */
 }
 
 .scrollable {
-  height: 690px;
-  /* 固定高度 */
   overflow-y: auto;
   /* 垂直方向上的滚动条 */
   overflow-x: hidden;
