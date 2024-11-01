@@ -21,6 +21,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/users")
 public class UserController {
+    @Autowired
     private CourseResourceController courseResourceController;
 
     @Autowired
@@ -128,12 +129,34 @@ public class UserController {
         return Result.success("密码修改成功");
     }
 
-    @PostMapping("/updateAvatar")
-    public Result updateAvatar(
-            @RequestParam("file") MultipartFile file,
-            @RequestParam("userNo") String userNo, // 假设每个用户都有唯一编号
-            @RequestParam("userType") String userType) { // 用户类型参数
+    //获取用户头像路径
+    @GetMapping("/getPicture")
+    public Result getPicture(HttpServletRequest request){
+        String userNo = request.getAttribute("username").toString();
+        if (userNo.startsWith("S")){
+            Student s = studentService.selectByStudentNo(userNo);
+            String url = s.getPicturePath();
+            return Result.success(url);
+        } else if (userNo.startsWith("T")) {
+            Teacher t = teacherService.selectByTeacherNo(userNo);
+            String url = t.getPicturePath();
+            return Result.success(url);
+        }else {
+            Assistant a = assistantService.selectByAssistantNo(userNo);
+            String url = a.getPicturePath();
+            return Result.success(url);
+        }
 
+    }
+
+    @PostMapping("/updateAvatar")
+    public Result updateAvatar(@RequestParam MultipartFile file,HttpServletRequest request) { // 用户类型参数
+
+//        @RequestParam("file") MultipartFile file,
+//        @RequestParam("userNo") String userNo, // 假设每个用户都有唯一编号
+//        @RequestParam("userType") String userType)
+
+        String userNo = request.getAttribute("username").toString();
         if (file.isEmpty()) {
             return Result.error("上传文件不能为空");
         }
@@ -145,11 +168,11 @@ public class UserController {
             String url = "http://" + ip + ":" + port + "/file/download/" + savedFileName;
 
             // 根据用户类型更新头像路径
-            if ("teacher".equalsIgnoreCase(userType)) {
+            if (userNo.startsWith("T")) {
                 teacherService.updateTeacherPicturePath(url, userNo);
-            } else if ("student".equalsIgnoreCase(userType)) {
+            } else if (userNo.startsWith("S")) {
                 studentService.updateStudentPicturePath(url,userNo);
-            } else if ("assistant".equalsIgnoreCase(userType)) {
+            } else if (userNo.startsWith("A")) {
                 assistantService.updateAssistantPicturePath(url,userNo);
             } else {
                 return Result.error("用户类型不合法");
