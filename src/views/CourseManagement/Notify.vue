@@ -8,7 +8,7 @@
         </el-form-item>
         <!-- 内容输入 -->
         <el-form-item label="通知内容">
-          <el-input type="textarea" v-model="form.notificationInformation" placeholder="请输入通知内容" rows="10"></el-input>
+          <el-input type="textarea" v-model="form.notificationInformation" placeholde r="请输入通知内容" rows="10"></el-input>
         </el-form-item>
         <!-- 发布按钮 -->
         <el-form-item>
