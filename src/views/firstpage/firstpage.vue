@@ -80,25 +80,23 @@
         <el-aside class="backright">
           <div class="whiteback3">
             <h1 style="text-align: left; font-weight: bold;margin-bottom: 10px;">通知公告</h1>
-
-            <el-row :gutter="20">
-              <el-col :span="24" v-for="(notification, index) in notifications" :key="index">
-                <div class="notification-bar">
-                  <div class="notification-info" @click="viewNotification(notification)">
-                    <h2 class="notification-lesson">{{ notification.courseName }}</h2>
-                    <h2 class="notification-title">{{ notification.notificationTitle }}</h2>
-                    <p class="notification-time">{{ notification.notificationPostingTime }}</p>
+            <div class="notification-scrollable">
+              <el-row :gutter="20">
+                <el-col :span="24" v-for="(notification, index) in notifications" :key="index">
+                  <div class="notification-bar">
+                    <div class="notification-info" @click="viewNotification(notification)">
+                      <h2 class="notification-lesson">{{ notification.courseName }}</h2>
+                      <h2 class="notification-title">{{ notification.notificationTitle }}</h2>
+                      <p class="notification-time">{{ notification.notificationPostingTime }}</p>
+                    </div>
+                    <el-tag :type="notification.notificationState === '已读' ? 'success' : 'warning'">
+                      {{ notification.notificationState }}
+                    </el-tag>
                   </div>
-                  <el-tag :type="notification.notificationState === '已读' ? 'success' : 'warning'">
-                    {{ notification.notificationState }}
-                  </el-tag>
-                </div>
-              </el-col>
-            </el-row>
+                </el-col>
+              </el-row>
+            </div>
           </div>
-
-
-
 
         </el-aside>
       </el-container>
@@ -341,6 +339,8 @@ const goToCourseInfo = async (courseId) => {
   background-color: #ffffff;
   padding: 10px;
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+  overflow-y: auto;
+  /* 垂直方向上的滚动条 */
 }
 
 .scrollable {
@@ -388,7 +388,7 @@ body>.el-container {
   border-radius: 15px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   width: 100%;
-  max-height: 500px;
+  max-height: 360px;
   overflow-y: auto;
 }
 
