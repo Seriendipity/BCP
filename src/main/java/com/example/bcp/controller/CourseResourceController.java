@@ -129,27 +129,4 @@ public class CourseResourceController {
         System.out.println("文件下载成功");
         return Result.success(filePath);
     }
-
-//    @GetMapping("/download")
-//    public void download(@RequestParam String fileName, HttpServletResponse response) throws IOException {
-//        String filePath = ROOT_PATH + File.separator + fileName;
-//        System.out.println("尝试下载的文件路径: " + filePath);
-//
-//        if (!FileUtil.exist(filePath)) {
-//            response.sendError(HttpServletResponse.SC_NOT_FOUND, "文件不存在");
-//            return;
-//        }
-//
-//        response.setContentType("application/octet-stream");
-//        response.setHeader("Content-Disposition", "attachment; filename=" + URLEncoder.encode(fileName, "UTF-8"));
-//
-//        try (ServletOutputStream outputStream = response.getOutputStream()) {
-//            byte[] bytes = FileUtil.readBytes(filePath);
-//            outputStream.write(bytes);
-//            outputStream.flush();
-//        }
-//
-//        System.out.println("文件下载成功: " + fileName);
-//    }
-
 }
