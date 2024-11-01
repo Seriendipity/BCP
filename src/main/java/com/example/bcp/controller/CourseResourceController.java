@@ -5,6 +5,7 @@ import com.example.bcp.entity.Favorite;
 import com.example.bcp.entity.Result;
 import cn.hutool.core.io.FileUtil;
 import com.example.bcp.service.CourseResourceService;
+import com.example.bcp.service.CourseService;
 import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +15,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
+import java.net.URLEncoder;
+import java.util.*;
 
 @RestController
 @CrossOrigin
@@ -24,9 +26,23 @@ public class CourseResourceController {
     private CourseResourceService courseResourceService;
 
     @GetMapping("/allCourseSource")
-    public Result selectAllCourseResource(@RequestParam String Cid){
-        List<CourseResource> selectByCid = courseResourceService.selectByCid(Cid);
-        return Result.success(selectByCid);
+    public Result selectAllCourseResource(@RequestParam String cid){
+        List<CourseResource> selectByCid = courseResourceService.selectByCid(cid);
+        Map<String,Object> responseData = new HashMap<>();
+        int index = 1;
+        for(CourseResource cr : selectByCid){
+            Map<String,Object> courseResource = new HashMap<>();
+            String name = cr.getCourseResourcePath();
+            List<String> list = new ArrayList<>(Arrays.asList(name.split("/")));
+            String filename = list.get(list.size()-1);
+            courseResource.put("name",filename);
+            courseResource.put("index",index);
+            courseResource.put("url",cr.getCourseResourcePath());
+            courseResource.put("type",cr.getResourceType());
+            responseData.put("CourseResource"+index,courseResource);
+            index++;
+        }
+        return Result.success(responseData);
     }
 
 
@@ -43,7 +59,7 @@ public class CourseResourceController {
 
     @PostMapping("/upload")
     public Result upload(@RequestParam("file") MultipartFile file,
-                         @RequestParam("Cid") String Cid) {
+                         @RequestParam("cid") String Cid) {
         if (file.isEmpty()) {
             return Result.error("上传文件不能为空");
         }
@@ -95,10 +111,10 @@ public class CourseResourceController {
     }
 
 
-    @GetMapping("/download")
-    public Result download(@RequestParam String fileName, HttpServletResponse response) throws IOException {
+    @GetMapping("/download/{fileName}")
+    public Result download(@PathVariable ("fileName") String fileName, HttpServletResponse response) throws IOException {
 
-        // response.addHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode(fileFullName, "UTF-8"));  // 附件下载
+        response.addHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode(fileName, "UTF-8"));  // 附件下载
         String filePath = ROOT_PATH + File.separator + fileName;
         System.out.println(filePath);
 
@@ -111,6 +127,29 @@ public class CourseResourceController {
         outputStream.flush();
         outputStream.close();
         System.out.println("文件下载成功");
-        return Result.success();
+        return Result.success(filePath);
     }
+
+//    @GetMapping("/download")
+//    public void download(@RequestParam String fileName, HttpServletResponse response) throws IOException {
+//        String filePath = ROOT_PATH + File.separator + fileName;
+//        System.out.println("尝试下载的文件路径: " + filePath);
+//
+//        if (!FileUtil.exist(filePath)) {
+//            response.sendError(HttpServletResponse.SC_NOT_FOUND, "文件不存在");
+//            return;
+//        }
+//
+//        response.setContentType("application/octet-stream");
+//        response.setHeader("Content-Disposition", "attachment; filename=" + URLEncoder.encode(fileName, "UTF-8"));
+//
+//        try (ServletOutputStream outputStream = response.getOutputStream()) {
+//            byte[] bytes = FileUtil.readBytes(filePath);
+//            outputStream.write(bytes);
+//            outputStream.flush();
+//        }
+//
+//        System.out.println("文件下载成功: " + fileName);
+//    }
+
 }

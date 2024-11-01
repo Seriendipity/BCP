@@ -98,28 +98,34 @@ public class UserController {
         return true;
     }
 
+    @PostMapping("/updatePassword")
+    public Result updatePassword(@RequestBody Map<String,Object> requestData,HttpServletRequest request){
+        String username = request.getAttribute("username").toString();
+        String oldPassword = request.getAttribute("password").toString();
+        String currentPassword = requestData.get("currentPassword").toString();
+        String confirmPassword =requestData.get("confirmPassword").toString();
+        String newPassword = requestData.get("newPassword").toString();
+        if(!newPassword.equals(confirmPassword)){
+            return Result.error("请重新确认密码，新密码与确认密码不一致");
+        }else{
+            try{
+                if (!oldPassword.equals(currentPassword)){
+                    return Result.error("请重新输入密码");
+                }
+                if(username.startsWith("T")){
+                    teacherService.updateTeacherPassword(newPassword,username);
+                } else if (username.startsWith("S")) {
+                    studentService.updateStudentPassword(newPassword,username);
+                }else{
+                    assistantService.updateAssistantPassword(newPassword,username);
+                }
+            }catch (Exception e){
+                return Result.error("密码修改失败，请重试");
+            }
 
-    @PostMapping("/{userType}/updatePassword")
-    public Result updatePassword(@PathVariable String userType,
-                                 @RequestParam String currentPassword,
-                                 @RequestParam String newPassword,
-                                 @RequestParam String confirmPassword,
-                                 @RequestParam String userNo) {
-        // 确认新密码与确认密码一致
-        if (!newPassword.equals(confirmPassword)) {
-            System.out.println("新密码与确认密码不一致");
-            return Result.error("新密码与确认密码不一致");
         }
 
-        // 调用UserService更新密码
-        boolean result = updatePassword(userType, currentPassword, newPassword, userNo);
-        if (result) {
-            System.out.println("密码修改成功");
-            return Result.success();
-        } else {
-            System.out.println("当前密码错误或用户类型无效");
-            return Result.error("当前密码错误或用户类型无效");
-        }
+        return Result.success("密码修改成功");
     }
 
     @PostMapping("/updateAvatar")
@@ -158,15 +164,37 @@ public class UserController {
 
     @GetMapping(value = "/userInfo")
     public Result getUserInfo(HttpServletRequest request){
-        String studentNo = request.getAttribute("username").toString();
-        Student s = studentService.selectByStudentNo(studentNo);
-        Map<String, Object> responseData = new HashMap<>();
-        responseData.put("studentNo",s.getStudentNo());
-        responseData.put("studentName",s.getStudentName());
-        responseData.put("email",s.getStudentEmail());
-        String classNo = s.getClassNo();
-        String classDept = classService.selectByClassNo(classNo).getClassDepartment();
-        responseData.put("dept",classDept);
-        return Result.success(responseData);
+        String username = request.getAttribute("username").toString();
+        if (username.startsWith("S")){
+            Student s = studentService.selectByStudentNo(username);
+            Map<String, Object> responseData = new HashMap<>();
+            responseData.put("userNo",s.getStudentNo());
+            responseData.put("userName",s.getStudentName());
+            responseData.put("email",s.getStudentEmail());
+            responseData.put("identity","学生");
+            String classNo = s.getClassNo();
+            String classDept = classService.selectByClassNo(classNo).getClassDepartment();
+            responseData.put("dept",classDept);
+            return Result.success(responseData);
+        } else if (username.startsWith("T")) {
+            Teacher t = teacherService.selectByTeacherNo(username);
+            Map<String, Object> responseData = new HashMap<>();
+            responseData.put("userNo",t.getTeacherNo());
+            responseData.put("userName",t.getTeacherName());
+            responseData.put("email",t.getTeacherEmail());
+            responseData.put("identity","教师");
+            responseData.put("dept",t.getDepartment());
+            return Result.success(responseData);
+        }else {
+            Assistant a = assistantService.selectByAssistantNo(username);
+            Map<String,Object> responseData = new HashMap<>();
+            responseData.put("userNo",a.getAssistantNo());
+            responseData.put("userName",studentService.selectByStudentNo(a.getAssistantNo()).getStudentName());
+            responseData.put("email",studentService.selectByStudentNo(a.getAssistantNo()).getStudentEmail());
+            responseData.put("identity","助教");
+            return Result.success();
+        }
+
+
     }
 }

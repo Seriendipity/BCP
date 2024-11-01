@@ -17,6 +17,8 @@ public interface CommentMapper {
     @Select("Select * from Comment Where CommentId = #{CommentId}")
     Comment selectByCommentId(String CommentId);
 
+    @Select("Select * from Comment Where CommentInformation Like concat('%', #{SelectInfo}, '%') and DiscussionId = #{DiscussionId}")
+    List<Comment> fuzzyQuery(String SelectInfo,String DiscussionId);
 
     @Insert("Insert into Comment(CommentId,DiscussionId,CommentInformation,LikesNumber,CommentPostingTime,imgUrl,mentionedUser)"+
     " values(#{CommentId},#{DiscussionId},#{CommentInformation} , #{LikesNumber} , #{CommentPostingTime},#{imgUrl},#{mentionedUser})")

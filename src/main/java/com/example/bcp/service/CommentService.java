@@ -44,4 +44,8 @@ public class CommentService {
     public void updateCommentInfo(String CommentInformation,String CommentId){
         commentMapper.updateCommentInfo(CommentInformation,CommentId);
     }
+
+    public List<Comment> fuzzyQuery(String SelectInfo,String DiscussionId){
+        return commentMapper.fuzzyQuery(SelectInfo,DiscussionId);
+    }
 }

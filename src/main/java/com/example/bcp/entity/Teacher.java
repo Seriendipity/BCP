@@ -44,6 +44,17 @@ public class Teacher {
     @Column(name = "TeacherPhone",length = 20)
     private String TeacherPhone;
 
+    @Column(name = "Department",length = 20)
+    private String Department;
+
+    public String getDepartment() {
+        return Department;
+    }
+
+    public void setDepartment(String department) {
+        Department = department;
+    }
+
     public String getTeacherInfo() {
         return TeacherInfo;
     }

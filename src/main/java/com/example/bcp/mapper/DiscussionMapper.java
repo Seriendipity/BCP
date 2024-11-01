@@ -32,6 +32,9 @@ public interface DiscussionMapper {
     @Select("Select * from Discussion Where mentionedUser like concat('%',#{StudentNo},'%')")
     List<Discussion> selectByMentioned(String StudentNo);
 
+    @Select("Select * from Discussion Where DiscussionInformation Like concat('%', #{SelectInfo}, '%') and Cid = #{Cid} ")
+    List<Discussion> fuzzyQuery(String SelectInfo,String Cid);
+
     @Insert("INSERT INTO Discussion (StudentNo, Cid, DiscussionId, DiscussionInformation, DiscussionPostingTime, mentionedUser, imgUrl, topic) " +
             "VALUES (#{StudentNo}, #{Cid}, #{DiscussionId}, #{DiscussionInformation}, #{DiscussionPostingTime}, #{mentionedUser}, #{imgUrl}, #{topic})")
     void insertDiscussion(String StudentNo, String Cid, String DiscussionId,

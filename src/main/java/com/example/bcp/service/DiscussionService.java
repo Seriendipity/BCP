@@ -59,4 +59,8 @@ public class DiscussionService {
     public List<Discussion> selectByMentioned(String StudentNo){
         return discussionMapper.selectByMentioned(StudentNo);
     }
+
+    public List<Discussion> fuzzyQuery(String SelectInfo,String Cid){
+        return discussionMapper.fuzzyQuery(SelectInfo,Cid);
+    }
 }
