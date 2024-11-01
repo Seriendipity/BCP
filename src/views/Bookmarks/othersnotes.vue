@@ -61,13 +61,13 @@
   
           <el-main height="600px">
             <el-row >
-                <el-col :span="4">
+                <el-col :span="3">
                     <router-link to="/notes" style="text-decoration: none;">
                     <!-- <h1 style="text-align: left; font-weight: bold;font-size: large;margin-top:-12px;"> 我的笔记</h1> -->
                     <el-button type="primary" style="text-align: left; font-weight: bold;font-size: large;" plain>我的笔记</el-button>
                 </router-link>
                 </el-col>
-                <el-col :span="20">
+                <el-col :span="21">
                     <!-- <h1 style="text-align: left; font-weight: bold;font-size: large;margin-top:-12px;"> 我的笔记</h1> -->
                     <el-button type="primary" style="text-align: left; font-weight: bold;font-size: large;" >浏览笔记</el-button>
                 </el-col>
@@ -76,138 +76,124 @@
                 </div> -->
             </el-row>
             <!-- <div class="scrollable"> -->
-                <div class="grid-content bg-white" style="height: 80px;">
-                    <el-row :gutter="20">
-                        <el-col :span="18">
-                            <h1 class="ziti03" style="margin-top: 0px;">数据结构第一次课程笔记</h1>
-                            <h1 class="ziti04" style="margin-top: 10px;">姜天亦</h1>
-                            <h1 class="ziti04" style="color: gray;margin-top: 5px;">2024年10月5日上传</h1>
-                        </el-col>
-                        <el-col :span="1">
-                            <!-- 未收藏状态 -->
-                            <i class="fas fa-star" style="color: lightslategrey; cursor: pointer;margin-top: 28px;" @click="toggleFavorite(this);"></i> <!-- 可点击的收藏状态 -->
-                        </el-col>
-                        <el-col :span="2">
-                        <el-button type="primary" style="margin-top: 20px;" plain>预览</el-button></el-col>
-                        <el-col :span="3">
-                        <el-button type="primary" style="margin-top: 20px;" plain>下载</el-button></el-col>
-                    </el-row>
-                </div>
-                <div class="grid-content bg-white" style="height: 80px;">
-                    <el-row :gutter="20">
-                        <el-col :span="18">
-                            <h1 class="ziti03" style="margin-top: 0px;">算法第3次作业答案</h1>
-                            <h1 class="ziti04" style="margin-top: 10px;">郑宇煊</h1>
-                            <h1 class="ziti04" style="color: gray;margin-top: 5px;">2023年9月5日上传</h1>
-                        </el-col>
-                        <el-col :span="1">
-                            <!-- 未收藏状态 -->
-                            <i class="fas fa-star" style="color: lightslategrey; cursor: pointer;margin-top: 28px;" @click="toggleFavorite(this);"></i> <!-- 可点击的收藏状态 -->
-                        </el-col>
-                        <el-col :span="2">
-                        <el-button type="primary" style="margin-top: 20px;" plain>预览</el-button></el-col>
-                        <el-col :span="3">
-                        <el-button type="primary" style="margin-top: 20px;" plain>下载</el-button></el-col>
-                    </el-row>
-                </div>
-                <div class="grid-content bg-white" style="height: 80px;">
-                    <el-row :gutter="20">
-                        <el-col :span="18">
-                            <h1 class="ziti03" style="margin-top: 0px;">软件测试小测原题</h1>
-                            <h1 class="ziti04" style="margin-top: 10px;">刘艺凡</h1>
-                            <h1 class="ziti04" style="color: gray;margin-top: 5px;">2022年8月5日上传</h1>
-                        </el-col>
-                        <el-col :span="1">
-                            <!-- 未收藏状态 -->
-                            <i class="fas fa-star" style="color: lightslategrey; cursor: pointer;margin-top: 28px;" @click="toggleFavorite(this);"></i> <!-- 可点击的收藏状态 -->
-                        </el-col>
-                        <el-col :span="2">
-                        <el-button type="primary" style="margin-top: 20px;" plain>预览</el-button></el-col>
-                        <el-col :span="3">
-                        <el-button type="primary" style="margin-top: 20px;" plain>下载</el-button></el-col>
-                    </el-row>
-                </div>
-                <!-- <el-col :span="8" v-for="course in courses" :key="course.cid"> -->
-                  <!-- <div class="grid-content bg-white" @click="goToCourseInfo(course.cid)">
-                    <h1 class="ziti03">{{ course.courseName }}</h1>
-                    <h1 class="ziti04">课程号: {{ course.courseNo }}</h1>
-                    <h1 class="ziti04">课序号: {{ course.cid }}</h1>
-                    <div class="avatar-container">
-                      <el-image style="width: 94%; height: 100%;margin-top: 10%;margin-left:3%" :src="course.picture"
-                        :fit="fit"></el-image>
-                    </div>
-                  </div> -->
-                <!-- </el-col> -->
-            <!-- </div> -->
+              <div class="grid-content bg-white" style="height: 75px;" v-for="note in notes" :key="note.title">
+            <el-row :gutter="20">
+              <el-col :span="20">
+                <h1 class="ziti03" >{{ note.title }}</h1>
+                <h1 class="ziti04" style="margin-top: 5px;">{{ note.author }}</h1>
+                <h1 class="ziti04" style="color: gray;margin-top: 5px;">{{ note.uploadDate }}上传</h1>
+              </el-col>
+              <el-col :span="1">
+                <!-- 未收藏状态 -->
+                 <i class="fas fa-star" style="color: lightslategrey; cursor: pointer;margin-top: 28px;" @click="toggleFavorite(this);"></i> <!-- 可点击的收藏状态 -->
+              </el-col>
+              <el-col :span="3">
+                <el-button type="primary" style="margin-top: 20px;" plain @click="previewNote(note)">查看</el-button>
+              </el-col>
+            </el-row>
+          </div>
+
           </el-main>
   
-          <el-aside class="backright">
-            <div class="whiteback3">
-              <h1 style="text-align: left; font-weight: bold;margin-bottom: 5px;">通知公告</h1>
-            </div>
-          </el-aside>
+
         </el-container>
       </el-main>
     </el-container>
   </template>
   
   <script setup>
-  
   import { ref, onMounted } from 'vue';
-  import { useRouter } from 'vue-router';
-  import { reqUserInfo, reqCourseList, reqCourseIntro } from '@/api/api';
-  import { ElNotification } from 'element-plus';
-  
-  const courses = ref([]);
-  const student = ref([]);
-  const router = useRouter();
-  const value = true;
-  
-  const circleUrl = ref('src/assets/images/example.jpg');
-  
-  // 获取用户信息和课程列表
-  onMounted(async () => {
-    try {
-      const userResponse = await reqUserInfo();
-      const courseResponse = await reqCourseList();
-      student.value = userResponse.data;
-      courses.value = courseResponse.data;
-    } catch (error) {
-      ElNotification({
-        type: 'error',
-        message: '获取信息失败',
-      });
-    }
-  });
-  
-  const goToCourseInfo = async (courseId) => {
-    try {
-      const response = await reqCourseIntro(courseId);
-      if (response && response.data) {
-        const currentQuery = router.currentRoute.value.query; // 获取当前查询参数
-        localStorage.setItem('courseId', courseId);
-        router.push({
-          path: '/CourseInfo',
-          query: {
-            ...currentQuery, // 保留当前查询参数
-            courseId,
-            courseIntro: response.data.courseInfo,
-            courseName: response.data.courseName,
-            courseNo: response.data.courseNo,
-            teacherName: response.data.teacherName,
-            establishCollege: response.data.establishCollege,
-            semester: response.data.semester,
-          },
-        });
-      }
-    } catch (error) {
-      ElNotification({
-        type: 'error',
-        message: '获取课程信息失败',
-      });
-    }
-  };
+import { useRouter } from 'vue-router';
+import { reqUserInfo, reqCourseList, reqCourseIntro, reqNotificationAll } from '@/api/api';
+import { ElNotification } from 'element-plus';
 
+const courses = ref([]);
+const student = ref([]);
+const router = useRouter();
+const dialogVisible = ref(false);
+const currentNotification = ref({});
+const notifications = ref([]);
+
+// const student = {
+//   studentName: '张三',
+//   studentNo: '20220001',
+//   dept: '计算机科学与技术',
+//   email: 'zhangsan@example.com'
+// };
+
+const circleUrl = 'https://example.com/avatar.jpg';
+
+const notes = ref([
+  { title: '数据结构第一次课程笔记', uploadDate: '2024年10月5日', author: 'jty',},
+  { title: '算法第3次作业答案', uploadDate: '2023年9月5日', author: 'mhb' },
+  { title: '软件测试小测原题', uploadDate: '2022年8月5日', author: 'zxc' }
+]);
+
+
+
+const previewNote = (note) => {//TODO
+  // 预览逻辑，可以使用 window.open 或者其他方式展示文件
+  // alert(`预览: ${note.title}`);
+  ElMessageBox.alert(`预览文件: ${note.title}`, "预览", { confirmButtonText: "确定" });
+};
+
+
+
+const updateNote = (note) => {//TODO
+  alert('更新后将会覆盖历史文件');
+  // 更新逻辑
+};
+
+
+
+const resetForm = () => {
+  // 重置上传表单
+};
+
+// 获取用户信息和课程列表
+onMounted(async () => {
+  try {
+    //TODO
+    const userResponse = await reqUserInfo();
+    const noteResponse = await reqNoteList();
+    student.value = userResponse.data;
+    notes.value = notesResponse.data;
+    localStorage.setItem('userName', student.value.studentName);
+  } catch (error) {
+    ElNotification({
+      type: 'error',
+      message: '获取信息失败',
+    });
+  }
+});
+
+const goToNoteInfo = async (noteNo) => {//TODO
+  try {
+    const response = await reqNoteIntro(courseId);
+    if (response && response.data) {
+      const currentQuery = router.currentRoute.value.query; // 获取当前查询参数
+      localStorage.setItem('courseId', courseId);
+      router.push({
+        path: '/CourseInfo',
+        query: {
+          ...currentQuery, // 保留当前查询参数
+          courseId,
+          courseIntro: response.data.courseInfo,
+          courseName: response.data.courseName,
+          courseNo: response.data.courseNo,
+          teacherName: response.data.teacherName,
+          establishCollege: response.data.establishCollege,
+          semester: response.data.semester,
+        },
+      });
+    }
+  } catch (error) {
+    ElNotification({
+      type: 'error',
+      message: '获取课程信息失败',
+    });
+  }
+};
   function toggleFavorite(element) {
   // 切换星星的样式
   element.classList.toggle('favorite'); // 半星样式，表示收藏状态的变化

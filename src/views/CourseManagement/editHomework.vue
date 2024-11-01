@@ -35,7 +35,10 @@
         <el-form-item label="满分">
           <el-input v-model="formData.fullscore" type="number" placeholder="输入满分" style="width: 15%;"></el-input>
         </el-form-item>
-        <el-form-item label="批改状态">
+        <el-form-item label="作业内容">
+          <el-input v-model="formData.content" placeholder="输入作业内容" type="textarea" style="width: 60%;" ></el-input>
+        </el-form-item>
+        <el-form-item label="批改">
           <el-button
             v-if="formData.check === '未完成'"
             type="success"
@@ -48,21 +51,27 @@
       </el-form>
   
       <el-row :gutter="20">
-        <el-col :span="3">
-          <el-button type="primary" @click="previewAttachment">预览附件</el-button>
+        <el-col :span="2">
+          <!-- 为空格空出来的 -->
         </el-col>
-        <el-col :span="21">
+        <el-col :span="3">
+          <el-button type="primary" @click="previewAttachment" style="margin-left: 10px;" plain>预览附件</el-button>
+        </el-col>
+        <el-col :span="7">
           <el-upload
             class="upload-demo"
             action="#"
             :on-success="handleUpload"
             :show-file-list="false">
-            <el-button type="primary">上传附件</el-button>
+            <el-button type="primary" plain>上传附件</el-button>
           </el-upload>
+        </el-col>
+        <el-col :span="12">
+          <el-button type="primary" @click="saveData" round style="font-size: medium;font-weight:bold;">保存</el-button>
         </el-col>
       </el-row>
   
-      <el-button type="primary" @click="saveData" round style="margin-top: 15px;margin-left: 50%;font-size: large;font-weight:bold;">保存</el-button>
+      
     </div>
   </template>
   
@@ -80,6 +89,7 @@
           fullscore: 100,
           number: 45,
           check: '未完成',
+          content: '见附件',
         },
         currentData: {},
       }

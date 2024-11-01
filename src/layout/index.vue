@@ -32,7 +32,7 @@
           <el-col :span="8" class="right-align">
             <div class="semester">
               <span>学期：{{ semester }}</span>
-              <span style="margin-left: 10px;">教学周：第{{ week }}周</span>
+              <span style="margin-left: 10px;font-weight: bold;">教学周：第{{ week }}周</span>
             </div>
           </el-col>
         </el-row>

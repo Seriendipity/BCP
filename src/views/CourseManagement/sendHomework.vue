@@ -39,7 +39,7 @@
           {{ scope.row.check }}
         </el-button>
       </el-table-column>
-      <el-table-column label="基本信息" v-slot="scope">
+      <el-table-column label="基本信息" v-slot="scope" width="100px">
         <el-button
           size="mini"
           @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
