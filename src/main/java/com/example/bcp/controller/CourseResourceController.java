@@ -14,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URLEncoder;
 import java.util.List;
 
 @RestController
@@ -24,11 +25,10 @@ public class CourseResourceController {
     private CourseResourceService courseResourceService;
 
     @GetMapping("/allCourseSource")
-    public Result selectAllCourseResource(@RequestParam String Cid){
+    public Result selectAllCourseResource(@RequestParam String Cid) {
         List<CourseResource> selectByCid = courseResourceService.selectByCid(Cid);
         return Result.success(selectByCid);
     }
-
 
 
     //-------------------------------文件上传下载---------------------------------
@@ -56,6 +56,8 @@ public class CourseResourceController {
 
             int size = courseResourceService.selectAllCourseResource().size() + 1;
             String newCRId = "R" + size;
+            System.out.println("--------------------------------------");
+            System.out.println(newCRId+"  "+Cid+"  ");
 
 
             // 插入文件记录到数据库
@@ -95,10 +97,10 @@ public class CourseResourceController {
     }
 
 
-    @GetMapping("/download")
-    public Result download(@RequestParam String fileName, HttpServletResponse response) throws IOException {
+    @GetMapping("/download/{fileName}")
+    public Result download(@PathVariable("fileName") String fileName, HttpServletResponse response) throws IOException {
 
-        // response.addHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode(fileFullName, "UTF-8"));  // 附件下载
+        response.addHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode(fileName, "UTF-8"));  // 附件下载
         String filePath = ROOT_PATH + File.separator + fileName;
         System.out.println(filePath);
 
