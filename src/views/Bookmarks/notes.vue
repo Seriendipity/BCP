@@ -30,13 +30,14 @@
         <el-col :span="1">
           <div class="grid-content">
             <router-link to="/myinformation" style="text-decoration: none;">
-              <div style="margin-top: 10px"><el-avatar :size="40" :src="circleUrl"></el-avatar></div>
+              <div style="margin-top: 10px"><el-avatar :size="40" :src="avatarUrl"></el-avatar></div>
             </router-link>
           </div>
         </el-col>
         <el-col :span="2">
           <router-link to="/myinformation" style="text-decoration: none;">
-            <h1 style="font-size: medium;margin-top: 21px;color: aliceblue;font-weight: 550;">爱学习</h1>
+            <h1 style="font-size: medium;margin-top: 21px;color: aliceblue;font-weight: 550;">{{ userInfo.userName }}
+            </h1>
           </router-link>
         </el-col>
       </el-row>
@@ -45,14 +46,16 @@
     <el-main class="backmain1">
       <el-container>
         <el-aside class="backleft">
-          <div class="whiteback" :data="student">
+          <div class="whiteback" :data="userInfo">
             <h1 style="text-align: left; font-weight: bold;margin-bottom: 5px;">个人信息</h1>
-            <div style="margin-top: 20px;text-align: center;"><el-avatar :size="100" :src="circleUrl"></el-avatar></div>
+            <div style="margin-top: 20px;text-align: center;"><el-avatar :size="100"
+                :src="userInfo.avatarUrl"></el-avatar>
+            </div>
             <h1 class="ziti01">学生</h1>
-            <h1 class="ziti02" style="text-align: left;padding-left: 15px;">姓名：{{ student.studentName }}</h1>
-            <h1 class="ziti02" style="text-align: left;padding-left: 15px;">学号：{{ student.studentNo }}</h1>
-            <h1 class="ziti02" style="text-align: left;padding-left: 15px;">学院：{{ student.dept }}</h1>
-            <h1 class="ziti02" style="text-align: left;padding-left: 15px;">邮箱：{{ student.email }}</h1>
+            <h1 class="ziti02" style="text-align: left;padding-left: 15px;">姓名：{{ userInfo.userName }}</h1>
+            <h1 class="ziti02" style="text-align: left;padding-left: 15px;">学号：{{ userInfo.userId }}</h1>
+            <h1 class="ziti02" style="text-align: left;padding-left: 15px;">学院：{{ userInfo.dept }}</h1>
+            <h1 class="ziti02" style="text-align: left;padding-left: 15px;">邮箱：{{ userInfo.email }}</h1>
           </div>
           <div class="whiteback2">
             <h1 style="text-align: left; font-weight: bold;margin-bottom: 5px;">课程提醒</h1>
@@ -66,11 +69,13 @@
             </el-col>
             <el-col :span="21">
               <router-link to="/othersnotes" style="text-decoration: none;">
-                <el-button type="primary" style="text-align: left; font-weight: bold;font-size: large;" plain>浏览笔记</el-button>
+                <el-button type="primary" style="text-align: left; font-weight: bold;font-size: large;"
+                  plain>浏览笔记</el-button>
               </router-link>
             </el-col>
             <div style="margin-left: 87%;">
-              <el-button type="primary" round @click="dialogVisible = true" style="font-size: large; font-weight: bold;">新建笔记</el-button>
+              <el-button type="primary" round @click="dialogVisible = true"
+                style="font-size: large; font-weight: bold;">新建笔记</el-button>
             </div>
           </el-row>
           <div class="grid-content bg-white" style="height: 75px;" v-for="note in notes" :key="note.title">
@@ -83,10 +88,7 @@
                 <h1 class="ziti04" style="color: gray;margin-top: 28px;text-align: right;">是否公开</h1>
               </el-col>
               <el-col :span="2">
-                <el-switch
-                  style="margin-top: 20px;"
-                  v-model="note.isPublic"
-                  active-color="#13ce66"
+                <el-switch style="margin-top: 20px;" v-model="note.isPublic" active-color="#13ce66"
                   inactive-color="#ff4949">
                 </el-switch>
               </el-col>
@@ -103,19 +105,14 @@
           </div>
         </el-main>
 
-      
+
       </el-container>
     </el-main>
   </el-container>
 
   <el-dialog :visible.sync="dialogVisible" title="上传文件" @close="resetForm">
-    <el-upload
-      class="upload-demo"
-      drag
-      action="https://jsonplaceholder.typicode.com/posts/"
-      :on-change="handleChange"
-      :on-success="handleSuccess"
-      :show-file-list="false">
+    <el-upload class="upload-demo" drag action="https://jsonplaceholder.typicode.com/posts/" :on-change="handleChange"
+      :on-success="handleSuccess" :show-file-list="false">
       <i class="el-icon-upload"></i>
       <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
       <div class="el-upload__tip" slot="tip" type="success">支持扩展名：.pdf/.doc/.docx</div>
@@ -130,24 +127,25 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
-import { reqUserInfo, reqCourseList, reqCourseIntro, reqNotificationAll } from '@/api/api';
+import { requireAvatar, reqUserInfo } from '@/api/api';
 import { ElNotification } from 'element-plus';
+import { Avatar } from '@element-plus/icons-vue';
 
-const courses = ref([]);
-const student = ref([]);
+const userInfo = ref([]);
 const router = useRouter();
 const dialogVisible = ref(false);
 const currentNotification = ref({});
 const notifications = ref([]);
 
-// const student = {
-//   studentName: '张三',
-//   studentNo: '20220001',
-//   dept: '计算机科学与技术',
-//   email: 'zhangsan@example.com'
-// };
+const mockData = {
+  userName: '张三',
+  userId: '20220001',
+  dept: '计算机科学与技术',
+  email: 'zhangsan@example.com',
+  avatarUrl: 'src/assets/images/example.jpg'
+};
 
-const circleUrl = 'https://example.com/avatar.jpg';
+
 
 const notes = ref([
   { title: '数据结构第一次课程笔记', uploadDate: '2024年10月5日', isPublic: true },
@@ -182,12 +180,15 @@ const resetForm = () => {
 onMounted(async () => {
   try {
     //TODO
+    const response = await requireAvatar();
     const userResponse = await reqUserInfo();
     const noteResponse = await reqNoteList();
-    student.value = userResponse.data;
+    userInfo.value.avatarUrl = response.data;
+    userInfo.value = userResponse.data;
     notes.value = notesResponse.data;
-    localStorage.setItem('userName', student.value.studentName);
+    localStorage.setItem('userName', userInfo.value.userName);
   } catch (error) {
+    userInfo.value = mockData;
     ElNotification({
       type: 'error',
       message: '获取信息失败',
@@ -224,8 +225,8 @@ const goToNoteInfo = async (noteNo) => {//TODO
 };
 </script>
 
-  
- 
+
+
 
 
 <style>

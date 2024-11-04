@@ -17,8 +17,10 @@ enum API {
   NOTIFICATION_STATECHANGE = "/notifications/change_status",
   COURSERESOURCE_UPLOAD = "/file/upload",
   COURSERESOURCE_GET = "/file/allCourseSource",
-  NOTIFICATION_ALL = "/notifications/getAllNotification"
-
+  NOTIFICATION_ALL = "/notifications/getAllNotification",
+  CHANGEPASSWORD = "/users/updatePassword",
+  GET_AVATAR = "/users/getPicture",
+  UPDATE_AVATAR = "/users/updateAvatar"
 }
 //登录接口
 export const reqLogin = (data: any) => request.post<any, any>(API.LOGIN_URL, data);
@@ -42,6 +44,8 @@ export const reqStudentData = (courseId: any) => request.get<any, any>(API.STUDE
 export const reqFileList = (courseId: any) => request.get<any, any>(API.COURSERESOURCE_GET + `?cid=${courseId}`)
 //获取所有通知
 export const reqNotificationAll = () => request.get<any, any>(API.NOTIFICATION_ALL)
+//获取头像
+export const requireAvatar = () => request.get<any, any>(API.GET_AVATAR)
 // export const awardInfo = () => request.get<any, any>(API.AWARD_GET);
 
 //发布通知
@@ -50,4 +54,9 @@ export const postNotification = (data: any) => request.post<any, any>(API.NOTIFI
 export const updateNotificationState = (data: any) => request.post<any, any>(API.NOTIFICATION_STATECHANGE, data);
 //课程资源上传
 export const reqUploadFile = (data: any) => request.post<any, any>(API.COURSERESOURCE_UPLOAD, data)
+//修改密码
+export const reqUpdatePassword = (data: any) => request.post<any, any>(API.CHANGEPASSWORD, data)
+//修改头像
+export const reqUpdateAvatar = (data: any) => request.post<any, any>(API.UPDATE_AVATAR, data)
+
 // export const awardPost = (data: any) => request.post<any>(API.AWARD_POST, data);

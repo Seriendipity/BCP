@@ -32,7 +32,7 @@
         </el-col>
         <el-col :span="2">
           <router-link to="/myinformation" style="text-decoration: none;">
-            <h1 style="font-size: medium;margin-top: 21px;color: aliceblue;font-weight: 550;">爱学习
+            <h1 style="font-size: medium;margin-top: 21px;color: aliceblue;font-weight: 550;">{{ userInfo.userName }}
             </h1>
           </router-link>
         </el-col>
@@ -42,15 +42,15 @@
     <el-main class="backmain1">
       <el-container class="main">
         <el-aside class="backleft">
-          <div class="whiteback" :data="student">
+          <div class="whiteback" :data="userInfo">
             <h1 style="text-align: left; font-weight: bold;margin-bottom: 5px;">个人信息</h1>
             <div style="margin-top: 20px;text-align: center; "><el-avatar :size="100" :src="circleUrl"></el-avatar>
             </div>
             <h1 class="ziti01">学生</h1>
-            <h1 class="ziti02" style="text-align: left;padding-left: 15px;">姓名：{{ student.studentName }}</h1>
-            <h1 class="ziti02" style="text-align: left;padding-left: 15px;">学号：{{ student.studentNo }}</h1>
-            <h1 class="ziti02" style="text-align: left;padding-left: 15px;">学院：{{ student.dept }}</h1>
-            <h1 class="ziti02" style="text-align: left;padding-left: 15px;">邮箱：{{ student.email }}</h1>
+            <h1 class="ziti02" style="text-align: left;padding-left: 15px;">姓名：{{ userInfo.userName }}</h1>
+            <h1 class="ziti02" style="text-align: left;padding-left: 15px;">学号：{{ userInfo.userId }}</h1>
+            <h1 class="ziti02" style="text-align: left;padding-left: 15px;">学院：{{ userInfo.dept }}</h1>
+            <h1 class="ziti02" style="text-align: left;padding-left: 15px;">邮箱：{{ userInfo.email }}</h1>
           </div>
           <div class="whiteback2">
             <h1 style="text-align: left; font-weight: bold;margin-bottom: 5px;">课程提醒</h1>
@@ -119,11 +119,11 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
-import { reqUserInfo, reqCourseList, reqCourseIntro, reqNotificationAll,updateNotificationState } from '@/api/api';
+import { reqUserInfo, reqCourseList, reqCourseIntro, reqNotificationAll, updateNotificationState } from '@/api/api';
 import { ElNotification } from 'element-plus';
 
 const courses = ref([]);
-const student = ref([]);
+const userInfo = ref([]);
 const router = useRouter();
 const dialogVisible = ref(false);
 const currentNotification = ref({});
@@ -133,7 +133,7 @@ const notifications = ref([]);
 const circleUrl = ref('src/assets/images/example.jpg');
 
 // 模拟数据
-const mockData = [
+const mockDataNotify = [
   {
     courseName: '数据库系统',
     notificationTitle: '课程调整通知',
@@ -157,6 +157,14 @@ const mockData = [
   },
 ];
 
+const mockDataUser = {
+  userName: '张三',
+  userId: '20220001',
+  dept: '计算机科学与技术',
+  email: 'zhangsan@example.com',
+  avatarUrl: 'src/assets/images/example.jpg'
+};
+
 // 获取通知数据
 const fetchNotifications = async () => {
   try {
@@ -164,7 +172,7 @@ const fetchNotifications = async () => {
     notifications.value = response.data || []; // 更新通知数据
   } catch (err) {
     // 捕获错误并使用模拟数据
-    notifications.value = mockData;
+    notifications.value = mockDataNotify;
     ElNotification({
       message: '获取通知失败',
       type: 'error',
@@ -211,10 +219,11 @@ onMounted(async () => {
   try {
     const userResponse = await reqUserInfo();
     const courseResponse = await reqCourseList();
-    student.value = userResponse.data;
+    userInfo.value = userResponse.data;
     courses.value = courseResponse.data;
-    localStorage.setItem('userName', student.value.studentName);
+    localStorage.setItem('userName', userInfo.value.userName);
   } catch (error) {
+    userInfo.value = mockDataUser;
     ElNotification({
       type: 'error',
       message: '获取信息失败',
@@ -254,7 +263,7 @@ const goToCourseInfo = async (courseId) => {
 
 <style>
 .main {
-  height:600px;
+  height: 600px;
 }
 
 .head {

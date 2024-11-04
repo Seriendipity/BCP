@@ -1,91 +1,97 @@
 <template>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
-    <el-container>
-      <el-header class="head">
-        <el-row :gutter="20">
-            <el-col :span="17">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+  <el-container>
+    <el-header class="head">
+      <el-row :gutter="20">
+        <el-col :span="17">
           <div class="grid-content">
-            <router-link to="/firstpage" style="text-decoration: none; " >
-            <h1 class="zitihead">智慧课程平台</h1>
-          </router-link>
+            <router-link to="/firstpage" style="text-decoration: none; ">
+              <h1 class="zitihead">智慧课程平台</h1>
+            </router-link>
           </div>
         </el-col>
         <el-col :span="2">
           <div class="grid-content " style="text-align: right;">
             <router-link to="/firstpage" style="text-decoration: none;">
-              <h1 style="font-size:x-large;margin-top: 17px;color: white;text-shadow: 2px 3px rgba(0, 0, 0, 0.5);font-weight: 550;">笔记
+              <h1
+                style="font-size:x-large;margin-top: 17px;color: white;text-shadow: 2px 3px rgba(0, 0, 0, 0.5);font-weight: 550;">
+                笔记
               </h1>
             </router-link>
           </div>
         </el-col>
-          <el-col :span="2">
-            <div class="grid-content ">
-              <router-link to="/bookmarks" style="text-decoration: none;">
-                <h1 style="font-size:larger;margin-top: 21px;color: aliceblue;font-weight: 550;">收藏夹
-                </h1>
-              </router-link>
-            </div>
-          </el-col>
-          <el-col :span="1">
-            <div class="grid-content ">
-              <router-link to="/myinformation" style="text-decoration: none;">
-                <div style="margin-top: 10px"><el-avatar :size="40" :src="circleUrl"></el-avatar></div>
-              </router-link>
-            </div>
-          </el-col>
-          <el-col :span="2">
-            <router-link to="/myinformation" style="text-decoration: none;">
-              <h1 style="font-size: medium;margin-top: 21px;color: aliceblue;font-weight: 550;">爱学习
+        <el-col :span="2">
+          <div class="grid-content ">
+            <router-link to="/bookmarks" style="text-decoration: none;">
+              <h1 style="font-size:larger;margin-top: 21px;color: aliceblue;font-weight: 550;">收藏夹
               </h1>
             </router-link>
-          </el-col>
-        </el-row>
-      </el-header>
-  
-      <el-main class="backmain1">
-        <el-container>
-          <el-aside class="backleft">
-            <div class="whiteback" :data="student">
-              <h1 style="text-align: left; font-weight: bold;margin-bottom: 5px;">个人信息</h1>
-              <div style="margin-top: 20px;text-align: center; "><el-avatar :size="100" :src="circleUrl"></el-avatar></div>
-              <h1 class="ziti01">学生</h1>
-              <h1 class="ziti02" style="text-align: left;padding-left: 15px;">姓名：{{ student.studentName }}</h1>
-              <h1 class="ziti02" style="text-align: left;padding-left: 15px;">学号：{{ student.studentNo }}</h1>
-              <h1 class="ziti02" style="text-align: left;padding-left: 15px;">学院：{{ student.dept }}</h1>
-              <h1 class="ziti02" style="text-align: left;padding-left: 15px;">邮箱：{{ student.email }}</h1>
+          </div>
+        </el-col>
+        <el-col :span="1">
+          <div class="grid-content ">
+            <router-link to="/myinformation" style="text-decoration: none;">
+              <div style="margin-top: 10px"><el-avatar :size="40" :src="userInfo.avatarUrl"></el-avatar></div>
+            </router-link>
+          </div>
+        </el-col>
+        <el-col :span="2">
+          <router-link to="/myinformation" style="text-decoration: none;">
+            <h1 style="font-size: medium;margin-top: 21px;color: aliceblue;font-weight: 550;">{{ userInfo.userName }}
+            </h1>
+          </router-link>
+        </el-col>
+      </el-row>
+    </el-header>
+
+    <el-main class="backmain1">
+      <el-container>
+        <el-aside class="backleft">
+          <div class="whiteback" :data="userInfo">
+            <h1 style="text-align: left; font-weight: bold;margin-bottom: 5px;">个人信息</h1>
+            <div style="margin-top: 20px;text-align: center; "><el-avatar :size="100"
+                :src="userInfo.avatarUrl"></el-avatar>
             </div>
-            <div class="whiteback2">
-              <h1 style="text-align: left; font-weight: bold;margin-bottom: 5px;">课程提醒</h1>
-            </div>
-          </el-aside>
-  
-          <el-main height="600px">
-            <el-row >
-                <el-col :span="3">
-                    <router-link to="/notes" style="text-decoration: none;">
-                    <!-- <h1 style="text-align: left; font-weight: bold;font-size: large;margin-top:-12px;"> 我的笔记</h1> -->
-                    <el-button type="primary" style="text-align: left; font-weight: bold;font-size: large;" plain>我的笔记</el-button>
-                </router-link>
-                </el-col>
-                <el-col :span="21">
-                    <!-- <h1 style="text-align: left; font-weight: bold;font-size: large;margin-top:-12px;"> 我的笔记</h1> -->
-                    <el-button type="primary" style="text-align: left; font-weight: bold;font-size: large;" >浏览笔记</el-button>
-                </el-col>
-                <!-- <div style="margin-left: 87%;">
+            <h1 class="ziti01">学生</h1>
+            <h1 class="ziti02" style="text-align: left;padding-left: 15px;">姓名：{{ userInfo.userName }}</h1>
+            <h1 class="ziti02" style="text-align: left;padding-left: 15px;">学号：{{ userInfo.userId }}</h1>
+            <h1 class="ziti02" style="text-align: left;padding-left: 15px;">学院：{{ userInfo.dept }}</h1>
+            <h1 class="ziti02" style="text-align: left;padding-left: 15px;">邮箱：{{ userInfo.email }}</h1>
+          </div>
+          <div class="whiteback2">
+            <h1 style="text-align: left; font-weight: bold;margin-bottom: 5px;">课程提醒</h1>
+          </div>
+        </el-aside>
+
+        <el-main height="600px">
+          <el-row>
+            <el-col :span="3">
+              <router-link to="/notes" style="text-decoration: none;">
+                <!-- <h1 style="text-align: left; font-weight: bold;font-size: large;margin-top:-12px;"> 我的笔记</h1> -->
+                <el-button type="primary" style="text-align: left; font-weight: bold;font-size: large;"
+                  plain>我的笔记</el-button>
+              </router-link>
+            </el-col>
+            <el-col :span="21">
+              <!-- <h1 style="text-align: left; font-weight: bold;font-size: large;margin-top:-12px;"> 我的笔记</h1> -->
+              <el-button type="primary" style="text-align: left; font-weight: bold;font-size: large;">浏览笔记</el-button>
+            </el-col>
+            <!-- <div style="margin-left: 87%;">
                 <el-button type="primary" round style="width: 80px;font-size: large; font-weight: bold;margin-bottom: -5px;">上传</el-button>
                 </div> -->
-            </el-row>
-            <!-- <div class="scrollable"> -->
-              <div class="grid-content bg-white" style="height: 75px;" v-for="note in notes" :key="note.title">
+          </el-row>
+          <!-- <div class="scrollable"> -->
+          <div class="grid-content bg-white" style="height: 75px;" v-for="note in notes" :key="note.title">
             <el-row :gutter="20">
               <el-col :span="20">
-                <h1 class="ziti03" >{{ note.title }}</h1>
+                <h1 class="ziti03">{{ note.title }}</h1>
                 <h1 class="ziti04" style="margin-top: 5px;">{{ note.author }}</h1>
                 <h1 class="ziti04" style="color: gray;margin-top: 5px;">{{ note.uploadDate }}上传</h1>
               </el-col>
               <el-col :span="1">
                 <!-- 未收藏状态 -->
-                 <i class="fas fa-star" style="color: lightslategrey; cursor: pointer;margin-top: 28px;" @click="toggleFavorite(this);"></i> <!-- 可点击的收藏状态 -->
+                <i class="fas fa-star" style="color: lightslategrey; cursor: pointer;margin-top: 28px;"
+                  @click="toggleFavorite(this);"></i> <!-- 可点击的收藏状态 -->
               </el-col>
               <el-col :span="3">
                 <el-button type="primary" style="margin-top: 20px;" plain @click="previewNote(note)">查看</el-button>
@@ -93,38 +99,33 @@
             </el-row>
           </div>
 
-          </el-main>
-  
+        </el-main>
 
-        </el-container>
-      </el-main>
-    </el-container>
-  </template>
-  
-  <script setup>
-  import { ref, onMounted } from 'vue';
+
+      </el-container>
+    </el-main>
+  </el-container>
+</template>
+
+<script setup>
+import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
-import { reqUserInfo, reqCourseList, reqCourseIntro, reqNotificationAll } from '@/api/api';
+import { reqUserInfo } from '@/api/api';
 import { ElNotification } from 'element-plus';
 
-const courses = ref([]);
-const student = ref([]);
+const userInfo = ref([]);
 const router = useRouter();
 const dialogVisible = ref(false);
-const currentNotification = ref({});
-const notifications = ref([]);
-
-// const student = {
-//   studentName: '张三',
-//   studentNo: '20220001',
-//   dept: '计算机科学与技术',
-//   email: 'zhangsan@example.com'
-// };
-
-const circleUrl = 'https://example.com/avatar.jpg';
+const mockData = {
+  userName: '张三',
+  userId: '20220001',
+  dept: '计算机科学与技术',
+  email: 'zhangsan@example.com',
+  avatarUrl: 'src/assets/images/example.jpg'
+};
 
 const notes = ref([
-  { title: '数据结构第一次课程笔记', uploadDate: '2024年10月5日', author: 'jty',},
+  { title: '数据结构第一次课程笔记', uploadDate: '2024年10月5日', author: 'jty', },
   { title: '算法第3次作业答案', uploadDate: '2023年9月5日', author: 'mhb' },
   { title: '软件测试小测原题', uploadDate: '2022年8月5日', author: 'zxc' }
 ]);
@@ -154,12 +155,14 @@ const resetForm = () => {
 onMounted(async () => {
   try {
     //TODO
+    const response = await requireAvatar();
     const userResponse = await reqUserInfo();
     const noteResponse = await reqNoteList();
-    student.value = userResponse.data;
+    userInfo.value.avatarUrl = response.data;
+    userInfo.value = userResponse.data;
     notes.value = notesResponse.data;
-    localStorage.setItem('userName', student.value.studentName);
   } catch (error) {
+    userInfo.value = mockData;
     ElNotification({
       type: 'error',
       message: '获取信息失败',
@@ -194,143 +197,142 @@ const goToNoteInfo = async (noteNo) => {//TODO
     });
   }
 };
-  function toggleFavorite(element) {
+function toggleFavorite(element) {
   // 切换星星的样式
   element.classList.toggle('favorite'); // 半星样式，表示收藏状态的变化
 }
-  </script>
-  
-  
-  <style>
+</script>
 
-  .head {
-    background-color: #005bac;
-  
-  }
-  
-  .backmain1 {
-    height: 770px;
-    background-color: #eaf6ff;
-  }
-  
-  .zitihead {
-    text-align: left;
-    font-weight: bold;
-    font-size: 24px;
-    margin-top: 15px;
-    color: #ffffff;
-  }
-  
-  .ziti01 {
-    text-align: center;
-    font-weight: 400;
-    font-size: 14px;
-    margin-bottom: 25px;
-    margin-top: 10px;
-  }
-  
-  .ziti02 {
-    text-align: center;
-    font-weight: bold;
-    font-size: 16px;
-  }
-  
-  .ziti03 {
-    text-align: left;
-    font-weight: bold;
-    margin-bottom: 5px;
-    font-size: 16px;
-    margin-left: 10px;
-    padding-top: 10px;
-  }
-  
-  .ziti04 {
-    text-align: left;
-    font-weight: 400;
-    margin-bottom: 2px;
-    font-size: 14px;
-    margin-left: 10px;
-  }
-  
-  .backleft {
-    width: "350px";
-    max-height: "550px";
-    background-color: #eaf6ff;
-  }
-  
-  .backright {
-    width: "350px";
-    height: "600px";
-    background-color: #eaf6ff;
-  }
-  
-  .whiteback {
-    border-radius: 4px;
-    max-height: 350px;
-    background-color: #ffffff;
-    padding: 10px;
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
-  
-  }
-  
-  .whiteback2 {
-    margin-top: 20px;
-    border-radius: 4px;
-    height: 200px;
-    background-color: #ffffff;
-    padding: 10px;
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
-  }
-  
-  .whiteback3 {
-    /* margin-top: 20px; */
-    border-radius: 4px;
-    height: 400px;
-    background-color: #ffffff;
-    padding: 10px;
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
-  }
-  
-  .scrollable {
-    height: 690px;
-    /* 固定高度 */
-    overflow-y: auto;
-    /* 垂直方向上的滚动条 */
-    overflow-x: hidden;
-    padding-right: 10px;
-  }
-  
-  .el-row {
-    margin-bottom: 20px;
-  
-    &:last-child {
-      margin-bottom: 0;
-    }
-  }
-  
-  .el-col {
-    border-radius: 4px;
-  }
-  
-  .bg-white {
-    background: #ffffff;
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
-    border-radius: 30px
-  }
-  
-  .grid-content {
-    border-radius: 4px;
-    min-height: 36px;
-    height: 250px;
-    margin-bottom: 10px;
-  
-  }
-  
-  body>.el-container {
-    margin-bottom: 40px;
-  }
 
-  .favorite {
-            color: gold;
-        }
-  </style>
+<style>
+.head {
+  background-color: #005bac;
+
+}
+
+.backmain1 {
+  height: 770px;
+  background-color: #eaf6ff;
+}
+
+.zitihead {
+  text-align: left;
+  font-weight: bold;
+  font-size: 24px;
+  margin-top: 15px;
+  color: #ffffff;
+}
+
+.ziti01 {
+  text-align: center;
+  font-weight: 400;
+  font-size: 14px;
+  margin-bottom: 25px;
+  margin-top: 10px;
+}
+
+.ziti02 {
+  text-align: center;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.ziti03 {
+  text-align: left;
+  font-weight: bold;
+  margin-bottom: 5px;
+  font-size: 16px;
+  margin-left: 10px;
+  padding-top: 10px;
+}
+
+.ziti04 {
+  text-align: left;
+  font-weight: 400;
+  margin-bottom: 2px;
+  font-size: 14px;
+  margin-left: 10px;
+}
+
+.backleft {
+  width: "350px";
+  max-height: "550px";
+  background-color: #eaf6ff;
+}
+
+.backright {
+  width: "350px";
+  height: "600px";
+  background-color: #eaf6ff;
+}
+
+.whiteback {
+  border-radius: 4px;
+  max-height: 350px;
+  background-color: #ffffff;
+  padding: 10px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+
+}
+
+.whiteback2 {
+  margin-top: 20px;
+  border-radius: 4px;
+  height: 200px;
+  background-color: #ffffff;
+  padding: 10px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+}
+
+.whiteback3 {
+  /* margin-top: 20px; */
+  border-radius: 4px;
+  height: 400px;
+  background-color: #ffffff;
+  padding: 10px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+}
+
+.scrollable {
+  height: 690px;
+  /* 固定高度 */
+  overflow-y: auto;
+  /* 垂直方向上的滚动条 */
+  overflow-x: hidden;
+  padding-right: 10px;
+}
+
+.el-row {
+  margin-bottom: 20px;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.el-col {
+  border-radius: 4px;
+}
+
+.bg-white {
+  background: #ffffff;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+  border-radius: 30px
+}
+
+.grid-content {
+  border-radius: 4px;
+  min-height: 36px;
+  height: 250px;
+  margin-bottom: 10px;
+
+}
+
+body>.el-container {
+  margin-bottom: 40px;
+}
+
+.favorite {
+  color: gold;
+}
+</style>
