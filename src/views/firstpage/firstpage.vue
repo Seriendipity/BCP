@@ -26,7 +26,7 @@
         <el-col :span="1">
           <div class="grid-content ">
             <router-link to="/myinformation" style="text-decoration: none;">
-              <div style="margin-top: 10px"><el-avatar :size="40" :src="circleUrl"></el-avatar></div>
+              <div style="margin-top: 10px"><el-avatar :size="40" :src="userInfo.avatarUrl"></el-avatar></div>
             </router-link>
           </div>
         </el-col>
@@ -44,7 +44,8 @@
         <el-aside class="backleft">
           <div class="whiteback" :data="userInfo">
             <h1 style="text-align: left; font-weight: bold;margin-bottom: 5px;">个人信息</h1>
-            <div style="margin-top: 20px;text-align: center; "><el-avatar :size="100" :src="circleUrl"></el-avatar>
+            <div style="margin-top: 20px;text-align: center; "><el-avatar :size="100"
+                :src="userInfo.avatarUrl"></el-avatar>
             </div>
             <h1 class="ziti01">学生</h1>
             <h1 class="ziti02" style="text-align: left;padding-left: 15px;">姓名：{{ userInfo.userName }}</h1>
@@ -121,6 +122,7 @@ import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { reqUserInfo, reqCourseList, reqCourseIntro, reqNotificationAll, updateNotificationState } from '@/api/api';
 import { ElNotification } from 'element-plus';
+import { requireAvatar } from '../../api/api';
 
 const courses = ref([]);
 const userInfo = ref([]);
@@ -129,8 +131,6 @@ const dialogVisible = ref(false);
 const currentNotification = ref({});
 const notifications = ref([]);
 
-
-const circleUrl = ref('src/assets/images/example.jpg');
 
 // 模拟数据
 const mockDataNotify = [
@@ -217,10 +217,12 @@ const closeDialog = () => {
 // 获取用户信息和课程列表
 onMounted(async () => {
   try {
+    const avatarResponse = await requireAvatar();
     const userResponse = await reqUserInfo();
     const courseResponse = await reqCourseList();
     userInfo.value = userResponse.data;
     courses.value = courseResponse.data;
+    userInfo.value.avatarUrl = avatarResponse.data;
     localStorage.setItem('userName', userInfo.value.userName);
   } catch (error) {
     userInfo.value = mockDataUser;

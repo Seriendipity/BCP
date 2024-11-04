@@ -20,7 +20,8 @@ enum API {
   NOTIFICATION_ALL = "/notifications/getAllNotification",
   CHANGEPASSWORD = "/users/updatePassword",
   GET_AVATAR = "/users/getPicture",
-  UPDATE_AVATAR = "/users/updateAvatar"
+  UPDATE_AVATAR = "/users/updateAvatar",
+  GET_NOTELIST = "",
 }
 //登录接口
 export const reqLogin = (data: any) => request.post<any, any>(API.LOGIN_URL, data);
