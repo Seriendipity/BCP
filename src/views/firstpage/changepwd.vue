@@ -56,8 +56,8 @@
 
 <script setup>
 import { ref, onMounted } from 'vue';
-import { ElNotification } from 'element-plus';
-import { reqUpdatePassword } from '@/api/api';
+import { ElNotification,ElMessage } from 'element-plus';
+import { reqUpdatePassword,reqUserInfo,requireAvatar } from '@/api/api';
 
 const userInfo = ref({
   avatarUrl: '',
@@ -85,8 +85,8 @@ const confirmPassword = ref(''); // 确认新密码
 const fetchUserInfo = async () => {
   try {
     const response = await reqUserInfo();
-    const responseAvatar = await requireAvatar();
     userInfo.value = response.data; // 从后端获取用户信息
+    const responseAvatar = await requireAvatar();
     userInfo.value.avatarUrl = responseAvatar.data;
     console.log('用户信息已从后端获取');
   } catch (error) {
