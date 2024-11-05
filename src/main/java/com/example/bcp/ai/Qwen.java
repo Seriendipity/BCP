@@ -10,6 +10,7 @@ import com.alibaba.dashscope.exception.NoApiKeyException;
 import com.example.bcp.entity.Result;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Arrays;
@@ -40,7 +41,7 @@ public class Qwen {
     }
 
     @PostMapping("/aiService")
-    public Result aiService(String question){
+    public Result aiService( @RequestParam String question){
         try {
             GenerationResult result = callWithMessage(question);
             System.out.println(result.getOutput().getChoices().get(0).getMessage().getContent());

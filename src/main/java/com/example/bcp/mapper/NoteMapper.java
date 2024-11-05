@@ -13,6 +13,12 @@ public interface NoteMapper {
     @Select("Select * from Note Where StudentNo = #{StudentNo}")
     List<Note> selectByStudentNo(String StudentNo);
 
+    @Select("Select * from Note Where NoteNo = #{NoteNo}")
+    Note selectByNoteNo(String NoteNo);
+
+    @Select("Select * from Note Where Authority = 1")
+    List<Note> selectAllPublicNote();
+
     @Insert("Insert into Note(NoteNo,StudentNo,NoteInformation,NotePath,Authority)"+
     " values(#{NoteNo},#{StudentNo},#{NoteInformation},#{NotePath},#{Authority})")
     void insertNote(String NoteNo, String StudentNo, String NoteInformation,
@@ -26,6 +32,9 @@ public interface NoteMapper {
 
     @Update("Update Note Set NoteInformation = #{NoteInformation} where NoteNo = #{NoteNo}")
     void updateNoteInformation(String NoteInformation , String NoteNo);
+
+    @Update("Update Note Set NotePath = #{NewPath} Where NoteNo = #{NoteNo}")
+    void updateNotePath(String NewPath,String NoteNo);
 
     @Select("select MAX(CAST(noteNo AS UNSIGNED)) from Note")
     int maxNo();

@@ -4,10 +4,12 @@ package com.example.bcp.controller;
 import com.example.bcp.entity.Favorite;
 import com.example.bcp.entity.Result;
 import com.example.bcp.service.FavoriteService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.apache.ibatis.annotations.Insert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -18,9 +20,14 @@ public class FavoriteController {
     FavoriteService favoriteService;
 
     @GetMapping("/selectByStudentNo")
-    public Result selectByStudentNo(@RequestParam String studentNo) {
-        List<Favorite> selectByStudentNo = favoriteService.selectByStudentNo(studentNo);
-        return Result.success(selectByStudentNo);
+    public Result selectByStudentNo(HttpServletRequest request) {
+        String userId = request.getAttribute("username").toString();
+        Map<String,Object> responseData = new HashMap<>();
+
+        List<Favorite> selectByStudentNo = favoriteService.selectByStudentNo(userId);
+        responseData.put("userId",userId);
+        responseData.put("Info",selectByStudentNo);
+        return Result.success(responseData);
     }
 
 

@@ -4,6 +4,8 @@ import cn.hutool.core.io.FileUtil;
 import com.example.bcp.entity.Note;
 import com.example.bcp.entity.Result;
 import com.example.bcp.service.NoteService;
+import com.example.bcp.service.StudentService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
@@ -11,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -20,41 +23,94 @@ public class NoteController {
     @Autowired
     NoteService noteService;
 
-    @GetMapping("/getStudentAllNote")
-    public Result getStudentAllNote(@RequestParam String studentNo) {
+    @Autowired
+    StudentService studentService;
 
-        List<Note> selectByStudentNo = noteService.selectByStudentNo(studentNo);
-        return Result.success(selectByStudentNo);
+
+    @GetMapping("/getStudentAllNote")
+    public Result getStudentAllNote(HttpServletRequest request) {
+        String userName = request.getAttribute("username").toString();
+        Map<String,Object> responseData = new HashMap<>();
+        int index =1 ;
+        List<Note> selectByStudentNo = noteService.selectByStudentNo(userName);
+        for(Note n : selectByStudentNo){
+            Map<String,Object> note = new HashMap<>();
+            note.put("noteNo",n.getStudentNo());
+            note.put("notePath",n.getNotePath());
+            note.put("noteInfo",n.getNoteInformation());
+            note.put("authority",n.isAuthority());
+            responseData.put("Note"+index,note);
+            index++;
+        }
+        return Result.success(responseData);
     }
 
+    @GetMapping("/allPublicNote")
+    public Result getAllPublicNote(HttpServletRequest request){
+        List<Note> notes = noteService.selectAllPublicNote();
+        Map<String,Object> responseData = new HashMap<>();
+        int index =1 ;
+        for(Note n : notes){
+            Map<String,Object> note = new HashMap<>();
+            note.put("noteNo",n.getNoteNo());
+            note.put("username",studentService.selectByStudentNo(n.getStudentNo()).getStudentName());
+            note.put("notePath",n.getNotePath());
+            note.put("noteInfo",n.getNoteInformation());
+            responseData.put("note"+index,note);
+            index++;
+        }
+        return Result.success(responseData);
+    }
     @PostMapping("/deleteNote")
     public Result deleteNote(@RequestBody Map<String, String> requestData) {
         String noteNo = requestData.get("noteNo");
+        try{
+            noteService.deleteNote(noteNo);
+            return Result.success("删除笔记成功");
+        }catch (Exception e){
+            return Result.error("删除笔记失败");
+        }
 
-        noteService.deleteNote(noteNo);
-        return Result.success();
     }
 
-    @PostMapping("/updateNoteAuthority")
-    public Result updateNoteAuthority(@RequestBody Map<String, Object> requestData) {
-        String noteNo = (String) requestData.get("NoteNo");
-        boolean authority = (Boolean) requestData.get("authority");
-
-        noteService.updateNoteAuthority(noteNo, authority);
-        return Result.success();
-    }
+//    @PostMapping("/updateNoteAuthority")
+//    public Result updateNoteAuthority(@RequestBody Map<String, Object> requestData) {
+//        String noteNo = (String) requestData.get("NoteNo");
+//        boolean authority = (Boolean) requestData.get("authority");
+//
+//        noteService.updateNoteAuthority(noteNo, authority);
+//        return Result.success();
+//    }
 
 
     @PostMapping("/updateNoteInformation")
     public Result updateNoteInformation(@RequestBody Map<String, String> requestData) {
-        String noteNo = requestData.get("NoteNo");
+        String noteNo = requestData.get("noteNo");
         String noteInformation = requestData.get("noteInformation");
-
-        noteService.updateNoteInformation(noteInformation, noteNo);
-        return Result.success();
+        String notePath = requestData.get("notePath");
+        try{
+            noteService.updateNoteInformation(noteInformation, noteNo);
+            noteService.updateNotePath(notePath,noteNo);
+            return Result.success("修改笔记信息成功");
+        }catch (Exception e){
+            return Result.error("修改失败");
+        }
     }
 
 
+    @PostMapping("/updateNoteAuthority")
+    public Result updateNoteAuthority(@RequestBody Map<String,String> requestData, HttpServletRequest request){
+        String userNo = request.getAttribute("username").toString();
+        String noteNo = requestData.get("noteNo");
+
+        Note n = noteService.selectByNoteNo(noteNo);
+        try {
+            noteService.updateNoteAuthority(noteNo,!n.isAuthority());
+            return Result.success("更改成功");
+        }catch (Exception e){
+            return Result.error("更改笔记公开信息失败");
+        }
+    }
 
     //---------------------------笔记上传--------------------------------------------
 

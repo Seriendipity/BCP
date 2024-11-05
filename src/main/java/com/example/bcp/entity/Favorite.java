@@ -22,6 +22,17 @@ public class Favorite {
     @Column(name = "FavoriteTitle" , length = 10)
     private String FavoriteTitle;
 
+    @Column(name = "Authority")
+    private Boolean Authority;
+
+    public Boolean getAuthority() {
+        return Authority;
+    }
+
+    public void setAuthority(Boolean authority) {
+        Authority = authority;
+    }
+
     public String getStudentNo() {
         return StudentNo;
     }

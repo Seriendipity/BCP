@@ -20,6 +20,14 @@ public class NoteService {
         return noteMapper.selectByStudentNo(StudentNo);
     }
 
+    public  Note selectByNoteNo(String NoteNo){
+        return noteMapper.selectByNoteNo(NoteNo);
+    }
+
+    public List<Note> selectAllPublicNote(){
+        return noteMapper.selectAllPublicNote();
+    }
+
     public void insertNote(String NoteNo, String StudentNo, String NoteInformation,
                            String NotePath , boolean Authority){
         noteMapper.insertNote(NoteNo,StudentNo,NoteInformation,NotePath , Authority);
@@ -35,6 +43,10 @@ public class NoteService {
 
     public void updateNoteInformation(String NoteInformation , String NoteNo){
         noteMapper.updateNoteInformation(NoteInformation,NoteNo);
+    }
+
+    public void updateNotePath(String NewPath,String NoteNo){
+        noteMapper.updateNotePath(NewPath,NoteNo);
     }
     public int maxNo(){
         return noteMapper.maxNo();

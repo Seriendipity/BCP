@@ -97,7 +97,7 @@ create table Favorite(
                          FavoriteNo varchar(10),
                          FavoriteInformationNO varchar(10),
                          FavoriteTitle varchar(10),
-                         primary key (StudentNo,FavoriteNo),
+                         primary key (StudentNo,FavoriteNo,FavoriteInformationNo),
                          FOREIGN KEY (StudentNo) references Student(StudentNo)
 );
 
@@ -187,6 +187,7 @@ alter table comment add column mentionedUser TEXT;
 alter table studenthomework add column Comment Text;
 
 alter table Teacher add column Department varchar(20);
+
 
 -- 插入 Class 表数据
 INSERT INTO Class (ClassNo, ClassName, ClassDepartment, ClassMajor, StudentNumber) VALUES

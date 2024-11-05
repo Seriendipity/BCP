@@ -191,7 +191,7 @@ public class UserController {
         if (username.startsWith("S")){
             Student s = studentService.selectByStudentNo(username);
             Map<String, Object> responseData = new HashMap<>();
-            responseData.put("userNo",s.getStudentNo());
+            responseData.put("userId",s.getStudentNo());
             responseData.put("userName",s.getStudentName());
             responseData.put("email",s.getStudentEmail());
             responseData.put("identity","学生");
@@ -202,7 +202,7 @@ public class UserController {
         } else if (username.startsWith("T")) {
             Teacher t = teacherService.selectByTeacherNo(username);
             Map<String, Object> responseData = new HashMap<>();
-            responseData.put("userNo",t.getTeacherNo());
+            responseData.put("userId",t.getTeacherNo());
             responseData.put("userName",t.getTeacherName());
             responseData.put("email",t.getTeacherEmail());
             responseData.put("identity","教师");
@@ -211,7 +211,7 @@ public class UserController {
         }else {
             Assistant a = assistantService.selectByAssistantNo(username);
             Map<String,Object> responseData = new HashMap<>();
-            responseData.put("userNo",a.getAssistantNo());
+            responseData.put("userId",a.getAssistantNo());
             responseData.put("userName",studentService.selectByStudentNo(a.getAssistantNo()).getStudentName());
             responseData.put("email",studentService.selectByStudentNo(a.getAssistantNo()).getStudentEmail());
             responseData.put("identity","助教");
