@@ -91,7 +91,6 @@ const handleSubmit = async () => {
     });
     return;
   }
-
   const formData = new FormData();
   const storedCourseId = localStorage.getItem('courseId');
 
@@ -110,7 +109,8 @@ const handleSubmit = async () => {
     const response = await reqUploadFile(formData); // 连接后端上传文件
     selectedFile.value = null; // 上传后清空选择的文件
     if (response.code === 0) {
-      ElMessage.success("文件上传成功");}
+      ElMessage.success("文件上传成功");
+    }
   } catch (error) {
     console.error('上传文件失败', error);
     ElNotification({
@@ -121,7 +121,7 @@ const handleSubmit = async () => {
 };
 
 // 下载文件
-const downloadFile =  (resource: any) => {
+const downloadFile = (resource: any) => {
   try {
     window.open(resource.url); // 打开文件链接
   } catch (error) {

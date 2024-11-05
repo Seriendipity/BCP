@@ -78,17 +78,17 @@
                 style="font-size: large; font-weight: bold;">新建笔记</el-button>
             </div>
           </el-row>
-          <div class="grid-content bg-white" style="height: 75px;" v-for="note in notes" :key="note.title">
+          <div class="grid-content bg-white" style="height: 75px;" v-for="note in notes" :key="note.noteNo">
             <el-row :gutter="20">
               <el-col :span="13">
-                <h1 class="ziti03" style="margin-top: 5px;">{{ note.title }}</h1>
+                <h1 class="ziti03" style="margin-top: 5px;">{{ note.noteInfo }}</h1>
                 <h1 class="ziti04" style="color: gray;margin-top: 15px;">{{ note.uploadDate }}上传</h1>
               </el-col>
               <el-col :span="4">
                 <h1 class="ziti04" style="color: gray;margin-top: 28px;text-align: right;">是否公开</h1>
               </el-col>
               <el-col :span="2">
-                <el-switch style="margin-top: 20px;" v-model="note.isPublic" active-color="#13ce66"
+                <el-switch style="margin-top: 20px;" v-model="note.authority" active-color="#13ce66"
                   inactive-color="#ff4949">
                 </el-switch>
               </el-col>
@@ -98,9 +98,6 @@
               <el-col :span="3">
                 <el-button type="primary" style="margin-top: 20px;" plain @click="previewNote(note)">查看</el-button>
               </el-col>
-              <!-- <el-col :span="3">
-                <el-button type="primary" style="margin-top: 20px;" plain @click="downloadNote(note)">下载</el-button>
-              </el-col> -->
             </el-row>
           </div>
         </el-main>
@@ -110,7 +107,7 @@
     </el-main>
   </el-container>
 
-  <el-dialog :visible.sync="dialogVisible" title="上传文件" @close="resetForm">
+  <el-dialog v-model="dialogVisible" title="上传文件" @close="resetForm">
     <el-upload class="upload-demo" drag action="https://jsonplaceholder.typicode.com/posts/" :on-change="handleChange"
       :on-success="handleSuccess" :show-file-list="false">
       <i class="el-icon-upload"></i>
@@ -127,7 +124,7 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
-import { requireAvatar, reqUserInfo } from '@/api/api';
+import { requireAvatar, reqUserInfo, requireMyNote } from '@/api/api';
 import { ElNotification } from 'element-plus';
 import { Avatar } from '@element-plus/icons-vue';
 
@@ -148,9 +145,9 @@ const mockData = {
 
 
 const notes = ref([
-  { title: '数据结构第一次课程笔记', uploadDate: '2024年10月5日', isPublic: true },
-  { title: '算法第3次作业答案', uploadDate: '2023年9月5日', isPublic: false },
-  { title: '软件测试小测原题', uploadDate: '2022年8月5日', isPublic: true }
+  { noteInfo: '数据结构第一次课程笔记', uploadDate: '2024年10月5日', authority: true },
+  { noteInfo: '算法第3次作业答案', uploadDate: '2023年9月5日', authority: false },
+  { noteInfo: '软件测试小测原题', uploadDate: '2022年8月5日', authority: true }
 ]);
 
 const uploadFile = () => {
@@ -160,8 +157,8 @@ const uploadFile = () => {
 
 const previewNote = (note) => {//TODO
   // 预览逻辑，可以使用 window.open 或者其他方式展示文件
-  // alert(`预览: ${note.title}`);
-  ElMessageBox.alert(`预览文件: ${note.title}`, "预览", { confirmButtonText: "确定" });
+  // alert(`预览: $ note.noteInfo}`);
+  ElMessageBox.alert(`预览文件: $ note.noteInfo}`, "预览", { confirmButtonText: "确定" });
 };
 
 
@@ -182,13 +179,14 @@ onMounted(async () => {
     //TODO
     const response = await requireAvatar();
     const userResponse = await reqUserInfo();
-    const noteResponse = await reqNoteList();
+    const noteResponse = await requireMyNote();
     userInfo.value.avatarUrl = response.data;
     userInfo.value = userResponse.data;
     notes.value = notesResponse.data;
-    localStorage.setItem('userName', userInfo.value.userName);
+
   } catch (error) {
     userInfo.value = mockData;
+    notes.value = notes;
     ElNotification({
       type: 'error',
       message: '获取信息失败',
@@ -219,7 +217,7 @@ const goToNoteInfo = async (noteNo) => {//TODO
   } catch (error) {
     ElNotification({
       type: 'error',
-      message: '获取课程信息失败',
+      message: '获取笔记信息失败',
     });
   }
 };

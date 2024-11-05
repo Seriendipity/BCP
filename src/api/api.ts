@@ -21,7 +21,13 @@ enum API {
   CHANGEPASSWORD = "/users/updatePassword",
   GET_AVATAR = "/users/getPicture",
   UPDATE_AVATAR = "/users/updateAvatar",
-  GET_NOTELIST = "",
+  GET_MYNOTELIST = "/note/getStudentAllnote",
+  GET_ALLNOTE = "/note/allPublicNote",
+  ADD_NOTE = "",
+  DELETE_NOTE = "/note/deleteNote",
+  UPDATE_NOTEINFO = "/note/updateNoteInformation",
+  UPDATENOTEVISIBLE = "/note/updateNoteAuthority",
+  UPDATENOTESTAR = "",
 }
 //登录接口
 export const reqLogin = (data: any) => request.post<any, any>(API.LOGIN_URL, data);
@@ -47,6 +53,10 @@ export const reqFileList = (courseId: any) => request.get<any, any>(API.COURSERE
 export const reqNotificationAll = () => request.get<any, any>(API.NOTIFICATION_ALL)
 //获取头像
 export const requireAvatar = () => request.get<any, any>(API.GET_AVATAR)
+//获取我的笔记
+export const requireMyNote = () => request.get<any, any>(API.GET_MYNOTELIST)
+//获取公开笔记
+export const requireAllNote = () => request.get<any, any>(API.GET_ALLNOTE)
 // export const awardInfo = () => request.get<any, any>(API.AWARD_GET);
 
 //发布通知
@@ -59,5 +69,14 @@ export const reqUploadFile = (data: any) => request.post<any, any>(API.COURSERES
 export const reqUpdatePassword = (data: any) => request.post<any, any>(API.CHANGEPASSWORD, data)
 //修改头像
 export const reqUpdateAvatar = (data: any) => request.post<any, any>(API.UPDATE_AVATAR, data)
-
+//新建笔记
+export const reqAddNote = (data: any) => request.post<any, any>(API.ADD_NOTE, data)
+//修改笔记收藏状态
+export const reqUpdateStar = (data: any) => request.post<any, any>(API.UPDATENOTESTAR, data)
+//修改笔记可见状态
+export const reqUpdateVisible = (data: any) => request.post<any, any>(API.UPDATENOTEVISIBLE, data)
+//修改笔记
+export const reqUpdateNote = (data: any) => request.post<any, any>(API.UPDATE_NOTEINFO, data);
+//删除笔记
+export const reqDeleteNote = (data: any) => request.post<any, any>(API.DELETE_NOTE, data)
 // export const awardPost = (data: any) => request.post<any>(API.AWARD_POST, data);
