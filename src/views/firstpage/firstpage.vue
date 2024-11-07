@@ -224,6 +224,7 @@ onMounted(async () => {
     courses.value = courseResponse.data;
     userInfo.value.avatarUrl = avatarResponse.data;
     localStorage.setItem('userName', userInfo.value.userName);
+    localStorage.setItem('userId', userInfo.userId)
   } catch (error) {
     userInfo.value = mockDataUser;
     ElNotification({

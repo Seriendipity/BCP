@@ -79,7 +79,7 @@
   </el-container>
 </template>
 
-<script setup>
+<script lang="js" setup>
 import { ref, onMounted } from 'vue';
 import { reqUserInfo, reqUpdateAvatar, requireAvatar } from '@/api/api';
 import { ElNotification, ElMessage } from 'element-plus';

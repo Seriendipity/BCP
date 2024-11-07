@@ -89,7 +89,7 @@
               </el-col>
               <el-col :span="2">
                 <el-switch style="margin-top: 20px;" v-model="note.authority" active-color="#13ce66"
-                  inactive-color="#ff4949">
+                  inactive-color="#ff4949" @click="updateNoteStatus(note)">
                 </el-switch>
               </el-col>
               <el-col :span="2">
@@ -107,32 +107,68 @@
     </el-main>
   </el-container>
 
-  <el-dialog v-model="dialogVisible" title="上传文件" @close="resetForm">
-    <el-upload class="upload-demo" drag action="https://jsonplaceholder.typicode.com/posts/" :on-change="handleChange"
-      :on-success="handleSuccess" :show-file-list="false">
-      <i class="el-icon-upload"></i>
-      <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
-      <div class="el-upload__tip" slot="tip" type="success">支持扩展名：.pdf/.doc/.docx</div>
-    </el-upload>
+  <el-dialog v-model="dialogVisible" title="上传文件">
+    <el-form :model="form">
+      <!-- 添加主题输入框 -->
+      <el-form-item label="主题" prop="title">
+        <el-input v-model="form.noteInfo" placeholder="请输入主题"></el-input>
+      </el-form-item>
+      <el-upload class="upload-demo" drag action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15"
+        :on-change="handleChange">
+        <i class="el-icon-upload"></i>
+        <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+        <div class="el-upload__tip" slot="tip" type="success">支持扩展名：.pdf/.doc/.docx</div>
+      </el-upload>
+      <!-- 上传成功后显示文件名 -->
+      <el-form-item v-if="fileName" label="上传的文件">
+        <span>{{ fileName }}</span>
+      </el-form-item>
+    </el-form>
     <span slot="footer" class="dialog-footer">
       <el-button @click="dialogVisible = false">取 消</el-button>
       <el-button type="primary" @click="uploadFile">确 定</el-button>
     </span>
   </el-dialog>
+
+  <el-dialog v-model="dialogUpdateVisible" title="更新文件">
+    <el-form :model="form">
+      <!-- 添加主题输入框 -->
+      <el-form-item label="主题" prop="title">
+        <el-input v-model="form.noteInfo" placeholder="请输入主题"></el-input>
+      </el-form-item>
+      <el-upload class="upload-demo" drag action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15"
+        :on-change="handleUpdateChange">
+        <i class="el-icon-upload"></i>
+        <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+        <div class="el-upload__tip" slot="tip" type="success">支持扩展名：.pdf/.doc/.docx</div>
+      </el-upload>
+      <!-- 上传成功后显示文件名 -->
+      <el-form-item v-if="fileName" label="上传的文件">
+        <span>{{ fileName }}</span>
+      </el-form-item>
+    </el-form>
+    <span slot="footer" class="dialog-footer">
+      <el-button @click="dialogUpdateVisible = false">取 消</el-button>
+      <el-button type="primary" @click="uploadNewFile">确 定</el-button>
+    </span>
+  </el-dialog>
 </template>
 
-<script setup>
+<script lang="js" setup>
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
-import { requireAvatar, reqUserInfo, requireMyNote } from '@/api/api';
+import { requireAvatar, reqUserInfo, requireMyNote, reqAddNote, reqUpdateVisible, reqUpdateNote } from '@/api/api';
 import { ElNotification } from 'element-plus';
 import { Avatar } from '@element-plus/icons-vue';
 
 const userInfo = ref([]);
 const router = useRouter();
 const dialogVisible = ref(false);
+const dialogUpdateVisible = ref(false);
 const currentNotification = ref({});
 const notifications = ref([]);
+const selectedFile = ref < File | null > (null); // 存储选中的文件
+const selectNoteNo = ref();
 
 const mockData = {
   userName: '张三',
@@ -142,6 +178,9 @@ const mockData = {
   avatarUrl: 'src/assets/images/example.jpg'
 };
 
+const form = {
+  noteInfo: ''
+}
 
 
 const notes = ref([
@@ -150,33 +189,115 @@ const notes = ref([
   { noteInfo: '软件测试小测原题', uploadDate: '2022年8月5日', authority: true }
 ]);
 
-const uploadFile = () => {
+// 处理文件选择
+const handleChange = (event) => {
+  const target = event.target;
+  if (target.files && target.files.length > 0) {
+    selectedFile.value = target.files[0]; // 存储选中的文件
+  }
+};
+
+const uploadFile = async () => {
   // 文件上传逻辑
+  // 获取文件扩展名
+  const allowedExtensions = ['.pdf', '.doc', '.docx'];
+  const fileExtension = file.name.slice(file.name.lastIndexOf('.')).toLowerCase();
+
+  // 检查文件扩展名是否符合要求
+  if (!allowedExtensions.includes(fileExtension)) {
+    alert('仅支持上传 .pdf, .doc 和 .docx 文件');
+    return;
+  }
+
+  const formData = new FormData();
+  const userId = localStorage.getItem('userId');
+  formData.append('file', selectedFile.value); // 传递文件
+  formData.append('studentNo', userId);
+  formData.append('noteInfo', form.noteInfo);
+  try {
+    const response = await reqAddNote(formData); // 连接后端上传文件
+    selectedFile.value = null; // 上传后清空选择的文件
+    if (response.code === 0) {
+      ElMessage.success("笔记上传成功");
+    }
+  } catch (error) {
+    console.error('上传笔记失败', error);
+    ElNotification({
+      message: '上传笔记失败，请重试',
+      type: 'error',
+    });
+  }
   dialogVisible.value = false;
 };
 
-const previewNote = (note) => {//TODO
+const previewNote = (note) => {//TODO:跳转到一个专门的预览界面
   // 预览逻辑，可以使用 window.open 或者其他方式展示文件
   // alert(`预览: $ note.noteInfo}`);
   ElMessageBox.alert(`预览文件: $ note.noteInfo}`, "预览", { confirmButtonText: "确定" });
 };
 
 
-const updateNote = (note) => {//TODO
+const updateNote = (note) => {
   alert('更新后将会覆盖历史文件');
+  dialogUpdateVisible.value = true;
+  form.noteInfo = note.noteInfo;
+  selectNoteNo = note.noteNo;
+
   // 更新逻辑
 };
 
+const uploadNewFile = async (note) => {
+  // 文件上传逻辑
+  // 获取文件扩展名
+  const allowedExtensions = ['.pdf', '.doc', '.docx'];
+  const fileExtension = file.name.slice(file.name.lastIndexOf('.')).toLowerCase();
 
+  // 检查文件扩展名是否符合要求
+  if (!allowedExtensions.includes(fileExtension)) {
+    alert('仅支持上传 .pdf, .doc 和 .docx 文件');
+    return;
+  }
 
-const resetForm = () => {
-  // 重置上传表单
+  const formData = new FormData();
+  const userId = localStorage.getItem('userId');
+  formData.append('notePath', selectedFile.value); // 传递文件
+  formData.append('noteInformation', form.noteInfo);
+  formData.append('noteNo', selectNoteNo);
+  try {
+    const response = await reqUpdateNote(formData); // 连接后端更新文件
+    selectedFile.value = null; // 更新后清空选择的文件
+    if (response.code === 0) {
+      ElMessage.success("笔记更新成功");
+    }
+  } catch (error) {
+    console.error('更新笔记失败', error);
+    ElNotification({
+      message: '更新笔记失败，请重试',
+      type: 'error',
+    });
+  }
+  dialogVisible.value = false;
 };
+
+
+const updateNoteStatus = async (note) => {
+  //更新公开状态
+  try {
+    await reqUpdateVisible({
+      noteNo: note.noteNo,
+    });
+  } catch (error) {
+    console.error('更新笔记浏览权限失败:', error);
+    ElNotification({
+      type: 'error',
+      message: '更新笔记浏览权限失败，请重试。',
+    });
+  }
+}
 
 // 获取用户信息和课程列表
 onMounted(async () => {
   try {
-    //TODO
     const response = await requireAvatar();
     const userResponse = await reqUserInfo();
     const noteResponse = await requireMyNote();
@@ -193,34 +314,6 @@ onMounted(async () => {
     });
   }
 });
-
-const goToNoteInfo = async (noteNo) => {//TODO
-  try {
-    const response = await reqNoteIntro(courseId);
-    if (response && response.data) {
-      const currentQuery = router.currentRoute.value.query; // 获取当前查询参数
-      localStorage.setItem('courseId', courseId);
-      router.push({
-        path: '/CourseInfo',
-        query: {
-          ...currentQuery, // 保留当前查询参数
-          courseId,
-          courseIntro: response.data.courseInfo,
-          courseName: response.data.courseName,
-          courseNo: response.data.courseNo,
-          teacherName: response.data.teacherName,
-          establishCollege: response.data.establishCollege,
-          semester: response.data.semester,
-        },
-      });
-    }
-  } catch (error) {
-    ElNotification({
-      type: 'error',
-      message: '获取笔记信息失败',
-    });
-  }
-};
 </script>
 
 

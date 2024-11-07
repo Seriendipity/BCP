@@ -43,7 +43,6 @@
         </el-col>
       </el-row>
     </el-header>
-
     <el-main class="backmain1">
       <el-container>
         <el-aside class="backleft">
@@ -81,27 +80,24 @@
                 </div> -->
           </el-row>
           <!-- <div class="scrollable"> -->
-          <div class="grid-content bg-white" style="height: 75px;" v-for="note in notes" :key="note.title">
+          <div class="grid-content bg-white" style="height: 75px;" v-for="note in notes" :key="note.noteNo">
             <el-row :gutter="20">
               <el-col :span="20">
-                <h1 class="ziti03">{{ note.title }}</h1>
-                <h1 class="ziti04" style="margin-top: 5px;">{{ note.author }}</h1>
+                <h1 class="ziti03">{{ note.noteInfo }}</h1>
+                <h1 class="ziti04" style="margin-top: 5px;">{{ note.username }}</h1>
                 <h1 class="ziti04" style="color: gray;margin-top: 5px;">{{ note.uploadDate }}上传</h1>
               </el-col>
               <el-col :span="1">
                 <!-- 未收藏状态 -->
-                <i class="fas fa-star" style="color: lightslategrey; cursor: pointer;margin-top: 28px;"
-                  @click="toggleFavorite(this);"></i> <!-- 可点击的收藏状态 -->
+                <i class="fas fa-star" style="color: lightslategrey; cursor: pointer; margin-top: 28px;"
+                  @click="toggleFavorite($event)"></i> <!-- 使用 $event 获取点击的元素 -->
               </el-col>
               <el-col :span="3">
                 <el-button type="primary" style="margin-top: 20px;" plain @click="previewNote(note)">查看</el-button>
               </el-col>
             </el-row>
           </div>
-
         </el-main>
-
-
       </el-container>
     </el-main>
   </el-container>
@@ -110,7 +106,7 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
-import { reqUserInfo } from '@/api/api';
+import { requireAllNote, reqUserInfo } from '@/api/api';
 import { ElNotification } from 'element-plus';
 
 const userInfo = ref([]);
@@ -125,27 +121,16 @@ const mockData = {
 };
 
 const notes = ref([
-  { title: '数据结构第一次课程笔记', uploadDate: '2024年10月5日', author: 'jty', },
-  { title: '算法第3次作业答案', uploadDate: '2023年9月5日', author: 'mhb' },
-  { title: '软件测试小测原题', uploadDate: '2022年8月5日', author: 'zxc' }
+  { noteInfo: '数据结构第一次课程笔记', uploadDate: '2024年10月5日', author: 'jty', },
+  { noteInfo: '算法第3次作业答案', uploadDate: '2023年9月5日', author: 'mhb' },
+  { noteInfo: '软件测试小测原题', uploadDate: '2022年8月5日', author: 'zxc' }
 ]);
 
-
-
-const previewNote = (note) => {//TODO
+const previewNote = (note) => {//TODO:跳转到一个专门的预览界面
   // 预览逻辑，可以使用 window.open 或者其他方式展示文件
-  // alert(`预览: ${note.title}`);
-  ElMessageBox.alert(`预览文件: ${note.title}`, "预览", { confirmButtonText: "确定" });
+  // alert(`预览: ${note.noteInfo}`);
+  ElMessageBox.alert(`预览文件: ${note.noteInfo}`, "预览", { confirmButtonText: "确定" });
 };
-
-
-
-const updateNote = (note) => {//TODO
-  alert('更新后将会覆盖历史文件');
-  // 更新逻辑
-};
-
-
 
 const resetForm = () => {
   // 重置上传表单
@@ -154,15 +139,15 @@ const resetForm = () => {
 // 获取用户信息和课程列表
 onMounted(async () => {
   try {
-    //TODO
     const response = await requireAvatar();
     const userResponse = await reqUserInfo();
-    const noteResponse = await reqNoteList();
+    const noteResponse = await requireAllNote();
     userInfo.value.avatarUrl = response.data;
     userInfo.value = userResponse.data;
     notes.value = notesResponse.data;
   } catch (error) {
     userInfo.value = mockData;
+    notes.value = notes;
     ElNotification({
       type: 'error',
       message: '获取信息失败',
@@ -170,37 +155,10 @@ onMounted(async () => {
   }
 });
 
-const goToNoteInfo = async (noteNo) => {//TODO
-  try {
-    const response = await reqNoteIntro(courseId);
-    if (response && response.data) {
-      const currentQuery = router.currentRoute.value.query; // 获取当前查询参数
-      localStorage.setItem('courseId', courseId);
-      router.push({
-        path: '/CourseInfo',
-        query: {
-          ...currentQuery, // 保留当前查询参数
-          courseId,
-          courseIntro: response.data.courseInfo,
-          courseName: response.data.courseName,
-          courseNo: response.data.courseNo,
-          teacherName: response.data.teacherName,
-          establishCollege: response.data.establishCollege,
-          semester: response.data.semester,
-        },
-      });
-    }
-  } catch (error) {
-    ElNotification({
-      type: 'error',
-      message: '获取课程信息失败',
-    });
-  }
+
+const toggleFavorite = (event) => {  //TODO:还有问题，不太懂，点击后没反应
+  event.target.classList.toggle('favorite');
 };
-function toggleFavorite(element) {
-  // 切换星星的样式
-  element.classList.toggle('favorite'); // 半星样式，表示收藏状态的变化
-}
 </script>
 
 
