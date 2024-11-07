@@ -188,6 +188,14 @@ alter table studenthomework add column Comment Text;
 
 alter table Teacher add column Department varchar(20);
 
+alter table homework add column isVisible boolean default 0;
+alter table homework add column HomeworkPath varchar(100);
+
+lter table Favorite add column IsOwn boolean default true; -- 是否自己的收藏，默认是自己的
+alter table Favorite add column FromStudentNo varchar(10); -- 收藏自他人收藏夹中的内容时，记录原始学生编号
+
+
+alter table note add column loadTime DATETIME;
 
 -- 插入 Class 表数据
 INSERT INTO Class (ClassNo, ClassName, ClassDepartment, ClassMajor, StudentNumber) VALUES

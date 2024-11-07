@@ -25,14 +25,18 @@ public class StudentHomeworkService {
         return studentHomeworkMapper.selectByHomeworkNo(HomeworkNo);
     }
 
+    public List<StudentHomework> selectCorrectingHomework(String HomeworkNo){
+        return studentHomeworkMapper.selectCorrectingHomework(HomeworkNo);
+    }
+
     public StudentHomework selectByStudentNoAndHomeworkNo(String StudentNo, String HomeworkNo){
         return studentHomeworkMapper.selectByStudentNoAndHomeworkNo(StudentNo,HomeworkNo);
     }
 
     public void insertStudentHomework(String StudentNo, String HomeworkNo, String SubmitDescription,
-                                      String SubmitPath , LocalDateTime SubmitTime, int SubmitGrade,String Comment){
+                                      String SubmitPath , LocalDateTime SubmitTime,String Comment){
         studentHomeworkMapper.insertStudentHomework(StudentNo,HomeworkNo,SubmitDescription,
-                                                SubmitPath,SubmitTime,SubmitGrade,Comment);
+                                                SubmitPath,SubmitTime,Comment);
     }
 
     public void updateStudentHomeworkPath(String SubmitPath , String StudentNo , String HomeworkNo){

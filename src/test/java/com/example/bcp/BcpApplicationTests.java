@@ -277,7 +277,7 @@ class BcpApplicationTests {
     private StudentHomeworkService studentHomeworkService;
     @Test
     void TestStudentHomework(){
-//        studentHomeworkService.insertStudentHomework("S001","H002","Test","/test",LocalDateTime.now(),100);
+        studentHomeworkService.insertStudentHomework("S002","H001","Test","/test",LocalDateTime.now(),"作业提交错误");
 //        studentHomeworkService.updateStudentHomeworkPath("/tttttt","S001","H002");
 //        studentHomeworkService.updateStudentHomeworkSubmitGrade(60,"S001","H002");
         List<StudentHomework> studentHomeworks =studentHomeworkService.selectAllStudentHomework();

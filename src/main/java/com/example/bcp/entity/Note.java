@@ -5,6 +5,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Table(name = "Note")
 public class Note {
@@ -23,6 +25,17 @@ public class Note {
 
     @Column(name = "Authority")
     private boolean Authority;
+
+    @Column(name = "loadTime" )
+    private LocalDateTime loadTime;
+
+    public LocalDateTime getLoadTime() {
+        return loadTime;
+    }
+
+    public void setLoadTime(LocalDateTime loadTime) {
+        this.loadTime = loadTime;
+    }
 
     public boolean isAuthority() {
         return Authority;

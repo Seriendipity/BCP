@@ -1,5 +1,6 @@
 package com.example.bcp.mapper;
 
+import com.example.bcp.entity.Student;
 import com.example.bcp.entity.StudentHomework;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
@@ -20,13 +21,16 @@ public interface StudentHomeworkMapper {
     @Select("Select * from StudentHomework Where HomeworkNo = #{HomeworkNo}")
     List<StudentHomework> selectByHomeworkNo(String HomeworkNo);
 
+    @Select("Select * from StudentHomework Where HomeworkNo = #{HomeworkNo} and SubmitGrade is not null")
+    List<StudentHomework> selectCorrectingHomework(String HomeworkNo);
+
     @Select("Select * from StudentHomework Where StudentNo = #{StudentNo} and HomeworkNo = #{HomeworkNo}")
     StudentHomework selectByStudentNoAndHomeworkNo(String StudentNo, String HomeworkNo);
 
     @Insert("Insert into StudentHomework(StudentNo,HomeworkNo,SubmitDescription,SubmitPath,SubmitTime,SubmitGrade,Comment)" +
-            " values(#{StudentNo},#{HomeworkNo},#{SubmitDescription},#{SubmitPath},#{SubmitTime},#{SubmitGrade},#{Comment})")
+            " values(#{StudentNo},#{HomeworkNo},#{SubmitDescription},#{SubmitPath},#{SubmitTime},null,#{Comment})")
     void insertStudentHomework(String StudentNo, String HomeworkNo, String SubmitDescription,
-                               String SubmitPath , LocalDateTime SubmitTime,int SubmitGrade,String Comment);
+                               String SubmitPath , LocalDateTime SubmitTime,String Comment);
 
     @Update("Update StudentHomework Set SubmitPath = #{SubmitPath}, SubmitTime = NOW() Where StudentNo = #{StudentNo} and HomeworkNo = #{HomeworkNo}")
     void updateStudentHomeworkPath(String SubmitPath , String StudentNo , String HomeworkNo);

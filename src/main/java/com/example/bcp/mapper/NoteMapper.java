@@ -19,8 +19,8 @@ public interface NoteMapper {
     @Select("Select * from Note Where Authority = 1")
     List<Note> selectAllPublicNote();
 
-    @Insert("Insert into Note(NoteNo,StudentNo,NoteInformation,NotePath,Authority)"+
-    " values(#{NoteNo},#{StudentNo},#{NoteInformation},#{NotePath},#{Authority})")
+    @Insert("Insert into Note(NoteNo,StudentNo,NoteInformation,NotePath,Authority,loadTime)"+
+    " values(#{NoteNo},#{StudentNo},#{NoteInformation},#{NotePath},#{Authority},Now()")
     void insertNote(String NoteNo, String StudentNo, String NoteInformation,
                     String NotePath ,boolean Authority);
 
@@ -33,7 +33,7 @@ public interface NoteMapper {
     @Update("Update Note Set NoteInformation = #{NoteInformation} where NoteNo = #{NoteNo}")
     void updateNoteInformation(String NoteInformation , String NoteNo);
 
-    @Update("Update Note Set NotePath = #{NewPath} Where NoteNo = #{NoteNo}")
+    @Update("Update Note Set NotePath = #{NewPath},loadTime = Now() Where NoteNo = #{NoteNo}")
     void updateNotePath(String NewPath,String NoteNo);
 
     @Select("select MAX(CAST(noteNo AS UNSIGNED)) from Note")

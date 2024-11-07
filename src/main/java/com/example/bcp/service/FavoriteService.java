@@ -42,4 +42,7 @@ public class FavoriteService {
         favoriteMapper.updateFavoriteTitle(FavoriteTitle,StudentNo,FavoriteNo);
     }
 
+    public void updateFavoriteAuthority(String StudentNo,String FavoriteNo,String FavoriteInformationNO){
+        favoriteMapper.updateFavoriteAuthority(StudentNo,FavoriteNo,FavoriteInformationNO);
+    }
 }

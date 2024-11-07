@@ -29,6 +29,28 @@ public class Homework {
     @Column(name = "HomeworkGrade")
     private int HomeworkGrade;
 
+    @Column(name = "isVisible")
+    private Boolean isVisible;
+
+    @Column(name = "HomeworkPath",length = 100)
+    private String HomeworkPath;
+
+    public String getHomeworkPath() {
+        return HomeworkPath;
+    }
+
+    public void setHomeworkPath(String homeworkPath) {
+        HomeworkPath = homeworkPath;
+    }
+
+    public Boolean getVisible() {
+        return isVisible;
+    }
+
+    public void setVisible(Boolean visible) {
+        isVisible = visible;
+    }
+
     public String getHomeworkNo() {
         return HomeworkNo;
     }

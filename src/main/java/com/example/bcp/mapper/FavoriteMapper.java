@@ -19,8 +19,8 @@ public interface FavoriteMapper {
     @Select("Select * from Favorite Where StudentNo = #{StudentNo} and FavoriteNo = #{FavoriteNo}")
     List<Favorite> selectByStudentNoAndFavoriteNo(String StudentNo, String FavoriteNo);
 
-    @Insert("Insert into Favorite(FavoriteNo,StudentNo,FavoriteInformationNo,FavoriteTitle)" +
-            " values(#{FavoriteNo},#{StudentNo},#{FavoriteInformationNo},#{FavoriteTitle})")
+    @Insert("Insert into Favorite(FavoriteNo,StudentNo,FavoriteInformationNo,FavoriteTitle,Authority)" +
+            " values(#{FavoriteNo},#{StudentNo},#{FavoriteInformationNo},#{FavoriteTitle},0)")
     void insertFavorite(String FavoriteNo,String StudentNo,
                         String FavoriteInformationNo,String FavoriteTitle);
 
@@ -29,4 +29,7 @@ public interface FavoriteMapper {
 
     @Update("Update Favorite Set FavoriteTitle = #{FavoriteTitle} Where StudentNo=#{StudentNo} and FavoriteNo =#{FavoriteNo}")
     void updateFavoriteTitle(String FavoriteTitle,String StudentNo , String FavoriteNo);
+
+    @Update("Update Favorite Set Authority = 1-Authority Where FavoriteNo=#{FavoriteNo} and FavoriteInformationNO = #{FavoriteInformationNO} and StudentNo = #{StudentNo}")
+    void updateFavoriteAuthority(String StudentNo,String FavoriteNo,String FavoriteInformationNO);
 }

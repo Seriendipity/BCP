@@ -33,7 +33,7 @@ import java.util.Map;
 @RequestMapping("/homework")
 public class HomeworkController {
     @Autowired
-    private HomeworkMapper homeworkMapper;
+    private HomeworkService homeworkService;
     @Autowired
     private StudentHomeworkMapper studentHomeworkMapper;
 
@@ -43,57 +43,103 @@ public class HomeworkController {
     @Autowired
     private StudentHomeworkService studentHomeworkService;
 
-    @Autowired
-    private HomeworkService homeworkService;
 
     //返回某cid对应所有homework
     @GetMapping("/allCidHomework")
     public Result selectByCid(@RequestParam String cid, HttpServletRequest request) {
         String userNo = request.getAttribute("username").toString();
-        List<Homework> homeworks = homeworkMapper.selectByCid(cid);
-        Map<String, Object> responseData = new HashMap<>();
-        int index = 1;
-        for (Homework homework : homeworks) {
-            Map<String, Object> hw = new HashMap<>();
-            hw.put("homeworkNO", homework.getHomeworkNo());
-            hw.put("homeworkDescription", homework.getHomeworkDescription());
-            hw.put("homeworkStratTime", homework.getStartTime());
-            hw.put("homeworkEndTime", homework.getEndTime());
+        if(userNo.startsWith("S")){
+            List<Homework> homeworks = homeworkService.selectByCidAndVisible(cid);
+            Map<String,Object> responseData = new HashMap<>();
+            int index = 1;
+            for(Homework homework:homeworks){
+                Map<String,Object> hw = new HashMap<>();
+                hw.put("homeworkNO",homework.getHomeworkNo());
+                hw.put("homeworkDescription",homework.getHomeworkDescription());
+                hw.put("homeworkStratTime",homework.getStartTime());
+                hw.put("homeworkEndTime",homework.getEndTime());
 
-            int studentNumbers = studentCourseService.selectByCid(cid).size();
-            int submitNumbers = studentHomeworkService.selectByHomeworkNo(homework.getHomeworkNo()).size();
-            String submitNumber = submitNumbers + "/" + studentNumbers;
-            hw.put("submitNumber", submitNumber);
+                int studentNumbers = studentCourseService.selectByCid(cid).size();
+                int submitNumbers = studentHomeworkService.selectByHomeworkNo(homework.getHomeworkNo()).size();
+                String submitNumber = submitNumbers+"/"+studentNumbers;
+                hw.put("submitNumber",submitNumber);
 
-            StudentHomework sh = studentHomeworkService.selectByStudentNoAndHomeworkNo(userNo, homework.getHomeworkNo());
-            if (sh == null) {
-                hw.put("status", "未提交");
-                hw.put("grade", null);
-            } else {
-                hw.put("status", "已提交");
-                hw.put("grade", sh.getSubmitGrade());
+                StudentHomework sh = studentHomeworkService.selectByStudentNoAndHomeworkNo(userNo, homework.getHomeworkNo());
+                if(sh == null){
+                    hw.put("status","未提交");
+                    hw.put("grade",null);
+                }else {
+                    hw.put("status","已提交");
+                    hw.put("grade",sh.getSubmitGrade());
+                }
+
+                responseData.put("homework"+index,hw);
+                index++;
             }
+            return Result.success(responseData);
+        }else if(userNo.startsWith("T")){
+            List<Homework> homeworks = homeworkService.selectByCid(cid);
+            Map<String,Object> responseData = new HashMap<>();
+            int index = 1;
+            for(Homework homework:homeworks){
+                Map<String,Object> hw = new HashMap<>();
+                hw.put("homeworkNO",homework.getHomeworkNo());
+                hw.put("homeworkDescription",homework.getHomeworkDescription());
+                hw.put("homeworkStratTime",homework.getStartTime());
+                hw.put("homeworkEndTime",homework.getEndTime());
 
-            responseData.put("homework" + index, hw);
-            index++;
+                int studentNumbers = studentCourseService.selectByCid(cid).size();
+                int submitNumbers = studentHomeworkService.selectByHomeworkNo(homework.getHomeworkNo()).size();
+                String submitNumber = submitNumbers+"/"+studentNumbers;
+                hw.put("submitNumber",submitNumber);
+
+                int correctingNumber = studentHomeworkService.selectCorrectingHomework(homework.getHomeworkNo()).size();
+                System.out.println("C is " + correctingNumber);
+                System.out.println("S is " + submitNumbers);
+                if(!homework.getVisible()){
+                    hw.put("correctStatus","未发布");
+                } else if(correctingNumber == submitNumbers && correctingNumber != 0){
+                    hw.put("correctStatus","已完成");
+                }else{
+                    hw.put("correctStatus","未完成");
+                }
+                responseData.put("homework"+index,hw);
+                index++;
+            }
+            return Result.success(responseData);
         }
-        return Result.success(responseData);
+       return Result.success();
     }
 
     @GetMapping("/allStudentHomework")
     public Result selectByHomeworkNO(@RequestParam String homeworkNo) {
 //        String username = request.getAttribute("username").toString();
         List<StudentHomework> studentHomeworks = studentHomeworkMapper.selectByHomeworkNo(homeworkNo);
-        Map<String, Object> responseData = new HashMap<>();
-        for (StudentHomework studentHomework : studentHomeworks) {
-            responseData.put("StudentNo", studentHomework.getStudentNo());
-            responseData.put("StudentDescription()", studentHomework.getSubmitDescription());
-            responseData.put("StudentHomeworkSubmitTime", studentHomework.getSubmitTime());
+        Map<String,Object> responseData = new HashMap<>();
+        int index = 1;
+        for(StudentHomework studentHomework:studentHomeworks){
+            Map<String,Object> sh = new HashMap<>();
+            sh.put("StudentNo",studentHomework.getStudentNo());
+            sh.put("StudentDescription()",studentHomework.getSubmitDescription());
+            sh.put("StudentHomeworkSubmitTime",studentHomework.getSubmitTime());
         }
 
         return Result.success(responseData);
     }
 
+    @PostMapping("/updateHomework")
+    public Result updateHomework(@RequestBody Map<String,Object> requestData){
+        LocalDateTime newEndTime = (LocalDateTime) requestData.get("newEndTime");
+        int fixedPoint = (int)requestData.get("scores");
+        String homeworkNo = requestData.get("homeworkNo").toString();
+        String homeworkDesc= requestData.get("homeworkDesc").toString();
+        String homeworkPath = requestData.get("path").toString();
+        homeworkService.updateHomeworkEndTime(newEndTime,homeworkNo);
+        homeworkService.updateHomeworkPath(homeworkPath,homeworkNo);
+        homeworkService.updateHomeworkDescription(homeworkDesc,homeworkNo);
+        homeworkService.updateHomeworkGrade(fixedPoint,homeworkNo);
+        return Result.success();
+    }
 
     //对某student的作业打分
     @PostMapping("/updateGrade")

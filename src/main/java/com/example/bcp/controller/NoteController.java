@@ -5,8 +5,8 @@ import com.example.bcp.entity.Note;
 import com.example.bcp.entity.Result;
 import com.example.bcp.service.NoteService;
 import com.example.bcp.service.StudentService;
-import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -37,13 +37,13 @@ public class NoteController {
         Map<String, Object> responseData = new HashMap<>();
         int index = 1;
         List<Note> selectByStudentNo = noteService.selectByStudentNo(userName);
-        for (Note n : selectByStudentNo) {
-            Map<String, Object> note = new HashMap<>();
-            note.put("noteNo", n.getStudentNo());
-            note.put("notePath", n.getNotePath());
-            note.put("noteInfo", n.getNoteInformation());
-            note.put("authority", n.isAuthority());
-            responseData.put("Note" + index, note);
+        for(Note n : selectByStudentNo){
+            Map<String,Object> note = new HashMap<>();
+            note.put("noteNo",n.getNoteNo());
+            note.put("notePath",n.getNotePath());
+            note.put("noteInfo",n.getNoteInformation());
+            note.put("authority",n.isAuthority());
+            responseData.put("Note"+index,note);
             index++;
         }
         return Result.success(responseData);
