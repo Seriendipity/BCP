@@ -157,7 +157,7 @@ public class HomeworkController {
 
     }
 
-    //-------------------------------作业文件上传下载---------------------------------
+    //-------------------------------作业文件上传下载(教师端）---------------------------------
 
     @Value("${ip:localhost}")
     String ip;
@@ -245,6 +245,8 @@ public class HomeworkController {
         System.out.println("文件下载成功");
         return Result.success(filePath);
     }
+
+
 
 
 }
