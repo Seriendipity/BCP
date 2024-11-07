@@ -71,12 +71,12 @@ public class CourseResourceController {
 //            int newId = courseResourceService.maxNo() + 1;
 
             int size = courseResourceService.selectAllCourseResource().size() + 1;
-            String newCRId = "R" + size;
+            String newCId = "R" + size;
 
 
             // 插入文件记录到数据库
             String url = "http://" + ip + ":" + port + "/file/download/" + savedFilePath;
-            courseResourceService.insertCourseResource(newCRId, Cid, FileUtil.extName(file.getOriginalFilename()), url);
+            courseResourceService.insertCourseResource(newCId, Cid, FileUtil.extName(file.getOriginalFilename()), url);
 
             return Result.success(url);  //返回文件的链接
         } catch (IOException e) {
