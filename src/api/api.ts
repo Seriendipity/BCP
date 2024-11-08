@@ -21,7 +21,7 @@ enum API {
   CHANGEPASSWORD = "/users/updatePassword",
   GET_AVATAR = "/users/getPicture",
   UPDATE_AVATAR = "/users/updateAvatar",
-  GET_MYNOTELIST = "/note/getStudentAllnote",
+  GET_MYNOTELIST = "/note/getStudentAllNote",
   GET_ALLNOTE = "/note/allPublicNote",
   ADD_NOTE = "",
   DELETE_NOTE = "/note/deleteNote",

@@ -241,7 +241,7 @@ const updateNote = (note) => {
   alert('更新后将会覆盖历史文件');
   dialogUpdateVisible.value = true;
   form.noteInfo = note.noteInfo;
-  selectNoteNo = note.noteNo;
+  selectNoteNo.value = note.noteNo;
 
   // 更新逻辑
 };
