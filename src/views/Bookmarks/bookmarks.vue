@@ -2,46 +2,120 @@
   <el-container>
     <el-header class="head">
       <el-row :gutter="20">
-        <el-col :span="18">
-          <div class="grid-content">
+          <el-col :span="18">
+        <div class="grid-content">
+          <router-link to="/firstpage" style="text-decoration: none; " >
+          <h1 class="zitihead">智慧课程平台</h1>
+        </router-link>
+        </div>
+      </el-col>
+      <el-col :span="1">
+        <div class="grid-content ">
+          <router-link to="/notes" style="text-decoration: none;">
+            <h1 style="font-size:larger;margin-top: 21px;color: aliceblue;font-weight: 550;">笔记
+            </h1>
+          </router-link>
+        </div>
+      </el-col>
+        <el-col :span="2">
+          <div class="grid-content ">
             <router-link to="/firstpage" style="text-decoration: none;">
-              <h1 class="zitihead">智慧课程平台</h1>
+              <h1 style="font-size:x-large;margin-top: 17px;color: white;text-shadow: 2px 3px rgba(0, 0, 0, 0.5);font-weight: 550;">收藏夹
+              </h1>
             </router-link>
           </div>
         </el-col>
-        <!-- 其他顶部导航代码... -->
+        <el-col :span="1">
+          <div class="grid-content ">
+            <router-link to="/myinformation" style="text-decoration: none;">
+              <div style="margin-top: 10px"><el-avatar :size="40" :src="circleUrl"></el-avatar></div>
+            </router-link>
+          </div>
+        </el-col>
+        <el-col :span="2">
+          <router-link to="/myinformation" style="text-decoration: none;">
+            <h1 style="font-size: medium;margin-top: 21px;color: aliceblue;font-weight: 550;">爱学习
+            </h1>
+          </router-link>
+        </el-col>
       </el-row>
     </el-header>
 
     <el-main class="backmain1">
       <el-container>
         <el-aside class="backleft">
-          <!-- 个人信息和课程提醒代码... -->
+          <div class="whiteback" :data="student">
+            <h1 style="text-align: left; font-weight: bold;margin-bottom: 5px;">个人信息</h1>
+            <div style="margin-top: 20px;text-align: center; "><el-avatar :size="100" :src="circleUrl"></el-avatar></div>
+            <h1 class="ziti01">学生</h1>
+            <h1 class="ziti02" style="text-align: left;padding-left: 15px;">姓名：{{ student.studentName }}</h1>
+            <h1 class="ziti02" style="text-align: left;padding-left: 15px;">学号：{{ student.studentNo }}</h1>
+            <h1 class="ziti02" style="text-align: left;padding-left: 15px;">学院：{{ student.dept }}</h1>
+            <h1 class="ziti02" style="text-align: left;padding-left: 15px;">邮箱：{{ student.email }}</h1>
+          </div>
+          <div class="whiteback2">
+            <h1 style="text-align: left; font-weight: bold;margin-bottom: 5px;">课程提醒</h1>
+          </div>
         </el-aside>
 
         <el-main height="600px">
-          <h1 style="text-align: left; font-weight: bold; margin-bottom: 10px; font-size: large; margin-top: -12px;">收藏夹
+          <h1 style="text-align: left; font-weight: bold;margin-bottom: 10px;font-size: large;;margin-top:-12px;">收藏夹
           </h1>
-          <div class="scrollable">
-            <div v-for="item in favorites" :key="item.id" class="grid-content bg-white" style="height: 90px;">
-              <el-row :gutter="20">
-                <el-col :span="17">
-                  <h1 class="ziti03" style="margin-top: 5px;">{{ item.title }}</h1>
-                  <h1 class="ziti04">{{ item.author }} - 上传时间: {{ item.uploadTime }}</h1>
-                </el-col>
-                <el-col :span="2">
-                  <el-button type="primary" style="margin-top: 20px;" plain @click="preview(item)">预览</el-button>
-                </el-col>
-                <el-col :span="3">
-                  <el-button type="primary" style="margin-top: 20px;" plain @click="download(item)">下载</el-button>
-                </el-col>
-              </el-row>
-            </div>
-          </div>
+          <!-- <div class="scrollable"> -->
+              <div class="grid-content bg-white" style="height: 75px;">
+                  <el-row :gutter="20">
+                      <el-col :span="19">
+                          <h1 class="ziti03" style="margin-top: 5px;">数据结构第一次课程笔记</h1>
+                          <h1 class="ziti04">马海博</h1>
+                      </el-col>
+                      <el-col :span="2">
+                      <el-button type="primary" style="margin-top: 20px;" plain>预览</el-button></el-col>
+                      <el-col :span="3">
+                      <el-button type="primary" style="margin-top: 20px;" plain>下载</el-button></el-col>
+                  </el-row>
+              </div>
+              <div class="grid-content bg-white" style="height: 75px;">
+                  <el-row :gutter="20">
+                      <el-col :span="19">
+                          <h1 class="ziti03" style="margin-top: 5px;">算法第3次作业答案</h1>
+                          <h1 class="ziti04">张学琛</h1>
+                      </el-col>
+                      <el-col :span="2">
+                      <el-button type="primary" style="margin-top: 20px;" plain>预览</el-button></el-col>
+                      <el-col :span="3">
+                      <el-button type="primary" style="margin-top: 20px;" plain>下载</el-button></el-col>
+                  </el-row>
+              </div>
+              <div class="grid-content bg-white" style="height: 75px;">
+                  <el-row :gutter="20">
+                      <el-col :span="19">
+                          <h1 class="ziti03" style="margin-top: 5px;">软件测试小测原题</h1>
+                          <h1 class="ziti04">张胤麟</h1>
+                      </el-col>
+                      <el-col :span="2">
+                      <el-button type="primary" style="margin-top: 20px;" plain>预览</el-button></el-col>
+                      <el-col :span="3">
+                      <el-button type="primary" style="margin-top: 20px;" plain>下载</el-button></el-col>
+                  </el-row>
+              </div>
+              <!-- <el-col :span="8" v-for="course in courses" :key="course.cid"> -->
+                <!-- <div class="grid-content bg-white" @click="goToCourseInfo(course.cid)">
+                  <h1 class="ziti03">{{ course.courseName }}</h1>
+                  <h1 class="ziti04">课程号: {{ course.courseNo }}</h1>
+                  <h1 class="ziti04">课序号: {{ course.cid }}</h1>
+                  <div class="avatar-container">
+                    <el-image style="width: 94%; height: 100%;margin-top: 10%;margin-left:3%" :src="course.picture"
+                      :fit="fit"></el-image>
+                  </div>
+                </div> -->
+              <!-- </el-col> -->
+          <!-- </div> -->
         </el-main>
 
         <el-aside class="backright">
-          <!-- 通知公告代码... -->
+          <div class="whiteback3">
+            <h1 style="text-align: left; font-weight: bold;margin-bottom: 5px;">通知公告</h1>
+          </div>
         </el-aside>
       </el-container>
     </el-main>
@@ -50,37 +124,58 @@
 
 <script setup>
 import { ref, onMounted } from 'vue';
-import { reqFavorites } from '@/api/api';
+import { useRouter } from 'vue-router';
+import { reqUserInfo, reqCourseList, reqCourseIntro } from '@/api/api';
 import { ElNotification } from 'element-plus';
 
-const favorites = ref([]); // 收藏夹数据
+const courses = ref([]);
+const student = ref([]);
+const router = useRouter();
 
-// 获取收藏夹数据
+
+const circleUrl = ref('src/assets/images/example.jpg');
+
+// 获取用户信息和课程列表
 onMounted(async () => {
   try {
-    const response = await reqFavorites();
-    favorites.value = response.data || [];
+    const userResponse = await reqUserInfo();
+    const courseResponse = await reqCourseList();
+    student.value = userResponse.data;
+    courses.value = courseResponse.data;
   } catch (error) {
-    // 请求失败时设置默认模拟数据
-    favorites.value = [
-      { id: 1, title: '数据结构第一次课程笔记', author: '马海博', uploadTime: '2024-10-10 14:00' },
-      { id: 2, title: '算法第3次作业答案', author: '张学琛', uploadTime: '2024-10-11 15:30' },
-      { id: 3, title: '软件测试小测原题', author: '张胤麟', uploadTime: '2024-10-12 16:45' },
-    ];
     ElNotification({
-      type: 'warning',
-      message: '获取收藏夹数据失败，已加载默认数据',
+      type: 'error',
+      message: '获取信息失败',
     });
   }
 });
 
-// 示例函数：预览和下载操作
-const preview = (item) => {
-  // 预览功能逻辑
-};
-
-const download = (item) => {
-  // 下载功能逻辑
+const goToCourseInfo = async (courseId) => {
+  try {
+    const response = await reqCourseIntro(courseId);
+    if (response && response.data) {
+      const currentQuery = router.currentRoute.value.query; // 获取当前查询参数
+      localStorage.setItem('courseId', courseId);
+      router.push({
+        path: '/CourseInfo',
+        query: {
+          ...currentQuery, // 保留当前查询参数
+          courseId,
+          courseIntro: response.data.courseInfo,
+          courseName: response.data.courseName,
+          courseNo: response.data.courseNo,
+          teacherName: response.data.teacherName,
+          establishCollege: response.data.establishCollege,
+          semester: response.data.semester,
+        },
+      });
+    }
+  } catch (error) {
+    ElNotification({
+      type: 'error',
+      message: '获取课程信息失败',
+    });
+  }
 };
 </script>
 

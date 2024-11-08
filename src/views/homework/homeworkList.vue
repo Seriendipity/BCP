@@ -1,6 +1,6 @@
 <template>
   <div class="Intro">
-  
+    <router-link to="/nomeworkInfo" style="text-decoration: none;">
     <el-table
       :data="tableData.filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase()))"
       class="homeworkTable">
@@ -37,18 +37,20 @@
         </template>
       </el-table-column>
       <el-table-column label="操作" v-slot="scope" width="240px"  >
+        <router-link to="/homeworkPreview" style="text-decoration: none;">
         <el-button
           size="mini"
           type="primary"
           @click="handlePush(scope.$index, scope.row)">预览</el-button>
+        </router-link>
         <el-button
           size="mini"
           type="danger"
-          @click="handleDeletePush(scope.$index, scope.row)">上传</el-button>
+          @click="handleDeletePush(scope.$index, scope.row)" style="margin-left: 10px;">上传</el-button>
 
       </el-table-column>
 
-      </el-table>
+      </el-table></router-link>
 
     
     

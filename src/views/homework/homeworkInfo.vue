@@ -18,7 +18,9 @@
           <!-- 为空格空出来的 -->
         </el-col>
         <el-col :span="10">
+        <router-link to="/homeworkPreview" style="text-decoration: none;">
           <el-button type="primary" @click="previewAttachment" style="margin-left: 10px;" plain>预览附件</el-button>
+        </router-link>
         </el-col>
         <el-col :span="12">
           <el-button type="primary" @click="saveData" round style="font-size: medium;font-weight:bold;">上传作业</el-button>

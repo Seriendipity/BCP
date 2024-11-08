@@ -217,6 +217,16 @@ export const constantRoute = [
           icon: 'Reading',
         }
       },
+      {
+        path: '/CourseManagement/checkHomework',
+        component: () => import('@/views/CourseManagement/checkHomework.vue'),
+        name: 'checkHomework',
+        meta: {
+          title: '批改作业',
+          hidden: false,
+          icon: 'Reading',
+        }
+      },
     ]
   },
   {
@@ -240,16 +250,26 @@ export const constantRoute = [
           icon: 'Files',
         }
       } ,
-          {
-            path: '/homework/homeworkInfo',
-            component: () => import('@/views/homework/homeworkInfo.vue'),
-            name: 'homeworkInfo',
-            meta: {
-              title: '作业详情',
-              hidden: false,
-              icon: 'Files',
-            }
-          }
+      {
+        path: '/homework/homeworkInfo',
+        component: () => import('@/views/homework/homeworkInfo.vue'),
+        name: 'homeworkInfo',
+        meta: {
+          title: '作业详情',
+          hidden: false,
+          icon: 'Files',
+        }
+      },
+      {
+        path: '/homework/homeworkPreview',
+        component: () => import('@/views/homework/homeworkPreview.vue'),
+        name: 'homeworkPreview',
+        meta: {
+          title: '作业预览',
+          hidden: false,
+          icon: 'Files',
+        }
+      }
       
       
     ]

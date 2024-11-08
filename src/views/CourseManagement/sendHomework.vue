@@ -1,10 +1,10 @@
 <template>
   <div class="Intro">
-  
+    <el-button type="primary" round style="padding: 17px;font-size: large;font-weight: bold;float: right;margin-right: 40px;margin-top: 15px;">新建作业</el-button>
     <el-table
       :data="tableData.filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase()))"
       class="homeworkTable">
-      <el-table-column label="是否可见" v-slot="scope">
+      <el-table-column label="是否发布" v-slot="scope">
         <el-switch
           v-model="scope.row.value"
           active-color="#13ce66"
@@ -31,7 +31,7 @@
           {{ scope.row.submitted }}/{{ scope.row.number }}
         </template>
       </el-table-column>
-      <el-table-column label="批改状态" v-slot="scope" width="100px" >
+      <el-table-column label="批改" v-slot="scope" width="100px" >
         <el-button
           size="mini"
           :type="scope.row.check === '已完成' ? 'success' : 'danger'"
@@ -39,12 +39,12 @@
           {{ scope.row.check }}
         </el-button>
       </el-table-column>
-      <el-table-column label="基本信息" v-slot="scope" width="100px">
+      <el-table-column label="基本信息" v-slot="scope" width="150px">
         <el-button
           size="mini"
           @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
       </el-table-column>
-      <el-table-column label="操作" v-slot="scope" width="240px"  >
+      <!-- <el-table-column label="操作" v-slot="scope" width="240px"  >
         <el-button
           size="mini"
           type="primary"
@@ -54,7 +54,7 @@
           type="danger"
           @click="handleDeletePush(scope.$index, scope.row)">取消发布</el-button>
 
-      </el-table-column>
+      </el-table-column> -->
 
       </el-table>
 
