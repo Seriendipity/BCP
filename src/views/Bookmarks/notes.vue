@@ -30,7 +30,7 @@
         <el-col :span="1">
           <div class="grid-content">
             <router-link to="/myinformation" style="text-decoration: none;">
-              <div style="margin-top: 10px"><el-avatar :size="40" :src="avatarUrl"></el-avatar></div>
+              <div style="margin-top: 10px"><el-avatar :size="40" :src="userInfo.avatarUrl"></el-avatar></div>
             </router-link>
           </div>
         </el-col>
@@ -43,7 +43,7 @@
       </el-row>
     </el-header>
 
-    <el-main class="backmain1">
+    <el-main class="backmain2">
       <el-container>
         <el-aside class="backleft">
           <div class="whiteback" :data="userInfo">
@@ -64,20 +64,18 @@
 
         <el-main height="600px">
           <el-row>
-            <el-col :span="3">
-              <el-button type="primary" style="text-align: left; font-weight: bold;font-size: large;">我的笔记</el-button>
-            </el-col>
-            <el-col :span="21">
-              <router-link to="/othersnotes" style="text-decoration: none;">
-                <el-button type="primary" style="text-align: left; font-weight: bold;font-size: large;"
-                  plain>浏览笔记</el-button>
-              </router-link>
-            </el-col>
-            <div style="margin-left: 87%;">
-              <el-button type="primary" round @click="dialogVisible = true"
-                style="font-size: large; font-weight: bold;">新建笔记</el-button>
-            </div>
-          </el-row>
+          <el-col :span="3">
+            <el-button type="primary" style="text-align: left; font-weight: bold;font-size: large;">我的笔记</el-button>
+          </el-col>
+          <el-col :span="21">
+            <router-link to="/othersnotes" style="text-decoration: none;">
+              <el-button type="primary" style="text-align: left; font-weight: bold;font-size: large;" plain>浏览笔记</el-button>
+            </router-link>
+          </el-col>
+          <div style="margin-left: 87%;">
+            <el-button type="primary" round @click="dialogVisible = true" style="font-size: large; font-weight: bold;">新建笔记</el-button>
+          </div>
+        </el-row>
           <div class="grid-content bg-white" style="height: 75px;" v-for="note in notes" :key="note.noteNo">
             <el-row :gutter="20">
               <el-col :span="13">
@@ -108,57 +106,43 @@
   </el-container>
 
   <el-dialog v-model="dialogVisible" title="上传文件">
-    <el-form :model="form">
-      <!-- 添加主题输入框 -->
-      <el-form-item label="主题" prop="title">
-        <el-input v-model="form.noteInfo" placeholder="请输入主题"></el-input>
-      </el-form-item>
-      <el-upload class="upload-demo" drag action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15"
-        :on-change="handleChange">
-        <i class="el-icon-upload"></i>
-        <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+      <el-form :model="form">
+        <el-form-item label="主题" prop="title">
+          <el-input v-model="newNoteInfo" placeholder="请输入主题"></el-input>
+        </el-form-item>
+        <div class="file-input-container">
+          <input type="file" id="fileInput" @change="handleChange" />
+        </div>
         <div class="el-upload__tip" slot="tip" type="success">支持扩展名：.pdf/.doc/.docx</div>
-      </el-upload>
-      <!-- 上传成功后显示文件名 -->
-      <el-form-item v-if="fileName" label="上传的文件">
-        <span>{{ fileName }}</span>
-      </el-form-item>
-    </el-form>
-    <span slot="footer" class="dialog-footer">
-      <el-button @click="dialogVisible = false">取 消</el-button>
-      <el-button type="primary" @click="uploadFile">确 定</el-button>
-    </span>
-  </el-dialog>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="uploadFile">确 定</el-button>
+      </span>
+    </el-dialog>
 
-  <el-dialog v-model="dialogUpdateVisible" title="更新文件">
-    <el-form :model="form">
-      <!-- 添加主题输入框 -->
-      <el-form-item label="主题" prop="title">
-        <el-input v-model="form.noteInfo" placeholder="请输入主题"></el-input>
-      </el-form-item>
-      <el-upload class="upload-demo" drag action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15"
-        :on-change="handleUpdateChange">
-        <i class="el-icon-upload"></i>
-        <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+    <el-dialog v-model="dialogUpdateVisible" title="更新文件">
+      <el-form :model="form">
+        <el-form-item label="主题" prop="title">
+          <el-input v-model="nowNoteInfo" placeholder="请输入主题"></el-input>
+        </el-form-item>
+        <div class="file-input-container">
+          <input type="file" id="fileInput" @change="handleChange" />
+        </div>
         <div class="el-upload__tip" slot="tip" type="success">支持扩展名：.pdf/.doc/.docx</div>
-      </el-upload>
-      <!-- 上传成功后显示文件名 -->
-      <el-form-item v-if="fileName" label="上传的文件">
-        <span>{{ fileName }}</span>
-      </el-form-item>
-    </el-form>
-    <span slot="footer" class="dialog-footer">
-      <el-button @click="dialogUpdateVisible = false">取 消</el-button>
-      <el-button type="primary" @click="uploadNewFile">确 定</el-button>
-    </span>
-  </el-dialog>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogUpdateVisible = false">取 消</el-button>
+        <el-button type="primary" @click="uploadNewFile">确 定</el-button>
+      </span>
+    </el-dialog>
 </template>
 
 <script lang="js" setup>
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { requireAvatar, reqUserInfo, requireMyNote, reqAddNote, reqUpdateVisible, reqUpdateNote } from '@/api/api';
-import { ElNotification } from 'element-plus';
+import { ElNotification,ElMessage } from 'element-plus';
 import { Avatar } from '@element-plus/icons-vue';
 
 const userInfo = ref([]);
@@ -167,8 +151,10 @@ const dialogVisible = ref(false);
 const dialogUpdateVisible = ref(false);
 const currentNotification = ref({});
 const notifications = ref([]);
-const selectedFile = ref < File | null > (null); // 存储选中的文件
+const selectedFile = ref(null); // 存储选中的文件
 const selectNoteNo = ref();
+const newNoteInfo = ref('');
+const nowNoteInfo = ref('');
 
 const mockData = {
   userName: '张三',
@@ -178,9 +164,8 @@ const mockData = {
   avatarUrl: 'src/assets/images/example.jpg'
 };
 
-const form = {
-  noteInfo: ''
-}
+
+
 
 
 const notes = ref([
@@ -189,36 +174,38 @@ const notes = ref([
   { noteInfo: '软件测试小测原题', uploadDate: '2022年8月5日', authority: true }
 ]);
 
-// 处理文件选择
+
+
 const handleChange = (event) => {
   const target = event.target;
   if (target.files && target.files.length > 0) {
     selectedFile.value = target.files[0]; // 存储选中的文件
   }
+  console.log(selectedFile.value)
 };
 
-const uploadFile = async () => {
-  // 文件上传逻辑
-  // 获取文件扩展名
-  const allowedExtensions = ['.pdf', '.doc', '.docx'];
-  const fileExtension = file.name.slice(file.name.lastIndexOf('.')).toLowerCase();
 
-  // 检查文件扩展名是否符合要求
-  if (!allowedExtensions.includes(fileExtension)) {
-    alert('仅支持上传 .pdf, .doc 和 .docx 文件');
+
+const uploadFile = async () => {
+  if (!selectedFile.value) {
+    ElNotification({
+      message: '请选择一个文件',
+      type: 'error',
+    });
     return;
   }
-
   const formData = new FormData();
   const userId = localStorage.getItem('userId');
   formData.append('file', selectedFile.value); // 传递文件
-  formData.append('studentNo', userId);
-  formData.append('noteInfo', form.noteInfo);
+  formData.append('noteInfo', newNoteInfo.value);
   try {
     const response = await reqAddNote(formData); // 连接后端上传文件
     selectedFile.value = null; // 上传后清空选择的文件
     if (response.code === 0) {
-      ElMessage.success("笔记上传成功");
+      ElNotification({
+        message: "笔记上传成功",
+        type: 'success',
+      });
     }
   } catch (error) {
     console.error('上传笔记失败', error);
@@ -227,6 +214,8 @@ const uploadFile = async () => {
       type: 'error',
     });
   }
+  newNoteInfo.value = '';
+  selectedFile.value='';
   dialogVisible.value = false;
 };
 
@@ -240,29 +229,27 @@ const previewNote = (note) => {//TODO:跳转到一个专门的预览界面
 const updateNote = (note) => {
   alert('更新后将会覆盖历史文件');
   dialogUpdateVisible.value = true;
-  form.noteInfo = note.noteInfo;
+  nowNoteInfo.value = note.noteInfo;
   selectNoteNo.value = note.noteNo;
+  console.log(nowNoteInfo.value)
 
   // 更新逻辑
 };
 
 const uploadNewFile = async (note) => {
-  // 文件上传逻辑
-  // 获取文件扩展名
-  const allowedExtensions = ['.pdf', '.doc', '.docx'];
-  const fileExtension = file.name.slice(file.name.lastIndexOf('.')).toLowerCase();
-
-  // 检查文件扩展名是否符合要求
-  if (!allowedExtensions.includes(fileExtension)) {
-    alert('仅支持上传 .pdf, .doc 和 .docx 文件');
+  if (!selectedFile.value) {
+    ElNotification({
+      message: '请选择一个文件',
+      type: 'error',
+    });
     return;
   }
-
   const formData = new FormData();
   const userId = localStorage.getItem('userId');
+  console.log(selectedFile.value)
   formData.append('notePath', selectedFile.value); // 传递文件
-  formData.append('noteInformation', form.noteInfo);
-  formData.append('noteNo', selectNoteNo);
+  formData.append('noteInfo', nowNoteInfo.value);
+  formData.append('noteNo', selectNoteNo.value);
   try {
     const response = await reqUpdateNote(formData); // 连接后端更新文件
     selectedFile.value = null; // 更新后清空选择的文件
@@ -276,7 +263,10 @@ const uploadNewFile = async (note) => {
       type: 'error',
     });
   }
-  dialogVisible.value = false;
+  nowNoteInfo.value = '';
+  selectNoteNo.value='';
+  selectedFile.value='';
+  dialogUpdateVisible.value = false;
 };
 
 
@@ -298,12 +288,12 @@ const updateNoteStatus = async (note) => {
 // 获取用户信息和课程列表
 onMounted(async () => {
   try {
-    const response = await requireAvatar();
+    const avatarResponse = await requireAvatar();
     const userResponse = await reqUserInfo();
     const noteResponse = await requireMyNote();
-    userInfo.value.avatarUrl = response.data;
     userInfo.value = userResponse.data;
-    notes.value = notesResponse.data;
+    notes.value = noteResponse.data;
+    userInfo.value.avatarUrl = avatarResponse.data;
 
   } catch (error) {
     userInfo.value = mockData;
@@ -326,7 +316,7 @@ onMounted(async () => {
 
 }
 
-.backmain1 {
+.backmain2 {
   height: 770px;
   background-color: #eaf6ff;
 }

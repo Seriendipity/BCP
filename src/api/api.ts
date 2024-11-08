@@ -23,7 +23,7 @@ enum API {
   UPDATE_AVATAR = "/users/updateAvatar",
   GET_MYNOTELIST = "/note/getStudentAllNote",
   GET_ALLNOTE = "/note/allPublicNote",
-  ADD_NOTE = "",
+  ADD_NOTE = "/note/upload",
   DELETE_NOTE = "/note/deleteNote",
   UPDATE_NOTEINFO = "/note/updateNoteInformation",
   UPDATENOTEVISIBLE = "/note/updateNoteAuthority",
