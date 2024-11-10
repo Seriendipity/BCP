@@ -141,7 +141,7 @@
 </template>
 
 <script lang="js" setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, reactive } from 'vue';
 import { useRouter } from 'vue-router';
 import { requireAvatar, reqUserInfo, requireMyNote, reqAddNote, reqUpdateVisible, reqUpdateNote } from '@/api/api';
 import { ElNotification, ElMessage } from 'element-plus';
@@ -151,8 +151,8 @@ const userInfo = ref([]);
 const router = useRouter();
 const dialogVisible = ref(false);
 const dialogUpdateVisible = ref(false);
-const currentNotification = ref({});
-const notifications = ref([]);
+const currentNotification = reactive({});
+const notifications = reactive([]);
 const selectedFile = ref(null); // 存储选中的文件
 const selectNoteNo = ref();
 const newNoteInfo = ref('');

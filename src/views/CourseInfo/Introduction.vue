@@ -5,12 +5,12 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { reactive, onMounted, ref } from 'vue';
 import { useRoute } from 'vue-router';
 import { reqCourseIntro } from '@/api/api';
 
 // 创建一个响应式变量用于存储课程介绍
-const courseIntro = ref('');
+const courseIntro = reactive('');
 
 // 获取路由信息
 const route = useRoute();

@@ -14,11 +14,11 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, reactive } from 'vue';
 import { reqStudentData, requireStudentList } from '@/api/api';
 import { ElNotification } from 'element-plus';
 
-const studentListData = ref([]); // 保存学生数据的数组
+const studentListData = reactive([]); // 保存学生数据的数组
 
 onMounted(async () => {
   try {

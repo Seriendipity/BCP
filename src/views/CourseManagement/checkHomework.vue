@@ -1,31 +1,31 @@
 <template>
-    <el-container>
-        <el-aside width="200px">
-            <div class="notification-scrollable">
-              <el-row :gutter="20">
-                <el-col :span="24" v-for="(notification, index) in notifications" :key="index">
-                  <div class="notification-bar">
-                    <div class="notification-info" @click="viewNotification(notification)">
-                      <h2 class="notification-lesson">{{ notification.courseName }}</h2>
-                      <h2 class="notification-title">{{ notification.notificationTitle }}</h2>
-                      <p class="notification-time">{{ notification.notificationPostingTime }}</p>
-                    </div>
-                    <el-tag :type="notification.notificationState === '已读' ? 'success' : 'warning'">
-                      {{ notification.notificationState }}
-                    </el-tag>
-                  </div>
-                </el-col>
-              </el-row>
+  <el-container>
+    <el-aside width="200px">
+      <div class="notification-scrollable">
+        <el-row :gutter="20">
+          <el-col :span="24" v-for="(notification, index) in notifications" :key="index">
+            <div class="notification-bar">
+              <div class="notification-info" @click="viewNotification(notification)">
+                <h2 class="notification-lesson">{{ notification.courseName }}</h2>
+                <h2 class="notification-title">{{ notification.notificationTitle }}</h2>
+                <p class="notification-time">{{ notification.notificationPostingTime }}</p>
+              </div>
+              <el-tag :type="notification.notificationState === '已读' ? 'success' : 'warning'">
+                {{ notification.notificationState }}
+              </el-tag>
             </div>
-          
-        </el-aside>
-        <el-main>Main</el-main>
-        <el-aside width="200px">Aside</el-aside>
-    </el-container>
+          </el-col>
+        </el-row>
+      </div>
+
+    </el-aside>
+    <el-main>Main</el-main>
+    <el-aside width="200px">Aside</el-aside>
+  </el-container>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, reactive } from 'vue';
 import { useRouter } from 'vue-router';
 import { reqUserInfo, reqCourseList, reqCourseIntro, reqNotificationAll, updateNotificationState } from '@/api/api';
 import { ElNotification } from 'element-plus';

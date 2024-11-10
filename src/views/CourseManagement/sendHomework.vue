@@ -39,12 +39,13 @@
 </template>
 
 <script>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, reactive } from 'vue';
+import { ElNotification } from 'element-plus';
 import { requireTeacherSendHomework } from '@/api/api';
 
 const sendHomework = {
   setup() {
-    const SendHomeworkData = ref([
+    const SendHomeworkData = reactive([
       { sendStatus: false, name: '感知机1', starttime: '2024-05-02 10:00:00', endtime: '2024-05-02 10:00:00', number: 44, submitted: 3, judge: '未完成' },
       { sendStatus: false, name: '感知机2', starttime: '2024-05-02 10:00:00', endtime: '2024-05-02 10:00:00', number: 45, submitted: 45, judge: '已完成' },
       { sendStatus: false, name: '感知机3', starttime: '2024-05-02 10:00:00', endtime: '2024-05-02 10:00:00', number: 45, submitted: 44, judge: '已完成' },

@@ -107,13 +107,13 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, reactive } from 'vue';
 import { useRouter } from 'vue-router';
 import { reqFavoriteStatus, requireAllNote, reqUpdateLike, reqUserInfo } from '@/api/api';
 import { ElNotification } from 'element-plus';
 
 const userInfo = ref([]);
-const favorite = ref([]);
+const favorite = reactive([]);
 const router = useRouter();
 const dialogVisible = ref(false);
 const mockData = {
@@ -124,7 +124,7 @@ const mockData = {
   avatarUrl: 'src/assets/images/example.jpg'
 };
 
-const notes = ref([
+const notes = reactive([
   { noteInfo: '数据结构第一次课程笔记', uploadDate: '2024年10月5日', username: 'jty', favorite: true },
   { noteInfo: '算法第3次作业答案', uploadDate: '2023年9月5日', username: 'mhb', favorite: false },
   { noteInfo: '软件测试小测原题', uploadDate: '2022年8月5日', username: 'zxc', favorite: false }
