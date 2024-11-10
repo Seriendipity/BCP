@@ -249,7 +249,7 @@ export const constantRoute = [
           hidden: false,
           icon: 'Files',
         }
-      } ,
+      },
       {
         path: '/homework/homeworkInfo',
         component: () => import('@/views/homework/homeworkInfo.vue'),
@@ -270,8 +270,8 @@ export const constantRoute = [
           icon: 'Files',
         }
       }
-      
-      
+
+
     ]
   },
   {

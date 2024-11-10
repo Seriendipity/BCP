@@ -33,6 +33,7 @@ enum API {
   GET_STUDENTHOMEWORKLIST = "",
   GET_TEACHERHOMEWORKLIST = "",
   SET_HOMEWORK_FILE = "",
+  UPDATE_HOMEWORK_SETTINGS = "",
 }
 //登录接口
 export const reqLogin = (data: any) => request.post<any, any>(API.LOGIN_URL, data);
@@ -95,4 +96,6 @@ export const reqUpdateNote = (data: any) => request.post<any, any>(API.UPDATE_NO
 export const reqDeleteNote = (data: any) => request.post<any, any>(API.DELETE_NOTE, data);
 //老师上传作业附件
 export const reqUploadHomeworkFile = (data: any) => request.post<any, any>(API.SET_HOMEWORK_FILE, data);
+//更新作业信息
+export const updateHomeworkSetting = (data: any) => request.post<any, any>(API.UPDATE_HOMEWORK_SETTINGS, data);
 // export const awardPost = (data: any) => request.post<any>(API.AWARD_POST, data);

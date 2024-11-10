@@ -59,7 +59,8 @@
 </template>
 
 <script>
-import { reqUploadHomeworkFile } from '@/api/api';
+import { reqUploadHomeworkFile, updateHomeworkSetting } from '@/api/api';
+import { ElNotification } from 'element-plus';
 import { ref, reactive, onMounted } from 'vue';
 
 export default {
@@ -99,7 +100,7 @@ export default {
           formData.name = currentData.value.name; // 初始化名称
           formData.number = currentData.value.number; // 初始化应提交人数
         } else {
-
+          currentData.value = tableData.value[0];
         }
       } catch (error) {
         currentData.value = tableData.value[0];
@@ -138,7 +139,7 @@ export default {
       }
     };
 
-    const saveData = () => {
+    const saveData = async () => {
       // 更新 tableData 中对应的数据
       currentData.value.name = formData.name;
       currentData.value.starttime = formData.starttime;
@@ -146,7 +147,19 @@ export default {
       currentData.value.number = formData.number;
       currentData.value.fullscore = formData.fullscore;
       currentData.value.check = formData.check;
-
+      try {
+        const response = await updateHomeworkSetting(formData); // 连接后端更新文件
+        if (response.code === 0) {
+          ElMessage.success("作业设置更新成功");
+        }
+        $router.push("/CourseManagement/sendHomework" + `?cid=${storedCourseId}`);
+      } catch (error) {
+        console.error('更新作业设置失败', error);
+        ElNotification({
+          message: '更新作业设置失败，请重试',
+          type: 'error',
+        });
+      }
       // 提示保存成功
       console.log('保存成功');
     };
