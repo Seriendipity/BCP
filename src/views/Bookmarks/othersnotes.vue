@@ -82,18 +82,13 @@
           <!-- <div class="scrollable"> -->
           <div class="grid-content bg-white" style="height: 75px;" v-for="note in notes" :key="note.noteNo">
             <el-row :gutter="20">
-              <el-col :span="14">
+              <el-col :span="18">
                 <h1 class="ziti03">{{ note.noteInfo }}</h1>
                 <h1 class="ziti04" style="margin-top: 5px;">{{ note.username }}</h1>
                 <h1 class="ziti04" style="color: gray;margin-top: 5px;">{{ note.uploadDate }}上传</h1>
               </el-col>
-              <el-col :span="4">
-                <h1 class="ziti04" style="color: gray;margin-top: 28px;text-align: right;">是否收藏</h1>
-              </el-col>
-              <el-col :span="2">
-                <el-switch style="margin-top: 20px;" v-model="note.favorite" active-color="#13ce66"
-                  inactive-color="#ff4949" @click="updateLikeStatus(note)">
-                </el-switch>
+              <el-col :span="3">
+                <el-button type="primary" style="margin-top: 20px;" plain @click="updateLikeStatus(note)">收藏</el-button>
               </el-col>
               <el-col :span="3">
                 <el-button type="primary" style="margin-top: 20px;" plain @click="previewNote(note)">查看</el-button>
@@ -107,13 +102,13 @@
 </template>
 
 <script setup>
-import { ref, onMounted, reactive } from 'vue';
+import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
-import { reqFavoriteStatus, requireAllNote, reqUpdateLike, reqUserInfo } from '@/api/api';
+import { reqFavoriteStatus, requireAllNote, reqUpdateLike, reqUserInfo ,requireAvatar} from '@/api/api';
 import { ElNotification } from 'element-plus';
 
 const userInfo = ref([]);
-const favorite = reactive([]);
+const favorite = ref([]);
 const router = useRouter();
 const dialogVisible = ref(false);
 const mockData = {
@@ -124,7 +119,7 @@ const mockData = {
   avatarUrl: 'src/assets/images/example.jpg'
 };
 
-const notes = reactive([
+const notes = ref([
   { noteInfo: '数据结构第一次课程笔记', uploadDate: '2024年10月5日', username: 'jty', favorite: true },
   { noteInfo: '算法第3次作业答案', uploadDate: '2023年9月5日', username: 'mhb', favorite: false },
   { noteInfo: '软件测试小测原题', uploadDate: '2022年8月5日', username: 'zxc', favorite: false }
@@ -143,20 +138,20 @@ onMounted(async () => {
     const userResponse = await reqUserInfo();
     const noteResponse = await requireAllNote();
     const favoriteResponse = await reqFavoriteStatus();
-    const favoriteArray = Object.values(favoriteResponse.data);
+    const favoriteArray = favoriteResponse.data;
     userInfo.value = userResponse.data;
     notes.value = noteResponse.data;
     userInfo.value.avatarUrl = response.data;
     // 遍历 notes 并赋值 favorite 属性
-    notes.value.forEach((note, index) => {
-      if (favoriteArray[index]) {
-        note.favorite = favoriteArray[index].favoriteAuthority;
-      }
-    });
+    for (let i = 0; i < notes.value.length; i++) {
+  if (favoriteArray[i]) {
+    notes.value[i].favorite = favoriteArray[i].favoriteAuthority;
+  }
+}
   } catch (error) {
+    console.log(error)
     userInfo.value = mockData;
     notes.value = notes;
-    notes.row.favorite = true;
     ElNotification({
       type: 'error',
       message: '获取信息失败',
@@ -169,6 +164,11 @@ const updateLikeStatus = async (note) => {
   try {
     await reqUpdateLike({
       favoriteInformationNo: note.noteNo,
+      favoriteTitle:note.noteInfo,
+    });
+    ElNotification({
+      type: 'success',
+      message: '收藏成功。',
     });
   } catch (error) {
     console.error('更新收藏状态失败:', error);
