@@ -80,8 +80,7 @@
                 </div> -->
           </el-row>
           <!-- <div class="scrollable"> -->
-          <div class="grid-content bg-white" style="height: 75px;" v-for="note in notes"
-            :key="note.noteId, favorite.favoriteInfoId">
+          <div class="grid-content bg-white" style="height: 75px;" v-for="note in notes" :key="note.noteNo">
             <el-row :gutter="20">
               <el-col :span="14">
                 <h1 class="ziti03">{{ note.noteInfo }}</h1>
@@ -92,7 +91,7 @@
                 <h1 class="ziti04" style="color: gray;margin-top: 28px;text-align: right;">是否收藏</h1>
               </el-col>
               <el-col :span="2">
-                <el-switch style="margin-top: 20px;" v-model="favorite.favoriteAuthority" active-color="#13ce66"
+                <el-switch style="margin-top: 20px;" v-model="note.favorite" active-color="#13ce66"
                   inactive-color="#ff4949" @click="updateLikeStatus(note)">
                 </el-switch>
               </el-col>
@@ -126,9 +125,9 @@ const mockData = {
 };
 
 const notes = ref([
-  { noteInfo: '数据结构第一次课程笔记', uploadDate: '2024年10月5日', author: 'jty', favorite: true },
-  { noteInfo: '算法第3次作业答案', uploadDate: '2023年9月5日', author: 'mhb', favorite: false },
-  { noteInfo: '软件测试小测原题', uploadDate: '2022年8月5日', author: 'zxc', favorite: false }
+  { noteInfo: '数据结构第一次课程笔记', uploadDate: '2024年10月5日', username: 'jty', favorite: true },
+  { noteInfo: '算法第3次作业答案', uploadDate: '2023年9月5日', username: 'mhb', favorite: false },
+  { noteInfo: '软件测试小测原题', uploadDate: '2022年8月5日', username: 'zxc', favorite: false }
 ]);
 
 const previewNote = (note) => {//TODO:跳转到一个专门的预览界面
@@ -137,7 +136,6 @@ const previewNote = (note) => {//TODO:跳转到一个专门的预览界面
   ElMessageBox.alert(`预览文件: ${note.noteInfo}`, "预览", { confirmButtonText: "确定" });
 };
 
-
 // 获取用户信息和课程列表
 onMounted(async () => {
   try {
@@ -145,13 +143,20 @@ onMounted(async () => {
     const userResponse = await reqUserInfo();
     const noteResponse = await requireAllNote();
     const favoriteResponse = await reqFavoriteStatus();
+    const favoriteArray = Object.values(favoriteResponse.data);
     userInfo.value = userResponse.data;
     notes.value = noteResponse.data;
     userInfo.value.avatarUrl = response.data;
-    favorite.value = favoriteResponse.data;
+    // 遍历 notes 并赋值 favorite 属性
+    notes.value.forEach((note, index) => {
+      if (favoriteArray[index]) {
+        note.favorite = favoriteArray[index].favoriteAuthority;
+      }
+    });
   } catch (error) {
     userInfo.value = mockData;
     notes.value = notes;
+    notes.row.favorite = true;
     ElNotification({
       type: 'error',
       message: '获取信息失败',
