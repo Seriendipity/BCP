@@ -20,7 +20,7 @@ public interface NoteMapper {
     List<Note> selectAllPublicNote();
 
     @Insert("Insert into Note(NoteNo,StudentNo,NoteInformation,NotePath,Authority,loadTime)"+
-    " values(#{NoteNo},#{StudentNo},#{NoteInformation},#{NotePath},#{Authority},Now()")
+    " values(#{NoteNo},#{StudentNo},#{NoteInformation},#{NotePath},#{Authority},Now())")
     void insertNote(String NoteNo, String StudentNo, String NoteInformation,
                     String NotePath ,boolean Authority);
 

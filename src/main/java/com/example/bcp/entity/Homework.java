@@ -35,6 +35,17 @@ public class Homework {
     @Column(name = "HomeworkPath",length = 100)
     private String HomeworkPath;
 
+    @Column(name = "homeworkInfo" , columnDefinition = "text")
+    private String homeworkInfo;
+
+    public String getHomeworkInfo() {
+        return homeworkInfo;
+    }
+
+    public void setHomeworkInfo(String homeworkInfo) {
+        this.homeworkInfo = homeworkInfo;
+    }
+
     public String getHomeworkPath() {
         return HomeworkPath;
     }

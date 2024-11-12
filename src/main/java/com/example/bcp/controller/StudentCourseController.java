@@ -75,6 +75,7 @@ public class StudentCourseController {
 
     /**
      *  导出选修某门课程的学生名单
+     *
      */
 
     @GetMapping("/exportStudentList")
@@ -87,11 +88,11 @@ public class StudentCourseController {
         // 创建表头
         Row headerRow = sheet.createRow(0);
         headerRow.createCell(0).setCellValue("Index");
-        headerRow.createCell(1).setCellValue("Student No");
-        headerRow.createCell(2).setCellValue("Student Name");
+        headerRow.createCell(1).setCellValue("StudentNo");
+        headerRow.createCell(2).setCellValue("StudentName");
         headerRow.createCell(3).setCellValue("Grade");
-        headerRow.createCell(4).setCellValue("Class No");
-        headerRow.createCell(5).setCellValue("Class Name");
+        headerRow.createCell(4).setCellValue("ClassNo");
+        headerRow.createCell(5).setCellValue("ClassName");
 
         // 填充学生信息
         int rowIndex = 1;

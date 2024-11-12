@@ -16,6 +16,7 @@ public class Favorite {
     @Column(name = "FavoriteNo" , length = 10)
     private String FavoriteNo;
 
+    @Id
     @Column(name = "FavoriteInformationNO" , length = 10)
     private String  FavoriteInformationNO;
 
@@ -24,6 +25,28 @@ public class Favorite {
 
     @Column(name = "Authority")
     private Boolean Authority;
+
+    @Column(name = "IsOwn")
+    private Boolean IsOwn;
+
+    @Column(name = "FromStudentNo",length = 10)
+    private String FromStudentNo;
+
+    public Boolean getOwn() {
+        return IsOwn;
+    }
+
+    public void setOwn(Boolean own) {
+        IsOwn = own;
+    }
+
+    public String getFromStudentNo() {
+        return FromStudentNo;
+    }
+
+    public void setFromStudentNo(String fromStudentNo) {
+        FromStudentNo = fromStudentNo;
+    }
 
     public Boolean getAuthority() {
         return Authority;

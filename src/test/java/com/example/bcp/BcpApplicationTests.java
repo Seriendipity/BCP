@@ -178,15 +178,16 @@ class BcpApplicationTests {
 //        favoriteService.insertFavorite("F003","S003","Test","Study");
 //        favoriteService.deleteFavorite("F003","S003");
 //        favoriteService.updateFavoriteTitle("Test","S001","F001");
-        List<Favorite> favorites = favoriteService.selectByStudentNo("S001");
-        for(Favorite f : favorites){
-            System.out.print(f.getFavoriteNo()+" ");
-            System.out.print(f.getFavoriteInformationNO()+" ");
-            System.out.print(f.getFavoriteTitle()+" ");
-            System.out.print(f.getStudentNo()+" ");
-            System.out.println(f.getAuthority());
-            System.out.println();
-        }
+//        List<Favorite> favorites = favoriteService.selectByStudentNo("S001");
+//        for(Favorite f : favorites){
+//            System.out.print(f.getFavoriteNo()+" ");
+//            System.out.print(f.getFavoriteInformationNO()+" ");
+//            System.out.print(f.getFavoriteTitle()+" ");
+//            System.out.print(f.getStudentNo()+" ");
+//            System.out.println(f.getAuthority());
+//            System.out.println();
+//        }
+        favoriteService.deleteFavorite("F002","S001","N002");
     }
 
     @Autowired

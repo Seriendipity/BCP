@@ -43,6 +43,10 @@ public class NoteController {
             note.put("notePath",n.getNotePath());
             note.put("noteInfo",n.getNoteInformation());
             note.put("authority",n.isAuthority());
+            System.out.println(n.getLoadTime());
+            String time = n.getLoadTime()+"";
+            String uploadDate = time.replace("T"," ");
+            note.put("uploadDate",uploadDate);
             responseData.put("Note"+index,note);
             index++;
         }
@@ -89,13 +93,19 @@ public class NoteController {
 
 
     @PostMapping("/updateNoteInformation")
-    public Result updateNoteInformation(@RequestBody Map<String, String> requestData) {
-        String noteNo = requestData.get("noteNo");
-        String noteInformation = requestData.get("noteInformation");
-        String notePath = requestData.get("notePath");
+    public Result updateNoteInformation(
+            @RequestParam("noteNo") String noteNo,
+            @RequestParam("noteInfo") String noteInformation,
+            @RequestParam("notePath") MultipartFile notePath) throws IOException {
         try {
+            System.out.println(noteInformation);
+            // 保存文件，获取文件路径
+            String filePath = uploadFile(notePath);  // 自定义文件保存方法
+
+            // 更新笔记信息
             noteService.updateNoteInformation(noteInformation, noteNo);
-            noteService.updateNotePath(notePath, noteNo);
+            noteService.updateNotePath(filePath, noteNo);  // 保存文件路径
+
             return Result.success("修改笔记信息成功");
         } catch (Exception e) {
             return Result.error("修改失败");
@@ -129,9 +139,10 @@ public class NoteController {
 
     @PostMapping("/upload")
     public Result upload(@RequestParam("file") MultipartFile file,
-                         @RequestParam("studentNo") String studentNo,
-                         @RequestParam("noteInformation") String noteInformation,
-                         @RequestParam("authority") Boolean authority) {
+                         @RequestParam("noteInfo") String noteInformation,
+                         HttpServletRequest request) {
+        System.out.println(noteInformation);
+        String studentNo = request.getAttribute("username").toString();
         if (file.isEmpty()) {
             return Result.error("上传文件不能为空");
         }
@@ -150,7 +161,7 @@ public class NoteController {
 //    public void insertNote(String NoteNo, String StudentNo, String NoteInformation,
 //                           String NotePath , boolean Authority)
             String url = "http://" + ip + ":" + port + "/note/download/" + savedFilePath;
-            noteService.insertNote(newNoteNo, studentNo, noteInformation, url, authority);
+            noteService.insertNote(newNoteNo, studentNo, noteInformation, url, false);
 
             return Result.success(url);  //返回文件的链接
         } catch (IOException e) {

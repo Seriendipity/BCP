@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.net.URLEncoder;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -56,13 +57,13 @@ public class HomeworkController {
                 Map<String,Object> hw = new HashMap<>();
                 hw.put("homeworkNO",homework.getHomeworkNo());
                 hw.put("homeworkDescription",homework.getHomeworkDescription());
-                hw.put("homeworkStratTime",homework.getStartTime());
+                hw.put("homeworkStartTime",homework.getStartTime());
                 hw.put("homeworkEndTime",homework.getEndTime());
 
                 int studentNumbers = studentCourseService.selectByCid(cid).size();
                 int submitNumbers = studentHomeworkService.selectByHomeworkNo(homework.getHomeworkNo()).size();
-                String submitNumber = submitNumbers+"/"+studentNumbers;
-                hw.put("submitNumber",submitNumber);
+                hw.put("submitNumbers",submitNumbers);
+                hw.put("studentNumbers",studentNumbers);
 
                 StudentHomework sh = studentHomeworkService.selectByStudentNoAndHomeworkNo(userNo, homework.getHomeworkNo());
                 if(sh == null){
@@ -85,23 +86,27 @@ public class HomeworkController {
                 Map<String,Object> hw = new HashMap<>();
                 hw.put("homeworkNO",homework.getHomeworkNo());
                 hw.put("homeworkDescription",homework.getHomeworkDescription());
-                hw.put("homeworkStratTime",homework.getStartTime());
+                hw.put("homeworkStartTime",homework.getStartTime());
                 hw.put("homeworkEndTime",homework.getEndTime());
 
                 int studentNumbers = studentCourseService.selectByCid(cid).size();
                 int submitNumbers = studentHomeworkService.selectByHomeworkNo(homework.getHomeworkNo()).size();
-                String submitNumber = submitNumbers+"/"+studentNumbers;
-                hw.put("submitNumber",submitNumber);
+                hw.put("submitNumbers",submitNumbers);
+                hw.put("studentNumbers",studentNumbers);
 
                 int correctingNumber = studentHomeworkService.selectCorrectingHomework(homework.getHomeworkNo()).size();
                 System.out.println("C is " + correctingNumber);
                 System.out.println("S is " + submitNumbers);
                 if(!homework.getVisible()){
-                    hw.put("correctStatus","未发布");
-                } else if(correctingNumber == submitNumbers && correctingNumber != 0){
-                    hw.put("correctStatus","已完成");
+                    hw.put("postStatus",false);
+                } else{
+                    hw.put("postStatus",true);
+                }
+
+                if(correctingNumber == submitNumbers && correctingNumber != 0){
+                    hw.put("correctStatus",true);
                 }else{
-                    hw.put("correctStatus","未完成");
+                    hw.put("correctStatus",false);
                 }
                 responseData.put("homework"+index,hw);
                 index++;
@@ -129,15 +134,22 @@ public class HomeworkController {
 
     @PostMapping("/updateHomework")
     public Result updateHomework(@RequestBody Map<String,Object> requestData){
-        LocalDateTime newEndTime = (LocalDateTime) requestData.get("newEndTime");
-        int fixedPoint = (int)requestData.get("scores");
+        String StringNewEndTime = (String) requestData.get("newEndTime");
+        String StringNewStartTime = (String)requestData.get("newStartTime");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        LocalDateTime newEndTime = LocalDateTime.parse(StringNewEndTime, formatter);
+        LocalDateTime newStartTime = LocalDateTime.parse(StringNewStartTime,formatter);
+        int fixedPoint = Integer.parseInt((String)requestData.get("scores"));
         String homeworkNo = requestData.get("homeworkNo").toString();
         String homeworkDesc= requestData.get("homeworkDesc").toString();
         String homeworkPath = requestData.get("path").toString();
+        String homeworkInfo = requestData.get("homeworkInfo").toString();
         homeworkService.updateHomeworkEndTime(newEndTime,homeworkNo);
         homeworkService.updateHomeworkPath(homeworkPath,homeworkNo);
         homeworkService.updateHomeworkDescription(homeworkDesc,homeworkNo);
         homeworkService.updateHomeworkGrade(fixedPoint,homeworkNo);
+        homeworkService.updateHomeworkStartTime(newStartTime,homeworkNo);
+        homeworkService.updateHomeworkInfo(homeworkInfo,homeworkNo);
         return Result.success();
     }
 
@@ -173,7 +185,8 @@ public class HomeworkController {
                          @RequestParam("homeworkDescription") String homeworkDescription,
                          @RequestParam("startTime") LocalDateTime startTime,
                          @RequestParam("endTime") LocalDateTime endTime,
-                         @RequestParam("homeworkGrade") int homeworkGrade) {
+                         @RequestParam("homeworkGrade") int homeworkGrade,
+                         @RequestParam("homeworkInfo") String homeworkInfo) {
         if (file.isEmpty()) {
             return Result.error("上传文件不能为空");
         }
@@ -192,7 +205,7 @@ public class HomeworkController {
             // public void insertHomework(String HomeworkNo, String Cid, String HomeworkDescription,
             //        LocalDateTime StartTime , LocalDateTime EndTime , int HomeworkGrade)
             String url = "http://" + ip + ":" + port + "/homework/download/" + savedFilePath;
-            homeworkService.insertHomework(newHomeworkNo,Cid,homeworkDescription,startTime,endTime,homeworkGrade);
+            homeworkService.insertHomework(newHomeworkNo,Cid,homeworkDescription,startTime,endTime,homeworkGrade,homeworkInfo);
 
             return Result.success(url);  //返回文件的链接
         } catch (IOException e) {

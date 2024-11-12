@@ -16,6 +16,17 @@ public class FavoriteService {
         return favoriteMapper.selectAllFavorite();
     }
 
+    public List<Favorite> selectByStudentOwn(String StudentNo){
+        return favoriteMapper.selectByStudentOwn(StudentNo);
+    }
+
+    public List<Favorite> selectByStudentOthers(String StudentNo){
+        return favoriteMapper.selectByStudentOthers(StudentNo);
+    }
+
+    public Favorite selectByStudentNoAndFavoriteNoAndFavoriteInformationNo(String StudentNo,String FavoriteNo,String FavoriteInformationNo){
+        return favoriteMapper.selectByStudentNoAndFavoriteNoAndFavoriteInformationNo(StudentNo,FavoriteNo,FavoriteInformationNo);
+    }
     public List<Favorite> selectByStudentNo(String StudentNo){
         return favoriteMapper.selectByStudentNo(StudentNo);
     }
@@ -28,14 +39,18 @@ public class FavoriteService {
         return favoriteMapper.selectByStudentNoAndFavoriteNo(StudentNo,FavoriteNo);
     }
 
-    public void insertFavorite(String FavoriteNo,String StudentNo,
-                               String FavoriteInformationNo,String FavoriteTitle){
-        favoriteMapper.insertFavorite(FavoriteNo,StudentNo,
-                FavoriteInformationNo,FavoriteTitle);
+    public void insertFavoriteOwn(String FavoriteNo,String StudentNo,
+                               String FavoriteInformationNo,String FavoriteTitle,int Authority){
+        favoriteMapper.insertFavoriteOwn(FavoriteNo,StudentNo,
+                FavoriteInformationNo,FavoriteTitle,Authority);
     }
-
-    public void deleteFavorite(String FavoriteNo, String StudentNo){
-        favoriteMapper.deleteFavorite(FavoriteNo,StudentNo);
+    public void insertFavoriteOthers(String FavoriteNo,String StudentNo,
+                                     String FavoriteInformationNo,String FavoriteTitle,String FromStudentNo){
+        favoriteMapper.insertFavoriteOthers(FavoriteNo,StudentNo,FavoriteInformationNo,
+                FavoriteTitle,FromStudentNo);
+    }
+    public void deleteFavorite(String FavoriteNo, String StudentNo,String FavoriteInformationNO){
+        favoriteMapper.deleteFavorite(FavoriteNo,StudentNo,FavoriteInformationNO);
     }
 
     public void updateFavoriteTitle(String FavoriteTitle,String StudentNo , String FavoriteNo){
@@ -44,5 +59,9 @@ public class FavoriteService {
 
     public void updateFavoriteAuthority(String StudentNo,String FavoriteNo,String FavoriteInformationNO){
         favoriteMapper.updateFavoriteAuthority(StudentNo,FavoriteNo,FavoriteInformationNO);
+    }
+
+    public String MaxFavorite(){
+        return favoriteMapper.MaxFavorite();
     }
 }

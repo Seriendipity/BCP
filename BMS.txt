@@ -190,6 +190,7 @@ alter table Teacher add column Department varchar(20);
 
 alter table homework add column isVisible boolean default 0;
 alter table homework add column HomeworkPath varchar(100);
+alter table homework add column homeworkInfo TEXT;
 
 lter table Favorite add column IsOwn boolean default true; -- 是否自己的收藏，默认是自己的
 alter table Favorite add column FromStudentNo varchar(10); -- 收藏自他人收藏夹中的内容时，记录原始学生编号

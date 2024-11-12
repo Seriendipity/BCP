@@ -25,9 +25,10 @@ public class HomeworkService {
         return homeworkMapper.selectByCidAndVisible(Cid);
     }
     public void insertHomework(String HomeworkNo, String Cid, String HomeworkDescription,
-                               LocalDateTime StartTime , LocalDateTime EndTime , int HomeworkGrade){
+                               LocalDateTime StartTime , LocalDateTime EndTime , int HomeworkGrade,
+                                String homeworkInfo){
         homeworkMapper.insertHomework(HomeworkNo,Cid,HomeworkDescription,
-                                StartTime,EndTime,HomeworkGrade);
+                                StartTime,EndTime,HomeworkGrade,homeworkInfo);
     }
 
     public void deleteHomework(String HomeworkNo){
@@ -50,4 +51,11 @@ public class HomeworkService {
         homeworkMapper.updateHomeworkGrade(HomeworkGrade,HomeworkNo);
     }
 
+    public void updateHomeworkStartTime(LocalDateTime StartTime,String HomeworkNo){
+        homeworkMapper.updateHomeworkStartTime(StartTime,HomeworkNo);
+    }
+
+    public void updateHomeworkInfo(String homeworkInfo,String HomeworkNo){
+        homeworkMapper.updateHomeworkInfo(homeworkInfo,HomeworkNo);
+    }
 }
