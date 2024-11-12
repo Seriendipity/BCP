@@ -157,6 +157,20 @@ Create table StudentHomework(
                                 FOREIGN KEY (StudentNo) references Student(StudentNo),
                                 FOREIGN KEY (HomeworkNo) references Homework(HomeworkNo)
 );
+
+CREATE TABLE PeerReviewAssignment(
+    RevieweeNo   varchar(10),                   -- 作业提交者的学号
+    ReviewerNo   varchar(10),                   -- 评分者的学号
+    HomeworkNo   varchar(10),                   -- 作业编号
+    ReviewStatus boolean DEFAULT false,         -- 评审状态:未/已评审
+    Comment Text,
+    StartTime datetime,
+    EndTime datetime,
+    PRIMARY KEY (RevieweeNo, ReviewerNo, HomeworkNo),
+    FOREIGN KEY (ReviewerNo) REFERENCES Student (StudentNo),
+    FOREIGN KEY (HomeworkNo, RevieweeNo) REFERENCES StudentHomework (HomeworkNo, StudentNo)
+);
+
 #
 
 alter table Favorite add column authority boolean default false;
@@ -185,6 +199,7 @@ alter table comment add column imgUrl VARCHAR(100);
 alter table comment add column mentionedUser TEXT;
 
 alter table studenthomework add column Comment Text;
+alter table StudentHomework add column isTeacherGrade boolean DEFAULT 0; -- 是否有教师评分
 
 alter table Teacher add column Department varchar(20);
 
@@ -192,7 +207,8 @@ alter table homework add column isVisible boolean default 0;
 alter table homework add column HomeworkPath varchar(100);
 alter table homework add column homeworkInfo TEXT;
 
-lter table Favorite add column IsOwn boolean default true; -- 是否自己的收藏，默认是自己的
+
+alter table Favorite add column IsOwn boolean default true; -- 是否自己的收藏，默认是自己的
 alter table Favorite add column FromStudentNo varchar(10); -- 收藏自他人收藏夹中的内容时，记录原始学生编号
 
 
@@ -207,7 +223,8 @@ INSERT INTO Class (ClassNo, ClassName, ClassDepartment, ClassMajor, StudentNumbe
 INSERT INTO Student (StudentNo, StudentName, StudentSex, StudentBirthday, TotalCredit, ClassNo, StudentEmail, Password) VALUES
                                                                                                                             ('S001', '张三', '男', '2000-01-01', 15, 'C001', 'zhangsan@example.com', 'password123'),
                                                                                                                             ('S002', '李四', '女', '2000-02-02', 18, 'C001', 'lisi@example.com', 'password123'),
-                                                                                                                            ('S003', '王五', '男', '2000-03-03', 12, 'C002', 'wangwu@example.com', 'password123');
+                                                                                                                            ('S003', '王五', '男', '2000-03-03', 12, 'C002', 'wangwu@example.com', 'password123'),
+                                                                                                                            ('S004', '王六', '男', '2000-03-03', 12, 'C002', 'wangliu@example.com', 'password123');
 
 -- 插入 Course 表数据
 INSERT INTO Course (CourseNo, CourseName, CourseCredit) VALUES
@@ -228,7 +245,9 @@ INSERT INTO Teaching (TeacherNo, CourseNo, Cid, CourseIntroduction, Syllabus, Te
 INSERT INTO StudentCourse (StudentNo, Cid, Grade) VALUES
                                                       ('S001', 'T001_CS101', 85),
                                                       ('S002', 'T001_CS101', 90),
-                                                      ('S003', 'T002_CS102', 75);
+                                                      ('S003', 'T002_CS102', 75),
+                                                      ('S003', 'T001_CS101', 75),
+                                                      ('S004', 'T001_CS101', 75);
 
 -- 插入 Discussion 表数据
 INSERT INTO Discussion (StudentNo, Cid, DiscussionId, DiscussionInformation, DiscussionPostingTime) VALUES
@@ -278,4 +297,7 @@ INSERT INTO Homework (Cid, HomeworkNo, HomeworkDescription, StartTime, EndTime, 
 -- 插入 StudentHomework 表数据
 INSERT INTO StudentHomework (StudentNo, HomeworkNo, SubmitDescription, SubmitPath, SubmitTime, SubmitGrade) VALUES
                                                                                                                 ('S001', 'H001', '我的数据结构作业', '/submissions/structure.pdf', NOW(), 90),
-                                                                                                                ('S002', 'H002', '我的算法作业', '/submissions/algorithm.pdf', NOW(), 85);
+                                                                                                                ('S002', 'H002', '我的算法作业', '/submissions/algorithm.pdf', NOW(), 85),
+                                                                                                                ('S002', 'H001', '作业', '/submissions/algorithm1.pdf', NOW(), 85),
+                                                                                                                ('S003', 'H001', '作业', '/submissions/algorithm2.pdf', NOW(), 85),
+                                                                                                                ('S004', 'H001', '作业', '/submissions/algorithm3.pdf', NOW(), 85);
