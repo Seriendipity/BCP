@@ -1,40 +1,30 @@
 <template>
   <div class="Intro">
     <el-descriptions class="margin-top" title="作业信息" :column="3" :size="size">
-      <el-descriptions-item label="作业名称">{{ currentData.name }}</el-descriptions-item>
-      <el-descriptions-item label="开始时间">{{ currentData.starttime }}</el-descriptions-item>
-      <el-descriptions-item label="结束时间">{{ currentData.endtime }}</el-descriptions-item>
-      <el-descriptions-item label="应提交人数">{{ currentData.number }}</el-descriptions-item>
-      <el-descriptions-item label="已提交人数">{{ currentData.submitted }}</el-descriptions-item>
-      <el-descriptions-item label="批改状态">
-        <el-tag size="small" :type="currentData.check === '已完成' ? 'success' : 'danger'">{{ currentData.check }}</el-tag>
-      </el-descriptions-item>
+      <el-descriptions-item label="作业名称">{{ currentData.homeworkDescription }}</el-descriptions-item>
+      <el-descriptions-item label="开始时间">{{ currentData.homeworkStartTime }}</el-descriptions-item>
+      <el-descriptions-item label="结束时间">{{ currentData.homeworkEndTime }}</el-descriptions-item>
+      <el-descriptions-item label="应提交人数">{{ currentData.studentNumbers }}</el-descriptions-item>
+      <el-descriptions-item label="已提交人数">{{ currentData.submitNumbers }}</el-descriptions-item>
     </el-descriptions>
 
-    <el-form :model="formData" class="form" label-width="100px">
+    <el-form :model="changedData" class="form" label-width="100px">
       <el-form-item label="作业名称">
-        <el-input v-model="formData.name" placeholder="输入作业名称" style="width: 50%;"></el-input>
-      </el-form-item>
-      <el-form-item label="应提交人数">
-        <el-input v-model="formData.number" type="number" placeholder="输入应提交人数" style="width: 15%;"></el-input>
+        <el-input v-model="changedData.homeworkDescription" placeholder="输入作业名称" style="width: 50%;"></el-input>
       </el-form-item>
       <el-form-item label="开始时间">
-        <el-date-picker v-model="formData.starttime" type="datetime" placeholder="选择开始时间">
+        <el-date-picker v-model="changedData.homeworkStartTime" type="datetime" placeholder="选择开始时间">
         </el-date-picker>
       </el-form-item>
       <el-form-item label="结束时间">
-        <el-date-picker v-model="formData.endtime" type="datetime" placeholder="选择结束时间">
+        <el-date-picker v-model="changedData.homeworkEndTime" type="datetime" placeholder="选择结束时间">
         </el-date-picker>
       </el-form-item>
       <el-form-item label="满分">
-        <el-input v-model="formData.fullscore" type="number" placeholder="输入满分" style="width: 15%;"></el-input>
+        <el-input v-model="changedData.scores" type="studentNumbers" placeholder="输入满分" style="width: 15%;"></el-input>
       </el-form-item>
       <el-form-item label="作业内容">
-        <el-input v-model="formData.content" placeholder="输入作业内容" type="textarea" style="width: 60%;"></el-input>
-      </el-form-item>
-      <el-form-item label="批改">
-        <el-button v-if="formData.check === '未完成'" type="success" @click="handleUpdateCheck('已完成')">已完成</el-button>
-        <el-button v-else type="danger" @click="handleUpdateCheck('未完成')">未完成</el-button>
+        <el-input v-model="changedData.content" placeholder="输入作业内容" type="textarea" style="width: 60%;"></el-input>
       </el-form-item>
     </el-form>
 
@@ -46,7 +36,8 @@
         <el-button type="primary" @click="previewAttachment" style="margin-left: 10px;" plain>预览附件</el-button>
       </el-col>
       <el-col :span="7">
-        <el-upload class="upload-demo" action="#" :before-upload="handleUpload" :show-file-list="true">
+        <el-upload class="upload-demo" action="#" :file-list="fileList" :before-upload="beforeUpload"
+          :show-file-list="true">
           <el-button type="primary" plain>上传附件</el-button>
         </el-upload>
       </el-col>
@@ -59,46 +50,50 @@
 </template>
 
 <script>
-import { reqUploadHomeworkFile, updateHomeworkSetting } from '@/api/api';
+import { updateHomeworkSetting, editSingleHomework } from '@/api/api';
 import { ElNotification } from 'element-plus';
-import { ref, reactive, onMounted } from 'vue';
+import { ref, onMounted } from 'vue';
+import { useRouter } from 'vue-router';
 
 export default {
   setup() {
+    let $router = useRouter();
+    const fileList = ref([]);
     const tableData = ref([
       {
-        name: '感知机1',
-        starttime: '2024-05-02 10:00:00',
-        endtime: '2024-05-02 10:00:00',
-        number: 45,
-        submitted: 3,
-        check: '未完成',
-        value: false,
+        homeworkDescription: '感知机1',
+        homeworkStartTime: '2024-05-02 10:00:00',
+        homeworkEndTime: '2024-05-02 10:00:00',
+        studentNumbers: 45,
+        submitNumbers: 3,
+        file: '',
       },
     ]);
-
-    const formData = reactive({
-      name: '感知机1',
-      starttime: '2024-05-02 10:00:00',
-      endtime: '2024-05-02 10:00:00',
-      fullscore: 100,
-      number: 45,
-      check: '未完成',
+    const changedData = ref({
+      homeworkDescription: '感知机1',
+      homeworkStartTime: '2024-05-02 10:00:00',
+      homeworkEndTime: '2024-05-02 10:00:00',
+      scores: 100,
       content: '见附件',
+      file: '',
     });
 
     const currentData = ref({});
 
+    const beforeUpload = (file) => {
+      console.log('文件信息:', file);
+      fileList.value[0] = file;
+    };
     onMounted(async () => {
       // 初始化时设置当前数据
       try {
 
-        const storedCourseId = localStorage.getItem('courseId');
-        const response = await requireTeacherSendHomework(storedCourseId); // 请求后端老师布置作业数据
+        const homeworkNO = localStorage.getItem('homeworkNO');
+        const response = await editSingleHomework(homeworkNO); // 请求后端老师布置作业数据
         if (response.code === 0) {
           currentData.value = response.value;
-          formData.name = currentData.value.name; // 初始化名称
-          formData.number = currentData.value.number; // 初始化应提交人数
+          changedData.value = response.value;
+          fileList.value[0] = response.value.file;
         } else {
           currentData.value = tableData.value[0];
         }
@@ -111,42 +106,23 @@ export default {
       }
     });
 
-    const handleUpdateCheck = (status) => {
-      formData.check = status;
-    };
 
     const previewAttachment = () => {
-      // 实现预览附件的逻辑
+      $router.push({ name: 'accessoryPreview' })
+      //TODO:传输预览URL
       console.log('预览附件');
-    };
-
-    const handleUpload = async (file) => {
-      const formData = new FormData();
-      const storedCourseId = localStorage.getItem('courseId');
-      formData.append('file', file.raw);
-      formData.append('cid', storedCourseId); // 传递 cid
-      try {
-        const response = await reqUploadHomeworkFile(formData);
-        if (response.code === 0) {
-          ElMessage.success("文件上传成功");
-        }
-      } catch (error) {
-        console.error('上传文件失败', error);
-        ElNotification({
-          message: '上传文件失败，请重试',
-          type: 'error',
-        });
-      }
     };
 
     const saveData = async () => {
       // 更新 tableData 中对应的数据
-      currentData.value.name = formData.name;
-      currentData.value.starttime = formData.starttime;
-      currentData.value.endtime = formData.endtime;
-      currentData.value.number = formData.number;
-      currentData.value.fullscore = formData.fullscore;
-      currentData.value.check = formData.check;
+      const formData = new FormData()
+      const homeworkNO = localStorage.getItem('homeworkNO');
+      formData.append('newStartTime', changedData.value.homeworkStartTime)
+      formData.append('newEndTime', changedData.value.homeworkEndTime)
+      formData.append('homeworkNO', homeworkNO)
+      formData.append('homeworkDesc', changedData.value.homeworkDescription)
+      formData.append('homeworkContent', changedData.value.content)
+      formData.append('file', fileList.value[0])
       try {
         const response = await updateHomeworkSetting(formData); // 连接后端更新文件
         if (response.code === 0) {
@@ -166,12 +142,11 @@ export default {
 
     return {
       tableData,
-      formData,
+      changedData: changedData,
       currentData,
-      handleUpdateCheck,
       previewAttachment,
-      handleUpload,
       saveData,
+      fileList,
     };
   },
 };

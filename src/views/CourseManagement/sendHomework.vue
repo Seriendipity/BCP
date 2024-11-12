@@ -42,14 +42,16 @@
 import { ref, onMounted, reactive } from 'vue';
 import { ElNotification } from 'element-plus';
 import { requireTeacherSendHomework } from '@/api/api';
+import { useRouter } from 'vue-router';
 
 const sendHomework = {
   setup() {
+    let $router = useRouter()
     const SendHomeworkData = reactive([
-      { sendStatus: false, name: '感知机1', starttime: '2024-05-02 10:00:00', endtime: '2024-05-02 10:00:00', number: 44, submitted: 3, judge: '未完成' },
-      { sendStatus: false, name: '感知机2', starttime: '2024-05-02 10:00:00', endtime: '2024-05-02 10:00:00', number: 45, submitted: 45, judge: '已完成' },
-      { sendStatus: false, name: '感知机3', starttime: '2024-05-02 10:00:00', endtime: '2024-05-02 10:00:00', number: 45, submitted: 44, judge: '已完成' },
-      { sendStatus: true, name: '感知机4', starttime: '2024-05-02 10:00:00', endtime: '2024-05-02 10:00:00', number: 45, submitted: 45, judge: '已完成' }
+      { homeworkNO: 'H001', sendStatus: false, name: '感知机1', starttime: '2024-05-02 10:00:00', endtime: '2024-05-02 10:00:00', number: 44, submitted: 3, judge: '未完成' },
+      { homeworkNO: 'H002', sendStatus: false, name: '感知机2', starttime: '2024-05-02 10:00:00', endtime: '2024-05-02 10:00:00', number: 45, submitted: 45, judge: '已完成' },
+      { homeworkNO: 'H003', sendStatus: false, name: '感知机3', starttime: '2024-05-02 10:00:00', endtime: '2024-05-02 10:00:00', number: 45, submitted: 44, judge: '已完成' },
+      { homeworkNO: 'H004', sendStatus: true, name: '感知机4', starttime: '2024-05-02 10:00:00', endtime: '2024-05-02 10:00:00', number: 45, submitted: 45, judge: '已完成' }
     ]);
     onMounted(async () => {
       try {
@@ -57,14 +59,14 @@ const sendHomework = {
         const response = await requireTeacherSendHomework(storedCourseId); // 请求后端老师布置作业数据
         if (response.code === 0) {
           // 将后端数据转为数组格式并赋值给 SendHomeworkData
-          SendHomeworkData.value = Object.values(response.data).map(student => ({
-            sendStatus: 1,
-            name: 1,
-            starttime: 1,
-            endtime: 1,
-            submitted: 1,
-            number: 1,
-            judge: 1,
+          SendHomeworkData.value = Object.values(response.data).map(homework => ({
+            sendStatus: homework.postStatus,
+            name: homework.homeworkDescription,
+            starttime: homework.homeworkStartTime,
+            endtime: homework.homeworkEndTime,
+            submitted: homework.submitNumbers,
+            number: homework.studentNumbers,
+            judge: homework.correctStatus,
           }));
         } else {
           ElNotification({
@@ -82,9 +84,10 @@ const sendHomework = {
 
     const search = ref('');
 
-    const handleEdit = (row) => {
+    const handleEdit = (index, row) => {
       // 跳转到编辑页面，传递该作业的详细信息
-      this.$router.push({ name: 'editHomework', params: { homework: row } });
+      localStorage.setItem('homeworkNO', row.homeworkNO)
+      $router.push({ name: 'editHomework' });
     };
     return {
       SendHomeworkData,

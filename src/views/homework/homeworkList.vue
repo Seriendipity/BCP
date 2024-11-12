@@ -103,13 +103,13 @@ const homeworkList = {
         if (response.code === 0) {
           // 将后端数据转为数组格式并赋值给 tableData
           homeworkListData.value = Object.values(response.data).map(homework => ({
-            name: 1,
-            starttime: 1,
-            endtime: 1,
-            submitted: 1,
-            number: 1,
-            grade: 1,
-            ifsubmit: 1,
+            name: homework.homeworkDescription,
+            starttime: homework.homeworkStartTime,
+            endtime: homework.homeworkEndTime,
+            submitted: homework.submitNumbers,
+            number: homework.studentNumbers,
+            grade: homework.grade,
+            ifsubmit: homework.status,
           }));
         } else {
           ElNotification({

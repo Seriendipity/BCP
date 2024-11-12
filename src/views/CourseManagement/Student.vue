@@ -14,11 +14,11 @@
 </template>
 
 <script setup>
-import { ref, onMounted, reactive } from 'vue';
+import { ref, onMounted } from 'vue';
 import { reqStudentData, requireStudentList } from '@/api/api';
 import { ElNotification } from 'element-plus';
 
-const studentListData = reactive([]); // 保存学生数据的数组
+const studentListData = ref([]); // 保存学生数据的数组
 
 onMounted(async () => {
   try {
@@ -73,7 +73,7 @@ const exportStudentList = async () => {
   border-radius: 20px;
   box-shadow: var(--el-box-shadow-light);
   background-color: #FFFFFF;
-  height: 580px;
+  height: 560px;
   border: groove;
 }
 

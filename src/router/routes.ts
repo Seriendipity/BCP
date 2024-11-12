@@ -227,6 +227,16 @@ export const constantRoute = [
           icon: 'Reading',
         }
       },
+      {
+        path: '/CourseManagement/accessoryPreview',
+        component: () => import('@/views/CourseManagement/accessoryPreview.vue'),
+        name: 'accessoryPreview',
+        meta: {
+          title: '附件预览',
+          hidden: false,
+          icon: 'Files',
+        }
+      }
     ]
   },
   {

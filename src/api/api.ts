@@ -30,10 +30,10 @@ enum API {
   UPDATENOTEFAVORITE = "/favorite/insertFavoriteOther",
   GET_FAVORITE = "/favorite/selectByStarNoteFromOthers",
   EXPORTSTUDENTLIST = "/StudentCourse/exportStudentList",
-  GET_STUDENTHOMEWORKLIST = "",
-  GET_TEACHERHOMEWORKLIST = "",
-  SET_HOMEWORK_FILE = "",
-  UPDATE_HOMEWORK_SETTINGS = "",
+  GET_STUDENTHOMEWORKLIST = "/homework/allCidHomework",
+  GET_TEACHERHOMEWORKLIST = "/homework/allCidHomework",
+  UPDATE_HOMEWORK_SETTINGS = "/homework/updateHomework",
+  EDIT_HOMEWORK = "",
 }
 //登录接口
 export const reqLogin = (data: any) => request.post<any, any>(API.LOGIN_URL, data);
@@ -71,6 +71,8 @@ export const requireStudentList = (courseId: any) => request.get<any, any>(API.E
 export const requireStudentHomework = (courseId: any) => request.get<any, any>(API.GET_STUDENTHOMEWORKLIST + `?cid=${courseId}`)
 //得到老师端作业布置列表
 export const requireTeacherSendHomework = (courseId: any) => request.get<any, any>(API.GET_TEACHERHOMEWORKLIST + `?cid=${courseId}`)
+//得到要编辑的作业
+export const editSingleHomework = (homeworkNO: any) => request.get<any, any>(API.EDIT_HOMEWORK + `?homeworkNO=${homeworkNO}`)
 // export const awardInfo = () => request.get<any, any>(API.AWARD_GET);
 
 
@@ -94,8 +96,6 @@ export const reqUpdateVisible = (data: any) => request.post<any, any>(API.UPDATE
 export const reqUpdateNote = (data: any) => request.post<any, any>(API.UPDATE_NOTEINFO, data);
 //删除笔记
 export const reqDeleteNote = (data: any) => request.post<any, any>(API.DELETE_NOTE, data);
-//老师上传作业附件
-export const reqUploadHomeworkFile = (data: any) => request.post<any, any>(API.SET_HOMEWORK_FILE, data);
 //更新作业信息
 export const updateHomeworkSetting = (data: any) => request.post<any, any>(API.UPDATE_HOMEWORK_SETTINGS, data);
 // export const awardPost = (data: any) => request.post<any>(API.AWARD_POST, data);
