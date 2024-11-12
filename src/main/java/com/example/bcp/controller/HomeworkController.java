@@ -48,10 +48,10 @@ public class HomeworkController {
     @PostMapping("/assignHomework")
     public Result assignHomework(@RequestBody Map<String, Object> requestData) {
         String homeworkNo= requestData.get("HomeworkNo").toString();
-//        LocalDateTime startTime = (LocalDateTime) requestData.get("startTime");
-//        LocalDateTime endTime = (LocalDateTime) requestData.get("endTime");
         String startTimeStr = requestData.get("startTime").toString();
         String endTimeStr = requestData.get("endTime").toString();
+
+        homeworkService.updateIsPeerReview(true,homeworkNo);
 
         // 解析时间字符串为 LocalDateTime
         DateTimeFormatter formatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
@@ -105,11 +105,19 @@ public class HomeworkController {
             }
         }
 
-        // 打印分配结果
-        for (int i = 0; i < studentAssignments.size(); i++) {
-            System.out.println("Student " + studentHomeworks.get(i).getStudentNo() + " is assigned the following homework:");
-            for (StudentHomework sh : studentAssignments.get(i)) {
-                System.out.println("HomeworkNo: " + sh.getHomeworkNo() + ", StudentNo: " + sh.getStudentNo());
+        // 随机选择学生作业
+        Random random = new Random();
+        Set<String> selectedStudentNo = new HashSet<>();
+        int numToSelect = (int) Math.ceil(studentHomeworks.size() * 0.15); // 选择15%
+
+        while (selectedStudentNo.size() < numToSelect) {
+            int index = random.nextInt(studentHomeworks.size());
+            StudentHomework selected = studentHomeworks.get(index);
+            String studentNo = selected.getStudentNo();
+
+            if (!selectedStudentNo.contains(studentNo)) {
+                selectedStudentNo.add(studentNo);
+                studentHomeworkService.updateIsTeacherGrade(true, studentNo, selected.getHomeworkNo());
             }
         }
         return Result.success();

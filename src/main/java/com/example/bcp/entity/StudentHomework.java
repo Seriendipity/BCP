@@ -31,12 +31,23 @@ public class StudentHomework {
     @Column(name = "Comment",columnDefinition = "Text")
     private String Comment;
 
+    @Column(name = "isTeacherGrade")
+    private boolean isTeacherGrade;
+
     public String getComment() {
         return Comment;
     }
 
     public void setComment(String comment) {
         Comment = comment;
+    }
+
+    public boolean getIsTeacherGrade() {
+        return isTeacherGrade;
+    }
+
+    public void setIsTeacherGrade(boolean IsteacherGrade) {
+        isTeacherGrade = IsteacherGrade;
     }
 
     public String getStudentNo() {

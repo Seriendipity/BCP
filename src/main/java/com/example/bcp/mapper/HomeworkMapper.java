@@ -31,6 +31,9 @@ public interface HomeworkMapper {
     @Update("Update Homework Set StartTime = #{StartTime} Where HomeworkNo = #{HomeworkNo}")
     void updateHomeworkStartTime(LocalDateTime StartTime,String HomeworkNo);
 
+    @Update("Update Homework Set isPeerReview= #{isPeerReview} Where HomeworkNo = #{HomeworkNo}")
+    void updateIsPeerReview(boolean isPeerReview , String HomeworkNo);
+
     @Update("Update Homework Set HomeworkPath = #{HomeworkPath} Where HomeworkNo = #{HomeworkNo}")
     void updateHomeworkPath(String HomeworkPath,String HomeworkNo);
 

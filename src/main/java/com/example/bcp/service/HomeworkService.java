@@ -26,9 +26,9 @@ public class HomeworkService {
     }
     public void insertHomework(String HomeworkNo, String Cid, String HomeworkDescription,
                                LocalDateTime StartTime , LocalDateTime EndTime , int HomeworkGrade,
-                                String homeworkInfo){
+                               String homeworkInfo){
         homeworkMapper.insertHomework(HomeworkNo,Cid,HomeworkDescription,
-                                StartTime,EndTime,HomeworkGrade,homeworkInfo);
+                StartTime,EndTime,HomeworkGrade,homeworkInfo);
     }
 
     public void deleteHomework(String HomeworkNo){
@@ -57,5 +57,9 @@ public class HomeworkService {
 
     public void updateHomeworkInfo(String homeworkInfo,String HomeworkNo){
         homeworkMapper.updateHomeworkInfo(homeworkInfo,HomeworkNo);
+    }
+
+    public void updateIsPeerReview(boolean isPeerReview , String HomeworkNo){
+        homeworkMapper.updateIsPeerReview(isPeerReview,HomeworkNo);
     }
 }

@@ -18,6 +18,9 @@ public interface StudentHomeworkMapper {
     @Select("Select * from StudentHomework Where StudentNo = #{StudentNo}")
     List<StudentHomework> selectByStudentNo(String StudentNo);
 
+    @Select("Select * from StudentHomework Where isTeacherGrade = true and HomeworkNo = #{HomeworkNo}")
+    List<StudentHomework> selectByIsTeacherAndHomeworkNo(String HomeworkNo);
+
     @Select("Select * from StudentHomework Where HomeworkNo = #{HomeworkNo}")
     List<StudentHomework> selectByHomeworkNo(String HomeworkNo);
 
@@ -37,4 +40,8 @@ public interface StudentHomeworkMapper {
 
     @Update("Update StudentHomework Set SubmitGrade = #{SubmitGrade} ,Comment = #{Comment} Where StudentNo = #{StudentNo} and HomeworkNo = #{HomeworkNo}")
     void updateStudentHomeworkSubmitGrade(int SubmitGrade,String StudentNo,String HomeworkNo,String Comment);
+
+    @Update("Update StudentHomework Set isTeacherGrade= #{isTeacherGrade} Where StudentNo = #{StudentNo} and HomeworkNo = #{HomeworkNo}")
+    void updateStudentHomeworkIsTeacherGrade(boolean isTeacherGrade, String StudentNo,String HomeworkNo);
+
 }

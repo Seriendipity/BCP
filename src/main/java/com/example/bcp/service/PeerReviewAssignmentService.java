@@ -22,13 +22,30 @@ public class PeerReviewAssignmentService {
         peerReviewAssignmentMapper.updateReviewStatus(reviewStatus, revieweeNo, reviewerNo, homeworkNo);
     }
 
+    public void updateGradeAndComment(int grade, String comment, String revieweeNo,String reviewerNo, String homeworkNo){
+        peerReviewAssignmentMapper.updateGradeAndComment(grade,comment,revieweeNo,reviewerNo,homeworkNo);
+    }
+
     public PeerReviewAssignment selectByPeerAndHomework(String revieweeNo, String reviewerNo, String homeworkNo) {
         return peerReviewAssignmentMapper.selectByPeerAndHomework(revieweeNo, reviewerNo, homeworkNo);
     }
 
-    public PeerReviewAssignment selectByRevieweeNo(String revieweeNo) {
+    public List<PeerReviewAssignment> selectByRevieweeNo(String revieweeNo) {
         return peerReviewAssignmentMapper.selectByRevieweeNo(revieweeNo);
     }
+
+    public List<PeerReviewAssignment> selectByReviewerNo(String reviewerNo) {
+        return peerReviewAssignmentMapper.selectByReviewerNo(reviewerNo);
+    }
+
+    public List<PeerReviewAssignment> selectByHomeworkNo(String homeworkNo) {
+        return peerReviewAssignmentMapper.selectByHomeworkNo(homeworkNo);
+    }
+
+    public List<PeerReviewAssignment> selectByRevieweeAndHomework(String revieweeNo,String homeworkNo) {
+        return peerReviewAssignmentMapper.selectByRevieweeAndHomework(revieweeNo,homeworkNo);
+    }
+
 
     public List<PeerReviewAssignment> selectAllAssignment() {
         return peerReviewAssignmentMapper.selectAllAssignment();

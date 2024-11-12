@@ -46,4 +46,12 @@ public class StudentHomeworkService {
     public void updateStudentHomeworkSubmitGrade(int SubmitGrade,String StudentNo,String HomeworkNo,String Comment){
         studentHomeworkMapper.updateStudentHomeworkSubmitGrade(SubmitGrade,StudentNo,HomeworkNo ,Comment);
     }
+
+    public List<StudentHomework> selectByIsTeacherAndHomeworkNo(String HomeworkNo){
+        return studentHomeworkMapper.selectByIsTeacherAndHomeworkNo(HomeworkNo);
+    }
+
+    public void updateIsTeacherGrade(boolean isTeacherGrade,String StudentNo,String HomeworkNo){
+        studentHomeworkMapper.updateStudentHomeworkIsTeacherGrade(isTeacherGrade,StudentNo,HomeworkNo);
+    }
 }

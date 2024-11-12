@@ -163,6 +163,7 @@ CREATE TABLE PeerReviewAssignment(
     ReviewerNo   varchar(10),                   -- 评分者的学号
     HomeworkNo   varchar(10),                   -- 作业编号
     ReviewStatus boolean DEFAULT false,         -- 评审状态:未/已评审
+    Grade int,                                  --分数
     Comment Text,
     StartTime datetime,
     EndTime datetime,
@@ -199,7 +200,8 @@ alter table comment add column imgUrl VARCHAR(100);
 alter table comment add column mentionedUser TEXT;
 
 alter table studenthomework add column Comment Text;
-alter table StudentHomework add column isTeacherGrade boolean DEFAULT 0; -- 是否有教师评分
+alter table studenthomework add column isTeacherGrade boolean DEFAULT false; -- 是否互评
+alter table Homework add column isPeerReview boolean DEFAULT false; -- 是否互评
 
 alter table Teacher add column Department varchar(20);
 

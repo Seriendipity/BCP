@@ -38,6 +38,9 @@ public class Homework {
     @Column(name = "homeworkInfo" , columnDefinition = "text")
     private String homeworkInfo;
 
+    @Column(name = "isPeerView")
+    private Boolean isPeerView;
+
     public String getHomeworkInfo() {
         return homeworkInfo;
     }
