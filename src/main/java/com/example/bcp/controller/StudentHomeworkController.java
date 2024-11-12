@@ -14,6 +14,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @RestController
 @RequestMapping("studentHomework")
@@ -38,8 +39,12 @@ public class StudentHomeworkController {
                          @RequestParam("homeworkNo") String homeworkNo,
                          @RequestParam("submitDescription") String submitDescription,
                          @RequestParam("submitPath") String submitPath,
-                         @RequestParam("submitTime") LocalDateTime submitTime,
+                         @RequestParam("submitTime") String submitTime,
                          @RequestParam("comment") String comment) {
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        LocalDateTime newSubmitTime = LocalDateTime.parse(submitTime, formatter);
+
         if (file.isEmpty()) {
             return Result.error("上传文件不能为空");
         }
@@ -57,7 +62,7 @@ public class StudentHomeworkController {
             //public void insertStudentHomework(String StudentNo, String HomeworkNo, String SubmitDescription,
             //      String SubmitPath , LocalDateTime SubmitTime,String Comment)
             String url = "http://" + ip + ":" + port + "/homework/download/" + savedFilePath;
-            studentHomeworkService.insertStudentHomework(studentNo, homeworkNo, submitDescription, submitPath, submitTime, comment);
+            studentHomeworkService.insertStudentHomework(studentNo, homeworkNo, submitDescription, submitPath, newSubmitTime, comment);
 
             return Result.success(url);  //返回文件的链接
         } catch (IOException e) {

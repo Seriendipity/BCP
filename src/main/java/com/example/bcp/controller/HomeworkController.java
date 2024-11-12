@@ -24,12 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.net.URLEncoder;
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
@@ -47,6 +42,79 @@ public class HomeworkController {
     @Autowired
     private StudentHomeworkService studentHomeworkService;
 
+    @Autowired
+    PeerReviewAssignmentService peerReviewAssignmentService;
+
+    @PostMapping("/assignHomework")
+    public Result assignHomework(@RequestBody Map<String, Object> requestData) {
+        String homeworkNo= requestData.get("HomeworkNo").toString();
+//        LocalDateTime startTime = (LocalDateTime) requestData.get("startTime");
+//        LocalDateTime endTime = (LocalDateTime) requestData.get("endTime");
+        String startTimeStr = requestData.get("startTime").toString();
+        String endTimeStr = requestData.get("endTime").toString();
+
+        // 解析时间字符串为 LocalDateTime
+        DateTimeFormatter formatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
+        LocalDateTime startTime = LocalDateTime.parse(startTimeStr, formatter);
+        LocalDateTime endTime = LocalDateTime.parse(endTimeStr, formatter);
+
+        List<StudentHomework> studentHomeworks = studentHomeworkService.selectByHomeworkNo(homeworkNo);
+        int studentCount = studentHomeworks.size();
+        int assignmentsPerStudent = Math.min(2, studentCount - 1); // 每个学生最多分配3份作业
+
+        // 复制作业，确保每个学生有2份作业进行评分
+        List<StudentHomework> allAssignments = new ArrayList<>();
+        for (StudentHomework sh : studentHomeworks) {
+            for (int i = 0; i < 2; i++) { // 每个作业复制2次
+                allAssignments.add(sh);
+            }
+        }
+
+        Collections.shuffle(allAssignments); // 随机打乱作业
+
+        // 存储每个学生分配到的作业
+        List<List<StudentHomework>> studentAssignments = new ArrayList<>();
+        for (int i = 0; i < studentCount; i++) {
+            studentAssignments.add(new ArrayList<>());
+        }
+
+        // 分配作业，确保每个学生不分配到自己的作业且分配的作业没有重复的学生
+        for (int i = 0; i < studentCount; i++) {
+            StudentHomework currentStudentHomework = studentHomeworks.get(i);
+            String currentStudentNo = currentStudentHomework.getStudentNo();
+
+            int assignedCount = 0;
+            Set<String> assignedStudentNos = new HashSet<>(); // 记录已分配的学生编号，防止重复
+            assignedStudentNos.add(currentStudentNo); // 确保不分配到自己的作业
+
+            for (StudentHomework assignedHomework : allAssignments) {
+                String assignedStudentNo = assignedHomework.getStudentNo();
+
+                // 确保分配的作业不是当前学生的作业，且没有重复的学生
+                if (!assignedStudentNos.contains(assignedStudentNo)) {
+                    studentAssignments.get(i).add(assignedHomework);
+                    assignedStudentNos.add(assignedStudentNo);
+                    assignedCount++;
+                    peerReviewAssignmentService.insertPeerReviewAssignment(assignedStudentNo,currentStudentNo,homeworkNo,startTime,endTime);
+                }
+
+                // 如果已分配的作业达到数量要求，退出循环
+                if (assignedCount >= assignmentsPerStudent) {
+                    break;
+                }
+            }
+        }
+
+        // 打印分配结果
+        for (int i = 0; i < studentAssignments.size(); i++) {
+            System.out.println("Student " + studentHomeworks.get(i).getStudentNo() + " is assigned the following homework:");
+            for (StudentHomework sh : studentAssignments.get(i)) {
+                System.out.println("HomeworkNo: " + sh.getHomeworkNo() + ", StudentNo: " + sh.getStudentNo());
+            }
+        }
+        return Result.success();
+    }
+
 
     //返回某cid对应所有homework
     @GetMapping("/allCidHomework")
@@ -60,13 +128,13 @@ public class HomeworkController {
                 Map<String,Object> hw = new HashMap<>();
                 hw.put("homeworkNO",homework.getHomeworkNo());
                 hw.put("homeworkDescription",homework.getHomeworkDescription());
-                hw.put("homeworkStartTime",homework.getStartTime());
+                hw.put("homeworkStratTime",homework.getStartTime());
                 hw.put("homeworkEndTime",homework.getEndTime());
 
                 int studentNumbers = studentCourseService.selectByCid(cid).size();
                 int submitNumbers = studentHomeworkService.selectByHomeworkNo(homework.getHomeworkNo()).size();
-                hw.put("submitNumbers",submitNumbers);
-                hw.put("studentNumbers",studentNumbers);
+                String submitNumber = submitNumbers+"/"+studentNumbers;
+                hw.put("submitNumber",submitNumber);
 
                 StudentHomework sh = studentHomeworkService.selectByStudentNoAndHomeworkNo(userNo, homework.getHomeworkNo());
                 if(sh == null){
@@ -111,25 +179,25 @@ public class HomeworkController {
                 }else{
                     hw.put("correctStatus",false);
                 }
-                responseData.put("homework"+index,hw);
+                responseData.put("homework" + index, hw);
                 index++;
             }
             return Result.success(responseData);
         }
-       return Result.success();
+        return Result.success();
     }
 
     @GetMapping("/allStudentHomework")
     public Result selectByHomeworkNO(@RequestParam String homeworkNo) {
 //        String username = request.getAttribute("username").toString();
         List<StudentHomework> studentHomeworks = studentHomeworkMapper.selectByHomeworkNo(homeworkNo);
-        Map<String,Object> responseData = new HashMap<>();
+        Map<String, Object> responseData = new HashMap<>();
         int index = 1;
-        for(StudentHomework studentHomework:studentHomeworks){
-            Map<String,Object> sh = new HashMap<>();
-            sh.put("StudentNo",studentHomework.getStudentNo());
-            sh.put("StudentDescription()",studentHomework.getSubmitDescription());
-            sh.put("StudentHomeworkSubmitTime",studentHomework.getSubmitTime());
+        for (StudentHomework studentHomework : studentHomeworks) {
+            Map<String, Object> sh = new HashMap<>();
+            sh.put("StudentNo", studentHomework.getStudentNo());
+            sh.put("StudentDescription()", studentHomework.getSubmitDescription());
+            sh.put("StudentHomeworkSubmitTime", studentHomework.getSubmitTime());
         }
 
         return Result.success(responseData);
@@ -144,7 +212,7 @@ public class HomeworkController {
         LocalDateTime newStartTime = LocalDateTime.parse(StringNewStartTime,formatter);
         int fixedPoint = Integer.parseInt((String)requestData.get("scores"));
         String homeworkNo = requestData.get("homeworkNo").toString();
-        String homeworkDesc= requestData.get("homeworkDesc").toString();
+        String homeworkDesc = requestData.get("homeworkDesc").toString();
         String homeworkPath = requestData.get("path").toString();
         String homeworkInfo = requestData.get("homeworkInfo").toString();
         homeworkService.updateHomeworkEndTime(newEndTime,homeworkNo);
@@ -186,10 +254,16 @@ public class HomeworkController {
     public Result upload(@RequestParam("file") MultipartFile file,
                          @RequestParam("Cid") String Cid,
                          @RequestParam("homeworkDescription") String homeworkDescription,
-                         @RequestParam("startTime") LocalDateTime startTime,
-                         @RequestParam("endTime") LocalDateTime endTime,
+                         @RequestParam("startTime") String startTime,
+                         @RequestParam("endTime") String endTime,
                          @RequestParam("homeworkGrade") int homeworkGrade,
                          @RequestParam("homeworkInfo") String homeworkInfo) {
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        LocalDateTime newStartTime = LocalDateTime.parse(startTime, formatter);
+        LocalDateTime newEndTime = LocalDateTime.parse(endTime, formatter);
+
+
         if (file.isEmpty()) {
             return Result.error("上传文件不能为空");
         }
@@ -208,7 +282,7 @@ public class HomeworkController {
             // public void insertHomework(String HomeworkNo, String Cid, String HomeworkDescription,
             //        LocalDateTime StartTime , LocalDateTime EndTime , int HomeworkGrade)
             String url = "http://" + ip + ":" + port + "/homework/download/" + savedFilePath;
-            homeworkService.insertHomework(newHomeworkNo,Cid,homeworkDescription,startTime,endTime,homeworkGrade,homeworkInfo);
+            homeworkService.insertHomework(newHomeworkNo, Cid, homeworkDescription, newStartTime, newEndTime, homeworkGrade,homeworkInfo);
 
             return Result.success(url);  //返回文件的链接
         } catch (IOException e) {
