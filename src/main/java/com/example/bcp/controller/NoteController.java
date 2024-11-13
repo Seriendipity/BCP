@@ -101,10 +101,10 @@ public class NoteController {
             System.out.println(noteInformation);
             // 保存文件，获取文件路径
             String filePath = uploadFile(notePath);  // 自定义文件保存方法
-
+            String url = "http://" + ip + ":" + port + "/note/download/" + filePath;
             // 更新笔记信息
             noteService.updateNoteInformation(noteInformation, noteNo);
-            noteService.updateNotePath(filePath, noteNo);  // 保存文件路径
+            noteService.updateNotePath(url, noteNo);  // 保存文件路径
 
             return Result.success("修改笔记信息成功");
         } catch (Exception e) {
