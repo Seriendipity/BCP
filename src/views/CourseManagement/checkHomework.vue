@@ -26,8 +26,8 @@
 <script setup>
 import { ref, onMounted, reactive } from 'vue';
 import { useRouter } from 'vue-router';
-import { reqUserInfo, reqCourseList, reqCourseIntro, reqhomeworkAll, updatehomeworkState } from '@/api/api';
-import { Elhomework } from 'element-plus';
+import { reqUserInfo, reqCourseList, reqCourseIntro,requireTeacherSendHomework} from '@/api/api';
+import { ElNotification } from 'element-plus';
 import { requireAvatar } from '../../api/api';
 
 const courses = ref([]);
@@ -74,12 +74,13 @@ const mockDataUser = {
 // 获取通知数据
 const fetchhomeworks = async () => {
   try {
-    const response = await reqhomeworkAll(); // 获取通知数据
+    const courseId = localStorage.getItem('courseId')
+    const response = await requireTeacherSendHomework(courseId); // 获取通知数据
     homeworks.value = response.data || []; // 更新通知数据
   } catch (err) {
     // 捕获错误并使用模拟数据
     homeworks.value = mockDataNotify;
-    Elhomework({
+    ElNotification({
       message: '获取通知失败',
       type: 'error',
     });
@@ -92,26 +93,26 @@ onMounted(() => {
 
 // 查看通知详情
 const viewhomework = async (homework) => {
-  currenthomework.value = homework; // 设置当前通知
-  dialogVisible.value = true; // 打开弹出框
+//   currenthomework.value = homework; // 设置当前通知
+//   dialogVisible.value = true; // 打开弹出框
 
-  if (homework.homeworkState === '未读') {
-    // 将状态更新为已读
-    homework.homeworkState = '已读';
+//   if (homework.homeworkState === '未读') {
+//     // 将状态更新为已读
+//     homework.homeworkState = '已读';
 
-    // 调用后端API更新状态
-    try {
-      await updatehomeworkState({
-        homeworkId: homework.homeworkId, // 传递通知ID
-      });
-    } catch (error) {
-      console.error('更新通知状态失败:', error);
-      Elhomework({
-        type: 'error',
-        message: '更新通知状态失败，请重试。',
-      });
-    }
-  }
+//     // 调用后端API更新状态
+//     try {
+//       await updatehomeworkState({
+//         homeworkId: homework.homeworkId, // 传递通知ID
+//       });
+//     } catch (error) {
+//       console.error('更新通知状态失败:', error);
+//       ElNotification({
+//         type: 'error',
+//         message: '更新通知状态失败，请重试。',
+//       });
+//     }
+//   }
 };
 
 
@@ -133,7 +134,7 @@ onMounted(async () => {
     localStorage.setItem('userId', userInfo.userId)
   } catch (error) {
     userInfo.value = mockDataUser;
-    Elhomework({
+    ElNotification({
       type: 'error',
       message: '获取信息失败',
     });
@@ -161,7 +162,7 @@ const goToCourseInfo = async (courseId) => {
       });
     }
   } catch (error) {
-    Elhomework({
+    ElNotification({
       type: 'error',
       message: '获取课程信息失败',
     });
