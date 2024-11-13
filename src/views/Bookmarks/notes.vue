@@ -138,6 +138,12 @@
       <el-button type="primary" @click="uploadNewFile">确 定</el-button>
     </span>
   </el-dialog>
+  <el-dialog v-model="previewVisible" title="预览" width="800px">
+    <iframe class="calendar" :src="noteSrc" width="100%" height="400px" style="border:none;"></iframe>
+    <span slot="footer" class="dialog-footer">
+      <el-button @click="previewVisible = false">关闭</el-button>
+    </span>
+  </el-dialog>
 </template>
 
 <script lang="js" setup>
@@ -147,9 +153,19 @@ import { requireAvatar, reqUserInfo, requireMyNote, reqAddNote, reqUpdateVisible
 import { ElNotification, ElMessage } from 'element-plus';
 import { Avatar } from '@element-plus/icons-vue';
 
+const props = defineProps({
+  previewSrc: {
+    type: String,
+    required: false,
+    default: () => 'https://book.yunzhan365.com/tnhkz/uvaj/mobile/index.html'
+  }
+});
+const noteSrc = ref(props.previewSrc)
+
 const userInfo = ref([]);
 const router = useRouter();
 const dialogVisible = ref(false);
+const previewVisible = ref(false);
 const dialogUpdateVisible = ref(false);
 const currentNotification = reactive({});
 const notifications = reactive([]);
@@ -222,9 +238,8 @@ const uploadFile = async () => {
 };
 
 const previewNote = (note) => {//TODO:跳转到一个专门的预览界面
-  // 预览逻辑，可以使用 window.open 或者其他方式展示文件
-  // alert(`预览: $ note.noteInfo}`);
-  ElMessageBox.alert(`预览文件: $ note.noteInfo}`, "预览", { confirmButtonText: "确定" });
+  noteSrc.value = note.notePath;
+  previewVisible.value = true;
 };
 
 

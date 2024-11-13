@@ -99,18 +99,26 @@
       </el-container>
     </el-main>
   </el-container>
+
+  <el-dialog v-model="previewVisible" title="预览" width="800px">
+    <iframe class="calendar" :src="noteSrc" width="100%" height="400px" style="border:none;"></iframe>
+    <span slot="footer" class="dialog-footer">
+      <el-button @click="previewVisible = false">关闭</el-button>
+    </span>
+  </el-dialog>
 </template>
 
 <script setup>
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
-import { reqFavoriteStatus, requireAllNote, reqUpdateLike, reqUserInfo ,requireAvatar} from '@/api/api';
+import { reqFavoriteStatus, requireAllNote, reqUpdateLike, reqUserInfo, requireAvatar } from '@/api/api';
 import { ElNotification } from 'element-plus';
 
 const userInfo = ref([]);
 const favorite = ref([]);
 const router = useRouter();
 const dialogVisible = ref(false);
+const previewVisible = ref(false);
 const mockData = {
   userName: '张三',
   userId: '20220001',
@@ -119,6 +127,15 @@ const mockData = {
   avatarUrl: 'src/assets/images/example.jpg'
 };
 
+const props = defineProps({
+  previewSrc: {
+    type: String,
+    required: false,
+    default: () => 'https://book.yunzhan365.com/tnhkz/uvaj/mobile/index.html'
+  }
+});
+const noteSrc = ref(props.previewSrc)
+
 const notes = ref([
   { noteInfo: '数据结构第一次课程笔记', uploadDate: '2024年10月5日', username: 'jty', favorite: true },
   { noteInfo: '算法第3次作业答案', uploadDate: '2023年9月5日', username: 'mhb', favorite: false },
@@ -126,9 +143,7 @@ const notes = ref([
 ]);
 
 const previewNote = (note) => {//TODO:跳转到一个专门的预览界面
-  // 预览逻辑，可以使用 window.open 或者其他方式展示文件
-  // alert(`预览: ${note.noteInfo}`);
-  ElMessageBox.alert(`预览文件: ${note.noteInfo}`, "预览", { confirmButtonText: "确定" });
+  previewVisible.value = true;
 };
 
 // 获取用户信息和课程列表
@@ -144,10 +159,10 @@ onMounted(async () => {
     userInfo.value.avatarUrl = response.data;
     // 遍历 notes 并赋值 favorite 属性
     for (let i = 0; i < notes.value.length; i++) {
-  if (favoriteArray[i]) {
-    notes.value[i].favorite = favoriteArray[i].favoriteAuthority;
-  }
-}
+      if (favoriteArray[i]) {
+        notes.value[i].favorite = favoriteArray[i].favoriteAuthority;
+      }
+    }
   } catch (error) {
     console.log(error)
     userInfo.value = mockData;
@@ -164,7 +179,7 @@ const updateLikeStatus = async (note) => {
   try {
     await reqUpdateLike({
       favoriteInformationNo: note.noteNo,
-      favoriteTitle:note.noteInfo,
+      favoriteTitle: note.noteInfo,
     });
     ElNotification({
       type: 'success',
