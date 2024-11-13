@@ -64,18 +64,20 @@
 
         <el-main height="600px">
           <el-row>
-          <el-col :span="3">
-            <el-button type="primary" style="text-align: left; font-weight: bold;font-size: large;">我的笔记</el-button>
-          </el-col>
-          <el-col :span="21">
-            <router-link to="/othersnotes" style="text-decoration: none;">
-              <el-button type="primary" style="text-align: left; font-weight: bold;font-size: large;" plain>浏览笔记</el-button>
-            </router-link>
-          </el-col>
-          <div style="margin-left: 87%;">
-            <el-button type="primary" round @click="dialogVisible = true" style="font-size: large; font-weight: bold;">新建笔记</el-button>
-          </div>
-        </el-row>
+            <el-col :span="3">
+              <el-button type="primary" style="text-align: left; font-weight: bold;font-size: large;">我的笔记</el-button>
+            </el-col>
+            <el-col :span="21">
+              <router-link to="/othersnotes" style="text-decoration: none;">
+                <el-button type="primary" style="text-align: left; font-weight: bold;font-size: large;"
+                  plain>浏览笔记</el-button>
+              </router-link>
+            </el-col>
+            <div style="margin-left: 87%;">
+              <el-button type="primary" round @click="dialogVisible = true"
+                style="font-size: large; font-weight: bold;">新建笔记</el-button>
+            </div>
+          </el-row>
           <div class="grid-content bg-white" style="height: 75px;" v-for="note in notes" :key="note.noteNo">
             <el-row :gutter="20">
               <el-col :span="13">
@@ -105,52 +107,52 @@
     </el-main>
   </el-container>
 
-  <el-dialog v-model="dialogVisible" title="上传文件">
-      <el-form :model="form">
-        <el-form-item label="主题" prop="title">
-          <el-input v-model="newNoteInfo" placeholder="请输入主题"></el-input>
-        </el-form-item>
-        <div class="file-input-container">
-          <input type="file" id="fileInput" @change="handleChange" />
-        </div>
-        <div class="el-upload__tip" slot="tip" type="success">支持扩展名：.pdf/.doc/.docx</div>
-      </el-form>
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="uploadFile">确 定</el-button>
-      </span>
-    </el-dialog>
+  <el-dialog v-model="dialogVisible" title="上传笔记">
+    <el-form :model="form">
+      <el-form-item label="主题" prop="title">
+        <el-input v-model="newNoteInfo" placeholder="请输入主题"></el-input>
+      </el-form-item>
+      <div class="file-input-container">
+        <input type="file" id="fileInput" @change="handleChange" />
+      </div>
+      <div class="el-upload__tip" slot="tip" type="success">支持扩展名：.pdf/.doc/.docx</div>
+    </el-form>
+    <span slot="footer" class="dialog-footer">
+      <el-button @click="dialogVisible = false">取 消</el-button>
+      <el-button type="primary" @click="uploadFile">确 定</el-button>
+    </span>
+  </el-dialog>
 
-    <el-dialog v-model="dialogUpdateVisible" title="更新文件">
-      <el-form :model="form">
-        <el-form-item label="主题" prop="title">
-          <el-input v-model="nowNoteInfo" placeholder="请输入主题"></el-input>
-        </el-form-item>
-        <div class="file-input-container">
-          <input type="file" id="fileInput" @change="handleChange" />
-        </div>
-        <div class="el-upload__tip" slot="tip" type="success">支持扩展名：.pdf/.doc/.docx</div>
-      </el-form>
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogUpdateVisible = false">取 消</el-button>
-        <el-button type="primary" @click="uploadNewFile">确 定</el-button>
-      </span>
-    </el-dialog>
+  <el-dialog v-model="dialogUpdateVisible" title="更新笔记">
+    <el-form :model="form">
+      <el-form-item label="主题" prop="title">
+        <el-input v-model="nowNoteInfo" placeholder="请输入主题"></el-input>
+      </el-form-item>
+      <div class="file-input-container">
+        <input type="file" id="fileInput" @change="handleChange" />
+      </div>
+      <div class="el-upload__tip" slot="tip" type="success">支持扩展名：.pdf/.doc/.docx</div>
+    </el-form>
+    <span slot="footer" class="dialog-footer">
+      <el-button @click="dialogUpdateVisible = false">取 消</el-button>
+      <el-button type="primary" @click="uploadNewFile">确 定</el-button>
+    </span>
+  </el-dialog>
 </template>
 
 <script lang="js" setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, reactive } from 'vue';
 import { useRouter } from 'vue-router';
 import { requireAvatar, reqUserInfo, requireMyNote, reqAddNote, reqUpdateVisible, reqUpdateNote } from '@/api/api';
-import { ElNotification,ElMessage } from 'element-plus';
+import { ElNotification, ElMessage } from 'element-plus';
 import { Avatar } from '@element-plus/icons-vue';
 
 const userInfo = ref([]);
 const router = useRouter();
 const dialogVisible = ref(false);
 const dialogUpdateVisible = ref(false);
-const currentNotification = ref({});
-const notifications = ref([]);
+const currentNotification = reactive({});
+const notifications = reactive([]);
 const selectedFile = ref(null); // 存储选中的文件
 const selectNoteNo = ref();
 const newNoteInfo = ref('');
@@ -215,7 +217,7 @@ const uploadFile = async () => {
     });
   }
   newNoteInfo.value = '';
-  selectedFile.value='';
+  selectedFile.value = '';
   dialogVisible.value = false;
 };
 
@@ -246,7 +248,6 @@ const uploadNewFile = async (note) => {
   }
   const formData = new FormData();
   const userId = localStorage.getItem('userId');
-  console.log(selectedFile.value)
   formData.append('notePath', selectedFile.value); // 传递文件
   formData.append('noteInfo', nowNoteInfo.value);
   formData.append('noteNo', selectNoteNo.value);
@@ -264,8 +265,8 @@ const uploadNewFile = async (note) => {
     });
   }
   nowNoteInfo.value = '';
-  selectNoteNo.value='';
-  selectedFile.value='';
+  selectNoteNo.value = '';
+  selectedFile.value = '';
   dialogUpdateVisible.value = false;
 };
 

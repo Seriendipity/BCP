@@ -17,15 +17,14 @@
                 </el-col>
               </el-row>
             </div>
-          
-        </el-aside>
-        <el-main>Main</el-main>
-        <el-aside width="200px">Aside</el-aside>
-    </el-container>
+    </el-aside>
+    <el-main>Main</el-main>
+    <el-aside width="200px">Aside</el-aside>
+  </el-container>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, reactive } from 'vue';
 import { useRouter } from 'vue-router';
 import { reqUserInfo, reqCourseList, reqCourseIntro, reqhomeworkAll, updatehomeworkState } from '@/api/api';
 import { Elhomework } from 'element-plus';
