@@ -17,6 +17,9 @@ public class HomeworkService {
         return homeworkMapper.selectAllHomework();
     }
 
+    public Homework selectByHomeworkNo(String HomeworkNo){
+        return homeworkMapper.selectByHomeworkNo(HomeworkNo);
+    }
     public List<Homework> selectByCid(String Cid){
         return homeworkMapper.selectByCid(Cid);
     }
@@ -26,9 +29,9 @@ public class HomeworkService {
     }
     public void insertHomework(String HomeworkNo, String Cid, String HomeworkDescription,
                                LocalDateTime StartTime , LocalDateTime EndTime , int HomeworkGrade,
-                               String homeworkInfo){
+                               String homeworkInfo, String HomeworkPath){
         homeworkMapper.insertHomework(HomeworkNo,Cid,HomeworkDescription,
-                StartTime,EndTime,HomeworkGrade,homeworkInfo);
+                StartTime,EndTime,HomeworkGrade,homeworkInfo,HomeworkPath);
     }
 
     public void deleteHomework(String HomeworkNo){

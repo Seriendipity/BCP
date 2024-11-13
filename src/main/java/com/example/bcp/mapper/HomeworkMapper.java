@@ -11,16 +11,19 @@ public interface HomeworkMapper {
     @Select("Select * from Homework")
     List<Homework> selectAllHomework();
 
+    @Select("Select * from Homework Where HomeworkNo = #{HomeworkNo}")
+    Homework selectByHomeworkNo(String HomeworkNo);
+
     @Select("Select * from Homework Where Cid = #{Cid}")
     List<Homework> selectByCid(String Cid);
 
     @Select("Select * from Homework Where Cid = #{Cid} and isVisible = 1")
     List<Homework> selectByCidAndVisible(String Cid);
-    @Insert("Insert into Homework(HomeworkNo,Cid,HomeworkDescription,StartTime,EndTime,HomeworkGrade,homeworkInfo)" +
-            " values(#{HomeworkNo},#{Cid},#{HomeworkDescription},#{StartTime},#{EndTime},#{HomeworkGrade},#{homeworkInfo})")
+    @Insert("Insert into Homework(HomeworkNo,Cid,HomeworkDescription,StartTime,EndTime,HomeworkGrade,homeworkInfo,HomeworkPath)" +
+            " values(#{HomeworkNo},#{Cid},#{HomeworkDescription},#{StartTime},#{EndTime},#{HomeworkGrade},#{homeworkInfo},#{HomeworkPath})")
     void insertHomework(String HomeworkNo, String Cid, String HomeworkDescription,
                         LocalDateTime StartTime , LocalDateTime EndTime , int HomeworkGrade,
-                        String homeworkInfo);
+                        String homeworkInfo,String HomeworkPath);
 
     @Delete("Delete from Homework Where HomeworkNo = #{HomeworkNo}")
     void deleteHomework(String HomeworkNo);
