@@ -1,6 +1,6 @@
 <template>
   <div class="Intro">
-    <router-link to="/nomeworkInfo" style="text-decoration: none;">
+    <router-link to="/homeworkInfo" style="text-decoration: none;">
       <el-table :data="tableData.filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase()))"
         class="homeworkTable">
         <el-table-column prop="name" label="作业名称">
@@ -24,9 +24,9 @@
         </el-table-column>
         <el-table-column label="操作" v-slot="scope" width="240px">
           <router-link to="/homeworkPreview" style="text-decoration: none;">
-            <el-button size="mini" type="primary" @click="handlePush(scope.$index, scope.row)">预览</el-button>
+            <el-button size="mini" type="primary" @click="handlePreview(scope.$index, scope.row)">预览</el-button>
           </router-link>
-          <el-button size="mini" type="danger" @click="handleDeletePush(scope.$index, scope.row)"
+          <el-button size="mini" type="danger" @click="handleUpload(scope.$index, scope.row)"
             style="margin-left: 10px;">上传</el-button>
 
         </el-table-column>
@@ -41,6 +41,10 @@
 <script>
 import { requireStudentHomework } from '@/api/api';
 import { ref, onMounted } from 'vue';
+import { ElNotification } from 'element-plus';
+import { useRouter } from 'vue-router';
+
+let $router = useRouter()
 const homeworkList = {
   setup() {
     const homeworkListData = ref([
@@ -84,17 +88,13 @@ const homeworkList = {
 
     const search = ref('');
 
-    const handleEdit = (row) => {
-      // 跳转到编辑页面，传递该作业的详细信息
-      this.$router.push({ name: 'editHomework', params: { homework: row } });
+
+    const handlePreview = (index, row) => {
+      $router.push({ name: 'homeworkPreview' });
     };
 
-    const handlePush = (index, row) => {
-      console.log('推送作业信息:', index, row);
-    };
-
-    const handleDeletePush = (index, row) => {
-      console.log('删除作业信息:', index, row);
+    const handleUpload = (index, row) => {
+      TODO: 文件上传
     };
     onMounted(async () => {
       try {
@@ -128,9 +128,8 @@ const homeworkList = {
     return {
       tableData: homeworkListData,
       search,
-      handleEdit,
-      handlePush,
-      handleDeletePush
+      handlePreview,
+      handleUpload,
     };
   }
 };

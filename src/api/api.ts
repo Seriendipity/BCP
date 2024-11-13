@@ -33,7 +33,9 @@ enum API {
   GET_STUDENTHOMEWORKLIST = "/homework/allCidHomework",
   GET_TEACHERHOMEWORKLIST = "/homework/allCidHomework",
   UPDATE_HOMEWORK_SETTINGS = "/homework/updateHomework",
-  EDIT_HOMEWORK = "",
+  EDIT_HOMEWORK = "/homework/oneHomework",
+  FINAL_GRADE = "",
+  GET_HOMEWORK_EVALUATION_TIME = "",
 }
 //登录接口
 export const reqLogin = (data: any) => request.post<any, any>(API.LOGIN_URL, data);
@@ -73,6 +75,10 @@ export const requireStudentHomework = (courseId: any) => request.get<any, any>(A
 export const requireTeacherSendHomework = (courseId: any) => request.get<any, any>(API.GET_TEACHERHOMEWORKLIST + `?cid=${courseId}`)
 //得到要编辑的作业
 export const editSingleHomework = (homeworkNO: any) => request.get<any, any>(API.EDIT_HOMEWORK + `?homeworkNO=${homeworkNO}`)
+//得到最终成绩
+export const getFinalHomeworkScore = (homeworkNO: any) => request.get<any, any>(API.FINAL_GRADE + `?homeworkNO=${homeworkNO}`)
+//得到互评最终时间
+export const getEvaluationEndTime = (homeworkNO: any) => request.get<any, any>(API.GET_HOMEWORK_EVALUATION_TIME + `?homeworkNO=${homeworkNO}`)
 // export const awardInfo = () => request.get<any, any>(API.AWARD_GET);
 
 

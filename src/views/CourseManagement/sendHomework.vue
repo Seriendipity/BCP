@@ -5,11 +5,11 @@
       @click="createHomework()">新建作业</el-button>
     <el-table :data="SendHomeworkData.filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase()))"
       class="homeworkTable">
-      <el-table-column label="是否发布" v-slot="scope">
+      <el-table-column label="是否发布" v-slot="scope" width="100px">
         <el-switch v-model="scope.row.sendStatus" active-color="#13ce66" inactive-color="#ff4949">
         </el-switch>
       </el-table-column>
-      <el-table-column prop="name" label="作业名称">
+      <el-table-column prop="name" label="作业名称" width="130px">
       </el-table-column>
       <el-table-column prop="starttime" label="作业开始时间" width="180px">
       </el-table-column>
@@ -26,10 +26,15 @@
           {{ scope.row.judge }}
         </el-button>
       </el-table-column>
-      <el-table-column label="基本信息" v-slot="scope" width="150px">
+      <el-table-column label="基本信息" v-slot="scope" width="100px">
         <el-button size="mini" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
       </el-table-column>
-
+      <el-table-column label="成绩" v-slot="scope" width="100px">
+        <el-button size="mini" @click="handleGrade(scope.$index, scope.row)">获取</el-button>
+      </el-table-column>
+      <el-table-column label="附件" v-slot="scope" width="100px">
+        <el-button size="mini" @click="handleFile(scope.$index, scope.row)">预览</el-button>
+      </el-table-column>
 
     </el-table>
 
@@ -67,6 +72,7 @@ const sendHomework = {
             submitted: homework.submitNumbers,
             number: homework.studentNumbers,
             judge: homework.correctStatus,
+            file: homework.file,
           }));
         } else {
           ElNotification({
@@ -89,10 +95,23 @@ const sendHomework = {
       localStorage.setItem('homeworkNO', row.homeworkNO)
       $router.push({ name: 'editHomework' });
     };
+    const handleGrade = (index, row) => {
+      // 跳转到成绩页面，传递成绩的详细信息
+      localStorage.setItem('homeworkNO', row.homeworkNO)
+      $router.push({ name: 'getHomeworkFinalGrade' });
+    };
+    const handleFile = (index, row) => {
+      // 跳转到成绩页面，传递成绩的详细信息
+      localStorage.setItem('homeworkNO', row.homeworkNO)
+      localStorage.setItem('fileURL', row.file)
+      $router.push({ name: 'accessoryPreview' });
+    };
     return {
       SendHomeworkData,
       search,
       handleEdit,
+      handleGrade,
+      handleFile,
     };
   }
 };

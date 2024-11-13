@@ -1,15 +1,18 @@
 <template>
   <div class="Intro">
     <el-table class="stutable" :data="studentListData" height="100%" width="90%">
-      <el-table-column prop="classNo" label="课程号" width="150px"></el-table-column>
-      <el-table-column prop="className" label="课程名称" width="150px"></el-table-column>
       <el-table-column prop="studentNo" label="学号" width="150px"></el-table-column>
       <el-table-column prop="studentName" label="姓名" width="150px"></el-table-column>
+      <el-table-column prop="grade" label="成绩" width="150px"></el-table-column>
     </el-table>
   </div>
   <el-button type="primary" round
     style="padding: 17px;font-size: large;font-weight: bold;float: right;margin-right: 40px;margin-top: 15px;"
-    @click="exportStudentList()">导出学生名单</el-button>
+    @click="postFinalScore()">发布成绩</el-button>
+  <el-button type="primary" round
+    style="padding: 17px;font-size: large;font-weight: bold;float: right;margin-right: 40px;margin-top: 15px;"
+    @click="getFinalScore()">获取最终成绩</el-button>
+
 </template>
 
 <script setup>
@@ -27,10 +30,7 @@ onMounted(async () => {
       // 将后端数据转为数组格式并赋值给 tableData
       studentListData.value = Object.values(response.data).map(student => ({
         studentName: student.studentName,
-        classNo: student.classNo,
-        index: student.index,
         studentNo: student.studentNo,
-        className: student.className
       }));
     } else {
       ElNotification({
@@ -46,23 +46,45 @@ onMounted(async () => {
   }
 });
 
-const exportStudentList = async () => {
-  alert('导出名单为.xlsx格式')
-  const courseId = localStorage.getItem('courseId')
+const getFinalScore = async () => {
+  const homeworkNo = localStorage.getItem('homeworkNO')
   try {
-    const response = await requireStudentList(courseId);
-    const link = document.createElement('a');
-    const url = window.URL.createObjectURL(response.blob());
-    link.href = url;
-    link.download = `student_list_${courseId}.xlsx`
-    link.click();
-    window.URL.revokeObjectURL(url);
+    const response = await getEvaluationEndTime(homeworkNo)
+    const currentTime = new Date()
+    const backendTime = new Date(response.data.time);
+    if (currentTime < backendTime) {
+      ElNotification({
+        message: '互评截止时间未到',
+        type: 'error',
+      });
+    } else {
+      try {
+        const response = await getFinalScore(homeworkNo)
+        if (response.code === 0) {
+          // 将后端数据转为数组格式并赋值给 tableData
+          studentListData.value = Object.values(response.data).map(student => ({
+            studentName: student.studentName,
+            studentNo: student.studentNo,
+            grade: student.grade,
+          }));
+        }
+      } catch (error) {
+        ElNotification({
+          message: '获取成绩失败，请重试',
+          type: 'error',
+        });
+      }
+    }
   } catch (error) {
     ElNotification({
-      message: '导出名单失败，请重试',
+      message: '获取互评截止时间失败，请重试',
       type: 'error',
     });
   }
+}
+
+const postFinalScore = async () => {
+  TODO: 发布最终成绩
 }
 </script>
 

@@ -24,7 +24,8 @@
         <el-input v-model="changedData.scores" type="studentNumbers" placeholder="输入满分" style="width: 15%;"></el-input>
       </el-form-item>
       <el-form-item label="作业内容">
-        <el-input v-model="changedData.content" placeholder="输入作业内容" type="textarea" style="width: 60%;"></el-input>
+        <el-input v-model="changedData.homeworkInfo" placeholder="输入作业内容" type="textarea"
+          style="width: 60%;"></el-input>
       </el-form-item>
     </el-form>
 
@@ -74,7 +75,7 @@ export default {
       homeworkStartTime: '2024-05-02 10:00:00',
       homeworkEndTime: '2024-05-02 10:00:00',
       scores: 100,
-      content: '见附件',
+      homeworkInfo: '见附件',
       file: '',
     });
 
@@ -91,9 +92,9 @@ export default {
         const homeworkNO = localStorage.getItem('homeworkNO');
         const response = await editSingleHomework(homeworkNO); // 请求后端老师布置作业数据
         if (response.code === 0) {
-          currentData.value = response.value;
-          changedData.value = response.value;
-          fileList.value[0] = response.value.file;
+          currentData.value = response.data;
+          changedData.value = response.data;
+          fileList.value[0] = response.data.file;
         } else {
           currentData.value = tableData.value[0];
         }
@@ -119,9 +120,10 @@ export default {
       const homeworkNO = localStorage.getItem('homeworkNO');
       formData.append('newStartTime', changedData.value.homeworkStartTime)
       formData.append('newEndTime', changedData.value.homeworkEndTime)
-      formData.append('homeworkNO', homeworkNO)
+      formData.append('scores', changedData.value.scores)
+      formData.append('homeworkNo', homeworkNO)
       formData.append('homeworkDesc', changedData.value.homeworkDescription)
-      formData.append('homeworkContent', changedData.value.content)
+      formData.append('homeworkInfo', changedData.value.homeworkInfo)
       formData.append('file', fileList.value[0])
       try {
         const response = await updateHomeworkSetting(formData); // 连接后端更新文件

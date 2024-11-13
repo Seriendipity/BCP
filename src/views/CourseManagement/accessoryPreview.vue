@@ -1,11 +1,15 @@
 <template>
   <iframe class="syllabus" :src="syllabusSrc" width="100%" height="100%" style="border:none;"></iframe>
+  <el-button type="primary" round
+    style="padding: 17px;font-size: large;font-weight: bold;float: right;margin-right: 40px;margin-top: 15px;"
+    @click="returnSendHomework()">返回</el-button>
 </template>
 
 <script setup>
 import { ref, onMounted } from 'vue';
 import { reqSyllabus } from '@/api/api';
 import { ElNotification } from 'element-plus';
+import { useRouter } from 'vue-router';
 
 const props = defineProps({
   previewSrc: {
@@ -14,7 +18,7 @@ const props = defineProps({
     default: () => 'https://book.yunzhan365.com/tnhkz/uvaj/mobile/index.html'
   }
 });
-
+const $router = useRouter()
 const syllabusSrc = ref(props.previewSrc); // 使用ref保存课程大纲的URL
 
 onMounted(async () => {
@@ -31,6 +35,10 @@ onMounted(async () => {
     });
   }
 });
+
+const returnSendHomework = () => {
+  $router.push({ name: 'sendHomework' });
+}
 </script>
 
 <style>
@@ -38,7 +46,7 @@ onMounted(async () => {
   border-radius: 20px;
   box-shadow: --el-box-shadow-light;
   background-color: #FFFFFF;
-  height: 580px;
+  height: 560px;
   border: groove;
 }
 </style>
