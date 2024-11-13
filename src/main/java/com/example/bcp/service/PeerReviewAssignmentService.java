@@ -15,7 +15,7 @@ public class PeerReviewAssignmentService {
     private PeerReviewAssignmentMapper peerReviewAssignmentMapper;
 
     public void insertPeerReviewAssignment(String revieweeNo, String reviewerNo, String homeworkNo, LocalDateTime startTime, LocalDateTime endTime) {
-        peerReviewAssignmentMapper.insertPeerReviewAssignment(revieweeNo, reviewerNo, homeworkNo, startTime.toString(), endTime.toString());
+        peerReviewAssignmentMapper.insertPeerReviewAssignment(revieweeNo, reviewerNo, homeworkNo, startTime, endTime);
     }
 
     public void updateReviewStatus(String revieweeNo, String reviewerNo, String homeworkNo, boolean reviewStatus) {

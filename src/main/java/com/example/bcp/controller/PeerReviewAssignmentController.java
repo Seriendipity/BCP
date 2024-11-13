@@ -1,6 +1,8 @@
 package com.example.bcp.controller;
 
 import com.example.bcp.entity.*;
+import com.example.bcp.service.StudentService;
+import jakarta.persistence.Entity;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.example.bcp.service.PeerReviewAssignmentService;
@@ -9,6 +11,8 @@ import com.example.bcp.service.StudentHomeworkService;
 import com.example.bcp.mapper.StudentHomeworkMapper;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,6 +25,8 @@ public class PeerReviewAssignmentController {
     @Autowired
     private StudentHomeworkService studentHomeworkService;
 
+    @Autowired
+    private StudentService studentService;
 
     //同伴打分以及写评论
     @PostMapping("/updatePeerGrade")
@@ -82,7 +88,7 @@ public class PeerReviewAssignmentController {
         }
     }
 
-    @PostMapping("/finalGrade")
+    @GetMapping("/finalGrade")
     public Result calculateGrade(@RequestParam String homeworkNo, HttpServletRequest request) {
         //获取HomeworkNo
 //        String homeworkNo = requestData.get("homeworkNo").toString();
@@ -110,6 +116,34 @@ public class PeerReviewAssignmentController {
                 studentHomeworkService.updateStudentHomeworkSubmitGrade(grade,sh.getStudentNo(),sh.getHomeworkNo(),null);
             }
         }
-        return Result.success();
+        Map<String,Object> responseData = new HashMap<>();
+        int sequence = 1;
+        for(StudentHomework st:studentHomeworks){
+            Map<String,Object> st1 = new HashMap<>();
+            st1.put("sequence",sequence);
+            st1.put("homeworkNO",st.getHomeworkNo());
+            Student student = studentService.selectByStudentNo(st.getStudentNo());
+            st1.put("studentNO",st.getStudentNo());
+            st1.put("studentName",student.getStudentName());
+            st1.put("grade",st.getSubmitGrade());
+            st1.put("submitTime",st.getSubmitTime());
+            responseData.put("peerReview" + sequence, st1);
+            sequence++;
+        }
+        return Result.success(responseData);
+    }
+
+    @GetMapping("/endTime")
+    public Result getEndTime(@RequestParam String homeworkNo){
+        Map<String,Object> responsedata = new HashMap<>();
+        try{
+            List<PeerReviewAssignment> pa = peerReviewAssignmentService.selectByHomeworkNo(homeworkNo);
+            LocalDateTime endTime = pa.get(0).getEndTime();
+            responsedata.put("EndTime",endTime);
+        }catch(Exception e){
+            responsedata.put("EndTime","2023-11-09T16:23:03");
+            Result.success(responsedata);
+        }
+        return Result.success(responsedata);
     }
 }

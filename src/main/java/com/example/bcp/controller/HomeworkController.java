@@ -48,15 +48,14 @@ public class HomeworkController {
     @PostMapping("/assignHomework")
     public Result assignHomework(@RequestBody Map<String, Object> requestData) {
         String homeworkNo= requestData.get("HomeworkNo").toString();
-        String startTimeStr = requestData.get("startTime").toString();
-        String endTimeStr = requestData.get("endTime").toString();
+        String startTime1= requestData.get("StartTime").toString();
+        String endTime1= requestData.get("EndTime").toString();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        LocalDateTime startTime = LocalDateTime.parse(startTime1, formatter);
+        LocalDateTime endTime = LocalDateTime.parse(endTime1,formatter);
 
         homeworkService.updateIsPeerReview(true,homeworkNo);
 
-        // 解析时间字符串为 LocalDateTime
-        DateTimeFormatter formatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
-        LocalDateTime startTime = LocalDateTime.parse(startTimeStr, formatter);
-        LocalDateTime endTime = LocalDateTime.parse(endTimeStr, formatter);
 
         List<StudentHomework> studentHomeworks = studentHomeworkService.selectByHomeworkNo(homeworkNo);
         int studentCount = studentHomeworks.size();
