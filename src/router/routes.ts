@@ -35,6 +35,17 @@ export const constantRoute = [
     },
   },
   {
+    path: '/bemarkedposts',
+    component: () => import('@/views/Bookmarks/bemarkedposts.vue'),
+    name: 'bemarkedposts',
+    meta: {
+      title: '收藏帖子',
+      hidden: true,//是否在菜单隐藏
+      icon: 'CircleCloseFilled',
+      key: 'unique-key'
+    },
+  },
+  {
     path: '/notes',
     component: () => import('@/views/Bookmarks/notes.vue'),
     name: 'notes',

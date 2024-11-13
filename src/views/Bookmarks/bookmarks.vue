@@ -59,8 +59,16 @@
         </el-aside>
 
         <el-main height="600px">
-          <h1 style="text-align: left; font-weight: bold;margin-bottom: 10px;font-size: large;;margin-top:-12px;">收藏夹
-          </h1>
+          <el-row>
+          <el-col :span="3">
+            <el-button type="primary" style="text-align: left; font-weight: bold;font-size: large;width: 100px;">收藏夹</el-button>
+          </el-col>
+          <el-col :span="21">
+            <router-link to="/bemarkedposts" style="text-decoration: none;">
+              <el-button type="primary" style="text-align: left; font-weight: bold;font-size: large;width: 100px;" plain>帖子</el-button>
+            </router-link>
+          </el-col>
+        </el-row>
           <!-- <div class="scrollable"> -->
               <div class="grid-content bg-white" style="height: 75px;">
                   <el-row :gutter="20">
@@ -112,11 +120,6 @@
           <!-- </div> -->
         </el-main>
 
-        <el-aside class="backright">
-          <div class="whiteback3">
-            <h1 style="text-align: left; font-weight: bold;margin-bottom: 5px;">通知公告</h1>
-          </div>
-        </el-aside>
       </el-container>
     </el-main>
   </el-container>
