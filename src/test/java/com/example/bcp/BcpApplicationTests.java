@@ -10,9 +10,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 @SpringBootTest
 class BcpApplicationTests {
@@ -187,8 +193,13 @@ class BcpApplicationTests {
 //            System.out.println(f.getAuthority());
 //            System.out.println();
 //        }
-        favoriteService.deleteFavorite("F002","S001","N002");
-    }
+//        favoriteService.deleteFavorite("F002","S001","N002");
+
+            String time = "Sat Nov 30 2024 00:00:00 GMT+0800 (中国标准时间)";
+
+
+        }
+
 
     @Autowired
     private AssistantService assistantService;

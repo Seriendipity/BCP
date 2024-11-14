@@ -129,31 +129,55 @@ public class StudentCourseController {
     }
 
     /**
-     *  查询某学生选修的所有课程
+     *  查询某学生选修的所有课程或者教师教授的所有课程
      */
     @GetMapping(value = "/allCourse")
     public Result allCourse( HttpServletRequest request) {
-        Map<String, Object> responseData = new HashMap<>();
-        int i = 1;
-        String cid,courseNo,courseName,picture;
         String username = request.getAttribute("username").toString();
-        List<StudentCourse> courseList = studentCourseService.selectByStudentNo(username);
-        for(StudentCourse sc : courseList){
-            cid = sc.getCid();
-            courseNo = teachingService.selectByCid(cid).getCourseNo();
-            courseName = courseService.selectByCourseNo(courseNo).getCourseName();
-            picture = teachingService.selectByCid(cid).getPicture();
-            // 将课程信息放入一个子Map中
-            Map<String, Object> courseInfo = new HashMap<>();
-            courseInfo.put("cid", cid);
-            courseInfo.put("courseNo", courseNo);
-            courseInfo.put("courseName", courseName);
-            courseInfo.put("picture", picture);
-            responseData.put("course"+i,courseInfo);
-            i++;
-        }
-        System.out.println(responseData);
-        return Result.success(responseData);
-    }
+        Map<String, Object> responseData = new HashMap<>();
+        if(username.startsWith("S")){
+            int i = 1;
+            String cid,courseNo,courseName,picture;
 
+            List<StudentCourse> courseList = studentCourseService.selectByStudentNo(username);
+            for(StudentCourse sc : courseList){
+                cid = sc.getCid();
+                courseNo = teachingService.selectByCid(cid).getCourseNo();
+                courseName = courseService.selectByCourseNo(courseNo).getCourseName();
+                picture = teachingService.selectByCid(cid).getPicture();
+                // 将课程信息放入一个子Map中
+                Map<String, Object> courseInfo = new HashMap<>();
+                courseInfo.put("cid", cid);
+                courseInfo.put("courseNo", courseNo);
+                courseInfo.put("courseName", courseName);
+                courseInfo.put("picture", picture);
+                responseData.put("course"+i,courseInfo);
+                i++;
+            }
+            System.out.println(responseData);
+        } else if (username.startsWith("T")) {
+
+            int i = 1;
+            List<Teaching> teachings = teachingService.selectByTeacherNo(username);
+            for(Teaching t : teachings){
+                String cid = t.getCid();
+                String courseNo = teachingService.selectByCid(cid).getCourseNo();
+                String courseName = courseService.selectByCourseNo(courseNo).getCourseName();
+                String picture = teachingService.selectByCid(cid).getPicture();
+                // 将课程信息放入一个子Map中
+                Map<String, Object> courseInfo = new HashMap<>();
+                courseInfo.put("cid", cid);
+                courseInfo.put("courseNo", courseNo);
+                courseInfo.put("courseName", courseName);
+                courseInfo.put("picture", picture);
+                responseData.put("course"+i,courseInfo);
+                i++;
+            }
+
+
+        }
+
+        return Result.success(responseData);
+
+    }
 }
