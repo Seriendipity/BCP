@@ -143,6 +143,7 @@ const notes = ref([
 ]);
 
 const previewNote = (note) => {//TODO:跳转到一个专门的预览界面
+  noteSrc.value = note.notePath;
   previewVisible.value = true;
 };
 
