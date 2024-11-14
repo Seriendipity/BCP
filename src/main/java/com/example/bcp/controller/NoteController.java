@@ -187,8 +187,10 @@ public class NoteController {
         }
 
         // 保存文件到本地
-        File saveFile = new File(ROOT_PATH + File.separator + originalFilename);
+        //File saveFile = new File(ROOT_PATH + File.separator + originalFilename);
+        File saveFile = new File("D:\\vscode\\BMS\\vite-project\\public\\"+ originalFilename);
         System.out.println("文件的保存路径：" + saveFile.getAbsolutePath());
+        System.out.println("----------");
         file.transferTo(saveFile);  // 存储文件到本地的磁盘里面去
 
         // 返回保存的文件名

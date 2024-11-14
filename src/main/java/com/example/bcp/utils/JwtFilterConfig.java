@@ -12,7 +12,12 @@ public class JwtFilterConfig {
         registrationBean.addUrlPatterns("/secure/*");
         registrationBean.addUrlPatterns("/comment/*");
         registrationBean.addUrlPatterns("/discussion/*");
-        registrationBean.addUrlPatterns("/note/*");
+        registrationBean.addUrlPatterns("/note/getStudentAllNote");
+        registrationBean.addUrlPatterns("/note/allPublicNote");
+        registrationBean.addUrlPatterns("/note/deleteNote");
+        registrationBean.addUrlPatterns("/note/updateNoteInformation");
+        registrationBean.addUrlPatterns("/note/updateNoteAuthority");
+        registrationBean.addUrlPatterns("/note/upload");
         registrationBean.addUrlPatterns("/favorite/*");
         registrationBean.addUrlPatterns("/StudentCourse/*");
         registrationBean.addUrlPatterns("/users/*");
@@ -20,6 +25,7 @@ public class JwtFilterConfig {
         registrationBean.addUrlPatterns("/notifications/*");
         registrationBean.addUrlPatterns("/homework/*");
         registrationBean.addUrlPatterns("/peerAssignment/*");
+        registrationBean.addUrlPatterns("/file/allCourseSource");
         return registrationBean;
     }
 }

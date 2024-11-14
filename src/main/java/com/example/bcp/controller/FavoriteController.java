@@ -218,9 +218,15 @@ public class FavoriteController {
         String favoriteTitle = requestData.get("favoriteTitle");
 
         try{
+            if(favoriteService.selectByStudentNoAndFavoriteNoAndFavoriteInformationNo(studentNo,favoriteNo,favoriteInformationNo) != null){
+                System.out.println("已收藏过");
+                return Result.success("已收藏过该内容");
+            }else{
+                favoriteService.insertFavoriteOthers(favoriteNo,studentNo,favoriteInformationNo,favoriteTitle,FromStudentNo);
+                System.out.println("收藏成功");
+                return Result.success("收藏同学的收藏夹内容成功");
+            }
 
-            favoriteService.insertFavoriteOthers(favoriteNo,studentNo,favoriteInformationNo,favoriteTitle,FromStudentNo);
-            return Result.success("收藏同学的收藏夹内容成功");
         }catch (Exception e){
             return Result.error("收藏同学的收藏夹内容失败");
         }

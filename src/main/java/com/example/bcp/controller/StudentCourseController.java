@@ -79,8 +79,8 @@ public class StudentCourseController {
      */
 
     @GetMapping("/exportStudentList")
-    public ResponseEntity<byte[]> exportStudentList(@RequestParam String Cid) {
-        List<StudentCourse> studentList = studentCourseService.selectByCid(Cid);
+    public ResponseEntity<byte[]> exportStudentList(@RequestParam String cid) {
+        List<StudentCourse> studentList = studentCourseService.selectByCid(cid);
 
         Workbook workbook = new XSSFWorkbook();
         Sheet sheet = workbook.createSheet("Student List");

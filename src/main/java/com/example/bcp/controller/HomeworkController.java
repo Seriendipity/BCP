@@ -125,8 +125,8 @@ public class HomeworkController {
 
 
     @GetMapping("/oneHomework")
-    public Result selectOneHomework(@RequestParam String homeworkNo){
-        Homework homework = homeworkService.selectByHomeworkNo(homeworkNo);
+    public Result selectOneHomework(@RequestParam String homeworkNO){
+        Homework homework = homeworkService.selectByHomeworkNo(homeworkNO);
         Map<String,Object> responseData = new HashMap<>();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         responseData.put("cid",homework.getCid());
@@ -161,8 +161,8 @@ public class HomeworkController {
 
                 int studentNumbers = studentCourseService.selectByCid(cid).size();
                 int submitNumbers = studentHomeworkService.selectByHomeworkNo(homework.getHomeworkNo()).size();
-                String submitNumber = submitNumbers+"/"+studentNumbers;
-                hw.put("submitNumber",submitNumber);
+                hw.put("submitNumbers",submitNumbers);
+                hw.put("studentNumbers",studentNumbers);
 
                 StudentHomework sh = studentHomeworkService.selectByStudentNoAndHomeworkNo(userNo, homework.getHomeworkNo());
                 if(sh == null){

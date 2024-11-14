@@ -200,7 +200,8 @@ alter table comment add column imgUrl VARCHAR(100);
 alter table comment add column mentionedUser TEXT;
 
 alter table studenthomework add column Comment Text;
-alter table studenthomework add column isTeacherGrade boolean DEFAULT false; -- 是否互评
+alter table studenthomework add column isTeacherGrade boolean DEFAULT false;
+alter table studenthomework add column isVisible boolean default false;-- 是否互评
 alter table Homework add column isPeerReview boolean DEFAULT false; -- 是否互评
 
 alter table Teacher add column Department varchar(20);
@@ -208,6 +209,7 @@ alter table Teacher add column Department varchar(20);
 alter table homework add column isVisible boolean default 0;
 alter table homework add column HomeworkPath varchar(100);
 alter table homework add column homeworkInfo TEXT;
+
 
 
 alter table Favorite add column IsOwn boolean default true; -- 是否自己的收藏，默认是自己的

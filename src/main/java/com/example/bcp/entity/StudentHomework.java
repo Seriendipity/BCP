@@ -31,8 +31,27 @@ public class StudentHomework {
     @Column(name = "Comment",columnDefinition = "Text")
     private String Comment;
 
+    @Column(name = "isVisible")
+    private boolean isVisible = false;
+
     @Column(name = "isTeacherGrade")
     private boolean isTeacherGrade;
+
+    public boolean isTeacherGrade() {
+        return isTeacherGrade;
+    }
+
+    public void setTeacherGrade(boolean teacherGrade) {
+        isTeacherGrade = teacherGrade;
+    }
+
+    public boolean isVisible() {
+        return isVisible;
+    }
+
+    public void setVisible(boolean visible) {
+        isVisible = visible;
+    }
 
     public String getComment() {
         return Comment;
