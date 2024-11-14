@@ -9,6 +9,8 @@
         <el-switch v-model="scope.row.sendStatus" active-color="#13ce66" inactive-color="#ff4949">
         </el-switch>
       </el-table-column>
+      <el-table-column prop="homeworkNO" label="作业ID" width="130px">
+      </el-table-column>
       <el-table-column prop="name" label="作业名称" width="130px">
       </el-table-column>
       <el-table-column prop="starttime" label="作业开始时间" width="180px">
@@ -21,9 +23,9 @@
         </template>
       </el-table-column>
       <el-table-column label="批改" v-slot="scope" width="100px">
-        <el-button size="mini" :type="scope.row.judge === '已完成' ? 'success' : 'danger'"
+        <el-button size="mini" :type="scope.row.judge === '已批改' ? 'success' : 'danger'"
           @click="handleDelete(scope.$index, scope.row)">
-          {{ scope.row.judge }}
+          {{ scope.row.judge==='true'?'已批改':'未批改' }}
         </el-button>
       </el-table-column>
       <el-table-column label="基本信息" v-slot="scope" width="100px">
@@ -44,7 +46,7 @@
 </template>
 
 <script>
-import { ref, onMounted, reactive } from 'vue';
+import { ref, onMounted} from 'vue';
 import { ElNotification } from 'element-plus';
 import { requireTeacherSendHomework } from '@/api/api';
 import { useRouter } from 'vue-router';
@@ -52,7 +54,7 @@ import { useRouter } from 'vue-router';
 const sendHomework = {
   setup() {
     let $router = useRouter()
-    const SendHomeworkData = reactive([
+    const SendHomeworkData = ref([
       { homeworkNO: 'H001', sendStatus: false, name: '感知机1', starttime: '2024-05-02 10:00:00', endtime: '2024-05-02 10:00:00', number: 44, submitted: 3, judge: '未完成' },
       { homeworkNO: 'H002', sendStatus: false, name: '感知机2', starttime: '2024-05-02 10:00:00', endtime: '2024-05-02 10:00:00', number: 45, submitted: 45, judge: '已完成' },
       { homeworkNO: 'H003', sendStatus: false, name: '感知机3', starttime: '2024-05-02 10:00:00', endtime: '2024-05-02 10:00:00', number: 45, submitted: 44, judge: '已完成' },
@@ -65,6 +67,7 @@ const sendHomework = {
         if (response.code === 0) {
           // 将后端数据转为数组格式并赋值给 SendHomeworkData
           SendHomeworkData.value = Object.values(response.data).map(homework => ({
+            homeworkNO:homework.homeworkNO,
             sendStatus: homework.postStatus,
             name: homework.homeworkDescription,
             starttime: homework.homeworkStartTime,
@@ -92,6 +95,7 @@ const sendHomework = {
 
     const handleEdit = (index, row) => {
       // 跳转到编辑页面，传递该作业的详细信息
+      console.log(row)
       localStorage.setItem('homeworkNO', row.homeworkNO)
       $router.push({ name: 'editHomework' });
     };

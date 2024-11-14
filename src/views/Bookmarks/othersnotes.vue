@@ -143,6 +143,8 @@ const notes = ref([
 ]);
 
 const previewNote = (note) => {//TODO:跳转到一个专门的预览界面
+  noteSrc.value = note.notePath.split('/').pop();
+  console.log(noteSrc)
   previewVisible.value = true;
 };
 
