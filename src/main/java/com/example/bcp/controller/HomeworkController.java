@@ -48,61 +48,72 @@ public class HomeworkController {
     @PostMapping("/assignHomework")
     public Result assignHomework(@RequestBody Map<String, Object> requestData) {
         String homeworkNo= requestData.get("HomeworkNo").toString();
-        String startTimeStr = requestData.get("startTime").toString();
-        String endTimeStr = requestData.get("endTime").toString();
+        String startTime1= requestData.get("StartTime").toString();
+        String endTime1= requestData.get("EndTime").toString();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        LocalDateTime startTime = LocalDateTime.parse(startTime1, formatter);
+        LocalDateTime endTime = LocalDateTime.parse(endTime1,formatter);
 
         homeworkService.updateIsPeerReview(true,homeworkNo);
 
-        // 解析时间字符串为 LocalDateTime
-        DateTimeFormatter formatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
-        LocalDateTime startTime = LocalDateTime.parse(startTimeStr, formatter);
-        LocalDateTime endTime = LocalDateTime.parse(endTimeStr, formatter);
 
         List<StudentHomework> studentHomeworks = studentHomeworkService.selectByHomeworkNo(homeworkNo);
         int studentCount = studentHomeworks.size();
-        int assignmentsPerStudent = Math.min(2, studentCount - 1); // 每个学生最多分配3份作业
+//        int assignmentsPerStudent = Math.min(2, studentCount - 1); // 每个学生最多分配2份作业
 
-        // 复制作业，确保每个学生有2份作业进行评分
         List<StudentHomework> allAssignments = new ArrayList<>();
         for (StudentHomework sh : studentHomeworks) {
-            for (int i = 0; i < 2; i++) { // 每个作业复制2次
                 allAssignments.add(sh);
-            }
         }
 
         Collections.shuffle(allAssignments); // 随机打乱作业
 
-        // 存储每个学生分配到的作业
+        // 存储每个学生分配到的作业(避免重复）
         List<List<StudentHomework>> studentAssignments = new ArrayList<>();
         for (int i = 0; i < studentCount; i++) {
             studentAssignments.add(new ArrayList<>());
         }
 
-        // 分配作业，确保每个学生不分配到自己的作业且分配的作业没有重复的学生
+        int index = 0;
+        // 第一次作业分配
         for (int i = 0; i < studentCount; i++) {
             StudentHomework currentStudentHomework = studentHomeworks.get(i);
             String currentStudentNo = currentStudentHomework.getStudentNo();
-
-            int assignedCount = 0;
-            Set<String> assignedStudentNos = new HashSet<>(); // 记录已分配的学生编号，防止重复
-            assignedStudentNos.add(currentStudentNo); // 确保不分配到自己的作业
-
-            for (StudentHomework assignedHomework : allAssignments) {
-                String assignedStudentNo = assignedHomework.getStudentNo();
-
-                // 确保分配的作业不是当前学生的作业，且没有重复的学生
-                if (!assignedStudentNos.contains(assignedStudentNo)) {
-                    studentAssignments.get(i).add(assignedHomework);
-                    assignedStudentNos.add(assignedStudentNo);
-                    assignedCount++;
-                    peerReviewAssignmentService.insertPeerReviewAssignment(assignedStudentNo,currentStudentNo,homeworkNo,startTime,endTime);
+            //分配一个！=学号的
+            index = i;
+            while(allAssignments.get(index).getStudentNo().equals(currentStudentNo)){
+                index +=1;
+                if(index > allAssignments.size()){
+                    return Result.error("分配错误");
                 }
-
-                // 如果已分配的作业达到数量要求，退出循环
-                if (assignedCount >= assignmentsPerStudent) {
-                    break;
-                }
+                allAssignments.add(allAssignments.get(index));
             }
+            StudentHomework assignedHomework = allAssignments.get(index);
+            String assignedStudentNo = assignedHomework.getStudentNo();
+            studentAssignments.get(i).add(assignedHomework);
+            peerReviewAssignmentService.insertPeerReviewAssignment(assignedStudentNo, currentStudentNo, homeworkNo, startTime, endTime);
+        }
+
+
+        // 第二次作业分配
+        for (int i = 0; i < studentCount; i++) {
+            StudentHomework currentStudentHomework = studentHomeworks.get(i);
+            String currentStudentNo = currentStudentHomework.getStudentNo();
+            //分配一个！=学号的&&不同于上次分配结果
+            index = i;
+            StudentHomework sh = studentAssignments.get(i).get(0);
+            while(allAssignments.get(index).getStudentNo().equals(currentStudentNo) ||
+                    allAssignments.get(index).getStudentNo().equals(sh.getStudentNo())){
+                index +=1;
+                if(index > allAssignments.size()){
+                    return Result.error("分配错误");
+                }
+                allAssignments.add(allAssignments.get(index));
+            }
+            StudentHomework assignedHomework = allAssignments.get(index);
+            String assignedStudentNo = assignedHomework.getStudentNo();
+            studentAssignments.get(i).add(assignedHomework);
+            peerReviewAssignmentService.insertPeerReviewAssignment(assignedStudentNo, currentStudentNo, homeworkNo, startTime, endTime);
         }
 
         // 随机选择学生作业
@@ -111,7 +122,7 @@ public class HomeworkController {
         int numToSelect = (int) Math.ceil(studentHomeworks.size() * 0.15); // 选择15%
 
         while (selectedStudentNo.size() < numToSelect) {
-            int index = random.nextInt(studentHomeworks.size());
+            index = random.nextInt(studentHomeworks.size());
             StudentHomework selected = studentHomeworks.get(index);
             String studentNo = selected.getStudentNo();
 

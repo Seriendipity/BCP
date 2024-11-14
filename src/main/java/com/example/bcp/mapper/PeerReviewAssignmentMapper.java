@@ -3,12 +3,13 @@ package com.example.bcp.mapper;
 import com.example.bcp.entity.PeerReviewAssignment;
 import org.apache.ibatis.annotations.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 @Mapper
 public interface PeerReviewAssignmentMapper {
     @Insert("INSERT INTO PeerReviewAssignment (RevieweeNo, ReviewerNo, HomeworkNo, StartTime, EndTime) " +
             "VALUES (#{revieweeNo}, #{reviewerNo}, #{homeworkNo}, #{startTime}, #{endTime})")
-    void insertPeerReviewAssignment(String revieweeNo, String reviewerNo, String homeworkNo, String startTime, String endTime);
+    void insertPeerReviewAssignment(String revieweeNo, String reviewerNo, String homeworkNo, LocalDateTime startTime, LocalDateTime endTime);
 
     // 更新评审状态
     @Update("UPDATE PeerReviewAssignment SET ReviewStatus = #{reviewStatus} WHERE RevieweeNo = #{revieweeNo} AND ReviewerNo = #{reviewerNo} AND HomeworkNo = #{homeworkNo}")

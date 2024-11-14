@@ -5,6 +5,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
@@ -32,10 +33,10 @@ public class PeerReviewAssignment {
     private String comment;      // 评审评论
 
     @Column(name = "StartTime")
-    private Date startTime;      // 评审开始时间
+    private LocalDateTime startTime;      // 评审开始时间
 
     @Column(name = "EndTime")
-    private Date endTime;        // 评审结束时间
+    private LocalDateTime endTime;        // 评审结束时间
 
     // Getters and Setters
     public String getRevieweeNo() {
@@ -86,19 +87,19 @@ public class PeerReviewAssignment {
         this.comment = comment;
     }
 
-    public Date getStartTime() {
+    public LocalDateTime getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(Date startTime) {
+    public void setStartTime(LocalDateTime startTime) {
         this.startTime = startTime;
     }
 
-    public Date getEndTime() {
+    public LocalDateTime getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(Date endTime) {
+    public void setEndTime(LocalDateTime endTime) {
         this.endTime = endTime;
     }
 }
