@@ -33,7 +33,7 @@
 </template>
 
 <script>
-import { ref, onMounted, reactive } from 'vue';
+import { ref, onMounted } from 'vue';
 import { reqNotificationStudent, updateNotificationState } from '@/api/api'; // 确保有这个API接口
 import { ElNotification } from 'element-plus';
 
@@ -41,7 +41,7 @@ export default {
   setup() {
     const dialogVisible = ref(false);
     const currentNotification = ref({});
-    const notifications = reactive([]);
+    const notifications = ref([]);
 
     // 模拟数据
     const mockData = [
