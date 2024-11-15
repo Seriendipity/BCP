@@ -36,6 +36,7 @@ enum API {
   EDIT_HOMEWORK = "/homework/oneHomework",
   FINAL_GRADE = "",
   GET_HOMEWORK_EVALUATION_TIME = "",
+  SEND_HOMEWORK = "/homework/updateVisible",
 }
 //登录接口
 export const reqLogin = (data: any) => request.post<any, any>(API.LOGIN_URL, data);
@@ -104,4 +105,6 @@ export const reqUpdateNote = (data: any) => request.post<any, any>(API.UPDATE_NO
 export const reqDeleteNote = (data: any) => request.post<any, any>(API.DELETE_NOTE, data);
 //更新作业信息
 export const updateHomeworkSetting = (data: any) => request.post<any, any>(API.UPDATE_HOMEWORK_SETTINGS, data);
+//发布作业
+export const updateHomeworkStatus = (data:any) => request.post<any,any>(API.SEND_HOMEWORK,data);
 // export const awardPost = (data: any) => request.post<any>(API.AWARD_POST, data);
