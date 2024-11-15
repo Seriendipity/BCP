@@ -1,5 +1,5 @@
 <template>
-  <iframe class="syllabus" :src="syllabusSrc" width="100%" height="100%" style="border:none;"></iframe>
+  <iframe class="preview" :src="previewSrc" width="100%" height="100%" style="border:none;"></iframe>
   <el-button type="primary" round
     style="padding: 17px;font-size: large;font-weight: bold;float: right;margin-right: 40px;margin-top: 15px;"
     @click="returnSendHomework()">返回</el-button>
@@ -7,7 +7,7 @@
 
 <script setup>
 import { ref, onMounted } from 'vue';
-import { reqSyllabus } from '@/api/api';
+import { editSingleHomework } from '@/api/api';
 import { ElNotification } from 'element-plus';
 import { useRouter } from 'vue-router';
 
@@ -19,19 +19,19 @@ const props = defineProps({
   }
 });
 const $router = useRouter()
-const syllabusSrc = ref(props.previewSrc); // 使用ref保存课程大纲的URL
+const previewSrc = ref(props.previewSrc); // 使用ref保存课程大纲的URL
 
 onMounted(async () => {
   try {
-    const storedCourseId = localStorage.getItem('courseId');
-    const response = await reqSyllabus(storedCourseId); // 获取后端课程大纲URL
+    const homeworkNO = localStorage.getItem('homeworkNO');
+    const response = await editSingleHomework(homeworkNO); // 获取后端课程大纲URL
     console.log(response)
-    syllabusSrc.value = response.data.Syllabus || Syllabus.value; // 更新URL或保持默认
-    console.log(syllabusSrc)
+    previewSrc.value = response.data.file.split('/').pop() || preview.value; // 更新URL或保持默认
+    console.log(previewSrc)
   } catch (error) {
     ElNotification({
       type: 'error',
-      message: '获取课程大纲失败',
+      message: '浏览作业失败',
     });
   }
 });
@@ -42,7 +42,7 @@ const returnSendHomework = () => {
 </script>
 
 <style>
-.syllabus {
+.preview {
   border-radius: 20px;
   box-shadow: --el-box-shadow-light;
   background-color: #FFFFFF;

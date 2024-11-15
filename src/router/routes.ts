@@ -275,7 +275,7 @@ export const constantRoute = [
         name: 'accessoryPreview',
         meta: {
           title: '附件预览',
-          hidden: false,
+          hidden: true,
           icon: 'Files',
         }
       },

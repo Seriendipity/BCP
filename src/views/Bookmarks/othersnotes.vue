@@ -1,3 +1,5 @@
+<!-- eslint-disable vue/multi-word-component-names -->
+<!-- eslint-disable @typescript-eslint/no-unused-vars -->
 <template>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
   <el-container>
@@ -102,21 +104,21 @@
 
   <el-dialog v-model="previewVisible" title="预览" width="800px">
     <iframe class="calendar" :src="noteSrc" width="100%" height="400px" style="border:none;"></iframe>
-    <span slot="footer" class="dialog-footer">
-      <el-button @click="previewVisible = false">关闭</el-button>
-    </span>
+    <template v-slot:footer>
+      <span class="dialog-footer">
+        <el-button @click="previewVisible = false">关闭</el-button>
+      </span>
+    </template>
   </el-dialog>
 </template>
 
 <script setup>
 import { ref, onMounted } from 'vue';
-import { useRouter } from 'vue-router';
 import { reqFavoriteStatus, requireAllNote, reqUpdateLike, reqUserInfo, requireAvatar } from '@/api/api';
 import { ElNotification } from 'element-plus';
 
 const userInfo = ref([]);
-const favorite = ref([]);
-const router = useRouter();
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const dialogVisible = ref(false);
 const previewVisible = ref(false);
 const mockData = {
@@ -143,6 +145,8 @@ const notes = ref([
 ]);
 
 const previewNote = (note) => {//TODO:跳转到一个专门的预览界面
+  noteSrc.value = note.notePath.split('/').pop();
+  console.log(noteSrc)
   previewVisible.value = true;
 };
 

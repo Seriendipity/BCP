@@ -48,21 +48,33 @@ onMounted(async () => {
 
 const exportStudentList = async () => {
   alert('导出名单为.xlsx格式')
-  const courseId = localStorage.getItem('courseId')
-  try {
-    const response = await requireStudentList(courseId);
-    const link = document.createElement('a');
-    const url = window.URL.createObjectURL(response.blob());
-    link.href = url;
-    link.download = `student_list_${courseId}.xlsx`
-    link.click();
-    window.URL.revokeObjectURL(url);
-  } catch (error) {
-    ElNotification({
-      message: '导出名单失败，请重试',
-      type: 'error',
-    });
-  }
+ const courseId = localStorage.getItem('courseId')
+
+try {
+  // 确保请求时设置 responseType 为 'blob'
+  const response = await requireStudentList(courseId, { responseType: 'blob' });
+
+  // 使用 createObjectURL 生成一个对象 URL
+  const link = document.createElement('a');
+  const url = window.URL.createObjectURL(response.data);  // response.data 是 Blob
+  link.href = url;
+
+  // 设置下载文件名
+  link.download = `student_list_${courseId}.xlsx`;
+  
+  // 模拟点击下载
+  link.click();
+  
+  // 释放对象 URL
+  window.URL.revokeObjectURL(url);
+} catch (error) {
+  console.log(error);
+  ElNotification({
+    message: '导出名单失败，请重试',
+    type: 'error',
+  });
+}
+
 }
 </script>
 

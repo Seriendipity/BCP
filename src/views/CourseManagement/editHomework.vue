@@ -33,33 +33,37 @@
       <el-col :span="2">
         <!-- 为空格空出来的 -->
       </el-col>
-      <el-col :span="3">
-        <el-button type="primary" @click="previewAttachment" style="margin-left: 10px;" plain>预览附件</el-button>
-      </el-col>
       <el-col :span="7">
-        <el-upload class="upload-demo" action="#" :file-list="fileList" :before-upload="beforeUpload"
-          :show-file-list="true">
-          <el-button type="primary" plain>上传附件</el-button>
-        </el-upload>
+        <el-form :model="form">
+        <div class="file-input-container">
+        <input type="file" id="fileInput" @change="handleChange" />
+      </div>
+    </el-form>
       </el-col>
       <el-col :span="12">
         <el-button type="primary" @click="saveData" round style="font-size: medium;font-weight:bold;">保存</el-button>
       </el-col>
     </el-row>
-
   </div>
+
+  <el-dialog v-model="previewVisible" title="预览" width="800px">
+    <iframe class="homeworkFile" :src="homeworkSrc" width="100%" height="400px" style="border:none;"></iframe>
+    <span slot="footer" class="dialog-footer">
+      <el-button @click="previewVisible = false">关闭</el-button>
+    </span>
+  </el-dialog>
 </template>
 
 <script>
 import { updateHomeworkSetting, editSingleHomework } from '@/api/api';
-import { ElNotification } from 'element-plus';
+import { ElNotification,ElMessage } from 'element-plus';
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 
 export default {
   setup() {
+    const selectedFile = ref(null); // 存储选中的文件
     let $router = useRouter();
-    const fileList = ref([]);
     const tableData = ref([
       {
         homeworkDescription: '感知机1',
@@ -80,11 +84,7 @@ export default {
     });
 
     const currentData = ref({});
-
-    const beforeUpload = (file) => {
-      console.log('文件信息:', file);
-      fileList.value[0] = file;
-    };
+    const previewVisible = ref(false);
     onMounted(async () => {
       // 初始化时设置当前数据
       try {
@@ -94,7 +94,7 @@ export default {
         if (response.code === 0) {
           currentData.value = response.data;
           changedData.value = response.data;
-          fileList.value[0] = response.data.file;
+          selectedFile.value = response.data.file;
         } else {
           currentData.value = tableData.value[0];
         }
@@ -107,13 +107,13 @@ export default {
       }
     });
 
-
-    const previewAttachment = () => {
-      $router.push({ name: 'accessoryPreview' })
-      //TODO:传输预览URL
-      console.log('预览附件');
-    };
-
+    const handleChange = (event) => {
+  const target = event.target;
+  if (target.files && target.files.length > 0) {
+    selectedFile.value = target.files[0]; // 存储选中的文件
+  }
+  console.log(selectedFile.value)
+};
     const saveData = async () => {
       // 更新 tableData 中对应的数据
       const formData = new FormData()
@@ -124,14 +124,16 @@ export default {
       formData.append('homeworkNo', homeworkNO)
       formData.append('homeworkDesc', changedData.value.homeworkDescription)
       formData.append('homeworkInfo', changedData.value.homeworkInfo)
-      formData.append('file', fileList.value[0])
+      formData.append('file', selectedFile.value)
       try {
         const response = await updateHomeworkSetting(formData); // 连接后端更新文件
         if (response.code === 0) {
           ElMessage.success("作业设置更新成功");
         }
+        const storedCourseId = localStorage.getItem('courseId')
         $router.push("/CourseManagement/sendHomework" + `?cid=${storedCourseId}`);
       } catch (error) {
+        console.log(error)
         console.error('更新作业设置失败', error);
         ElNotification({
           message: '更新作业设置失败，请重试',
@@ -146,9 +148,9 @@ export default {
       tableData,
       changedData: changedData,
       currentData,
-      previewAttachment,
       saveData,
-      fileList,
+      selectedFile,
+      handleChange
     };
   },
 };

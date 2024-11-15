@@ -123,6 +123,7 @@ const handleSubmit = async () => {
 // 下载文件
 const downloadFile = (resource: any) => {
   try {
+    
     window.open(resource.url); // 打开文件链接
   } catch (error) {
     ElNotification({
