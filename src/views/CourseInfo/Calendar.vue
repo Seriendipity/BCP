@@ -1,3 +1,4 @@
+<!-- eslint-disable vue/multi-word-component-names -->
 <template>
   <iframe class="calendar" :src="calendarSrc" width="100%" height="100%" style="border:none;"></iframe>
 </template>
@@ -23,6 +24,7 @@ onMounted(async () => {
     const response = await reqCalendar(storedCourseId); // 获取后端日历URL
     calendarSrc.value = response.data.Calendar || calendarSrc.value; // 更新URL或保持默认
   } catch (error) {
+    console.log(error)
     ElNotification({
       type: 'error',
       message: '获取日历信息失败',

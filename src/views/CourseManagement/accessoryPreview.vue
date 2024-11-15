@@ -26,9 +26,10 @@ onMounted(async () => {
     const homeworkNO = localStorage.getItem('homeworkNO');
     const response = await editSingleHomework(homeworkNO); // 获取后端课程大纲URL
     console.log(response)
-    previewSrc.value = response.data.file.split('/').pop() || preview.value; // 更新URL或保持默认
+    previewSrc.value = response.data.file.split('/').pop() || previewSrc.value; // 更新URL或保持默认
     console.log(previewSrc)
   } catch (error) {
+    console.log(error)
     ElNotification({
       type: 'error',
       message: '浏览作业失败',

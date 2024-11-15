@@ -84,7 +84,7 @@ const getFinalScore = async () => {
 }
 
 const postFinalScore = async () => {
-  TODO: 发布最终成绩
+  //TODO: 发布最终成绩
 }
 </script>
 

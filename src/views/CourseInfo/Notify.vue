@@ -1,3 +1,4 @@
+<!-- eslint-disable vue/multi-word-component-names -->
 <template>
   <el-main height="600px">
     <h1 style="text-align: left; font-weight: bold; margin-bottom: 10px; font-size: large; margin-top: -12px;">通知列表</h1>
@@ -25,9 +26,11 @@
         <p class="dialog-title"><strong>主题:</strong> {{ currentNotification.notificationTitle }}</p>
         <p class="dialog-info"><strong>内容:</strong> {{ currentNotification.notificationInfo }}</p>
       </div>
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="closeDialog" type="primary">关闭</el-button>
-      </span>
+      <template v-slot:footer>
+        <span class="dialog-footer">
+          <el-button @click="closeDialog" type="primary">关闭</el-button>
+        </span>
+      </template>
     </el-dialog>
   </el-main>
 </template>
@@ -73,6 +76,7 @@ export default {
         notifications.value = response.data || []; // 更新通知数据
       } catch (err) {
         // 捕获错误并使用模拟数据
+        console.log(err)
         notifications.value = mockData;
         ElNotification({
           message: '获取通知失败',
