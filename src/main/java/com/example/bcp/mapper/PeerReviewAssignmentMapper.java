@@ -42,4 +42,7 @@ public interface PeerReviewAssignmentMapper {
     // 根据条件删除评审分配
     @Delete("DELETE FROM PeerReviewAssignment WHERE RevieweeNo = #{revieweeNo} AND ReviewerNo = #{reviewerNo} AND HomeworkNo = #{homeworkNo}")
     int deleteByPeerAndHomework(String revieweeNo,String reviewerNo,String homeworkNo);
+
+    @Delete("DELETE FROM PeerReviewAssignment WHERE HomeworkNo = #{homeworkNo}")
+    int deleteByHomework(String homeworkNo);
 }

@@ -58,7 +58,6 @@ public class HomeworkController {
 
         List<StudentHomework> studentHomeworks = studentHomeworkService.selectByHomeworkNo(homeworkNo);
         int studentCount = studentHomeworks.size();
-        //int assignmentsPerStudent = Math.min(2, studentCount - 1); // 每个学生最多分配2份作业
 
         List<StudentHomework> allAssignments = new ArrayList<>();
         for (StudentHomework sh : studentHomeworks) {
@@ -66,55 +65,119 @@ public class HomeworkController {
         }
 
         Collections.shuffle(allAssignments); // 随机打乱作业
-
-        // 存储每个学生分配到的作业(避免重复）
-        List<List<StudentHomework>> studentAssignments = new ArrayList<>();
+        List<StudentHomework> assignmentResults = new ArrayList<>(allAssignments);//随机作业整体右移
+        Collections.rotate(assignmentResults, 1);
         for (int i = 0; i < studentCount; i++) {
-            studentAssignments.add(new ArrayList<>());
+            StudentHomework currentStudentHomework = allAssignments.get(i);
+            String currentStudentNo = currentStudentHomework.getStudentNo();
+            System.out.println("currentStudet"+currentStudentNo+"i:"+i);
+            StudentHomework assignedHomework = assignmentResults.get(i);
+            String assignedStudentNo = assignedHomework.getStudentNo();
+            System.out.println("assignedStudentNo"+assignedStudentNo+"i:"+i);
+
+            if(i==0 && peerReviewAssignmentService.selectByHomeworkNo(homeworkNo)!=null){
+                peerReviewAssignmentService.deleteByHomework(homeworkNo);
+                peerReviewAssignmentService.insertPeerReviewAssignment(assignedStudentNo, currentStudentNo, homeworkNo, startTime, endTime);
+                System.out.println("第一份：被评作业者：" + assignedStudentNo + "评审员：" + currentStudentNo);
+            }else{
+                peerReviewAssignmentService.insertPeerReviewAssignment(assignedStudentNo, currentStudentNo, homeworkNo, startTime, endTime);
+            }
+            //插入每个人的第二份互评作业
+            StudentHomework nextHomework;
+            String nextStudenNo;
+            if(i != 0){
+               nextHomework = assignmentResults.get(i-1);
+               nextStudenNo = nextHomework.getStudentNo();
+            }else{
+                nextHomework = assignmentResults.get(studentCount-1);
+                nextStudenNo = nextHomework.getStudentNo();
+            }
+            peerReviewAssignmentService.insertPeerReviewAssignment(nextStudenNo, currentStudentNo, homeworkNo, startTime, endTime);
+            System.out.println("第二份："+"被评作业者：" + nextStudenNo + "评审员：" + currentStudentNo+"I:"+i);
         }
 
+
+
+//        // 存储每个学生分配到的作业(避免重复）
+//        List<List<StudentHomework>> studentAssignments = new ArrayList<>();
+//        for (int i = 0; i < studentCount; i++) {
+//            studentAssignments.add(new ArrayList<>());
+//        }
+//
+//        int index = 0;
+//        // 第一次作业分配
+//        for (int i = 0; i < studentCount; i++) {
+//            StudentHomework currentStudentHomework = studentHomeworks.get(i);
+//            String currentStudentNo = currentStudentHomework.getStudentNo();
+//            //分配一个！=学号的
+//            while (allAssignments.get(index).getStudentNo().equals(currentStudentNo)) {
+//                index += 1;
+//                if (index > allAssignments.size()) {
+//                    return Result.success("分配错误");
+//                }
+//                allAssignments.add(allAssignments.get(index));
+//            }
+//            StudentHomework assignedHomework = allAssignments.get(index);
+//            String assignedStudentNo = assignedHomework.getStudentNo();
+//            studentAssignments.get(i).add(assignedHomework);
+//            try {
+//                // 尝试插入新的评价任务
+//                peerReviewAssignmentService.insertPeerReviewAssignment(assignedStudentNo, currentStudentNo, homeworkNo, startTime, endTime);
+//                System.out.println("被评作业者："+assignedStudentNo+"评审员："+currentStudentNo);
+//            } catch (Exception e) {
+//                // 如果插入失败，首先尝试删除旧数据
+//                try {
+//                    peerReviewAssignmentService.deleteByHomework(homeworkNo);
+//                    System.out.println("被评作业者："+assignedStudentNo+"评审员："+currentStudentNo);
+//                } catch (Exception deleteException) {
+//                    // 如果删除失败，记录删除失败的异常信息
+//                    System.err.println("删除旧的评价任务失败: " + deleteException.getMessage());
+//                    // 根据需求选择是否继续处理或终止操作
+//                }
+//
+//                // 删除成功或失败后，重新插入新的数据
+//                try {
+//                    peerReviewAssignmentService.insertPeerReviewAssignment(assignedStudentNo, currentStudentNo, homeworkNo, startTime, endTime);
+//                } catch (Exception insertException) {
+//                    // 如果插入失败，记录插入失败的异常信息
+//                    System.err.println("插入新的评价任务失败: " + insertException.getMessage());
+//                }
+//            }
+//
+//        }
+//
+//        // 重新打乱作业
+//        allAssignments.clear();
+//        for (StudentHomework sh : studentHomeworks) {
+//            allAssignments.add(sh);
+//        }
+//
+//        Collections.shuffle(allAssignments);
+//
+//
+//        index = 0;
+//        // 第二次作业分配
+//        for (int i = 0; i < studentCount; i++) {
+//            StudentHomework currentStudentHomework = studentHomeworks.get(i);
+//            String currentStudentNo = currentStudentHomework.getStudentNo();
+//            //分配一个！=学号的&&不同于上次分配结果
+//            StudentHomework sh = studentAssignments.get(i).get(0);
+//            while (allAssignments.get(index).getStudentNo().equals(currentStudentNo) ||
+//                    allAssignments.get(index).getStudentNo().equals(sh.getStudentNo())) {
+//                index += 1;
+//                if (index > allAssignments.size()) {
+//                    return Result.success("分配错误");
+//                }
+//                allAssignments.add(allAssignments.get(index));
+//            }
+//            StudentHomework assignedHomework = allAssignments.get(index);
+//            String assignedStudentNo = assignedHomework.getStudentNo();
+//            studentAssignments.get(i).add(assignedHomework);
+//            peerReviewAssignmentService.insertPeerReviewAssignment(assignedStudentNo, currentStudentNo, homeworkNo, startTime, endTime);
+//            System.out.println("被评作业者："+assignedStudentNo+"评审员："+currentStudentNo);
+//        }
+//
         int index = 0;
-        // 第一次作业分配
-        for (int i = 0; i < studentCount; i++) {
-            StudentHomework currentStudentHomework = studentHomeworks.get(i);
-            String currentStudentNo = currentStudentHomework.getStudentNo();
-            //分配一个！=学号的
-            index = i;
-            while (allAssignments.get(index).getStudentNo().equals(currentStudentNo)) {
-                index += 1;
-                if (index > allAssignments.size()) {
-                    return Result.error("分配错误");
-                }
-                allAssignments.add(allAssignments.get(index));
-            }
-            StudentHomework assignedHomework = allAssignments.get(index);
-            String assignedStudentNo = assignedHomework.getStudentNo();
-            studentAssignments.get(i).add(assignedHomework);
-            peerReviewAssignmentService.insertPeerReviewAssignment(assignedStudentNo, currentStudentNo, homeworkNo, startTime, endTime);
-        }
-
-
-        // 第二次作业分配
-        for (int i = 0; i < studentCount; i++) {
-            StudentHomework currentStudentHomework = studentHomeworks.get(i);
-            String currentStudentNo = currentStudentHomework.getStudentNo();
-            //分配一个！=学号的&&不同于上次分配结果
-            index = i;
-            StudentHomework sh = studentAssignments.get(i).get(0);
-            while (allAssignments.get(index).getStudentNo().equals(currentStudentNo) ||
-                    allAssignments.get(index).getStudentNo().equals(sh.getStudentNo())) {
-                index += 1;
-                if (index > allAssignments.size()) {
-                    return Result.error("分配错误");
-                }
-                allAssignments.add(allAssignments.get(index));
-            }
-            StudentHomework assignedHomework = allAssignments.get(index);
-            String assignedStudentNo = assignedHomework.getStudentNo();
-            studentAssignments.get(i).add(assignedHomework);
-            peerReviewAssignmentService.insertPeerReviewAssignment(assignedStudentNo, currentStudentNo, homeworkNo, startTime, endTime);
-        }
-
         // 随机选择学生作业
         Random random = new Random();
         Set<String> selectedStudentNo = new HashSet<>();

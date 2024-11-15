@@ -54,4 +54,8 @@ public class PeerReviewAssignmentService {
     public int deletePeerAndHomework(String revieweeNo, String reviewerNo, String homeworkNo) {
         return peerReviewAssignmentMapper.deleteByPeerAndHomework(revieweeNo, reviewerNo, homeworkNo);
     }
+
+    public void deleteByHomework(String homeworkNo){
+        peerReviewAssignmentMapper.deleteByHomework(homeworkNo);
+    }
 }
