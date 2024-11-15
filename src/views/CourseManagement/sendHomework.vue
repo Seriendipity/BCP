@@ -6,7 +6,7 @@
     <el-table :data="SendHomeworkData.filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase()))"
       class="homeworkTable">
       <el-table-column label="是否发布" v-slot="scope" width="100px">
-        <el-switch v-model="scope.row.sendStatus" active-color="#13ce66" inactive-color="#ff4949">
+        <el-switch v-model="scope.row.sendStatus" active-color="#13ce66" inactive-color="#ff4949"@click="handleSend(scope.$index,scope.row)">
         </el-switch>
       </el-table-column>
       <el-table-column prop="homeworkNO" label="作业ID" width="130px">
@@ -47,8 +47,8 @@
 
 <script>
 import { ref, onMounted} from 'vue';
-import { ElNotification } from 'element-plus';
-import { requireTeacherSendHomework } from '@/api/api';
+import { ElNotification,ElMessage } from 'element-plus';
+import { requireTeacherSendHomework, updateHomeworkStatus } from '@/api/api';
 import { useRouter } from 'vue-router';
 
 const sendHomework = {
@@ -105,10 +105,30 @@ const sendHomework = {
       $router.push({ name: 'getHomeworkFinalGrade' });
     };
     const handleFile = (index, row) => {
-      // 跳转到成绩页面，传递成绩的详细信息
+      // 跳转到附件预览页面
       localStorage.setItem('homeworkNO', row.homeworkNO)
       localStorage.setItem('fileURL', row.file)
       $router.push({ name: 'accessoryPreview' });
+    };
+    const handleSend = async (index, row) => {
+      // 发布作业
+      const formData = new FormData()
+      formData.append('homeworkNo',row.homeworkNO)
+      try{    
+        const response = await updateHomeworkStatus(formData)
+        if (response.code === 0) {
+          ElMessage.success("作业发布状态更新成功");
+        }
+      }catch(error){
+        
+        ElNotification({
+          type: 'error',
+          message: '更新作业发布状态失败'
+        });
+      }
+  
+
+
     };
     return {
       SendHomeworkData,
@@ -116,6 +136,7 @@ const sendHomework = {
       handleEdit,
       handleGrade,
       handleFile,
+      handleSend
     };
   }
 };

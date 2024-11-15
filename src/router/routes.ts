@@ -265,7 +265,7 @@ export const constantRoute = [
         name: 'editHomework',
         meta: {
           title: '编辑作业信息',
-          hidden: false,
+          hidden: true,
           icon: 'Reading',
         }
       },
