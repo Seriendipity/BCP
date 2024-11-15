@@ -8,7 +8,7 @@
 import { reactive, onMounted, ref } from 'vue';
 import { useRoute } from 'vue-router';
 import { reqCourseIntro } from '@/api/api';
-
+import { ElNotification } from 'element-plus';
 // 创建一个响应式变量用于存储课程介绍
 const courseIntro = reactive('');
 

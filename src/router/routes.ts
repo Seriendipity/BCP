@@ -178,6 +178,37 @@ export const constantRoute = [
     ]
   },
   {
+    path: '/discussion',
+    component: () => import("@/layout/index.vue"),
+    name: 'discussion',
+    meta: {
+      title: '讨论',
+      hidden: false,//是否在菜单隐藏
+      icon: 'Notification',
+    },children: [
+      {
+        path: '/discussion/discussionArea',
+        component: () => import('@/views/discussion/discussionArea.vue'),
+        name: 'discussionArea',
+        meta: {
+          title: '讨论区',
+          hidden: false,
+          icon: 'Files',
+        }
+      },
+      {
+        path: '/discussion/discussionInfo',
+        component: () => import('@/views/discussion/discussionInfo.vue'),
+        name: 'discussionInfo',
+        meta: {
+          title: '讨论详情',
+          hidden: false,
+          icon: 'Files',
+        }
+      }
+    ]
+  },
+  {
     path: '/CourseManagement',
     component: () => import("@/layout/index.vue"),
     name: 'CourseManagement',
@@ -305,6 +336,7 @@ export const constantRoute = [
 
     ]
   },
+  
   {
     //404
     path: "/404",
