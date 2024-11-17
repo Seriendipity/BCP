@@ -32,7 +32,8 @@ import { ai_Helper } from "@/api/api";
 export default {
   setup() {
     // 定义响应式数据
-    const messages = ref([
+    const messages = ref([])
+    const mockMessages = ref([
       { text: "你好！", align: "left", name: "王阳阳", time: "18:07" },
       { text: "你好！", align: "right", name: "丽丝", time: "19:21" },
       { text: "如何才能帮助您？", align: "left", name: "王阳阳", time: "21:26" },
@@ -70,6 +71,7 @@ export default {
           });
         }
       } catch (error) {
+        messages.value = mockMessages.value
         console.log(error)
         ElNotification({
           message: '提问失败，请重试',
