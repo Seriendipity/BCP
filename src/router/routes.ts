@@ -185,7 +185,7 @@ export const constantRoute = [
       title: '讨论',
       hidden: false,//是否在菜单隐藏
       icon: 'Notification',
-    },children: [
+    }, children: [
       {
         path: '/discussion/discussionArea',
         component: () => import('@/views/discussion/discussionArea.vue'),
@@ -332,11 +332,32 @@ export const constantRoute = [
           icon: 'Files',
         }
       }
-
-
     ]
   },
-  
+  {
+    path: '/AI',
+    component: () => import("@/layout/index.vue"),
+    name: 'AI',
+    redirect: '/AI/AIhelper',
+    meta: {
+      title: 'AI',
+      hidden: false,
+      icon: 'Folder',
+    },
+    children: [
+      {
+        path: '/AI/AIhelper',
+        component: () => import('@/views/AI/AIhelper.vue'),
+        name: 'AIhelper',
+        meta: {
+          title: 'AI助手',
+          hidden: false,
+          icon: 'Files',
+        }
+      }
+    ]
+  },
+
   {
     //404
     path: "/404",

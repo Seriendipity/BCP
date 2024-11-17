@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 //用户相关接口
 import request from '@/utils/request'
 
@@ -30,13 +31,13 @@ enum API {
   UPDATENOTEFAVORITE = "/favorite/insertFavoriteOther",
   GET_FAVORITE = "/favorite/selectByStarNoteFromOthers",
   EXPORTSTUDENTLIST = "/StudentCourse/exportStudentList",
-  GET_STUDENTHOMEWORKLIST = "/homework/allCidHomework",
-  GET_TEACHERHOMEWORKLIST = "/homework/allCidHomework",
+  GET_HOMEWORKLIST = "/homework/allCidHomework",
   UPDATE_HOMEWORK_SETTINGS = "/homework/updateHomework",
   EDIT_HOMEWORK = "/homework/oneHomework",
   FINAL_GRADE = "",
-  GET_HOMEWORK_EVALUATION_TIME = "",
+  GET_HOMEWORK_EVALUATION_TIME = "1",
   SEND_HOMEWORK = "/homework/updateVisible",
+  AI_HELPER = "/ai/aiService"
 }
 //登录接口
 export const reqLogin = (data: any) => request.post<any, any>(API.LOGIN_URL, data);
@@ -71,9 +72,9 @@ export const reqFavoriteStatus = () => request.get<any, any>(API.GET_FAVORITE)
 //导出选课学生名单
 export const requireStudentList = (courseId: any) => request.get<any, any>(API.EXPORTSTUDENTLIST + `?cid=${courseId}`)
 //得到学生端作业列表
-export const requireStudentHomework = (courseId: any) => request.get<any, any>(API.GET_STUDENTHOMEWORKLIST + `?cid=${courseId}`)
+export const requireStudentHomework = (courseId: any) => request.get<any, any>(API.GET_HOMEWORKLIST + `?cid=${courseId}`)
 //得到老师端作业布置列表
-export const requireTeacherSendHomework = (courseId: any) => request.get<any, any>(API.GET_TEACHERHOMEWORKLIST + `?cid=${courseId}`)
+export const requireTeacherSendHomework = (courseId: any) => request.get<any, any>(API.GET_HOMEWORKLIST + `?cid=${courseId}`)
 //得到要编辑的作业
 export const editSingleHomework = (homeworkNO: any) => request.get<any, any>(API.EDIT_HOMEWORK + `?homeworkNO=${homeworkNO}`)
 //得到最终成绩
@@ -106,5 +107,7 @@ export const reqDeleteNote = (data: any) => request.post<any, any>(API.DELETE_NO
 //更新作业信息
 export const updateHomeworkSetting = (data: any) => request.post<any, any>(API.UPDATE_HOMEWORK_SETTINGS, data);
 //发布作业
-export const updateHomeworkStatus = (data:any) => request.post<any,any>(API.SEND_HOMEWORK,data);
+export const updateHomeworkStatus = (data: any) => request.post<any, any>(API.SEND_HOMEWORK, data);
+//AI助手
+export const ai_Helper = (data: any) => request.post<any, any>(API.AI_HELPER, data);
 // export const awardPost = (data: any) => request.post<any>(API.AWARD_POST, data);
