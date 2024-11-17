@@ -93,7 +93,7 @@ export default {
 <style scoped>
 .el_main_content {
   width: 100%;
-  height: 700px;
+  height: 580px;
   border-radius: 8px;
   border: 1px solid #dcdfe6;
   box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
