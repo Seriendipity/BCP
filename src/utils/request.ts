@@ -4,7 +4,7 @@ import { ElMessage } from "element-plus";
 import userUserStore from '@/store/modules/user';
 let request = axios.create({
   baseURL: "/api",
-  timeout: 5000,
+  timeout: 10000,
 });
 //请求拦截
 request.interceptors.request.use((config) => {
