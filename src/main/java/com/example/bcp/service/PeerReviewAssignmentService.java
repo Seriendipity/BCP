@@ -30,6 +30,11 @@ public class PeerReviewAssignmentService {
         return peerReviewAssignmentMapper.selectByPeerAndHomework(revieweeNo, reviewerNo, homeworkNo);
     }
 
+    public List<PeerReviewAssignment> selectByReviewerAndHomework(String reviewerNo,String homeworkNo) {
+        return peerReviewAssignmentMapper.selectByReviewerAndHomework(reviewerNo, homeworkNo);
+    }
+
+
     public List<PeerReviewAssignment> selectByRevieweeNo(String revieweeNo) {
         return peerReviewAssignmentMapper.selectByRevieweeNo(revieweeNo);
     }

@@ -410,9 +410,9 @@ public class HomeworkController {
     //对某student的作业打分
     @PostMapping("/updateGrade")
     public Result updateGrade(@RequestBody Map<String, Object> requestData) {
-        int submitGrade = Integer.parseInt(requestData.get("SubmitGrade").toString());
-        String studentNo = (String) requestData.get("StudentNo");
-        String homeworkNo = (String) requestData.get("HomeworkNo");
+        int submitGrade = Integer.parseInt(requestData.get("grade").toString());
+        String studentNo = requestData.get("StudentNo").toString();
+        String homeworkNo = requestData.get("HomeworkNo").toString();
         String comment = requestData.get("comment").toString();
         try {
             studentHomeworkMapper.updateStudentHomeworkSubmitGrade(submitGrade, studentNo, homeworkNo, comment);

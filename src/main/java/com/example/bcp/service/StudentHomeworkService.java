@@ -51,6 +51,7 @@ public class StudentHomeworkService {
         return studentHomeworkMapper.selectByIsTeacherAndHomeworkNo(HomeworkNo);
     }
 
+
     public void updateIsTeacherGrade(boolean isTeacherGrade,String StudentNo,String HomeworkNo){
         studentHomeworkMapper.updateStudentHomeworkIsTeacherGrade(isTeacherGrade,StudentNo,HomeworkNo);
     }

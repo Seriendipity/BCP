@@ -32,6 +32,9 @@ public interface PeerReviewAssignmentMapper {
     @Select("SELECT * FROM PeerReviewAssignment WHERE HomeworkNo = #{homeworkNo}")
     List<PeerReviewAssignment> selectByHomeworkNo(String homeworkNo);
 
+    @Select("SELECT * FROM PeerReviewAssignment WHERE ReviewerNo = #{reviewerNo} AND HomeworkNo = #{homeworkNo}")
+    List<PeerReviewAssignment> selectByReviewerAndHomework(String reviewerNo,String homeworkNo);
+
     @Select("SELECT * FROM PeerReviewAssignment WHERE ReviewerNo = #{reviewerNo}")
     List<PeerReviewAssignment> selectByReviewerNo(String reviewerNo);
 
