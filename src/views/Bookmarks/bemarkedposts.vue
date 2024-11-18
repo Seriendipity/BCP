@@ -95,10 +95,9 @@
   
   <script>
   import { ref, onMounted } from 'vue';
-import { useRouter } from 'vue-router';
 import { reqUpdateVisible } from '@/api/api'; // 假设这是更新帖子权限状态的API
 import { ElNotification } from 'element-plus';
-import { reqUserInfo,reqCourseList } from '@/api/api';
+import { reqUserInfo ,reqPostList} from '@/api/api';
 
 export default {
   setup() {
@@ -134,15 +133,15 @@ export default {
       // 更多帖子数据...
     ]);
     const mockData = {
-  studentName: '张三',
-  studentNo: '20220001',
-  dept: '计算机科学与技术',
-  email: 'zhangsan@example.com',
-  avatarUrl: 'src/assets/images/example.jpg'
-};
+      studentName: '张三',
+      studentNo: '20220001',
+      dept: '计算机科学与技术',
+      email: 'zhangsan@example.com',
+      avatarUrl: 'src/assets/images/example.jpg'
+    };
     const posts = ref([]);//界面展示的
     const student = ref([]);
-    const router = useRouter(); // 获取路由实例
+    
 
     // 定义方法
     //TODO
@@ -183,6 +182,7 @@ export default {
     student.value = userResponse.data;
     posts.value = postResponse.data;
   } catch (error) {
+    console.log(error);
     student.value = mockData;
     posts.value = mockPost.value;
     ElNotification({

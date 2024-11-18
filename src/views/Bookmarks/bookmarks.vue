@@ -146,6 +146,7 @@ onMounted(async () => {
     student.value = userResponse.data;
     courses.value = courseResponse.data;
   } catch (error) {
+    console.log(error);
     ElNotification({
       type: 'error',
       message: '获取信息失败',

@@ -147,11 +147,10 @@
 </template>
 
 <script lang="js" setup>
-import { ref, onMounted, reactive } from 'vue';
-import { useRouter } from 'vue-router';
+import { ref, onMounted, } from 'vue';
 import { requireAvatar, reqUserInfo, requireMyNote, reqAddNote, reqUpdateVisible, reqUpdateNote } from '@/api/api';
 import { ElNotification, ElMessage } from 'element-plus';
-import { Avatar } from '@element-plus/icons-vue';
+
 
 const props = defineProps({
   previewSrc: {
@@ -163,12 +162,10 @@ const props = defineProps({
 const noteSrc = ref(props.previewSrc)
 
 const userInfo = ref([]);
-const router = useRouter();
+
 const dialogVisible = ref(false);
 const previewVisible = ref(false);
 const dialogUpdateVisible = ref(false);
-const currentNotification = reactive({});
-const notifications = reactive([]);
 const selectedFile = ref(null); // 存储选中的文件
 const selectNoteNo = ref();
 const newNoteInfo = ref('');
@@ -213,7 +210,7 @@ const uploadFile = async () => {
     return;
   }
   const formData = new FormData();
-  const userId = localStorage.getItem('userId');
+  
   formData.append('file', selectedFile.value); // 传递文件
   formData.append('noteInfo', newNoteInfo.value);
   try {
@@ -256,6 +253,7 @@ const updateNote = (note) => {
 
 const uploadNewFile = async (note) => {
   if (!selectedFile.value) {
+    console.log(note);
     ElNotification({
       message: '请选择一个文件',
       type: 'error',
@@ -263,7 +261,7 @@ const uploadNewFile = async (note) => {
     return;
   }
   const formData = new FormData();
-  const userId = localStorage.getItem('userId');
+  
   formData.append('notePath', selectedFile.value); // 传递文件
   formData.append('noteInfo', nowNoteInfo.value);
   formData.append('noteNo', selectNoteNo.value);
@@ -313,6 +311,7 @@ onMounted(async () => {
     userInfo.value.avatarUrl = avatarResponse.data;
 
   } catch (error) {
+    console.log(error);
     userInfo.value = mockData;
     notes.value = notes;
     ElNotification({

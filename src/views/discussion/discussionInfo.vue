@@ -1,31 +1,37 @@
 <template>
   
     <h1 class="ziti03" style="margin-bottom: 20px;">{{ lesson.lessonName }}讨论区  </h1>
-
-    <el-scrollbar max-height="615px">
+    <div class="grid-content bg-white" style="padding: 10px;">
       <el-row :gutter="20">
               <el-col :span="22">
-                <h1 class="ziti03" style="margin-top: 10px;"> {{ post.postAuthor }}  </h1>
-                <h1 class="ziti04" style="line-height: 1.5 ;margin-top: 5px;"> {{ post.postInfo }} </h1>
-                <h1 class="ziti04" style="color: gray;margin-top: 15px;">{{ post.uploadDate }}   上传</h1>
-                <h1 class="ziti04" style="color: gray;margin-top: 5px;margin-bottom: 15px;">{{ post.replynum }}条回复</h1>
+                <h1 class="ziti03" > {{ posts.postAuthor }}  </h1>
+                <h1 class="ziti04" style="line-height: 1.5 ;margin-top: 5px;"> {{ posts.postInfo }} </h1>
+                <h1 class="ziti04" style="color: gray;margin-top: 15px;">{{ posts.uploadDate }}   上传</h1>
+                <h1 class="ziti04" style="color: gray;margin-top: 5px;margin-bottom: 15px;">{{ posts.replynum }}条回复 {{ posts.favornum }}次收藏</h1>
               </el-col>
               <el-col :span="2">
                 <el-button type="primary" style="margin-top: 10px;" @click="updatepost(post)">收藏</el-button>
               </el-col>
             </el-row>
-<div class="grid-content bg-white" style="padding-left: 10px;" v-for="reply in replies" :key="reply.replyNo">
-  <h1 class="ziti03" style="margin-top: 10px;"> {{ reply.replyAuthor }}  </h1>
-                <h1 class="ziti04" style="line-height: 1.5 ;margin-top: 5px;"> {{ post.postInfo }} </h1>
-                <h1 class="ziti04" style="color: gray;margin-top: 15px;">{{ post.uploadDate }}   上传</h1>
-            
-          </div></el-scrollbar>
+          </div>
+          <!-- <h1 class="ziti03" style="padding-right: 30px; text-align: right;margin-bottom: 10px;">共{{ posts.replynum }}条回复</h1> -->
+          <el-button type="primary" round>新建回复</el-button>
+            <el-scrollbar max-height="400px">
+              <div class="grid-content bg-white" style="padding: 10px;">
+<div v-for="reply in replies" :key="reply.replyNo">
+  <h1 class="ziti04" style="margin-top: 5px;font-weight: bold;"> {{ reply.replyAuthor }}  </h1>
+                <h1 class="ziti04" style="line-height: 1.5 ;margin-top: 5px;"> {{ reply.replyInfo }} </h1>
+                <h1 class="ziti04" style="color: gray;margin-top: 5px;margin-bottom: 5px;">{{ reply.uploadDate }}</h1>
+                <el-divider></el-divider>
+          </div>
+        </div>
+          </el-scrollbar>
 </template>
 
 <script>
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
-import { reqUpdateVisible } from '@/api/api'; // 假设这是更新帖子权限状态的API
+import { reqFavoriteStatus, reqUpdateVisible } from '@/api/api'; // 假设这是更新帖子权限状态的API
 import { ElNotification } from 'element-plus';
 import { reqUserInfo,reqCourseList } from '@/api/api';
 
@@ -37,19 +43,50 @@ setup() {
       postNo: 1,
       postLesson: '人工智能基础',
       postInfo: 'line-height的值应该大于或等于文本的字体大小，以确保行间距生效。如果文本的字体大小小于line-height的值，行间距将不会显示出来。如果你的文本字体大小小于1.25或1.5，你可能需要调整line-height的值或字体大小以得到期望的行间距效果。',
-      sendStatus: true ,
       postAuthor: '郑宇煊',
       uploadDate: '2024-11-11',
-      authority: true,
-      replynum: 0,
+      replynum: 5,
+      favornum: 4,
     };
   const mocklessonData = {
 lessonName:'课程实训',
 };
+const mockReply = ref([
+    {
+      replyNo: 1,
+      replyInfo: 'line-height的值应该大于或等于文本的字体大小，以确保行间距生效。如果文本的字体大小小于line-height的值，行间距将不会显示出来。如果你的文本字体大小小于1.25或1.5，你可能需要调整line-height的值或字体大小以得到期望的行间距效果。',
+      replyAuthor: '郑宇煊',
+      uploadDate: '2024-11-11',
+    },
+    {
+      replyNo: 2,
+      replyInfo: 'line-height的值应该大于或等于文本的字体大小，以确保行间距生效。如果文本的字体大小小于line-height的值，行间距将不会显示出来。如果你的文本字体大小小于1.25或1.5，你可能需要调整line-height的值或字体大小以得到期望的行间距效果。',
+      replyAuthor: 'zxc',
+      uploadDate: '2024-11-12',
+    },
+    {
+      replyNo: 3,
+      replyInfo: 'line-height的值应该大于或等于文本的字体大小，以确保行间距生效。如果文本的字体大小小于line-height的值，行间距将不会显示出来。如果你的文本字体大小小于1.25或1.5，你可能需要调整line-height的值或字体大小以得到期望的行间距效果。',
+      replyAuthor: '爱学习',
+      uploadDate: '2024-11-14',
+    },
+    {
+      replyNo: 4,
+      replyInfo: 'line-height的值应该大于或等于文本的字体大小，以确保行间距生效。如果文本的字体大小小于line-height的值，行间距将不会显示出来。如果你的文本字体大小小于1.25或1.5，你可能需要调整line-height的值或字体大小以得到期望的行间距效果。line-height的值应该大于或等于文本的字体大小，以确保行间距生效。如果文本的字体大小小于line-height的值，行间距将不会显示出来。如果你的文本字体大小小于1.25或1.5，你可能需要调整line-height的值或字体大小以得到期望的行间距效果。line-height的值应该大于或等于文本的字体大小，以确保行间距生效。如果文本的字体大小小于line-height的值，行间距将不会显示出来。如果你的文本字体大小小于1.25或1.5，你可能需要调整line-height的值或字体大小以得到期望的行间距效果。',
+      replyAuthor: '爱学习',
+      uploadDate: '2024-11-14',
+    },
+    {
+      replyNo: 5,
+      replyInfo: 'line-height的值应该大于或等于文本的字体大小，以确保行间距生效。如果文本的字体大小小于line-height的值，行间距将不会显示出来。如果你的文本字体大小小于1.25或1.5，你可能需要调整line-height的值或字体大小以得到期望的行间距效果。',
+      replyAuthor: '爱学习',
+      uploadDate: '2024-11-14',
+    },
+  ]);
   const posts = ref([]);//界面展示的
   const lesson  = ref([]);
   const router = useRouter(); // 获取路由实例
-
+  const replies = ref([]);//界面展示的
   // 定义方法
   //TODO
   const updatePostStatus = (post) => {
@@ -81,16 +118,20 @@ lessonName:'课程实训',
        });
      }
    };
-
+//TODO
+// 如何传对应讨论内容的参数以达到打开对应讨论详情我还没写
   onMounted(async () => {
 try {
   const classResponse = await reqClassInfo();
   const postResponse = await reqPostList();
+  const replyResponse = await reqReplyList();
   lesson.value = classResponse.data;
   posts.value = postResponse.data;
+  reply.value = replyResponse.data;
 } catch (error) {
     lesson.value = mocklessonData;
-  posts.value = mockPost.value;
+    posts.value = mockPost;
+    replies.value = mockReply.value;
   ElNotification({
     type: 'error',
     message: '获取信息失败',
@@ -107,6 +148,7 @@ try {
     mocklessonData,
     lesson,
     posts,
+    replies,
   };
 },
 };

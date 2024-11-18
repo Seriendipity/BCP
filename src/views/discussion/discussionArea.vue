@@ -36,6 +36,7 @@ setup() {
       postAuthor: '姜天亦',
       uploadDate: '2024-11-13',
       replynum: 0,
+      favornum: 0,
     },
     {
       postNo: 2,

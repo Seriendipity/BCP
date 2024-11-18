@@ -171,6 +171,7 @@ const fetchNotifications = async () => {
     const response = await reqNotificationAll(); // 获取通知数据
     notifications.value = response.data || []; // 更新通知数据
   } catch (err) {
+    console.log(err);
     // 捕获错误并使用模拟数据
     notifications.value = mockDataNotify;
     ElNotification({
@@ -179,6 +180,7 @@ const fetchNotifications = async () => {
     });
   }
 };
+
 
 onMounted(() => {
   fetchNotifications(); // 组件挂载时获取通知数据
@@ -223,10 +225,11 @@ onMounted(async () => {
     userInfo.value = userResponse.data;
     courses.value = courseResponse.data;
     userInfo.value.avatarUrl = avatarResponse.data;
-    localStorage.setItem('userName', userInfo.value.userName);
-    localStorage.setItem('userId', userInfo.userId)
+    localStorage.setItem('userName', userInfo.cuserName);
+    localStorage.setItem('userId', userInfo.value.userId)
   } catch (error) {
     userInfo.value = mockDataUser;
+    console.log(error);
     ElNotification({
       type: 'error',
       message: '获取信息失败',
@@ -255,6 +258,7 @@ const goToCourseInfo = async (courseId) => {
       });
     }
   } catch (error) {
+    console.log(error);
     ElNotification({
       type: 'error',
       message: '获取课程信息失败',
