@@ -38,7 +38,6 @@ public class StudentHomeworkController {
                          @RequestParam("studentNo") String studentNo,
                          @RequestParam("homeworkNo") String homeworkNo,
                          @RequestParam("submitDescription") String submitDescription,
-                         @RequestParam("submitPath") String submitPath,
                          @RequestParam("submitTime") String submitTime,
                          @RequestParam("comment") String comment) {
 
@@ -62,7 +61,7 @@ public class StudentHomeworkController {
             //public void insertStudentHomework(String StudentNo, String HomeworkNo, String SubmitDescription,
             //      String SubmitPath , LocalDateTime SubmitTime,String Comment)
             String url = "http://" + ip + ":" + port + "/homework/download/" + savedFilePath;
-            studentHomeworkService.insertStudentHomework(studentNo, homeworkNo, submitDescription, submitPath, newSubmitTime, comment);
+            studentHomeworkService.insertStudentHomework(studentNo, homeworkNo, submitDescription, url, newSubmitTime, comment);
 
             return Result.success(url);  //返回文件的链接
         } catch (IOException e) {
