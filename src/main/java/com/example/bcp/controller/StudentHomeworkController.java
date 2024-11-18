@@ -4,6 +4,7 @@ import cn.hutool.core.io.FileUtil;
 import com.example.bcp.entity.Result;
 import com.example.bcp.service.StudentHomeworkService;
 import jakarta.servlet.ServletOutputStream;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -39,7 +40,8 @@ public class StudentHomeworkController {
                          @RequestParam("homeworkNo") String homeworkNo,
                          @RequestParam("submitDescription") String submitDescription,
                          @RequestParam("submitTime") String submitTime,
-                         @RequestParam("comment") String comment) {
+                         @RequestParam("comment") String comment,
+                         HttpServletRequest request) {
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         LocalDateTime newSubmitTime = LocalDateTime.parse(submitTime, formatter);

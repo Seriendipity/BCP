@@ -70,32 +70,31 @@ public class HomeworkController {
         for (int i = 0; i < studentCount; i++) {
             StudentHomework currentStudentHomework = allAssignments.get(i);
             String currentStudentNo = currentStudentHomework.getStudentNo();
-            System.out.println("currentStudet"+currentStudentNo+"i:"+i);
+            System.out.println("currentStudet" + currentStudentNo + "i:" + i);
             StudentHomework assignedHomework = assignmentResults.get(i);
             String assignedStudentNo = assignedHomework.getStudentNo();
-            System.out.println("assignedStudentNo"+assignedStudentNo+"i:"+i);
+            System.out.println("assignedStudentNo" + assignedStudentNo + "i:" + i);
 
-            if(i==0 && peerReviewAssignmentService.selectByHomeworkNo(homeworkNo)!=null){
+            if (i == 0 && peerReviewAssignmentService.selectByHomeworkNo(homeworkNo) != null) {
                 peerReviewAssignmentService.deleteByHomework(homeworkNo);
                 peerReviewAssignmentService.insertPeerReviewAssignment(assignedStudentNo, currentStudentNo, homeworkNo, startTime, endTime);
                 System.out.println("第一份：被评作业者：" + assignedStudentNo + "评审员：" + currentStudentNo);
-            }else{
+            } else {
                 peerReviewAssignmentService.insertPeerReviewAssignment(assignedStudentNo, currentStudentNo, homeworkNo, startTime, endTime);
             }
             //插入每个人的第二份互评作业
             StudentHomework nextHomework;
             String nextStudenNo;
-            if(i != 0){
-               nextHomework = assignmentResults.get(i-1);
-               nextStudenNo = nextHomework.getStudentNo();
-            }else{
-                nextHomework = assignmentResults.get(studentCount-1);
+            if (i != 0) {
+                nextHomework = assignmentResults.get(i - 1);
+                nextStudenNo = nextHomework.getStudentNo();
+            } else {
+                nextHomework = assignmentResults.get(studentCount - 1);
                 nextStudenNo = nextHomework.getStudentNo();
             }
             peerReviewAssignmentService.insertPeerReviewAssignment(nextStudenNo, currentStudentNo, homeworkNo, startTime, endTime);
-            System.out.println("第二份："+"被评作业者：" + nextStudenNo + "评审员：" + currentStudentNo+"I:"+i);
+            System.out.println("第二份：" + "被评作业者：" + nextStudenNo + "评审员：" + currentStudentNo + "I:" + i);
         }
-
 
 
 //        // 存储每个学生分配到的作业(避免重复）
@@ -315,33 +314,33 @@ public class HomeworkController {
 
         System.out.println(newStartTime);
         System.out.println(newEndTime);
-        String startTime ;
-        String endTime ;
+        String startTime;
+        String endTime;
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        LocalDateTime newEndTimes ;
+        LocalDateTime newEndTimes;
         LocalDateTime newStartTimes;
 
-       if(newStartTime.endsWith(")") && newEndTime.endsWith(")")){
-           //都是Zone形式
-           startTime = getLocalTime(newStartTime);
-           endTime = getLocalTime(newEndTime);
-           newStartTimes = LocalDateTime.parse(startTime,formatter);
-           newEndTimes = LocalDateTime.parse(endTime,formatter);
-       } else if (!newStartTime.endsWith(")") && newEndTime.endsWith(")")) {
-           newStartTimes = LocalDateTime.parse(newStartTime,formatter);
-           endTime = getLocalTime(newEndTime);
-           newEndTimes = LocalDateTime.parse(endTime,formatter);
-       } else if (newStartTime.endsWith(")") && !newEndTime.endsWith(")")) {
-           startTime = getLocalTime(newStartTime);
-           newStartTimes = LocalDateTime.parse(startTime,formatter);
-           newEndTimes = LocalDateTime.parse(newEndTime,formatter);
-       }else {
-           newStartTimes = LocalDateTime.parse(newStartTime,formatter);
-           newEndTimes = LocalDateTime.parse(newEndTime,formatter);
-       }
+        if (newStartTime.endsWith(")") && newEndTime.endsWith(")")) {
+            //都是Zone形式
+            startTime = getLocalTime(newStartTime);
+            endTime = getLocalTime(newEndTime);
+            newStartTimes = LocalDateTime.parse(startTime, formatter);
+            newEndTimes = LocalDateTime.parse(endTime, formatter);
+        } else if (!newStartTime.endsWith(")") && newEndTime.endsWith(")")) {
+            newStartTimes = LocalDateTime.parse(newStartTime, formatter);
+            endTime = getLocalTime(newEndTime);
+            newEndTimes = LocalDateTime.parse(endTime, formatter);
+        } else if (newStartTime.endsWith(")") && !newEndTime.endsWith(")")) {
+            startTime = getLocalTime(newStartTime);
+            newStartTimes = LocalDateTime.parse(startTime, formatter);
+            newEndTimes = LocalDateTime.parse(newEndTime, formatter);
+        } else {
+            newStartTimes = LocalDateTime.parse(newStartTime, formatter);
+            newEndTimes = LocalDateTime.parse(newEndTime, formatter);
+        }
 
         int fixedPoint = Integer.parseInt(scores);
-        if(file != null && ! file.isEmpty()){
+        if (file != null && !file.isEmpty()) {
             String savedPath = uploadFile(file);
             String url = "http://" + ip + ":" + port + "/homework/download/" + savedPath;
             homeworkService.updateHomeworkPath(url, homeworkNo);
@@ -355,7 +354,7 @@ public class HomeworkController {
         return Result.success();
     }
 
-    String getLocalTime(String time){
+    String getLocalTime(String time) {
         // 1. 去掉中文时区名称 "(中国标准时间)"
         String cleanedTime = time.replaceAll("\\(.*\\)", "").trim();  // 去除括号内的中文时区名称
 
@@ -365,21 +364,47 @@ public class HomeworkController {
         // 3. 使用switch语句将月份缩写转化为对应的月份数字
         int month = 0;  // 初始化一个变量，默认为0，表示无效月份
         switch (parts[1]) {
-            case "Jan": month = 1;break;
-            case "Feb": month = 2;break;
-            case "Mar": month = 3;break;
-            case "Apr": month = 4;break;
-            case "May": month = 5;break;
-            case "Jun": month = 6;break;
-            case "Jul": month = 7;break;
-            case "Aug": month = 8;break;
-            case "Sep": month = 9;break;
-            case "Oct": month = 10;break;
-            case "Nov": month = 11;break;
-            case "Dec": month = 12;break;
-            default: System.out.println("Invalid month");break;
+            case "Jan":
+                month = 1;
+                break;
+            case "Feb":
+                month = 2;
+                break;
+            case "Mar":
+                month = 3;
+                break;
+            case "Apr":
+                month = 4;
+                break;
+            case "May":
+                month = 5;
+                break;
+            case "Jun":
+                month = 6;
+                break;
+            case "Jul":
+                month = 7;
+                break;
+            case "Aug":
+                month = 8;
+                break;
+            case "Sep":
+                month = 9;
+                break;
+            case "Oct":
+                month = 10;
+                break;
+            case "Nov":
+                month = 11;
+                break;
+            case "Dec":
+                month = 12;
+                break;
+            default:
+                System.out.println("Invalid month");
+                break;
         }
-        return parts[3]+"-"+month+"-"+parts[2]+" "+parts[4];
+        return parts[3] + "-" + month + "-" + parts[2] + " " + parts[4];
     }
 
     //对某student的作业打分
@@ -440,7 +465,9 @@ public class HomeworkController {
             // public void insertHomework(String HomeworkNo, String Cid, String HomeworkDescription,
             //        LocalDateTime StartTime , LocalDateTime EndTime , int HomeworkGrade)
             String url = "http://" + ip + ":" + port + "/homework/download/" + savedFilePath;
-            homeworkService.insertHomework(newHomeworkNo, Cid, homeworkDescription, newStartTime, newEndTime, homeworkGrade, homeworkInfo, url);
+            System.out.println(Cid);
+            System.out.println(Cid.length());
+            homeworkService.insertHomework(Cid, newHomeworkNo, homeworkDescription, newStartTime, newEndTime, homeworkGrade, homeworkInfo, url);
 
             return Result.success(url);  //返回文件的链接
         } catch (IOException e) {
@@ -466,7 +493,8 @@ public class HomeworkController {
         }
 
         // 保存文件到本地
-        File saveFile = new File("D:\\vscode\\BMS\\vite-project\\public\\" + originalFilename);
+        //File saveFile = new File("D:\\vscode\\BMS\\vite-project\\public\\" + originalFilename);
+        File saveFile = new File("D:\\桌面\\课程\\大三上\\综合实训\\BCP\\demo1\\BCP\\files" + originalFilename);
         System.out.println("文件的保存路径：" + saveFile.getAbsolutePath());
         file.transferTo(saveFile);  // 存储文件到本地的磁盘里面去
 
