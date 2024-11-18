@@ -285,7 +285,7 @@ export const constantRoute = [
         name: 'getHomeworkFinalGrade',
         meta: {
           title: '作业最终成绩',
-          hidden: false,
+          hidden: true,
           icon: 'Files',
         }
       }

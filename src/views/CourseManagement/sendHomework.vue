@@ -6,7 +6,8 @@
     <el-table :data="SendHomeworkData.filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase()))"
       class="homeworkTable">
       <el-table-column label="是否发布" v-slot="scope" width="100px">
-        <el-switch v-model="scope.row.sendStatus" active-color="#13ce66" inactive-color="#ff4949"@click="handleSend(scope.$index,scope.row)">
+        <el-switch v-model="scope.row.sendStatus" active-color="#13ce66" inactive-color="#ff4949"
+          @click="handleSend(scope.$index, scope.row)">
         </el-switch>
       </el-table-column>
       <el-table-column prop="homeworkNO" label="作业ID" width="130px">
@@ -25,7 +26,7 @@
       <el-table-column label="批改" v-slot="scope" width="100px">
         <el-button size="mini" :type="scope.row.judge === '已批改' ? 'success' : 'danger'"
           @click="handleDelete(scope.$index, scope.row)">
-          {{ scope.row.judge==='true'?'已批改':'未批改' }}
+          {{ scope.row.judge === 'true' ? '已批改' : '未批改' }}
         </el-button>
       </el-table-column>
       <el-table-column label="基本信息" v-slot="scope" width="100px">
@@ -46,8 +47,8 @@
 </template>
 
 <script>
-import { ref, onMounted} from 'vue';
-import { ElNotification,ElMessage } from 'element-plus';
+import { ref, onMounted } from 'vue';
+import { ElNotification, ElMessage } from 'element-plus';
 import { requireTeacherSendHomework, updateHomeworkStatus } from '@/api/api';
 import { useRouter } from 'vue-router';
 
@@ -67,7 +68,7 @@ const sendHomework = {
         if (response.code === 0) {
           // 将后端数据转为数组格式并赋值给 SendHomeworkData
           SendHomeworkData.value = Object.values(response.data).map(homework => ({
-            homeworkNO:homework.homeworkNO,
+            homeworkNO: homework.homeworkNO,
             sendStatus: homework.postStatus,
             name: homework.homeworkDescription,
             starttime: homework.homeworkStartTime,
@@ -84,6 +85,7 @@ const sendHomework = {
           });
         }
       } catch (error) {
+        console.log(error)
         ElNotification({
           type: 'error',
           message: '获取布置作业数据失败'
@@ -113,20 +115,20 @@ const sendHomework = {
     const handleSend = async (index, row) => {
       // 发布作业
       const formData = new FormData()
-      formData.append('homeworkNo',row.homeworkNO)
-      try{    
+      formData.append('homeworkNo', row.homeworkNO)
+      try {
         const response = await updateHomeworkStatus(formData)
         if (response.code === 0) {
           ElMessage.success("作业发布状态更新成功");
         }
-      }catch(error){
-        
+      } catch (error) {
+        console.log(error)
         ElNotification({
           type: 'error',
           message: '更新作业发布状态失败'
         });
       }
-  
+
 
 
     };

@@ -17,8 +17,8 @@
 
 <script setup>
 import { ref, onMounted } from 'vue';
-import { reqStudentData, requireStudentList } from '@/api/api';
-import { ElNotification } from 'element-plus';
+import { reqStudentData, getEvaluationEndTime, getFinalGrade, postScore } from '@/api/api';
+import { ElNotification, ElMessage } from 'element-plus';
 
 const studentListData = ref([]); // 保存学生数据的数组
 
@@ -39,6 +39,7 @@ onMounted(async () => {
       });
     }
   } catch (error) {
+    console.log(error)
     ElNotification({
       type: 'error',
       message: '获取学生数据失败'
@@ -59,16 +60,17 @@ const getFinalScore = async () => {
       });
     } else {
       try {
-        const response = await getFinalScore(homeworkNo)
+        const response = await getFinalGrade(homeworkNo)
         if (response.code === 0) {
           // 将后端数据转为数组格式并赋值给 tableData
           studentListData.value = Object.values(response.data).map(student => ({
             studentName: student.studentName,
-            studentNo: student.studentNo,
+            studentNo: student.studentNO,
             grade: student.grade,
           }));
         }
       } catch (error) {
+        console.log(error)
         ElNotification({
           message: '获取成绩失败，请重试',
           type: 'error',
@@ -76,6 +78,7 @@ const getFinalScore = async () => {
       }
     }
   } catch (error) {
+    console.log(error)
     ElNotification({
       message: '获取互评截止时间失败，请重试',
       type: 'error',
@@ -84,6 +87,21 @@ const getFinalScore = async () => {
 }
 
 const postFinalScore = async () => {
+  const formData = new FormData()
+  const homeworkNo = localStorage.getItem('homeworkNO')
+  formData.append('homeworkNo', homeworkNo)
+  try {
+    const response = await postScore(formData)
+    if (response.code === 0) {
+      ElMessage.success("发布成绩成功");
+    }
+  } catch (error) {
+    console.log(error)
+    ElNotification({
+      message: '发布成绩失败，请重试',
+      type: 'error',
+    });
+  }
   //TODO: 发布最终成绩
 }
 </script>

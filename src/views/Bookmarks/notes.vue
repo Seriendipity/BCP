@@ -1,3 +1,4 @@
+<!-- eslint-disable vue/multi-word-component-names -->
 <template>
   <el-container>
     <el-header class="head">
@@ -115,12 +116,16 @@
       <div class="file-input-container">
         <input type="file" id="fileInput" @change="handleChange" />
       </div>
-      <div class="el-upload__tip" slot="tip" type="success">支持扩展名：.pdf/.doc/.docx</div>
+      <template v-slot:tip>
+        <div class="el-upload__tip" type="success">支持扩展名：.pdf/.doc/.docx</div>
+      </template>
     </el-form>
-    <span slot="footer" class="dialog-footer">
-      <el-button @click="dialogVisible = false">取 消</el-button>
-      <el-button type="primary" @click="uploadFile">确 定</el-button>
-    </span>
+    <template v-slot:footer>
+      <span class="dialog-footer">
+        <el-button @click="dialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="uploadFile">确 定</el-button>
+      </span>
+    </template>
   </el-dialog>
 
   <el-dialog v-model="dialogUpdateVisible" title="更新笔记">
@@ -131,27 +136,31 @@
       <div class="file-input-container">
         <input type="file" id="fileInput" @change="handleChange" />
       </div>
-      <div class="el-upload__tip" slot="tip" type="success">支持扩展名：.pdf/.doc/.docx</div>
+      <template v-slot:tip>
+        <div class="el-upload__tip" type="success">支持扩展名：.pdf/.doc/.docx</div>
+      </template>
     </el-form>
-    <span slot="footer" class="dialog-footer">
-      <el-button @click="dialogUpdateVisible = false">取 消</el-button>
-      <el-button type="primary" @click="uploadNewFile">确 定</el-button>
-    </span>
+    <template v-slot:footer>
+      <span class="dialog-footer">
+        <el-button @click="dialogUpdateVisible = false">取 消</el-button>
+        <el-button type="primary" @click="uploadNewFile">确 定</el-button>
+      </span>
+    </template>
   </el-dialog>
   <el-dialog v-model="previewVisible" title="预览" width="800px">
     <iframe class="calendar" :src="noteSrc" width="100%" height="400px" style="border:none;"></iframe>
-    <span slot="footer" class="dialog-footer">
-      <el-button @click="previewVisible = false">关闭</el-button>
-    </span>
+    <template v-slot:footer>
+      <span class="dialog-footer">
+        <el-button @click="previewVisible = false">关闭</el-button>
+      </span>
+    </template>
   </el-dialog>
 </template>
 
 <script lang="js" setup>
-import { ref, onMounted, reactive } from 'vue';
-import { useRouter } from 'vue-router';
+import { ref, onMounted } from 'vue';
 import { requireAvatar, reqUserInfo, requireMyNote, reqAddNote, reqUpdateVisible, reqUpdateNote } from '@/api/api';
 import { ElNotification, ElMessage } from 'element-plus';
-import { Avatar } from '@element-plus/icons-vue';
 
 const props = defineProps({
   previewSrc: {
@@ -163,12 +172,9 @@ const props = defineProps({
 const noteSrc = ref(props.previewSrc)
 
 const userInfo = ref([]);
-const router = useRouter();
 const dialogVisible = ref(false);
 const previewVisible = ref(false);
 const dialogUpdateVisible = ref(false);
-const currentNotification = reactive({});
-const notifications = reactive([]);
 const selectedFile = ref(null); // 存储选中的文件
 const selectNoteNo = ref();
 const newNoteInfo = ref('');
@@ -213,7 +219,6 @@ const uploadFile = async () => {
     return;
   }
   const formData = new FormData();
-  const userId = localStorage.getItem('userId');
   formData.append('file', selectedFile.value); // 传递文件
   formData.append('noteInfo', newNoteInfo.value);
   try {
@@ -224,6 +229,7 @@ const uploadFile = async () => {
         message: "笔记上传成功",
         type: 'success',
       });
+      window.location.reload();
     }
   } catch (error) {
     console.error('上传笔记失败', error);
@@ -254,7 +260,7 @@ const updateNote = (note) => {
   // 更新逻辑
 };
 
-const uploadNewFile = async (note) => {
+const uploadNewFile = async () => {
   if (!selectedFile.value) {
     ElNotification({
       message: '请选择一个文件',
@@ -263,7 +269,6 @@ const uploadNewFile = async (note) => {
     return;
   }
   const formData = new FormData();
-  const userId = localStorage.getItem('userId');
   formData.append('notePath', selectedFile.value); // 传递文件
   formData.append('noteInfo', nowNoteInfo.value);
   formData.append('noteNo', selectNoteNo.value);
@@ -313,6 +318,7 @@ onMounted(async () => {
     userInfo.value.avatarUrl = avatarResponse.data;
 
   } catch (error) {
+    console.log(error)
     userInfo.value = mockData;
     notes.value = notes;
     ElNotification({
