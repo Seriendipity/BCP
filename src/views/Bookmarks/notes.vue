@@ -259,6 +259,7 @@ const updateNote = (note) => {
 
 const uploadNewFile = async () => {
   if (!selectedFile.value) {
+    // console.log(note);
     ElNotification({
       message: '请选择一个文件',
       type: 'error',

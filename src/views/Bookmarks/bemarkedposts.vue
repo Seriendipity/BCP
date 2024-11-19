@@ -1,3 +1,4 @@
+<!-- eslint-disable vue/multi-word-component-names -->
 <template>
   <el-container>
     <el-header class="head">
@@ -99,10 +100,9 @@
 
 <script>
 import { ref, onMounted } from 'vue';
-import { useRouter } from 'vue-router';
 import { reqUpdateVisible } from '@/api/api'; // 假设这是更新帖子权限状态的API
 import { ElNotification } from 'element-plus';
-import { reqUserInfo, reqCourseList } from '@/api/api';
+import { reqUserInfo, reqPostList } from '@/api/api';
 
 export default {
   setup() {
@@ -196,6 +196,8 @@ export default {
         });
       }
     });
+
+
 
     return {
       posts,

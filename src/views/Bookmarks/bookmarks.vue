@@ -132,12 +132,12 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
-import { reqUserInfo, reqCourseList, reqCourseIntro, requireAvatar } from '@/api/api';
+import { reqUserInfo, reqCourseList, requireAvatar } from '@/api/api';
 import { ElNotification } from 'element-plus';
 
 const courses = ref([]);
 const userInfo = ref([]);
-const router = useRouter();
+const $router = useRouter();
 
 const mockData = {
   userName: '张三',
@@ -167,34 +167,6 @@ onMounted(async () => {
   }
 });
 
-const goToCourseInfo = async (courseId) => {
-  try {
-    const response = await reqCourseIntro(courseId);
-    if (response && response.data) {
-      const currentQuery = router.currentRoute.value.query; // 获取当前查询参数
-      localStorage.setItem('courseId', courseId);
-      router.push({
-        path: '/CourseInfo',
-        query: {
-          ...currentQuery, // 保留当前查询参数
-          courseId,
-          courseIntro: response.data.courseInfo,
-          courseName: response.data.courseName,
-          courseNo: response.data.courseNo,
-          teacherName: response.data.teacherName,
-          establishCollege: response.data.establishCollege,
-          semester: response.data.semester,
-        },
-      });
-    }
-  } catch (error) {
-    console.log(error)
-    ElNotification({
-      type: 'error',
-      message: '获取课程信息失败',
-    });
-  }
-};
 </script>
 
 

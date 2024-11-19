@@ -233,6 +233,7 @@ const fetchNotifications = async () => {
     notifications.value = response.data || []; // 更新通知数据
     homeworks.value = homeworkResponse.data || [];
   } catch (err) {
+    console.log(err);
     // 捕获错误并使用模拟数据
     notifications.value = mockDataNotify;
     console.log(mockDataHomework);
@@ -245,6 +246,7 @@ const fetchNotifications = async () => {
     });
   }
 };
+
 
 onMounted(() => {
   fetchNotifications(); // 组件挂载时获取通知数据
