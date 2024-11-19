@@ -41,6 +41,7 @@ enum API {
   UPLOAD_HOMEWORK = "/studentHomework/upload",
   POST_FINALGRADE = "1",
   UNFINISHED_HOMEWORK = "2",
+  CREATE_HOMEWORK = "/homework/upload"
 }
 //登录接口
 export const reqLogin = (data: any) => request.post<any, any>(API.LOGIN_URL, data);
@@ -119,4 +120,6 @@ export const ai_Helper = (data: any) => request.post<any, any>(API.AI_HELPER, da
 export const reqUploadHomework = (data: any) => request.post<any, any>(API.UPLOAD_HOMEWORK, data);
 //发布最终成绩
 export const postScore = (data: any) => request.post<any, any>(API.POST_FINALGRADE, data);
+//老师发布作业
+export const createHomework = (data: any) => request.post<any, any>(API.CREATE_HOMEWORK, data);
 // export const awardPost = (data: any) => request.post<any>(API.AWARD_POST, data);
