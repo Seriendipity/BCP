@@ -31,7 +31,7 @@
           <textarea class="chat-input no-border" v-model="question" />
         </div>
         <div class="btn_box">
-          <el-button type="primary" class="btn" @click="askClick(question)" style="">发送</el-button>
+          <el-button type="primary" class="btn" @click="askClick(question)" style="float: right;">发送</el-button>
         </div>
       </div> 
 </template>
@@ -62,7 +62,7 @@ lessonName:'课程实训',
 const mockMessages = ref([
       {
         text: "我需要帮助进行Vue.js开发我需要帮助进行Vue.js开发我需要帮助进行Vue.js开发我需要帮助进行Vue.js开发",
-        align: "left",
+        // align: "left",
         name: "丽丝",
         time: "22:37",
       },
@@ -229,8 +229,24 @@ try {
   flex: 1;
   display: flex;
   align-items: center;
+  width: 100%
 }
 
+.chat-input {
+    width: 100%;
+    height: 80px;
+    padding: 12px 16px;
+    border: 1px solid #dcdfe6;
+    border-radius: 8px;
+    resize: none;
+    font-size: 14px;
+    color: #606266;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
+    transition: border-color 0.3s, box-shadow 0.3s;
+    margin-top: 10px;
+  }
+
+  
 .backmain1 {
   height: 770px;
   background-color: #eaf6ff;
@@ -353,4 +369,24 @@ try {
 body>.el-container {
   margin-bottom: 40px;
 }
+
+.btn_box {
+  margin-top: 10px;
+  display: flex;
+  justify-content: flex-end;
+
+  .btn {
+    background-color: #409eff;
+    color: #ffffff;
+    border-radius: 4px;
+    padding: 6px 20px;
+    font-size: 14px;
+    transition: background-color 0.3s;
+  }
+
+  .btn:hover {
+    background-color: #66b1ff;
+  }
+}
+
 </style>
