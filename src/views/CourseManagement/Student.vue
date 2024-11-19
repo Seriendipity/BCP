@@ -15,7 +15,7 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import { reqStudentData, requireStudentList } from '@/api/api';
-import { ElNotification } from 'element-plus';
+import { ElMessage, ElNotification } from 'element-plus';
 
 const studentListData = ref([]); // 保存学生数据的数组
 
@@ -51,12 +51,13 @@ const exportStudentList = async () => {
  const courseId = localStorage.getItem('courseId')
 
 try {
-  // 确保请求时设置 responseType 为 'blob'
   const response = await requireStudentList(courseId, { responseType: 'blob' });
-
-  // 使用 createObjectURL 生成一个对象 URL
+  console.log(response); // 查看整个 response 对象
+  console.log(response.data); // 查看 data 属性
+// 检查 response.data 是否是 Blob
+if (response instanceof Blob) {
   const link = document.createElement('a');
-  const url = window.URL.createObjectURL(response.data);  // response.data 是 Blob
+  const url = window.URL.createObjectURL(response);  // response.data 是 Blob
   link.href = url;
 
   // 设置下载文件名
@@ -67,6 +68,10 @@ try {
   
   // 释放对象 URL
   window.URL.revokeObjectURL(url);
+  ElMessage.success('导出成功')
+} else {
+  console.error('Expected Blob, but received:', response);
+}
 } catch (error) {
   console.log(error);
   ElNotification({
