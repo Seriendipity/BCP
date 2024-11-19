@@ -30,13 +30,13 @@
         <el-col :span="1">
           <div class="grid-content ">
             <router-link to="/myinformation" style="text-decoration: none;">
-              <div style="margin-top: 10px"><el-avatar :size="40" :src="circleUrl"></el-avatar></div>
+              <div style="margin-top: 10px"><el-avatar :size="40" :src="userInfo.avatarUrl"></el-avatar></div>
             </router-link>
           </div>
         </el-col>
         <el-col :span="2">
           <router-link to="/myinformation" style="text-decoration: none;">
-            <h1 style="font-size: medium;margin-top: 21px;color: aliceblue;font-weight: 550;">爱学习
+            <h1 style="font-size: medium;margin-top: 21px;color: aliceblue;font-weight: 550;">{{ userInfo.userName }}
             </h1>
           </router-link>
         </el-col>
@@ -46,18 +46,16 @@
     <el-main class="backmain1">
       <el-container>
         <el-aside class="backleft">
-          <div class="whiteback" :data="student">
+          <div class="whiteback" :data="userInfo">
             <h1 style="text-align: left; font-weight: bold;margin-bottom: 5px;">个人信息</h1>
-            <div style="margin-top: 20px;text-align: center; "><el-avatar :size="100" :src="circleUrl"></el-avatar>
+            <div style="margin-top: 20px;text-align: center; "><el-avatar :size="100"
+                :src="userInfo.avatarUrl"></el-avatar>
             </div>
             <h1 class="ziti01">学生</h1>
-            <h1 class="ziti02" style="text-align: left;padding-left: 15px;">姓名：{{ student.studentName }}</h1>
-            <h1 class="ziti02" style="text-align: left;padding-left: 15px;">学号：{{ student.studentNo }}</h1>
-            <h1 class="ziti02" style="text-align: left;padding-left: 15px;">学院：{{ student.dept }}</h1>
-            <h1 class="ziti02" style="text-align: left;padding-left: 15px;">邮箱：{{ student.email }}</h1>
-          </div>
-          <div class="whiteback2">
-            <h1 style="text-align: left; font-weight: bold;margin-bottom: 5px;">课程提醒</h1>
+            <h1 class="ziti02" style="text-align: left;padding-left: 15px;">姓名：{{ userInfo.userName }}</h1>
+            <h1 class="ziti02" style="text-align: left;padding-left: 15px;">学号：{{ userInfo.userId }}</h1>
+            <h1 class="ziti02" style="text-align: left;padding-left: 15px;">学院：{{ userInfo.dept }}</h1>
+            <h1 class="ziti02" style="text-align: left;padding-left: 15px;">邮箱：{{ userInfo.email }}</h1>
           </div>
         </el-aside>
 
@@ -140,15 +138,15 @@ export default {
       // 更多帖子数据...
     ]);
     const mockData = {
-      studentName: '张三',
-      studentNo: '20220001',
+      userName: '张三',
+      userId: '20220001',
       dept: '计算机科学与技术',
       email: 'zhangsan@example.com',
       avatarUrl: 'src/assets/images/example.jpg'
     };
     const posts = ref([]);//界面展示的
-    const student = ref([]);
-    const router = useRouter(); // 获取路由实例
+    const userInfo = ref([]);
+    let $router = useRouter(); // 获取路由实例
 
     // 定义方法
     //TODO
@@ -186,10 +184,11 @@ export default {
       try {
         const userResponse = await reqUserInfo();
         const postResponse = await reqPostList();
-        student.value = userResponse.data;
+        userInfo.value = userResponse.data;
         posts.value = postResponse.data;
       } catch (error) {
-        student.value = mockData;
+        console.log(error)
+        userInfo.value = mockData;
         posts.value = mockPost.value;
         ElNotification({
           type: 'error',
@@ -205,8 +204,8 @@ export default {
       previewPost,
       updatePostFavStatus,
       mockData,
-      student,
-      posts,
+      userInfo,
+
     };
   },
 };
@@ -221,7 +220,7 @@ export default {
 }
 
 .backmain1 {
-  height: 770px;
+  height: 705px;
   background-color: #eaf6ff;
 }
 
@@ -286,27 +285,11 @@ export default {
 
 }
 
-.whiteback2 {
-  margin-top: 20px;
-  border-radius: 4px;
-  height: 200px;
-  background-color: #ffffff;
-  padding: 10px;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
-}
 
-.whiteback3 {
-  /* margin-top: 20px; */
-  border-radius: 4px;
-  height: 400px;
-  background-color: #ffffff;
-  padding: 10px;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
-}
+
+
 
 .scrollable {
-  height: 690px;
-  /* 固定高度 */
   overflow-y: auto;
   /* 垂直方向上的滚动条 */
   overflow-x: hidden;
