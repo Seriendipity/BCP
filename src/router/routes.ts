@@ -270,6 +270,16 @@ export const constantRoute = [
         }
       },
       {
+        path: '/CourseManagement/addHomework',
+        component: () => import('@/views/CourseManagement/addHomework.vue'),
+        name: 'addHomework',
+        meta: {
+          title: '新建作业',
+          hidden: true,
+          icon: 'Reading',
+        }
+      },
+      {
         path: '/CourseManagement/accessoryPreview',
         component: () => import('@/views/CourseManagement/accessoryPreview.vue'),
         name: 'accessoryPreview',

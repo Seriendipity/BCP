@@ -2,7 +2,7 @@
   <div class="Intro">
     <el-button type="primary" round
       style="padding: 17px;font-size: large;font-weight: bold;float: right;margin-right: 40px;margin-top: 15px;"
-      @click="createHomework()">新建作业</el-button>
+      @click="newHomework()">新建作业</el-button>
     <el-table :data="SendHomeworkData.filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase()))"
       class="homeworkTable">
       <el-table-column label="是否发布" v-slot="scope" width="100px">
@@ -95,6 +95,10 @@ const sendHomework = {
 
     const search = ref('');
 
+    const newHomework = () => {
+      $router.push({ name: 'addHomework' });
+    }
+
     const handleEdit = (index, row) => {
       // 跳转到编辑页面，传递该作业的详细信息
       console.log(row)
@@ -138,7 +142,8 @@ const sendHomework = {
       handleEdit,
       handleGrade,
       handleFile,
-      handleSend
+      handleSend,
+      newHomework,
     };
   }
 };

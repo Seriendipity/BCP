@@ -59,9 +59,6 @@
             <h1 class="ziti02" style="text-align: left;padding-left: 15px;">学院：{{ userInfo.dept }}</h1>
             <h1 class="ziti02" style="text-align: left;padding-left: 15px;">邮箱：{{ userInfo.email }}</h1>
           </div>
-          <div class="whiteback2">
-            <h1 style="text-align: left; font-weight: bold;margin-bottom: 5px;">课程提醒</h1>
-          </div>
         </el-aside>
 
         <el-main height="600px">
@@ -209,7 +206,7 @@ const updateLikeStatus = async (note) => {
 }
 
 .backmain1 {
-  height: 770px;
+  height: 705px;
   background-color: #eaf6ff;
 }
 
@@ -273,27 +270,8 @@ const updateLikeStatus = async (note) => {
 
 }
 
-.whiteback2 {
-  margin-top: 20px;
-  border-radius: 4px;
-  height: 200px;
-  background-color: #ffffff;
-  padding: 10px;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
-}
-
-.whiteback3 {
-  /* margin-top: 20px; */
-  border-radius: 4px;
-  height: 400px;
-  background-color: #ffffff;
-  padding: 10px;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
-}
 
 .scrollable {
-  height: 690px;
-  /* 固定高度 */
   overflow-y: auto;
   /* 垂直方向上的滚动条 */
   overflow-x: hidden;

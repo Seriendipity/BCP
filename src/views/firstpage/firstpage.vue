@@ -1,3 +1,4 @@
+<!-- eslint-disable vue/multi-word-component-names -->
 <template>
   <el-container>
     <el-header class="head">
@@ -54,7 +55,24 @@
             <h1 class="ziti02" style="text-align: left;padding-left: 15px;">邮箱：{{ userInfo.email }}</h1>
           </div>
           <div class="whiteback2">
-            <h1 style="text-align: left; font-weight: bold;margin-bottom: 5px;">课程提醒</h1>
+            <h1 style="text-align: left; font-weight: bold;margin-bottom: 5px;">课程作业提醒</h1>
+            <div class="homework-scrollable">
+              <el-row :gutter="20">
+                <el-col :span="24" v-for="(homework, index) in homeworks" :key="index">
+                  <div class="homework-bar">
+                    <div class="homework-info">
+                      <h2 class="homework-lesson">{{ homework.courseName }}</h2>
+                      <h2 class="homework-title">{{ homework.homeworkDesc }}</h2>
+                      <p class="homework-time">起始时间：{{ homework.homeworkStartTime }}</p>
+                      <p class="homework-time">终止时间：{{ homework.homeworkEndTime }}</p>
+                    </div>
+                    <el-tag :type="'warning'">
+                      未完成
+                    </el-tag>
+                  </div>
+                </el-col>
+              </el-row>
+            </div>
           </div>
         </el-aside>
 
@@ -110,9 +128,11 @@
       <p class="dialog-title"><strong>主题:</strong> {{ currentNotification.notificationTitle }}</p>
       <p class="dialog-info"><strong>内容:</strong> {{ currentNotification.notificationInfo }}</p>
     </div>
-    <span slot="footer" class="dialog-footer">
-      <el-button @click="closeDialog" type="primary">关闭</el-button>
-    </span>
+    <template v-slot:footer>
+      <span class="dialog-footer">
+        <el-button @click="closeDialog" type="primary">关闭</el-button>
+      </span>
+    </template>
   </el-dialog>
 
 </template>
@@ -120,7 +140,7 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
-import { reqUserInfo, reqCourseList, reqCourseIntro, reqNotificationAll, updateNotificationState } from '@/api/api';
+import { reqUserInfo, reqCourseList, reqCourseIntro, reqNotificationAll, updateNotificationState, reqUnfinishedHomework } from '@/api/api';
 import { ElNotification } from 'element-plus';
 import { requireAvatar } from '../../api/api';
 
@@ -130,6 +150,7 @@ const router = useRouter();
 const dialogVisible = ref(false);
 const currentNotification = ref({});
 const notifications = ref([]);
+const homeworks = ref([]);
 
 
 // 模拟数据
@@ -157,6 +178,45 @@ const mockDataNotify = [
   },
 ];
 
+const mockDataHomework = [
+  {
+    courseName: '高等数学',
+    homeworkDesc: '第3章作业：微分公式及应用',
+    homeworkStartTime: '2024-11-20 08:00:00',
+    homeworkEndTime: '2024-11-25 23:59:59',
+  },
+  {
+    courseName: '线性代数',
+    homeworkDesc: '矩阵与向量作业',
+    homeworkStartTime: '2024-11-21 10:00:00',
+    homeworkEndTime: '2024-11-28 23:59:59',
+  },
+  {
+    courseName: '数据结构',
+    homeworkDesc: '链表实现的基本操作',
+    homeworkStartTime: '2024-11-22 14:00:00',
+    homeworkEndTime: '2024-11-27 20:00:00',
+  },
+  {
+    courseName: '操作系统',
+    homeworkDesc: '文件系统原理课后习题',
+    homeworkStartTime: '2024-11-23 09:00:00',
+    homeworkEndTime: '2024-11-29 18:00:00',
+  },
+  {
+    courseName: '编译原理',
+    homeworkDesc: '语法分析与语义分析作业',
+    homeworkStartTime: '2024-11-24 08:30:00',
+    homeworkEndTime: '2024-12-01 22:00:00',
+  },
+  {
+    courseName: '人工智能导论',
+    homeworkDesc: 'AI伦理与应用案例分析',
+    homeworkStartTime: '2024-11-25 11:00:00',
+    homeworkEndTime: '2024-12-02 21:00:00',
+  },
+];
+
 const mockDataUser = {
   userName: '张三',
   userId: '20220001',
@@ -169,13 +229,19 @@ const mockDataUser = {
 const fetchNotifications = async () => {
   try {
     const response = await reqNotificationAll(); // 获取通知数据
+    const homeworkResponse = await reqUnfinishedHomework();
     notifications.value = response.data || []; // 更新通知数据
+    homeworks.value = homeworkResponse.data || [];
   } catch (err) {
     console.log(err);
     // 捕获错误并使用模拟数据
     notifications.value = mockDataNotify;
+    console.log(mockDataHomework);
+    homeworks.value = mockDataHomework;
+    console.log(homeworks)
+    console.log(err)
     ElNotification({
-      message: '获取通知失败',
+      message: '获取失败',
       type: 'error',
     });
   }
@@ -184,6 +250,7 @@ const fetchNotifications = async () => {
 
 onMounted(() => {
   fetchNotifications(); // 组件挂载时获取通知数据
+
 });
 
 // 查看通知详情
@@ -225,11 +292,11 @@ onMounted(async () => {
     userInfo.value = userResponse.data;
     courses.value = courseResponse.data;
     userInfo.value.avatarUrl = avatarResponse.data;
-    localStorage.setItem('userName', userInfo.cuserName);
+    localStorage.setItem('userName', userInfo.value.userName);
     localStorage.setItem('userId', userInfo.value.userId)
   } catch (error) {
     userInfo.value = mockDataUser;
-    console.log(error);
+    console.log(error)
     ElNotification({
       type: 'error',
       message: '获取信息失败',
@@ -258,7 +325,7 @@ const goToCourseInfo = async (courseId) => {
       });
     }
   } catch (error) {
-    console.log(error);
+    console.log(error)
     ElNotification({
       type: 'error',
       message: '获取课程信息失败',
@@ -323,14 +390,14 @@ const goToCourseInfo = async (courseId) => {
 }
 
 .backleft {
-  width: "350px";
-  max-height: "550px";
+  width: 360px;
+  height: 650px;
   background-color: #eaf6ff;
 }
 
 .backright {
-  width: "350px";
-  max-height: "550px";
+  width: 290px;
+  height: 650px;
   background-color: #eaf6ff;
 }
 
@@ -346,7 +413,7 @@ const goToCourseInfo = async (courseId) => {
 .whiteback2 {
   margin-top: 20px;
   border-radius: 4px;
-  height: 200px;
+  height: 350px;
   background-color: #ffffff;
   padding: 10px;
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
@@ -355,7 +422,7 @@ const goToCourseInfo = async (courseId) => {
 .whiteback3 {
   /* margin-top: 20px; */
   border-radius: 4px;
-  height: 400px;
+  height: 650px;
   background-color: #ffffff;
   padding: 10px;
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
@@ -408,6 +475,16 @@ body>.el-container {
   overflow-y: auto;
 }
 
+.homework-scrollable {
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 15px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
 .notification-bar {
   display: flex;
   align-items: center;
@@ -418,7 +495,21 @@ body>.el-container {
   transition: background 0.3s ease;
 }
 
+.homework-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 20px;
+  border-bottom: 1px solid #e4e7ed;
+  background: #ffffff;
+  transition: background 0.3s ease;
+}
+
 .notification-bar:hover {
+  background: #f5f7fa;
+}
+
+.homework-bar:hover {
   background: #f5f7fa;
 }
 
@@ -439,6 +530,28 @@ body>.el-container {
 }
 
 .notification-time {
+  color: #999;
+  font-size: 12px;
+  margin-top: 10px;
+}
+
+.homework-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.homework-title {
+  font-size: 14px;
+  font-weight: normal;
+}
+
+.homework-lesson {
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.homework-time {
   color: #999;
   font-size: 12px;
   margin-top: 10px;

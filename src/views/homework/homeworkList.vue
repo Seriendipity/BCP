@@ -55,7 +55,7 @@
 <script>
 import { requireStudentHomework, reqUploadHomework } from '@/api/api';
 import { ref, onMounted } from 'vue';
-import { ElNotification } from 'element-plus';
+import { ElMessage, ElNotification } from 'element-plus';
 import { useRouter } from 'vue-router';
 
 
@@ -108,9 +108,14 @@ const homeworkList = {
     const selectedHomeworkNo = ref();
 
     const handlePreview = (index, row) => {
-      localStorage.setItem('homeworkNO', row.homeworkNO)
-      localStorage.setItem('fileURL', row.file)
-      $router.push({ name: 'homeworkPreview' });
+      if (row.ifsubmit === '未完成') {
+        ElMessage.error('作业未完成，不可预览')
+      } else {
+        localStorage.setItem('homeworkNO', row.homeworkNO)
+        localStorage.setItem('fileURL', row.file)
+        $router.push({ name: 'homeworkPreview' });
+      }
+
     };
 
     const handleChange = (event) => {

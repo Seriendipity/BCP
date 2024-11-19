@@ -12,16 +12,19 @@
   <el-button type="primary" round
     style="padding: 17px;font-size: large;font-weight: bold;float: right;margin-right: 40px;margin-top: 15px;"
     @click="getFinalScore()">获取最终成绩</el-button>
-
+  <el-button type="primary" round
+    style="padding: 17px;font-size: large;font-weight: bold;float: right;margin-right: 40px;margin-top: 15px;"
+    @click="goBack()">返回</el-button>
 </template>
 
 <script setup>
 import { ref, onMounted } from 'vue';
 import { reqStudentData, getEvaluationEndTime, getFinalGrade, postScore } from '@/api/api';
 import { ElNotification, ElMessage } from 'element-plus';
+import { useRouter } from 'vue-router';
 
 const studentListData = ref([]); // 保存学生数据的数组
-
+const $router = useRouter();
 onMounted(async () => {
   try {
     const storedCourseId = localStorage.getItem('courseId');
@@ -103,6 +106,11 @@ const postFinalScore = async () => {
     });
   }
   //TODO: 发布最终成绩
+}
+
+const goBack = () => {
+  const storedCourseId = localStorage.getItem('courseId');
+  $router.push("/CourseManagement/sendHomework" + `?cid=${storedCourseId}`);
 }
 </script>
 

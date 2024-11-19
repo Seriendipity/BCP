@@ -34,12 +34,14 @@ enum API {
   GET_HOMEWORKLIST = "/homework/allCidHomework",
   UPDATE_HOMEWORK_SETTINGS = "/homework/updateHomework",
   EDIT_HOMEWORK = "/homework/oneHomework",
-  FINAL_GRADE = "",
+  FINAL_GRADE = "/peerAssignment/finalGrade",
   GET_HOMEWORK_EVALUATION_TIME = "/peerAssignment/endTime",
   SEND_HOMEWORK = "/homework/updateVisible",
   AI_HELPER = "/ai/aiService",
-  UPLOAD_HOMEWORK = "2",
-  POST_FINALGRADE = "1",
+  UPLOAD_HOMEWORK = "/studentHomework/upload",
+  POST_FINALGRADE = "/studentHomework/updateVisible",
+  UNFINISHED_HOMEWORK = "/studentHomework/getAllUnfinishedHomework",
+  CREATE_HOMEWORK = "/homework/upload"
 }
 //登录接口
 export const reqLogin = (data: any) => request.post<any, any>(API.LOGIN_URL, data);
@@ -83,6 +85,8 @@ export const editSingleHomework = (homeworkNO: any) => request.get<any, any>(API
 export const getFinalGrade = (homeworkNO: any) => request.get<any, any>(API.FINAL_GRADE + `?homeworkNo=${homeworkNO}`)
 //得到互评最终时间
 export const getEvaluationEndTime = (homeworkNO: any) => request.get<any, any>(API.GET_HOMEWORK_EVALUATION_TIME + `?homeworkNo=${homeworkNO}`)
+//获得未完成作业
+export const reqUnfinishedHomework = () => request.get<any, any>(API.UNFINISHED_HOMEWORK)
 // export const awardInfo = () => request.get<any, any>(API.AWARD_GET);
 
 
@@ -115,5 +119,7 @@ export const ai_Helper = (data: any) => request.post<any, any>(API.AI_HELPER, da
 //学生提交作业
 export const reqUploadHomework = (data: any) => request.post<any, any>(API.UPLOAD_HOMEWORK, data);
 //发布最终成绩
-export const postScore = (data: any) => request.post<any, any>(API)
+export const postScore = (data: any) => request.post<any, any>(API.POST_FINALGRADE, data);
+//老师发布作业
+export const createHomework = (data: any) => request.post<any, any>(API.CREATE_HOMEWORK, data);
 // export const awardPost = (data: any) => request.post<any>(API.AWARD_POST, data);
