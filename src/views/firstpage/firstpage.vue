@@ -55,14 +55,14 @@
             <h1 class="ziti02" style="text-align: left;padding-left: 15px;">邮箱：{{ userInfo.email }}</h1>
           </div>
           <div class="whiteback2">
-            <h1 style="text-align: left; font-weight: bold;margin-bottom: 5px;">课程提醒</h1>
+            <h1 style="text-align: left; font-weight: bold;margin-bottom: 5px;">课程作业提醒</h1>
             <div class="homework-scrollable">
               <el-row :gutter="20">
                 <el-col :span="24" v-for="(homework, index) in homeworks" :key="index">
                   <div class="homework-bar">
                     <div class="homework-info">
                       <h2 class="homework-lesson">{{ homework.courseName }}</h2>
-                      <h2 class="homework-title">{{ homework.homeworkInfo }}</h2>
+                      <h2 class="homework-title">{{ homework.homeworkDesc }}</h2>
                       <p class="homework-time">起始时间：{{ homework.homeworkStartTime }}</p>
                       <p class="homework-time">终止时间：{{ homework.homeworkEndTime }}</p>
                     </div>
@@ -181,37 +181,37 @@ const mockDataNotify = [
 const mockDataHomework = [
   {
     courseName: '高等数学',
-    homeworkInfo: '第3章作业：微分公式及应用',
+    homeworkDesc: '第3章作业：微分公式及应用',
     homeworkStartTime: '2024-11-20 08:00:00',
     homeworkEndTime: '2024-11-25 23:59:59',
   },
   {
     courseName: '线性代数',
-    homeworkInfo: '矩阵与向量作业',
+    homeworkDesc: '矩阵与向量作业',
     homeworkStartTime: '2024-11-21 10:00:00',
     homeworkEndTime: '2024-11-28 23:59:59',
   },
   {
     courseName: '数据结构',
-    homeworkInfo: '链表实现的基本操作',
+    homeworkDesc: '链表实现的基本操作',
     homeworkStartTime: '2024-11-22 14:00:00',
     homeworkEndTime: '2024-11-27 20:00:00',
   },
   {
     courseName: '操作系统',
-    homeworkInfo: '文件系统原理课后习题',
+    homeworkDesc: '文件系统原理课后习题',
     homeworkStartTime: '2024-11-23 09:00:00',
     homeworkEndTime: '2024-11-29 18:00:00',
   },
   {
     courseName: '编译原理',
-    homeworkInfo: '语法分析与语义分析作业',
+    homeworkDesc: '语法分析与语义分析作业',
     homeworkStartTime: '2024-11-24 08:30:00',
     homeworkEndTime: '2024-12-01 22:00:00',
   },
   {
     courseName: '人工智能导论',
-    homeworkInfo: 'AI伦理与应用案例分析',
+    homeworkDesc: 'AI伦理与应用案例分析',
     homeworkStartTime: '2024-11-25 11:00:00',
     homeworkEndTime: '2024-12-02 21:00:00',
   },

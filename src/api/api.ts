@@ -39,8 +39,8 @@ enum API {
   SEND_HOMEWORK = "/homework/updateVisible",
   AI_HELPER = "/ai/aiService",
   UPLOAD_HOMEWORK = "/studentHomework/upload",
-  POST_FINALGRADE = "1",
-  UNFINISHED_HOMEWORK = "2",
+  POST_FINALGRADE = "/studentHomework/updateVisible",
+  UNFINISHED_HOMEWORK = "/studentHomework/getAllUnfinishedHomework",
   CREATE_HOMEWORK = "/homework/upload"
 }
 //登录接口
