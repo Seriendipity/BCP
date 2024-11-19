@@ -35,10 +35,10 @@
       </el-col>
       <el-col :span="7">
         <el-form :model="form">
-        <div class="file-input-container">
-        <input type="file" id="fileInput" @change="handleChange" />
-      </div>
-    </el-form>
+          <div class="file-input-container">
+            <input type="file" id="fileInput" @change="handleChange" />
+          </div>
+        </el-form>
       </el-col>
       <el-col :span="12">
         <el-button type="primary" @click="saveData" round style="font-size: medium;font-weight:bold;">保存</el-button>
@@ -56,7 +56,7 @@
 
 <script>
 import { updateHomeworkSetting, editSingleHomework } from '@/api/api';
-import { ElNotification,ElMessage } from 'element-plus';
+import { ElNotification, ElMessage } from 'element-plus';
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 
@@ -100,6 +100,7 @@ export default {
         }
       } catch (error) {
         currentData.value = tableData.value[0];
+        console.log(error)
         ElNotification({
           type: 'error',
           message: '获取布置作业数据失败'
@@ -108,12 +109,12 @@ export default {
     });
 
     const handleChange = (event) => {
-  const target = event.target;
-  if (target.files && target.files.length > 0) {
-    selectedFile.value = target.files[0]; // 存储选中的文件
-  }
-  console.log(selectedFile.value)
-};
+      const target = event.target;
+      if (target.files && target.files.length > 0) {
+        selectedFile.value = target.files[0]; // 存储选中的文件
+      }
+      console.log(selectedFile.value)
+    };
     const saveData = async () => {
       // 更新 tableData 中对应的数据
       const formData = new FormData()

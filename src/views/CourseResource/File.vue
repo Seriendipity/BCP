@@ -1,3 +1,4 @@
+<!-- eslint-disable vue/multi-word-component-names -->
 <template>
   <div class="file-layout">
     <el-row :gutter="20">
@@ -42,6 +43,7 @@ import { ref, onMounted } from 'vue';
 import { reqFileList, reqUploadFile } from '@/api/api'; // 引入 API
 import { ElMessage, ElNotification } from 'element-plus';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const fileList = ref<any[]>([]);
 const selectedFile = ref<File | null>(null); // 存储选中的文件
 
@@ -93,7 +95,7 @@ const handleSubmit = async () => {
   }
   const formData = new FormData();
   const storedCourseId = localStorage.getItem('courseId');
-
+  console.log(selectedFile.value)
   if (storedCourseId) {
     formData.append('cid', storedCourseId); // 传递 cid
     formData.append('file', selectedFile.value); // 传递文件
@@ -110,6 +112,7 @@ const handleSubmit = async () => {
     selectedFile.value = null; // 上传后清空选择的文件
     if (response.code === 0) {
       ElMessage.success("文件上传成功");
+      window.location.reload();
     }
   } catch (error) {
     console.error('上传文件失败', error);
@@ -121,11 +124,12 @@ const handleSubmit = async () => {
 };
 
 // 下载文件
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const downloadFile = (resource: any) => {
   try {
-    
     window.open(resource.url); // 打开文件链接
   } catch (error) {
+    console.log(error)
     ElNotification({
       message: '下载文件失败，请重试',
       type: 'error',

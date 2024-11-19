@@ -1,52 +1,67 @@
 <template>
   <div class="Intro">
-    <router-link to="/homeworkInfo" style="text-decoration: none;">
-      <el-table :data="tableData.filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase()))"
-        class="homeworkTable">
-        <el-table-column prop="name" label="作业名称">
-        </el-table-column>
-        <el-table-column prop="starttime" label="作业开始时间" width="180px">
-        </el-table-column>
-        <el-table-column prop="endtime" label="作业结束时间" width="180px">
-        </el-table-column>
-        <el-table-column label="提交人数" width="100px">
-          <template v-slot="scope">
-            {{ scope.row.submitted }}/{{ scope.row.number }}
-          </template>
-        </el-table-column>
-        <el-table-column prop="grade" label="成绩" width="100px">
-        </el-table-column>
-        <el-table-column label="状态" width="100px">
-          <template v-slot="scope">
-            <el-tag size="small" :type="scope.row.ifsubmit === '已完成' ? 'success' : 'danger'">{{ scope.row.ifsubmit
-              }}</el-tag>
-          </template>
-        </el-table-column>
-        <el-table-column label="操作" v-slot="scope" width="240px">
-          <router-link to="/homeworkPreview" style="text-decoration: none;">
-            <el-button size="mini" type="primary" @click="handlePreview(scope.$index, scope.row)">预览</el-button>
-          </router-link>
-          <el-button size="mini" type="danger" @click="handleUpload(scope.$index, scope.row)"
-            style="margin-left: 10px;">上传</el-button>
+    <el-table :data="tableData.filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase()))"
+      class="homeworkTable">
+      <el-table-column prop="name" label="作业名称">
+      </el-table-column>
+      <el-table-column prop="starttime" label="作业开始时间" width="180px">
+      </el-table-column>
+      <el-table-column prop="endtime" label="作业结束时间" width="180px">
+      </el-table-column>
+      <el-table-column label="提交人数" width="100px">
+        <template v-slot="scope">
+          {{ scope.row.submitted }}/{{ scope.row.number }}
+        </template>
+      </el-table-column>
+      <el-table-column prop="grade" label="成绩" width="100px">
+      </el-table-column>
+      <el-table-column label="状态" width="100px">
+        <template v-slot="scope">
+          <el-tag size="small" :type="scope.row.ifsubmit === '已完成' ? 'success' : 'danger'">{{ scope.row.ifsubmit
+            }}</el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column label="操作" v-slot="scope" width="240px">
+        <el-button size="mini" type="primary" @click="handlePreview(scope.$index, scope.row)">预览</el-button>
+        <el-button size="mini" type="danger" @click="handleUpload(scope.$index, scope.row)"
+          style="margin-left: 10px;">上传</el-button>
 
-        </el-table-column>
+      </el-table-column>
 
-      </el-table></router-link>
-
-
-
+    </el-table>
   </div>
+
+  <el-dialog v-model="dialogVisible" title="上传作业">
+    <el-form :model="form">
+      <el-form-item label="作业内容" prop="content">
+        <el-input class="homeworkContent no-border" v-model="homeworkAnswer" placeholder="请输入作业答案"></el-input>
+      </el-form-item>
+      <div class="file-input-container">
+        <input type="file" id="fileInput" @change="handleChange" />
+      </div>
+      <template v-slot:tip>
+        <div class="el-upload__tip" type="success">支持扩展名：.pdf/.doc/.docx</div>
+      </template>
+    </el-form>
+    <template v-slot:footer>
+      <span class="dialog-footer">
+        <el-button @click="dialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="uploadFile">确 定</el-button>
+      </span>
+    </template>
+  </el-dialog>
 </template>
 
 <script>
-import { requireStudentHomework } from '@/api/api';
+import { requireStudentHomework, reqUploadHomework } from '@/api/api';
 import { ref, onMounted } from 'vue';
 import { ElNotification } from 'element-plus';
 import { useRouter } from 'vue-router';
 
-let $router = useRouter()
+
 const homeworkList = {
   setup() {
+    let $router = useRouter()
     const homeworkListData = ref([
       {
         name: '感知机1',
@@ -87,14 +102,70 @@ const homeworkList = {
     ]);
 
     const search = ref('');
-
+    const dialogVisible = ref(false);
+    const homeworkAnswer = ref('');
+    const selectedFile = ref(null);
+    const selectedHomeworkNo = ref();
 
     const handlePreview = (index, row) => {
+      localStorage.setItem('homeworkNO', row.homeworkNO)
+      localStorage.setItem('fileURL', row.file)
       $router.push({ name: 'homeworkPreview' });
     };
 
+    const handleChange = (event) => {
+      const target = event.target;
+      if (target.files && target.files.length > 0) {
+        selectedFile.value = target.files[0]; // 存储选中的文件
+      }
+      console.log(selectedFile.value)
+    };
+
+    const uploadFile = async () => {
+      if (!selectedFile.value) {
+        ElNotification({
+          message: '请选择一个文件',
+          type: 'error',
+        });
+        return;
+      }
+      const formData = new FormData();
+      const studentNo = localStorage.getItem('userId')
+      const submitTime = getFormattedDate()
+      const comment = ref();
+      formData.append('file', selectedFile.value); // 传递文件
+      formData.append('submitDescription', homeworkAnswer.value);
+      formData.append('homeworkNo', selectedHomeworkNo.value);
+      formData.append('studentNo', studentNo);
+      formData.append('submitTime', submitTime);
+      formData.append('comment', comment);
+      try {
+        const response = await reqUploadHomework(formData); // 连接后端上传文件
+        selectedFile.value = null; // 上传后清空选择的文件
+        selectedHomeworkNo.value = null;
+        if (response.code === 0) {
+          ElNotification({
+            message: "作业上传成功",
+            type: 'success',
+          });
+          window.location.reload();
+        }
+      } catch (error) {
+        console.log(error);
+        ElNotification({
+          message: '上传作业失败，请重试',
+          type: 'error',
+        });
+      }
+      homeworkAnswer.value = '';
+      selectedFile.value = '';
+      dialogVisible.value = false;
+    };
+
     const handleUpload = (index, row) => {
-      TODO: 文件上传
+      selectedHomeworkNo.value = row.homeworkNO
+      dialogVisible.value = true;
+      //TODO: 文件上传
     };
     onMounted(async () => {
       try {
@@ -118,6 +189,7 @@ const homeworkList = {
           });
         }
       } catch (error) {
+        console.log(error)
         ElNotification({
           type: 'error',
           message: '获取作业数据失败'
@@ -125,11 +197,30 @@ const homeworkList = {
       }
     });
 
+    function getFormattedDate() {
+      const now = new Date();
+      const year = now.getFullYear();
+      const month = String(now.getMonth() + 1).padStart(2, '0'); // 月份从0开始，需要+1
+      const day = String(now.getDate()).padStart(2, '0');
+      const hours = String(now.getHours()).padStart(2, '0');
+      const minutes = String(now.getMinutes()).padStart(2, '0');
+      const seconds = String(now.getSeconds()).padStart(2, '0');
+
+      return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+    }
+
     return {
       tableData: homeworkListData,
       search,
       handlePreview,
       handleUpload,
+      handleChange,
+      uploadFile,
+      getFormattedDate,
+      dialogVisible,
+      homeworkAnswer,
+
+
     };
   }
 };

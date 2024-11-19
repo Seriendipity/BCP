@@ -1,22 +1,22 @@
 <template>
-    <el-container>
-        <el-aside width="200px">
-            <div class="homework-scrollable">
-              <el-row :gutter="20">
-                <el-col :span="24" v-for="(homework, index) in homeworks" :key="index">
-                  <div class="homework-bar">
-                    <div class="homework-info" @click="viewhomework(homework)">
-                      <h2 class="homework-lesson">{{ homework.courseName }}</h2>
-                      <h2 class="homework-title">{{ homework.homeworkTitle }}</h2>
-                      <p class="homework-time">{{ homework.homeworkPostingTime }}</p>
-                    </div>
-                    <el-tag :type="homework.homeworkState === '已读' ? 'success' : 'warning'">
-                      {{ homework.homeworkState }}
-                    </el-tag>
-                  </div>
-                </el-col>
-              </el-row>
+  <el-container>
+    <el-aside width="200px">
+      <div class="homework-scrollable">
+        <el-row :gutter="20">
+          <el-col :span="24" v-for="(homework, index) in homeworks" :key="index">
+            <div class="homework-bar">
+              <div class="homework-info" @click="viewhomework(homework)">
+                <h2 class="homework-lesson">{{ homework.courseName }}</h2>
+                <h2 class="homework-title">{{ homework.homeworkTitle }}</h2>
+                <p class="homework-time">{{ homework.homeworkPostingTime }}</p>
+              </div>
+              <el-tag :type="homework.homeworkState === '已读' ? 'success' : 'warning'">
+                {{ homework.homeworkState }}
+              </el-tag>
             </div>
+          </el-col>
+        </el-row>
+      </div>
     </el-aside>
     <el-main>Main</el-main>
     <el-aside width="200px">Aside</el-aside>
@@ -26,7 +26,7 @@
 <script setup>
 import { ref, onMounted, reactive } from 'vue';
 import { useRouter } from 'vue-router';
-import { reqUserInfo, reqCourseList, reqCourseIntro,requireTeacherSendHomework} from '@/api/api';
+import { reqUserInfo, reqCourseList, reqCourseIntro, requireTeacherSendHomework } from '@/api/api';
 import { ElNotification } from 'element-plus';
 import { requireAvatar } from '../../api/api';
 
@@ -93,26 +93,26 @@ onMounted(() => {
 
 // 查看通知详情
 const viewhomework = async (homework) => {
-//   currenthomework.value = homework; // 设置当前通知
-//   dialogVisible.value = true; // 打开弹出框
+  //   currenthomework.value = homework; // 设置当前通知
+  //   dialogVisible.value = true; // 打开弹出框
 
-//   if (homework.homeworkState === '未读') {
-//     // 将状态更新为已读
-//     homework.homeworkState = '已读';
+  //   if (homework.homeworkState === '未读') {
+  //     // 将状态更新为已读
+  //     homework.homeworkState = '已读';
 
-//     // 调用后端API更新状态
-//     try {
-//       await updatehomeworkState({
-//         homeworkId: homework.homeworkId, // 传递通知ID
-//       });
-//     } catch (error) {
-//       console.error('更新通知状态失败:', error);
-//       ElNotification({
-//         type: 'error',
-//         message: '更新通知状态失败，请重试。',
-//       });
-//     }
-//   }
+  //     // 调用后端API更新状态
+  //     try {
+  //       await updatehomeworkState({
+  //         homeworkId: homework.homeworkId, // 传递通知ID
+  //       });
+  //     } catch (error) {
+  //       console.error('更新通知状态失败:', error);
+  //       ElNotification({
+  //         type: 'error',
+  //         message: '更新通知状态失败，请重试。',
+  //       });
+  //     }
+  //   }
 };
 
 
@@ -131,8 +131,9 @@ onMounted(async () => {
     courses.value = courseResponse.data;
     userInfo.value.avatarUrl = avatarResponse.data;
     localStorage.setItem('userName', userInfo.value.userName);
-    localStorage.setItem('userId', userInfo.userId)
+    localStorage.setItem('userId', userInfo.value.userId)
   } catch (error) {
+    console.log(error)
     userInfo.value = mockDataUser;
     ElNotification({
       type: 'error',

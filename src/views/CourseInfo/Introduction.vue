@@ -21,6 +21,7 @@ onMounted(async () => {
     const response = await reqCourseIntro(storedCourseId); // 获取教师信息
     courseIntro.value = response.data.courseInfo
   } catch (error) {
+    console.log(error)
     ElNotification({
       type: 'error',
       message: '获取课程介绍失败',
