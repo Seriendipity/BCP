@@ -1,6 +1,6 @@
 <template>
   
-    <h1 class="ziti03" style="margin-bottom: 20px;">{{ lesson.lessonName }}讨论区  </h1>
+    <!-- <h1 class="ziti03" style="margin-bottom: 20px;">{{ lesson.lessonName }}讨论区  </h1> -->
     <div class="grid-content bg-white" style="padding: 10px;">
       <el-row :gutter="20">
               <el-col :span="22">
@@ -15,7 +15,7 @@
             </el-row>
           </div>
           <!-- <h1 class="ziti03" style="padding-right: 30px; text-align: right;margin-bottom: 10px;">共{{ posts.replynum }}条回复</h1> -->
-          <el-button type="primary" round>新建回复</el-button>
+          <!-- <el-button type="primary" round>新建回复</el-button> -->
             <el-scrollbar max-height="400px">
               <div class="grid-content bg-white" style="padding: 10px;">
 <div v-for="reply in replies" :key="reply.replyNo">
@@ -26,13 +26,21 @@
           </div>
         </div>
           </el-scrollbar>
+          <div class="main_content_footer">
+        <div class="input_box" width="100%">
+          <textarea class="chat-input no-border" v-model="question" />
+        </div>
+        <div class="btn_box">
+          <el-button type="primary" class="btn" @click="askClick(question)" style="">发送</el-button>
+        </div>
+      </div> 
 </template>
 
 <script>
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { reqFavoriteStatus, reqUpdateVisible } from '@/api/api'; // 假设这是更新帖子权限状态的API
-import { ElNotification } from 'element-plus';
+import { ElNotification,ElMessage } from 'element-plus';
 import { reqUserInfo,reqCourseList } from '@/api/api';
 
 export default {
@@ -51,6 +59,14 @@ setup() {
   const mocklessonData = {
 lessonName:'课程实训',
 };
+const mockMessages = ref([
+      {
+        text: "我需要帮助进行Vue.js开发我需要帮助进行Vue.js开发我需要帮助进行Vue.js开发我需要帮助进行Vue.js开发",
+        align: "left",
+        name: "丽丝",
+        time: "22:37",
+      },
+    ]);
 const mockReply = ref([
     {
       replyNo: 1,
@@ -87,6 +103,7 @@ const mockReply = ref([
   const lesson  = ref([]);
   const router = useRouter(); // 获取路由实例
   const replies = ref([]);//界面展示的
+  const newmessage = ref(""); // 输入框的绑定值
   // 定义方法
   //TODO
   const updatePostStatus = (post) => {
@@ -118,6 +135,38 @@ const mockReply = ref([
        });
      }
    };
+   const askClick = async (val) => {
+      if (val.trim()) {
+        const userName = localStorage.getItem("userName") || "默认用户";
+        messages.value.push({
+          text: val, // 用户输入的消息
+          name: userName, // 用户名
+          align: "right",
+        });
+        newmessage.value = ""; // 发送消息后清空输入框
+      } else {
+        ElMessage.warning("不能发送空白消息");
+      }
+      const formData = new FormData()
+      formData.append('question', val)
+      try {
+        //const response = await ai_Helper(formData)
+        // if (response.code === 0) {
+        //   messages.value.push({
+        //     text: response.data,
+        //     name: "智慧课堂小助手",
+        //     align: "left",
+        //   });
+        // }
+      } catch (error) {
+        newmessage.value = mockMessages.value
+        console.log(error)
+        ElNotification({
+          message: '发送失败，请重试',
+          type: 'error',
+        });
+      }
+    };
 //TODO
 // 如何传对应讨论内容的参数以达到打开对应讨论详情我还没写
   onMounted(async () => {
@@ -148,6 +197,8 @@ try {
     mocklessonData,
     lesson,
     posts,
+    newmessage,
+    mockMessages,
     replies,
   };
 },
@@ -160,6 +211,24 @@ try {
 .head {
   background-color: #005bac;
 
+}
+
+.main_content_footer {
+  width: 100%;
+  height: 150px;
+  background-color: #ffffff;
+  border-top: 1px solid #e4e7ed;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 10px 16px;
+  margin-top: 10px;
+}
+
+.input_box {
+  flex: 1;
+  display: flex;
+  align-items: center;
 }
 
 .backmain1 {
