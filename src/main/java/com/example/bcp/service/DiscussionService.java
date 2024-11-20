@@ -63,4 +63,8 @@ public class DiscussionService {
     public List<Discussion> fuzzyQuery(String SelectInfo,String Cid){
         return discussionMapper.fuzzyQuery(SelectInfo,Cid);
     }
+
+    public void increaseStarTimes(String DiscussionId){
+        discussionMapper.increaseStarTimes(DiscussionId);
+    }
 }

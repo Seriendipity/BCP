@@ -48,4 +48,7 @@ public interface DiscussionMapper {
     @Update("Update Discussion Set DiscussionInformation = #{DiscussionInformation} ,DiscussionPostingTime = Now()" +
             "Where DiscussionId = #{DiscussionId}")
     void updateDiscussionInfo(String DiscussionInformation,String DiscussionId);
+
+    @Update("Update Discussion Set starTimes = starTimes+1 Where DiscussionId = #{DiscussionId}")
+    void increaseStarTimes(String DiscussionId);
 }

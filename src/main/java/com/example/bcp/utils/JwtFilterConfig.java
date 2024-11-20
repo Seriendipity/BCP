@@ -20,10 +20,17 @@ public class JwtFilterConfig {
         registrationBean.addUrlPatterns("/note/upload");
         registrationBean.addUrlPatterns("/favorite/*");
         registrationBean.addUrlPatterns("/StudentCourse/*");
+        registrationBean.addUrlPatterns("/studentHomework/getAllUnfinishedHomework");
         registrationBean.addUrlPatterns("/users/*");
         registrationBean.addUrlPatterns("/teaching/*");
         registrationBean.addUrlPatterns("/notifications/*");
-        registrationBean.addUrlPatterns("/homework/*");
+        registrationBean.addUrlPatterns("/homework/assignHomework");
+        registrationBean.addUrlPatterns("/homework/oneHomework");
+        registrationBean.addUrlPatterns("/homework/allCidHomework");
+        registrationBean.addUrlPatterns("/homework/allStudentHomework");
+        registrationBean.addUrlPatterns("/homework/updateHomework");
+        registrationBean.addUrlPatterns("/homework/updateGrade");
+        registrationBean.addUrlPatterns("/homework/updateVisible");
         registrationBean.addUrlPatterns("/peerAssignment/*");
         registrationBean.addUrlPatterns("/file/allCourseSource");
         return registrationBean;

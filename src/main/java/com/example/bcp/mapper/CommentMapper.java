@@ -20,12 +20,15 @@ public interface CommentMapper {
     @Select("Select * from Comment Where CommentInformation Like concat('%', #{SelectInfo}, '%') and DiscussionId = #{DiscussionId}")
     List<Comment> fuzzyQuery(String SelectInfo,String DiscussionId);
 
-    @Insert("Insert into Comment(CommentId,DiscussionId,CommentInformation,LikesNumber,CommentPostingTime,imgUrl,mentionedUser)"+
-    " values(#{CommentId},#{DiscussionId},#{CommentInformation} , #{LikesNumber} , #{CommentPostingTime},#{imgUrl},#{mentionedUser})")
+    @Select("Select count(*) from Comment WHere DiscussionId = #{DiscussionId}  ")
+    int commentTimes(String DiscussionId);
+
+    @Insert("Insert into Comment(CommentId,DiscussionId,CommentInformation,LikesNumber,CommentPostingTime,imgUrl,mentionedUser,postStudent)"+
+    " values(#{CommentId},#{DiscussionId},#{CommentInformation} , #{LikesNumber} , #{CommentPostingTime},#{imgUrl},#{mentionedUser},#{postStudent})")
     void insertComment(String CommentId , String DiscussionId ,
                        String CommentInformation , int LikesNumber ,
                        LocalDateTime CommentPostingTime,String imgUrl,
-                       String mentionedUser);
+                       String mentionedUser,String postStudent);
 
 
     @Delete("Delete from Comment Where CommentId = #{CommentId}")

@@ -289,18 +289,19 @@ class BcpApplicationTests {
     private StudentHomeworkService studentHomeworkService;
     @Test
     void TestStudentHomework(){
-        studentHomeworkService.insertStudentHomework("S002","H001","Test","/test",LocalDateTime.now(),"作业提交错误");
-//        studentHomeworkService.updateStudentHomeworkPath("/tttttt","S001","H002");
-//        studentHomeworkService.updateStudentHomeworkSubmitGrade(60,"S001","H002");
-        List<StudentHomework> studentHomeworks =studentHomeworkService.selectAllStudentHomework();
-        for(StudentHomework h : studentHomeworks){
-            System.out.print(h.getHomeworkNo()+" ");
-            System.out.print(h.getStudentNo()+" ");
-            System.out.print(h.getSubmitPath()+" ");
-            System.out.print(h.getSubmitGrade()+" ");
-            System.out.print(h.getSubmitDescription()+" ");
-            System.out.print(h.getSubmitTime()+" ");
-            System.out.println();
-        }
+//        studentHomeworkService.insertStudentHomework("S002","H001","Test","/test",LocalDateTime.now(),"作业提交错误");
+////        studentHomeworkService.updateStudentHomeworkPath("/tttttt","S001","H002");
+////        studentHomeworkService.updateStudentHomeworkSubmitGrade(60,"S001","H002");
+//        List<StudentHomework> studentHomeworks =studentHomeworkService.selectAllStudentHomework();
+//        for(StudentHomework h : studentHomeworks){
+//            System.out.print(h.getHomeworkNo()+" ");
+//            System.out.print(h.getStudentNo()+" ");
+//            System.out.print(h.getSubmitPath()+" ");
+//            System.out.print(h.getSubmitGrade()+" ");
+//            System.out.print(h.getSubmitDescription()+" ");
+//            System.out.print(h.getSubmitTime()+" ");
+//            System.out.println();
+//        }
+        studentHomeworkService.updateVisible("H001");
     }
 }

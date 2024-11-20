@@ -28,11 +28,14 @@ public class CommentService {
     public void insertComment(String CommentId , String DiscussionId ,
                               String CommentInformation , int LikesNumber ,
                               LocalDateTime CommentPostingTime,String imgUrl,
-                              String mentionedUser){
+                              String mentionedUser,String postStudent){
         commentMapper.insertComment(CommentId,DiscussionId,CommentInformation,
-                LikesNumber, CommentPostingTime,imgUrl,mentionedUser);
+                LikesNumber, CommentPostingTime,imgUrl,mentionedUser,postStudent);
     }
 
+    public int commentTimes(String DiscussionId){
+        return commentMapper.commentTimes(DiscussionId);
+    }
     public void deleteComment(String CommentId){
         commentMapper.deleteComment(CommentId);
     }

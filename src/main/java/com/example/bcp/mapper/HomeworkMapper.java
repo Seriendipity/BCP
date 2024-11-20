@@ -48,6 +48,9 @@ public interface HomeworkMapper {
     void updateHomeworkGrade(int HomeworkGrade, String HomeworkNo);
 
     @Update("Update Homework Set homeworkInfo = #{homeworkInfo} Where HomeworkNo = #{HomeworkNo}")
-    void updateHomeworkInfo(String homeworkInfo, String HomeworkNo);
+    void updateHomeworkInfo(String homeworkInfo,String HomeworkNo);
+
+    @Update("Update Homework Set isVisible = 1 - isVisible Where HomeworkNo = #{HomeworkNo}")
+    void updateHomeworkIsVisible(String HomeworkNo);
 }
 

@@ -67,4 +67,8 @@ public class HomeworkService {
     public void updateIsPeerReview(boolean isPeerReview, String HomeworkNo) {
         homeworkMapper.updateIsPeerReview(isPeerReview, HomeworkNo);
     }
+
+    public void updateHomeworkIsVisible(String HomeworkNo){
+        homeworkMapper.updateHomeworkIsVisible(HomeworkNo);
+    }
 }

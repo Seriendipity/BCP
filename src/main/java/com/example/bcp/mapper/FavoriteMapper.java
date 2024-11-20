@@ -28,6 +28,9 @@ public interface FavoriteMapper {
     @Select("Select * from Favorite Where StudentNo = #{StudentNo} and FavoriteNo = #{FavoriteNo}")
     List<Favorite> selectByStudentNoAndFavoriteNo(String StudentNo, String FavoriteNo);
 
+    @Select("Select * from Favorite Where StudentNo = #{StudentNo} and FavoriteTitle like concat('%', #{FavoriteTitle}, '%')")
+    List<Favorite> selectByFavoriteTitle(String StudentNo,String FavoriteTitle);
+
     @Insert("Insert into Favorite(FavoriteNo,StudentNo,FavoriteInformationNo,FavoriteTitle,Authority,IsOwn)" +
             " values(#{FavoriteNo},#{StudentNo},#{FavoriteInformationNo},#{FavoriteTitle},#{Authority},1)")
     void insertFavoriteOwn(String FavoriteNo,String StudentNo,

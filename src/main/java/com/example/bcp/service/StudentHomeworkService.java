@@ -55,4 +55,8 @@ public class StudentHomeworkService {
     public void updateIsTeacherGrade(boolean isTeacherGrade,String StudentNo,String HomeworkNo){
         studentHomeworkMapper.updateStudentHomeworkIsTeacherGrade(isTeacherGrade,StudentNo,HomeworkNo);
     }
+
+    public void updateVisible(String HomeworkNo){
+        studentHomeworkMapper.updateVisible(HomeworkNo);
+    }
 }

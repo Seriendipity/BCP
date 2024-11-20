@@ -2,8 +2,11 @@ package com.example.bcp.controller;
 
 import com.example.bcp.entity.Comment;
 import com.example.bcp.entity.Discussion;
+import com.example.bcp.entity.Note;
 import com.example.bcp.entity.Result;
+import com.example.bcp.service.CommentService;
 import com.example.bcp.service.DiscussionService;
+import com.example.bcp.service.StudentService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +22,10 @@ public class
 DiscussionController {
     @Autowired
     private DiscussionService discussionService;
+    @Autowired
+    private CommentService commentService;
+    @Autowired
+    private StudentService studentService;
 
     /**
     * 查询某门课程的所有帖子
@@ -37,15 +44,39 @@ DiscussionController {
             discussionInfo.put("Information",d.getDiscussionInformation());
             discussionInfo.put("PostingTime",d.getDiscussionPostingTime());
             discussionInfo.put("studentNo",d.getStudentNo());
+            discussionInfo.put("username",studentService.selectByStudentNo(d.getStudentNo()).getStudentName());
             discussionInfo.put("imgUrl",d.getImageUrl());
             discussionInfo.put("mentionedUser",d.getMentionedUser());
             discussionInfo.put("topic",d.getTopic());
+            discussionInfo.put("starTimes",d.getStarTimes());
+            discussionInfo.put("commentTimes",commentService.commentTimes(d.getDiscussionId()));
             responseData.put("discussion" + i,discussionInfo);
             i++;
         }
         responseData.put("username", username);
         return Result.success(responseData);
     }
+
+    /**
+     *  查询某个帖子的信息
+     */
+    @GetMapping(value = "/getOneDiscussion" )
+    public Result getOneDiscussion(@RequestParam String discussionId, HttpServletRequest request){
+        Discussion d = discussionService.selectByDiscussionId(discussionId);
+        Map<String , Object> discussionInfo = new HashMap<>();
+        discussionInfo.put("DiscussionId",d.getDiscussionId());
+        discussionInfo.put("Information",d.getDiscussionInformation());
+        discussionInfo.put("PostingTime",d.getDiscussionPostingTime());
+        discussionInfo.put("studentNo",d.getStudentNo());
+        discussionInfo.put("username",studentService.selectByStudentNo(d.getStudentNo()).getStudentName());
+        discussionInfo.put("imgUrl",d.getImageUrl());
+        discussionInfo.put("mentionedUser",d.getMentionedUser());
+        discussionInfo.put("topic",d.getTopic());
+        discussionInfo.put("starTimes",d.getStarTimes());
+        discussionInfo.put("commentTimes",commentService.commentTimes(d.getDiscussionId()));
+        return Result.success(discussionInfo);
+    }
+
     /**
      * 查询某个学生某门课程的所有帖子
      * */
@@ -152,11 +183,13 @@ DiscussionController {
     /**
      *  新增帖子
      */
-    @RequestMapping(value = "/insert" , method = RequestMethod.POST)
-    public Result insertDiscussion(@RequestBody Map<String,String> requestData){
+    @PostMapping(value = "/insert")
+    public Result insertDiscussion(@RequestBody Map<String,String> requestData,
+                                   HttpServletRequest request){
         String cid = requestData.get("cid");
-        String StudentNo = requestData.get("studentNo");
+        String StudentNo = request.getAttribute("username").toString();
         String DiscussionInfo = requestData.get("information");
+        System.out.println(DiscussionInfo);
         String mentionedUser = requestData.get("mentionedUser");
         String imgUrl = requestData.get("imgUrl");
         String tag = requestData.get("tag");

@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import java.io.ByteArrayOutputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -107,26 +108,23 @@ public class StudentCourseController {
             row.createCell(5).setCellValue(classService.selectByClassNo(classNo).getClassName());
         }
 
-        String filePath = "student_list.xlsx"; // 替换为你的目录
-        try (FileOutputStream fileOut = new FileOutputStream(filePath)) {
-            workbook.write(fileOut);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        // 导出为 Excel 文件
+        // 导出为 Excel 文件并返回为 byte[]
         try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
             workbook.write(outputStream);
             byte[] content = outputStream.toByteArray();
 
             HttpHeaders headers = new HttpHeaders();
             headers.add("Content-Disposition", "attachment; filename=student_list.xlsx");
+            headers.add("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+
+            // 直接返回 byte 数组
             return new ResponseEntity<>(content, headers, HttpStatus.OK);
         } catch (IOException e) {
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
 
     /**
      *  查询某学生选修的所有课程或者教师教授的所有课程

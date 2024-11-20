@@ -243,7 +243,12 @@ public class HomeworkController {
                     hw.put("grade", null);
                 } else {
                     hw.put("status", "已提交");
-                    hw.put("grade", sh.getSubmitGrade());
+                    if(sh.isVisible()){
+                        hw.put("grade", sh.getSubmitGrade());
+                    }else{
+                        hw.put("grade","教师未公布");
+                    }
+
                 }
 
                 responseData.put("homework" + index, hw);
@@ -423,6 +428,18 @@ public class HomeworkController {
 
     }
 
+    @PostMapping("/updateVisible")
+    public Result updateVisible(@RequestParam String homeworkNo){
+        try{
+            homeworkService.updateHomeworkIsVisible(homeworkNo);
+            return Result.success("作业发布成功");
+        }catch (Exception e){
+            return Result.error("作业发布失败");
+        }
+
+
+    }
+
     //-------------------------------作业文件上传下载(教师端）---------------------------------
 
     @Value("${ip:localhost}")
@@ -443,8 +460,10 @@ public class HomeworkController {
                          @RequestParam("homeworkInfo") String homeworkInfo) {
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        LocalDateTime newStartTime = LocalDateTime.parse(startTime, formatter);
-        LocalDateTime newEndTime = LocalDateTime.parse(endTime, formatter);
+        String start = getLocalTime(startTime);
+        String end = getLocalTime(endTime);
+        LocalDateTime newStartTime = LocalDateTime.parse(start, formatter);
+        LocalDateTime newEndTime = LocalDateTime.parse(end, formatter);
 
 
         if (file.isEmpty()) {
@@ -493,8 +512,8 @@ public class HomeworkController {
         }
 
         // 保存文件到本地
-        //File saveFile = new File("D:\\vscode\\BMS\\vite-project\\public\\" + originalFilename);
-        File saveFile = new File("D:\\桌面\\课程\\大三上\\综合实训\\BCP\\demo1\\BCP\\files" + originalFilename);
+        File saveFile = new File("D:\\vscode\\BMS\\vite-project\\public\\" + originalFilename);
+        //File saveFile = new File("D:\\桌面\\课程\\大三上\\综合实训\\BCP\\demo1\\BCP\\files" + originalFilename);
         System.out.println("文件的保存路径：" + saveFile.getAbsolutePath());
         file.transferTo(saveFile);  // 存储文件到本地的磁盘里面去
 

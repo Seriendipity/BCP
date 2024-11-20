@@ -35,6 +35,17 @@ public class Discussion {
     @Column(name = "topic" , length = 20)
     private String topic;
 
+    @Column(name = "starTimes")
+    private int starTimes;
+
+    public int getStarTimes() {
+        return starTimes;
+    }
+
+    public void setStarTimes(int starTimes) {
+        this.starTimes = starTimes;
+    }
+
     public String getImageUrl() {
         return imageUrl;
     }

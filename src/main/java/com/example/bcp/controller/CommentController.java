@@ -4,6 +4,7 @@ package com.example.bcp.controller;
 import com.example.bcp.entity.Comment;
 import com.example.bcp.entity.Result;
 import com.example.bcp.service.CommentService;
+import com.example.bcp.service.StudentService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +19,8 @@ import java.util.Map;
 public class CommentController {
     @Autowired
     private CommentService commentService;
+    @Autowired
+    private StudentService studentService;
 
     /**
      * 查询某个帖子的所有评论
@@ -38,6 +41,7 @@ public class CommentController {
             commentInfo.put("PostingTime",c.getCommentPostingTime());
             commentInfo.put("Likes",c.getLikesNumber());
             commentInfo.put("DiscussionId",c.getDiscussionId());
+            commentInfo.put("commentUsername",studentService.selectByStudentNo(c.getPostStudent()).getStudentName());
 
             responseData.put("comment"+i,commentInfo);
             i++;
@@ -50,7 +54,8 @@ public class CommentController {
      *  给某条帖子插入评论
      */
     @RequestMapping(value = "/insert" , method = RequestMethod.POST)
-    public Result insertComment(@RequestBody Map<String,String> requestData){
+    public Result insertComment(@RequestBody Map<String,String> requestData,HttpServletRequest request){
+        String userNo = request.getAttribute("username").toString() ;
         int size = commentService.selectAllComments().size()+1;
         String CommentId = "C"+size;
         String DiscussionId = requestData.get("discussionId");
@@ -72,7 +77,7 @@ public class CommentController {
         String message;
         try {
             commentService.insertComment(CommentId,DiscussionId,CommentInfo,
-                    LikesNumber,postingTime,imgUrl,mentionedUser);
+                    LikesNumber,postingTime,imgUrl,mentionedUser,userNo);
             message = "评论成功！";
         }catch (Exception e){
             message = "评论失败，请重试！";

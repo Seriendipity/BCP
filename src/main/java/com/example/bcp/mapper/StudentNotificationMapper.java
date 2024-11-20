@@ -27,6 +27,7 @@ public interface StudentNotificationMapper {
     @Delete("Delete from StudentNotification Where StudentNo = #{StudentNo} and NotificationNo = #{NotificationNo}")
     void deleteStudentNotification(String StudentNo , String NotificationNo);
 
+
     @Update("Update StudentNotification set NotificationState = true where StudentNo = #{studentNo} and NotificationNo = #{notificationNo}")
     int updateNotificationState(String studentNo, String notificationNo);
 

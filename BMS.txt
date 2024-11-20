@@ -195,9 +195,11 @@ alter table notification add column PostingTime DateTime ;
 alter table Discussion add column imgUrl VARCHAR(100);
 alter table discussion add column mentionedUser TEXT;
 alter table discussion add column topic varchar(20);
+alter  table  discussion add column  starTimes int default 0;
 
 alter table comment add column imgUrl VARCHAR(100);
 alter table comment add column mentionedUser TEXT;
+alter table comment add column postStudent varchar(20);
 
 alter table studenthomework add column Comment Text;
 alter table studenthomework add column isTeacherGrade boolean DEFAULT false;

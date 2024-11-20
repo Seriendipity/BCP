@@ -33,6 +33,17 @@ public class Comment {
     @Column(name = "mentionedUser" , columnDefinition = "TEXT")
     private String mentionedUser;
 
+    @Column(name = "postStudent",length = 20)
+    private String postStudent;
+
+    public String getPostStudent() {
+        return postStudent;
+    }
+
+    public void setPostStudent(String postStudent) {
+        this.postStudent = postStudent;
+    }
+
     public String getImageUrl() {
         return imageUrl;
     }

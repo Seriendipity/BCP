@@ -23,6 +23,9 @@ public class FavoriteService {
     public List<Favorite> selectByStudentOthers(String StudentNo){
         return favoriteMapper.selectByStudentOthers(StudentNo);
     }
+    public List<Favorite> selectByFavoriteTitle(String StudentNo,String FavoriteTitle){
+        return favoriteMapper.selectByFavoriteTitle(StudentNo,FavoriteTitle);
+    }
 
     public Favorite selectByStudentNoAndFavoriteNoAndFavoriteInformationNo(String StudentNo,String FavoriteNo,String FavoriteInformationNo){
         return favoriteMapper.selectByStudentNoAndFavoriteNoAndFavoriteInformationNo(StudentNo,FavoriteNo,FavoriteInformationNo);

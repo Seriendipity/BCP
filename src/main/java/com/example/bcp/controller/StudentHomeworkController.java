@@ -1,8 +1,8 @@
 package com.example.bcp.controller;
 
 import cn.hutool.core.io.FileUtil;
-import com.example.bcp.entity.Result;
-import com.example.bcp.service.StudentHomeworkService;
+import com.example.bcp.entity.*;
+import com.example.bcp.service.*;
 import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -16,15 +16,92 @@ import java.io.IOException;
 import java.net.URLEncoder;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @RestController
-@RequestMapping("studentHomework")
+@RequestMapping("/studentHomework")
 public class StudentHomeworkController {
-
-    //-------------------------------作业文件上传下载(学生端）---------------------------------
 
     @Autowired
     private StudentHomeworkService studentHomeworkService;
+    @Autowired
+    private StudentCourseService studentCourseService;
+    @Autowired
+    private CourseService courseService;
+    @Autowired
+    private TeachingService teachingService;
+    @Autowired
+    private HomeworkService homeworkService;
+
+    @PostMapping("/updateVisible")
+    public Result updateVisible(@RequestParam String homeworkNo){
+        try{
+            System.out.println(homeworkNo);
+            studentHomeworkService.updateVisible(homeworkNo);
+            return Result.success("作业成绩发布成功");
+        }catch (Exception e){
+            return Result.error("作业成绩公布失败");
+        }
+    }
+
+    @GetMapping("/getAllUnfinishedHomework")
+    public Result getAllUnfinishedHomework(HttpServletRequest request){
+        String username = request.getAttribute("username").toString();
+        Map<String,Object> responseData = new HashMap<>();
+        if (username.startsWith("S")){
+            int index = 1;
+            List<StudentCourse> allCourses = studentCourseService.selectByStudentNo(username);
+            for(StudentCourse sc: allCourses){
+                String courseNo = teachingService.selectByCid(sc.getCid()).getCourseNo();
+                String courseName = courseService.selectByCourseNo(courseNo).getCourseName();
+                List<Homework> homeworks = homeworkService.selectByCid(sc.getCid());
+                for(Homework h : homeworks){
+                    if(h.getVisible() && studentHomeworkService.selectByStudentNoAndHomeworkNo(username,h.getHomeworkNo()) == null){
+                        Map<String,Object> undoHomework = new HashMap<>();
+                        undoHomework.put("courseName",courseName);
+                        undoHomework.put("homeworkDesc",h.getHomeworkDescription());
+                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+                        undoHomework.put("homeworkStartTime",h.getStartTime().format(formatter));
+                        undoHomework.put("homeworkEndTime",h.getEndTime().format(formatter));
+                        undoHomework.put("index",index);
+                        responseData.put("homework"+index,undoHomework);
+                        index++;
+                    }
+                }
+            }
+        } else if (username.startsWith("T")) {
+            int index = 1;
+            List<Teaching> teachings = teachingService.selectByTeacherNo(username);
+            for(Teaching t : teachings){
+                String cid = t.getCid();
+                String courseName = courseService.selectByCourseNo(t.getCourseNo()).getCourseName();
+                List<Homework> homeworks = homeworkService.selectByCid(cid);
+                for(Homework h : homeworks){
+                    Map<String,Object> unCorrectHomework = new HashMap<>();
+                    if(h.getVisible() ){
+                        int submitNumbers = studentHomeworkService.selectByHomeworkNo(h.getHomeworkNo()).size();
+                        int correctingNumber = studentHomeworkService.selectCorrectingHomework(h.getHomeworkNo()).size();
+                        if(correctingNumber < submitNumbers || submitNumbers == 0){
+                            unCorrectHomework.put("courseName",courseName);
+                            unCorrectHomework.put("homeworkDesc",h.getHomeworkDescription());
+                            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+                            unCorrectHomework.put("homeworkStartTime",h.getStartTime().format(formatter));
+                            unCorrectHomework.put("homeworkEndTime",h.getEndTime().format(formatter));
+                            responseData.put("homework"+index,unCorrectHomework);
+                            index++;
+                        }
+                    }
+                }
+            }
+        }
+        return Result.success(responseData);
+    }
+
+    //-------------------------------作业文件上传下载(学生端）---------------------------------
+
+
 
     @Value("${ip:localhost}")
     String ip;
@@ -63,8 +140,11 @@ public class StudentHomeworkController {
             //public void insertStudentHomework(String StudentNo, String HomeworkNo, String SubmitDescription,
             //      String SubmitPath , LocalDateTime SubmitTime,String Comment)
             String url = "http://" + ip + ":" + port + "/homework/download/" + savedFilePath;
-            studentHomeworkService.insertStudentHomework(studentNo, homeworkNo, submitDescription, url, newSubmitTime, comment);
-
+            if(studentHomeworkService.selectByStudentNoAndHomeworkNo(studentNo,homeworkNo) != null){
+                studentHomeworkService.updateStudentHomeworkPath(url,studentNo,homeworkNo);
+            }else{
+                studentHomeworkService.insertStudentHomework(studentNo, homeworkNo, submitDescription, url, newSubmitTime, comment);
+            }
             return Result.success(url);  //返回文件的链接
         } catch (IOException e) {
             e.printStackTrace();
@@ -89,7 +169,7 @@ public class StudentHomeworkController {
         }
 
         // 保存文件到本地
-        File saveFile = new File(ROOT_PATH + File.separator + originalFilename);
+        File saveFile = new File("D:\\vscode\\BMS\\vite-project\\public\\" + originalFilename);
         System.out.println("文件的保存路径：" + saveFile.getAbsolutePath());
         file.transferTo(saveFile);  // 存储文件到本地的磁盘里面去
 
