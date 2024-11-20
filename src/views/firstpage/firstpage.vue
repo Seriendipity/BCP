@@ -310,7 +310,7 @@ const goToCourseInfo = async (courseId) => {
     if (response && response.data) {
       const currentQuery = router.currentRoute.value.query; // 获取当前查询参数
       localStorage.setItem('courseId', courseId);
-      localStorage.setItem('courseName', response.data.courseName)
+      localStorage.setItem('courseName', response.data.courseName);
       router.push({
         path: '/CourseInfo',
         query: {

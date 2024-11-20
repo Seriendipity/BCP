@@ -48,8 +48,9 @@ enum API {
   ADD_COMMENT = "/comment/insert",
   ADD_DISCUSSION = "/discussion/insert",
   ALL_LIKE_NOTE = "/favorite/selectByStarNoteFromOthers",
-  ALL_LIKE_DISCUSSION = "/favorite/selectByStarDiscussionFromOthers"
-
+  ALL_LIKE_DISCUSSION = "/favorite/selectByStarDiscussionFromOthers",
+  //TODO
+  GET_MYHOMEWORK_SRC = "1122334",
 
 }
 //登录接口
@@ -105,7 +106,8 @@ export const reqLikeNote = () => request.get<any, any>(API.ALL_LIKE_NOTE)
 //获得收藏的帖子
 export const reqLikeDiscussion = () => request.get<any, any>(API.ALL_LIKE_DISCUSSION)
 // export const awardInfo = () => request.get<any, any>(API.AWARD_GET);
-
+//获得作业的src //TODO
+export const reqHomework = () => request.get<any, any>(API.GET_MYHOMEWORK_SRC)
 
 //发布通知
 export const postNotification = (data: any) => request.post<any, any>(API.NOTIFICATION_POST, data);
