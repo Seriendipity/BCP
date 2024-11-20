@@ -24,8 +24,6 @@ enum API {
   UPDATE_AVATAR = "/users/updateAvatar",
   GET_MYNOTELIST = "/note/getStudentAllNote",
   GET_ALLNOTE = "/note/allPublicNote",
-  GET_MYFAVORLIST = "",
-  GET_MYFAVORPOSTLIST = "hhhh",
   ADD_NOTE = "/note/upload",
   DELETE_NOTE = "/note/deleteNote",
   UPDATE_NOTEINFO = "/note/updateNoteInformation",
@@ -35,7 +33,7 @@ enum API {
   EXPORTSTUDENTLIST = "/StudentCourse/exportStudentList",
   GET_HOMEWORKLIST = "/homework/allCidHomework",
   UPDATE_HOMEWORK_SETTINGS = "/homework/updateHomework",
-  EDIT_HOMEWORK = "/homework/oneHomework",
+  ONE_HOMEWORK = "/homework/oneHomework",
   FINAL_GRADE = "/peerAssignment/finalGrade",
   GET_HOMEWORK_EVALUATION_TIME = "/peerAssignment/endTime",
   SEND_HOMEWORK = "/homework/updateVisible",
@@ -79,10 +77,6 @@ export const requireAvatar = () => request.get<any, any>(API.GET_AVATAR)
 export const requireMyNote = () => request.get<any, any>(API.GET_MYNOTELIST)
 //获取公开笔记
 export const requireAllNote = () => request.get<any, any>(API.GET_ALLNOTE)
-//获取收藏夹笔记内容 
-export const reqFavorList = () => request.get<any, any>(API.GET_MYFAVORLIST)
-//获取已收藏帖子内容
-export const reqfavorPostList = () => request.get<any, any>(API.GET_MYFAVORPOSTLIST)
 //获取笔记收藏状态
 export const reqFavoriteStatus = () => request.get<any, any>(API.GET_FAVORITE)
 //导出选课学生名单
@@ -92,7 +86,7 @@ export const requireStudentHomework = (courseId: any) => request.get<any, any>(A
 //得到老师端作业布置列表
 export const requireTeacherSendHomework = (courseId: any) => request.get<any, any>(API.GET_HOMEWORKLIST + `?cid=${courseId}`)
 //得到要编辑的作业
-export const editSingleHomework = (homeworkNO: any) => request.get<any, any>(API.EDIT_HOMEWORK + `?homeworkNO=${homeworkNO}`)
+export const reqSingleHomework = (homeworkNO: any) => request.get<any, any>(API.ONE_HOMEWORK + `?homeworkNO=${homeworkNO}`)
 //得到最终成绩
 export const getFinalGrade = (homeworkNO: any) => request.get<any, any>(API.FINAL_GRADE + `?homeworkNo=${homeworkNO}`)
 //得到互评最终时间

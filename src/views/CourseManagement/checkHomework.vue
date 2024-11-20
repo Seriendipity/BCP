@@ -23,17 +23,17 @@
     </el-main>
     <el-aside width="200px">
       <div class="inputagr_box" width="100%">
-          <textarea class="agr-input no-border" v-model="question" />
-        </div>
-        <div class="btn_box">
-          <el-button type="primary" class="btn" >保存</el-button>
-        </div>
-        <div class="inputagr_box" width="100%">
-          <textarea class="agr-input no-border" v-model="question" />
-        </div>
-        <div class="btn_box">
-          <el-button type="primary" class="btn" >打分</el-button>
-        </div>
+        <textarea class="agr-input no-border" v-model="question" />
+      </div>
+      <div class="btn_box">
+        <el-button type="primary" class="btn">保存</el-button>
+      </div>
+      <div class="inputagr_box" width="100%">
+        <textarea class="agr-input no-border" v-model="question" />
+      </div>
+      <div class="btn_box">
+        <el-button type="primary" class="btn">打分</el-button>
+      </div>
     </el-aside>
   </el-container>
 </template>
@@ -41,7 +41,7 @@
 <script setup>
 import { ref, onMounted, reactive } from 'vue';
 import { useRouter } from 'vue-router';
-import { reqHomework ,reqCourseIntro, requireTeacherSendHomework } from '@/api/api';
+import { reqSingleHomework, reqCourseIntro, requireTeacherSendHomework } from '@/api/api';
 import { ElNotification } from 'element-plus';
 import { requireAvatar } from '../../api/api';
 
@@ -51,7 +51,8 @@ const router = useRouter();
 const dialogVisible = ref(false);
 const currenthomework = ref({});
 const homeworks = ref([]);
-const homeworkSrc = ref(props.previewSrc); 
+
+
 
 const props = defineProps({
   previewSrc: {
@@ -60,6 +61,8 @@ const props = defineProps({
     default: () => 'https://book.yunzhan365.com/tnhkz/uvaj/mobile/index.html'
   }
 });
+
+const homeworkSrc = ref(props.previewSrc);
 
 // 模拟数据
 const mockDataHomework = [
@@ -135,26 +138,26 @@ onMounted(() => {
 
 // 查看通知详情
 // const viewhomework = async (homework) => {
-  //   currenthomework.value = homework; // 设置当前通知
-  //   dialogVisible.value = true; // 打开弹出框
+//   currenthomework.value = homework; // 设置当前通知
+//   dialogVisible.value = true; // 打开弹出框
 
-  //   if (homework.homeworkState === '未读') {
-  //     // 将状态更新为已读
-  //     homework.homeworkState = '已读';
+//   if (homework.homeworkState === '未读') {
+//     // 将状态更新为已读
+//     homework.homeworkState = '已读';
 
-  //     // 调用后端API更新状态
-  //     try {
-  //       await updatehomeworkState({
-  //         homeworkId: homework.homeworkId, // 传递通知ID
-  //       });
-  //     } catch (error) {
-  //       console.error('更新通知状态失败:', error);
-  //       ElNotification({
-  //         type: 'error',
-  //         message: '更新通知状态失败，请重试。',
-  //       });
-  //     }
-  //   }
+//     // 调用后端API更新状态
+//     try {
+//       await updatehomeworkState({
+//         homeworkId: homework.homeworkId, // 传递通知ID
+//       });
+//     } catch (error) {
+//       console.error('更新通知状态失败:', error);
+//       ElNotification({
+//         type: 'error',
+//         message: '更新通知状态失败，请重试。',
+//       });
+//     }
+//   }
 // };
 
 
@@ -170,9 +173,10 @@ onMounted(async () => {
     homeworks.value = homeworkResponse.data;
     localStorage.setItem('homeworkId');
     const storedHomeworkId = localStorage.getItem('homeworkId');
-    const response = await reqHomework(storedHomeworkId); // 获取后端日历URL
-    homeworkSrc.value = response.data.Homework || homeworkSrc.value; 
+    const response = await reqSingleHomework(storedHomeworkId); // 获取后端日历URL
+    homeworkSrc.value = response.data.Homework || homeworkSrc.value;
   } catch (error) {
+    console.log(error)
     homeworks.value = mockDataHomework.data;
     // console.log(error)
     userInfo.value = mockDataUser;
@@ -420,20 +424,20 @@ body>.el-container {
 
 
 .agr-input {
-    width: 100%;
-    height: 80px;
-    padding: 12px 16px;
-    border: 1px solid #dcdfe6;
-    border-radius: 8px;
-    resize: none;
-    font-size: 14px;
-    color: #606266;
-    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
-    transition: border-color 0.3s, box-shadow 0.3s;
-    margin-top: 10px;
-  }
+  width: 100%;
+  height: 80px;
+  padding: 12px 16px;
+  border: 1px solid #dcdfe6;
+  border-radius: 8px;
+  resize: none;
+  font-size: 14px;
+  color: #606266;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
+  transition: border-color 0.3s, box-shadow 0.3s;
+  margin-top: 10px;
+}
 
-  .btn_box {
+.btn_box {
   margin-top: 10px;
   display: flex;
   justify-content: flex-end;
