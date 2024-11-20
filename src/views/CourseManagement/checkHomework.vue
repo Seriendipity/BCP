@@ -6,60 +6,102 @@
           <el-col :span="24" v-for="(homework, index) in homeworks" :key="index">
             <div class="homework-bar">
               <div class="homework-info" @click="viewhomework(homework)">
-                <h2 class="homework-lesson">{{ homework.courseName }}</h2>
-                <h2 class="homework-title">{{ homework.homeworkTitle }}</h2>
-                <p class="homework-time">{{ homework.homeworkPostingTime }}</p>
+                <h2 class="homework-lesson">{{ homework.homeworkInfoName }}</h2>
+                <h2 class="homework-stuId">{{ homework.homeworkstuID }}</h2>
+                <p class="homework-time">{{ homework.homeworkUpdateTime }}</p>
               </div>
-              <el-tag :type="homework.homeworkState === '已读' ? 'success' : 'warning'">
-                {{ homework.homeworkState }}
+              <el-tag :type="homework.homeworkState === '已批改' ? 'success' : 'warning'">
+                {{ homework.homeworkCheckState }}
               </el-tag>
             </div>
           </el-col>
         </el-row>
       </div>
     </el-aside>
-    <el-main>Main</el-main>
-    <el-aside width="200px">Aside</el-aside>
+    <el-main>
+      <iframe class="homework" :src="homeworkSrc" width="100%" height="100%" style="border:none;"></iframe>
+    </el-main>
+    <el-aside width="200px">
+      <div class="inputagr_box" width="100%">
+          <textarea class="agr-input no-border" v-model="question" />
+        </div>
+        <div class="btn_box">
+          <el-button type="primary" class="btn" >保存</el-button>
+        </div>
+        <div class="inputagr_box" width="100%">
+          <textarea class="agr-input no-border" v-model="question" />
+        </div>
+        <div class="btn_box">
+          <el-button type="primary" class="btn" >打分</el-button>
+        </div>
+    </el-aside>
   </el-container>
 </template>
 
 <script setup>
 import { ref, onMounted, reactive } from 'vue';
 import { useRouter } from 'vue-router';
-import { reqUserInfo, reqCourseList, reqCourseIntro, requireTeacherSendHomework } from '@/api/api';
+import { reqHomework ,reqCourseIntro, requireTeacherSendHomework } from '@/api/api';
 import { ElNotification } from 'element-plus';
 import { requireAvatar } from '../../api/api';
 
-const courses = ref([]);
+// const courses = ref([]);
 const userInfo = ref([]);
 const router = useRouter();
 const dialogVisible = ref(false);
 const currenthomework = ref({});
 const homeworks = ref([]);
+const homeworkSrc = ref(props.previewSrc); 
 
+const props = defineProps({
+  previewSrc: {
+    type: String,
+    required: false,
+    default: () => 'https://book.yunzhan365.com/tnhkz/uvaj/mobile/index.html'
+  }
+});
 
 // 模拟数据
-const mockDataNotify = [
+const mockDataHomework = [
   {
-    courseName: '数据库系统',
-    homeworkTitle: '课程调整通知',
-    homeworkInfo: '由于特殊情况，本周的课程时间将调整，请查看具体时间安排。',
-    homeworkPostingTime: '2024-10-28 14:00',
-    homeworkState: '未读',
+    index: 1,
+    homeworkstuName: '姜天亦',
+    homeworkstuID: '22301149',
+    homeworkGrade: '99',
+    homeworkUpdateTime: '2024-10-28 14:00',
+    homeworkCheckState: '已批改',
   },
   {
-    courseName: '人工智能基础',
-    homeworkTitle: '期末考试安排',
-    homeworkInfo: '请注意，期末考试将在12月1日举行，请提前做好复习准备。',
-    homeworkPostingTime: '2024-10-29 09:00',
-    homeworkState: '已读',
+    index: 2,
+    homeworkstuName: '马海博',
+    homeworkstuID: '22301157',
+    homeworkGrade: '98',
+    homeworkUpdateTime: '2024-10-28 14:00',
+    homeworkCheckState: '已批改',
   },
   {
-    courseName: '软件学院团委宣传部',
-    homeworkTitle: '社团活动通知',
-    homeworkInfo: '下周五有社团活动，欢迎大家参加！',
-    homeworkPostingTime: '2024-10-30 11:00',
-    homeworkState: '未读',
+    index: 3,
+    homeworkstuName: '张学琛',
+    homeworkstuID: '22301168',
+    homeworkGrade: '100',
+    homeworkUpdateTime: '2024-10-28 14:00',
+    homeworkCheckState: '已批改',
+  },
+  {
+    index: 4,
+    homeworkstuName: '郑宇煊',
+    homeworkstuID: '22301170',
+    homeworkGrade: ' ',
+    homeworkUpdateTime: '2024-10-28 14:00',
+    homeworkCheckState: '未批改',
+  },
+  {
+    index: 5,
+    homeworkstuName: '刘艺凡',
+    homeworkstuID: '22301153',
+    homeworkGrade: ' ',
+    homeworkUpdateTime: '2024-10-28 14:00',
+    homeworkCheckState: '未批改',
   },
 ];
 
@@ -71,15 +113,15 @@ const mockDataUser = {
   avatarUrl: 'src/assets/images/example.jpg'
 };
 
-// 获取通知数据
+
 const fetchhomeworks = async () => {
   try {
     const courseId = localStorage.getItem('courseId')
     const response = await requireTeacherSendHomework(courseId); // 获取通知数据
-    homeworks.value = response.data || []; // 更新通知数据
+    homeworkSrc.value = response.data || []; // 更新通知数据
   } catch (err) {
     // 捕获错误并使用模拟数据
-    homeworks.value = mockDataNotify;
+    homeworkSrc.value = props.previewSrc;
     ElNotification({
       message: '获取通知失败',
       type: 'error',
@@ -92,7 +134,7 @@ onMounted(() => {
 });
 
 // 查看通知详情
-const viewhomework = async (homework) => {
+// const viewhomework = async (homework) => {
   //   currenthomework.value = homework; // 设置当前通知
   //   dialogVisible.value = true; // 打开弹出框
 
@@ -113,7 +155,7 @@ const viewhomework = async (homework) => {
   //       });
   //     }
   //   }
-};
+// };
 
 
 // 关闭弹出框
@@ -124,16 +166,15 @@ const closeDialog = () => {
 // 获取用户信息和课程列表
 onMounted(async () => {
   try {
-    const avatarResponse = await requireAvatar();
-    const userResponse = await reqUserInfo();
-    const courseResponse = await reqCourseList();
-    userInfo.value = userResponse.data;
-    courses.value = courseResponse.data;
-    userInfo.value.avatarUrl = avatarResponse.data;
-    localStorage.setItem('userName', userInfo.value.userName);
-    localStorage.setItem('userId', userInfo.value.userId)
+    const homeworkResponse = await requireTeacherSendHomework();
+    homeworks.value = homeworkResponse.data;
+    localStorage.setItem('homeworkId');
+    const storedHomeworkId = localStorage.getItem('homeworkId');
+    const response = await reqHomework(storedHomeworkId); // 获取后端日历URL
+    homeworkSrc.value = response.data.Homework || homeworkSrc.value; 
   } catch (error) {
-    console.log(error)
+    homeworks.value = mockDataHomework.data;
+    // console.log(error)
     userInfo.value = mockDataUser;
     ElNotification({
       type: 'error',
@@ -142,33 +183,33 @@ onMounted(async () => {
   }
 });
 
-const goToCourseInfo = async (courseId) => {
-  try {
-    const response = await reqCourseIntro(courseId);
-    if (response && response.data) {
-      const currentQuery = router.currentRoute.value.query; // 获取当前查询参数
-      localStorage.setItem('courseId', courseId);
-      router.push({
-        path: '/CourseInfo',
-        query: {
-          ...currentQuery, // 保留当前查询参数
-          courseId,
-          courseIntro: response.data.courseInfo,
-          courseName: response.data.courseName,
-          courseNo: response.data.courseNo,
-          teacherName: response.data.teacherName,
-          establishCollege: response.data.establishCollege,
-          semester: response.data.semester,
-        },
-      });
-    }
-  } catch (error) {
-    ElNotification({
-      type: 'error',
-      message: '获取课程信息失败',
-    });
-  }
-};
+// const goToCourseInfo = async (courseId) => {
+//   try {
+//     const response = await reqCourseIntro(courseId);
+//     if (response && response.data) {
+//       const currentQuery = router.currentRoute.value.query; // 获取当前查询参数
+//       localStorage.setItem('courseId', courseId);
+//       router.push({
+//         path: '/CourseInfo',
+//         query: {
+//           ...currentQuery, // 保留当前查询参数
+//           courseId,
+//           courseIntro: response.data.courseInfo,
+//           courseName: response.data.courseName,
+//           courseNo: response.data.courseNo,
+//           teacherName: response.data.teacherName,
+//           establishCollege: response.data.establishCollege,
+//           semester: response.data.semester,
+//         },
+//       });
+//     }
+//   } catch (error) {
+//     ElNotification({
+//       type: 'error',
+//       message: '获取课程信息失败',
+//     });
+//   }
+// };
 </script>
 
 <style>
@@ -328,6 +369,7 @@ body>.el-container {
 .homework-info {
   display: flex;
   flex-direction: column;
+
 }
 
 .homework-title {
@@ -367,5 +409,47 @@ body>.el-container {
 
 .dialog-footer {
   text-align: right;
+}
+
+
+.inputagr_box {
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+
+
+.agr-input {
+    width: 100%;
+    height: 80px;
+    padding: 12px 16px;
+    border: 1px solid #dcdfe6;
+    border-radius: 8px;
+    resize: none;
+    font-size: 14px;
+    color: #606266;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
+    transition: border-color 0.3s, box-shadow 0.3s;
+    margin-top: 10px;
+  }
+
+  .btn_box {
+  margin-top: 10px;
+  display: flex;
+  justify-content: flex-end;
+  float: right;
+
+  .btn {
+    background-color: #409eff;
+    color: #ffffff;
+    border-radius: 4px;
+    padding: 6px 20px;
+    font-size: 14px;
+    transition: background-color 0.3s;
+  }
+
+  .btn:hover {
+    background-color: #66b1ff;
+  }
 }
 </style>

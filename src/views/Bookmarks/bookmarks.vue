@@ -74,11 +74,11 @@
             </el-col>
           </el-row>
           <!-- <div class="scrollable"> -->
-          <div class="grid-content bg-white" style="height: 75px;">
+          <div class="grid-content bg-white" style="height: 75px;" v-for="favor in favors" :key="favor.favorNo">
             <el-row :gutter="20">
               <el-col :span="19">
-                <h1 class="ziti03" style="margin-top: 5px;">数据结构第一次课程笔记</h1>
-                <h1 class="ziti04">马海博</h1>
+                <h1 class="ziti03" style="margin-top: 5px;">{{favor.favorTitle}}</h1>
+                <h1 class="ziti04">{{favor.favorAuthor}}</h1>
               </el-col>
               <el-col :span="2">
                 <el-button type="primary" style="margin-top: 20px;" plain>预览</el-button></el-col>
@@ -86,42 +86,7 @@
                 <el-button type="primary" style="margin-top: 20px;" plain>下载</el-button></el-col>
             </el-row>
           </div>
-          <div class="grid-content bg-white" style="height: 75px;">
-            <el-row :gutter="20">
-              <el-col :span="19">
-                <h1 class="ziti03" style="margin-top: 5px;">算法第3次作业答案</h1>
-                <h1 class="ziti04">张学琛</h1>
-              </el-col>
-              <el-col :span="2">
-                <el-button type="primary" style="margin-top: 20px;" plain>预览</el-button></el-col>
-              <el-col :span="3">
-                <el-button type="primary" style="margin-top: 20px;" plain>下载</el-button></el-col>
-            </el-row>
-          </div>
-          <div class="grid-content bg-white" style="height: 75px;">
-            <el-row :gutter="20">
-              <el-col :span="19">
-                <h1 class="ziti03" style="margin-top: 5px;">软件测试小测原题</h1>
-                <h1 class="ziti04">张胤麟</h1>
-              </el-col>
-              <el-col :span="2">
-                <el-button type="primary" style="margin-top: 20px;" plain>预览</el-button></el-col>
-              <el-col :span="3">
-                <el-button type="primary" style="margin-top: 20px;" plain>下载</el-button></el-col>
-            </el-row>
-          </div>
-          <!-- <el-col :span="8" v-for="course in courses" :key="course.cid"> -->
-          <!-- <div class="grid-content bg-white" @click="goToCourseInfo(course.cid)">
-                  <h1 class="ziti03">{{ course.courseName }}</h1>
-                  <h1 class="ziti04">课程号: {{ course.courseNo }}</h1>
-                  <h1 class="ziti04">课序号: {{ course.cid }}</h1>
-                  <div class="avatar-container">
-                    <el-image style="width: 94%; height: 100%;margin-top: 10%;margin-left:3%" :src="course.picture"
-                      :fit="fit"></el-image>
-                  </div>
-                </div> -->
-          <!-- </el-col> -->
-          <!-- </div> -->
+          
         </el-main>
 
       </el-container>
@@ -132,10 +97,10 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
-import { reqUserInfo, reqCourseList, requireAvatar } from '@/api/api';
+import { reqUserInfo, reqFavorList, requireAvatar } from '@/api/api';
 import { ElNotification } from 'element-plus';
 
-const courses = ref([]);
+const favors = ref([]);
 const userInfo = ref([]);
 const $router = useRouter();
 
@@ -147,19 +112,52 @@ const mockData = {
   avatarUrl: 'src/assets/images/example.jpg'
 };
 
+const mockFavor = ref([
+    {
+      favorNo: 1,
+      favorTitle: '实训',
+      favorAuthor: '姜天亦',
+      uploadDate: '2024-11-13',
+    },
+    {
+      favorNo: 2,
+      favorTitle: '实训',
+      favorAuthor: '姜天亦',
+      uploadDate: '2024-11-13',
+    },
+    {
+      favorNo: 3,
+      favorTitle: '实训',
+      favorAuthor: '姜天亦',
+      uploadDate: '2024-11-13',
+    },
+    {
+      favorNo: 4,
+      favorTitle: '实训',
+      favorAuthor: '姜天亦',
+      uploadDate: '2024-11-13',
+    },
+    {
+      favorNo: 5,
+      favorTitle: '实训',
+      favorAuthor: '姜天亦',
+      uploadDate: '2024-11-13',
+    },
+  ]);
 
 // 获取用户信息和课程列表
 onMounted(async () => {
   try {
     const userResponse = await reqUserInfo();
-    const courseResponse = await reqCourseList();
+    const favorResponse = await reqFavorList();
     const avatarResponse = await requireAvatar()
     userInfo.value = userResponse.data;
-    courses.value = courseResponse.data;
+    favors.value = favorResponse.data;
     userInfo.value.avatarUrl = avatarResponse.data;
   } catch (error) {
     console.log(error)
     userInfo.value = mockData;
+    favors.value = mockFavor.value;
     ElNotification({
       type: 'error',
       message: '获取信息失败',
