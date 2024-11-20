@@ -28,7 +28,7 @@
 //TODO:添加主题，添加@其他人
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
-import { reqLikeDiscussion, reqUpdateVisible } from '@/api/api'; // 假设这是更新帖子权限状态的API
+import { addLikeDiscussion, reqUpdateVisible } from '@/api/api'; // 假设这是更新帖子权限状态的API
 import { ElMessage, ElNotification } from 'element-plus';
 import { reqDiscussionList } from '@/api/api';
 
@@ -103,7 +103,7 @@ export default {
       formData.append('favoriteInformationNo', post.DiscussionId)
       formData.append('favoriteTitle', title.value)
       try {
-        const response = await reqLikeDiscussion(formData)
+        const response = await addLikeDiscussion(formData)
         if (response.code === 0) {
           ElMessage.success('收藏成功')
         }

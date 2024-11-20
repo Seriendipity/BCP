@@ -29,7 +29,6 @@ enum API {
   UPDATE_NOTEINFO = "/note/updateNoteInformation",
   UPDATENOTEVISIBLE = "/note/updateNoteAuthority",
   UPDATENOTEFAVORITE = "/favorite/insertFavoriteOther",
-  GET_FAVORITE = "/favorite/selectByStarNoteFromOthers",
   EXPORTSTUDENTLIST = "/StudentCourse/exportStudentList",
   GET_HOMEWORKLIST = "/homework/allCidHomework",
   UPDATE_HOMEWORK_SETTINGS = "/homework/updateHomework",
@@ -48,6 +47,10 @@ enum API {
   ALL_COMMENT = "/comment/all",
   ADD_COMMENT = "/comment/insert",
   ADD_DISCUSSION = "/discussion/insert",
+  ALL_LIKE_NOTE = "/favorite/selectByStarNoteFromOthers",
+  ALL_LIKE_DISCUSSION = "/favorite/selectByStarDiscussionFromOthers"
+
+
 }
 //登录接口
 export const reqLogin = (data: any) => request.post<any, any>(API.LOGIN_URL, data);
@@ -77,8 +80,6 @@ export const requireAvatar = () => request.get<any, any>(API.GET_AVATAR)
 export const requireMyNote = () => request.get<any, any>(API.GET_MYNOTELIST)
 //获取公开笔记
 export const requireAllNote = () => request.get<any, any>(API.GET_ALLNOTE)
-//获取笔记收藏状态
-export const reqFavoriteStatus = () => request.get<any, any>(API.GET_FAVORITE)
 //导出选课学生名单
 export const requireStudentList = (courseId: any) => request.get<any, any>(API.EXPORTSTUDENTLIST + `?cid=${courseId}`)
 //得到学生端作业列表
@@ -99,6 +100,10 @@ export const reqDiscussionList = (data: any) => request.get<any, any>(API.ALL_DI
 export const reqOneDiscussion = (data: any) => request.get<any, any>(API.ONE_DISCUSSION, data)
 //获得所有评论
 export const reqAllComment = (data: any) => request.get<any, any>(API.ALL_COMMENT, data)
+//获得收藏的笔记
+export const reqLikeNote = () => request.get<any, any>(API.ALL_LIKE_NOTE)
+//获得收藏的帖子
+export const reqLikeDiscussion = () => request.get<any, any>(API.ALL_LIKE_DISCUSSION)
 // export const awardInfo = () => request.get<any, any>(API.AWARD_GET);
 
 
@@ -135,7 +140,7 @@ export const postScore = (data: any) => request.post<any, any>(API.POST_FINALGRA
 //老师发布作业
 export const createHomework = (data: any) => request.post<any, any>(API.CREATE_HOMEWORK, data);
 //收藏帖子
-export const reqLikeDiscussion = (data: any) => request.post<any, any>(API.LIKE_DISCUSSION, data);
+export const addLikeDiscussion = (data: any) => request.post<any, any>(API.LIKE_DISCUSSION, data);
 //评论帖子
 export const addComment = (data: any) => request.post<any, any>(API.ADD_COMMENT, data);
 //新建帖子

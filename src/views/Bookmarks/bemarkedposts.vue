@@ -65,7 +65,7 @@
             <el-col :span="3">
               <router-link to="/bookmarks" style="text-decoration: none;">
                 <el-button type="primary" style="text-align: left; font-weight: bold;font-size: large;width: 100px;"
-                  plain>收藏夹</el-button>
+                  plain>笔记</el-button>
               </router-link>
             </el-col>
             <el-col :span="21">
@@ -76,13 +76,14 @@
             </el-col>
           </el-row>
           <!-- <div class="scrollable"> -->
-          <div class="grid-postcontent bg-postwhite" style="padding-left: 10px;" v-for="post in posts" :key="post.postNo">
+          <div class="grid-postcontent bg-postwhite" style="padding-left: 10px;" v-for="post in posts"
+            :key="post.postNo">
             <el-row :gutter="20">
               <el-col :span="21">
-                <h1 class="ziti03" style="margin-top: 5px;">{{ post.postLesson }} </h1>
-                <h1 class="ziti04" style="line-height: 1.5"> {{ post.postInfo }} </h1>
-                <h1 class="ziti04" style="color: gray;margin-top: 15px;margin-bottom: 15px;">{{ post.uploadDate }} {{
-                  post.postAuthor }} 上传 </h1>
+                <h1 class="ziti03" style="margin-top: 5px;">{{ post.fromCourseName }} </h1>
+                <h1 class="ziti04" style="line-height: 1.5"> {{ post.discussionInfo }} </h1>
+                <h1 class="ziti04" style="color: gray;margin-top: 15px;margin-bottom: 15px;">{{ post.discussionPt }} {{
+                  post.fromUsername }} 上传 </h1>
               </el-col>
 
               <el-col :span="3">
@@ -100,10 +101,9 @@
 
 <script>
 import { ref, onMounted } from 'vue';
-import { reqUpdateVisible } from '@/api/api'; // 假设这是更新帖子权限状态的API
+import { reqLikeDiscussion, reqUpdateVisible, reqUserInfo } from '@/api/api'; // 假设这是更新帖子权限状态的API
 import { ElNotification } from 'element-plus';
 import { useRouter } from 'vue-router';
-import { reqUserInfo, reqfavorPostList } from '@/api/api';
 
 export default {
   setup() {
@@ -111,29 +111,29 @@ export default {
     const mockPost = ref([
       {
         postNo: 1,
-        postLesson: '实训',
-        postInfo: '帖子内容是真不错真不错真不错真不戳真不戳真不戳',
+        fromCourseName: '实训',
+        discussionInfo: '帖子内容是真不错真不错真不错真不戳真不戳真不戳',
         sendStatus: true,
-        postAuthor: '姜天亦',
-        uploadDate: '2024-11-13',
+        fromUsername: '姜天亦',
+        discussionPt: '2024-11-13',
         authority: true,
       },
       {
         postNo: 2,
-        postLesson: '科技论文写作',
-        postInfo: '老师好，我负责的内容是项目内容，首先项目内容分为以下三个方面，一用户面部特征信息录入与人脸匹配模块。二跨摄像头目标跟踪模块。三校园人员晕倒行为检测与告警模块。以下我对方针对这三个主要内容进行详细讲解。一用户名不特征信息录入与人脸匹配模块。在使用本系统前，系统可对新用户进行人脸录入，这主要是指在校园安全系统使用之初，我们将对校园已存在的老师以及已在校的同学进行人脸录入，以确保老师和同学具有相对应的出入校权限。',
+        fromCourseName: '科技论文写作',
+        discussionInfo: '老师好，我负责的内容是项目内容，首先项目内容分为以下三个方面，一用户面部特征信息录入与人脸匹配模块。二跨摄像头目标跟踪模块。三校园人员晕倒行为检测与告警模块。以下我对方针对这三个主要内容进行详细讲解。一用户名不特征信息录入与人脸匹配模块。在使用本系统前，系统可对新用户进行人脸录入，这主要是指在校园安全系统使用之初，我们将对校园已存在的老师以及已在校的同学进行人脸录入，以确保老师和同学具有相对应的出入校权限。',
         sendStatus: false,
-        postAuthor: '马海博',
-        uploadDate: '2024-11-12',
+        fromUsername: '马海博',
+        discussionPt: '2024-11-12',
         authority: false,
       },
       {
         postNo: 3,
-        postLesson: 'UI前端',
-        postInfo: 'line-height的值应该大于或等于文本的字体大小，以确保行间距生效。如果文本的字体大小小于line-height的值，行间距将不会显示出来。如果你的文本字体大小小于1.25或1.5，你可能需要调整line-height的值或字体大小以得到期望的行间距效果。',
+        fromCourseName: 'UI前端',
+        discussionInfo: 'line-height的值应该大于或等于文本的字体大小，以确保行间距生效。如果文本的字体大小小于line-height的值，行间距将不会显示出来。如果你的文本字体大小小于1.25或1.5，你可能需要调整line-height的值或字体大小以得到期望的行间距效果。',
         sendStatus: true,
-        postAuthor: '张学琛',
-        uploadDate: '2024-11-11',
+        fromUsername: '张学琛',
+        discussionPt: '2024-11-11',
         authority: true,
       },
       // 更多帖子数据...
@@ -184,9 +184,9 @@ export default {
     onMounted(async () => {
       try {
         const userResponse = await reqUserInfo();
-        const favpostResponse = await reqfavorPostList();
+        const discussionResponse = await reqLikeDiscussion();
         userInfo.value = userResponse.data;
-        posts.value = favpostResponse.data;
+        posts.value = discussionResponse.data;
       } catch (error) {
         console.log(error)
         userInfo.value = mockData;
@@ -321,7 +321,7 @@ export default {
   min-height: 36px;
   /* height: 250px; */
   margin-bottom: 10px;
-  
+
 }
 
 body>.el-container {

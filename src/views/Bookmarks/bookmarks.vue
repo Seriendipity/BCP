@@ -59,12 +59,11 @@
             <h1 class="ziti02" style="text-align: left;padding-left: 15px;">邮箱：{{ userInfo.email }}</h1>
           </div>
         </el-aside>
-
         <el-main height="600px">
           <el-row>
             <el-col :span="3">
               <el-button type="primary"
-                style="text-align: left; font-weight: bold;font-size: large;width: 100px;">收藏夹</el-button>
+                style="text-align: left; font-weight: bold;font-size: large;width: 100px;">笔记</el-button>
             </el-col>
             <el-col :span="21">
               <router-link to="/bemarkedposts" style="text-decoration: none;">
@@ -74,11 +73,12 @@
             </el-col>
           </el-row>
           <!-- <div class="scrollable"> -->
-          <div class="grid-content bg-white" style="height: 75px;" v-for="favor in favors" :key="favor.favorNo">
+          <div class="grid-content bg-white" style="height: 75px;" v-for="favor in likeNotes" :key="favor.favorNo">
             <el-row :gutter="20">
               <el-col :span="19">
-                <h1 class="ziti03" style="margin-top: 5px;">{{favor.favorTitle}}</h1>
-                <h1 class="ziti04">{{favor.favorAuthor}}</h1>
+                <h1 class="ziti03" style="margin-top: 5px;">{{ favor.favoriteTitle }}</h1>
+                <h1 class="ziti04">{{ favor.fromUsername }}</h1>
+                <h1 class="ziti04" style="color: gray;">{{ favor.notePt }} 上传 </h1>
               </el-col>
               <el-col :span="2">
                 <el-button type="primary" style="margin-top: 20px;" plain>预览</el-button></el-col>
@@ -86,7 +86,7 @@
                 <el-button type="primary" style="margin-top: 20px;" plain>下载</el-button></el-col>
             </el-row>
           </div>
-          
+
         </el-main>
 
       </el-container>
@@ -97,10 +97,10 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
-import { reqUserInfo, reqFavorList, requireAvatar } from '@/api/api';
+import { reqUserInfo, requireAvatar, reqLikeNote } from '@/api/api';
 import { ElNotification } from 'element-plus';
 
-const favors = ref([]);
+const likeNotes = ref([]);
 const userInfo = ref([]);
 const $router = useRouter();
 
@@ -112,52 +112,52 @@ const mockData = {
   avatarUrl: 'src/assets/images/example.jpg'
 };
 
-const mockFavor = ref([
-    {
-      favorNo: 1,
-      favorTitle: '实训',
-      favorAuthor: '姜天亦',
-      uploadDate: '2024-11-13',
-    },
-    {
-      favorNo: 2,
-      favorTitle: '实训',
-      favorAuthor: '姜天亦',
-      uploadDate: '2024-11-13',
-    },
-    {
-      favorNo: 3,
-      favorTitle: '实训',
-      favorAuthor: '姜天亦',
-      uploadDate: '2024-11-13',
-    },
-    {
-      favorNo: 4,
-      favorTitle: '实训',
-      favorAuthor: '姜天亦',
-      uploadDate: '2024-11-13',
-    },
-    {
-      favorNo: 5,
-      favorTitle: '实训',
-      favorAuthor: '姜天亦',
-      uploadDate: '2024-11-13',
-    },
-  ]);
+const mockNotes = ref([
+  {
+    favorNo: 1,
+    favoriteTitle: '实训',
+    fromUsername: '姜天亦',
+    notePt: '2024-11-13',
+  },
+  {
+    favorNo: 2,
+    favoriteTitle: '实训',
+    fromUsername: '姜天亦',
+    notePt: '2024-11-13',
+  },
+  {
+    favorNo: 3,
+    favoriteTitle: '实训',
+    fromUsername: '姜天亦',
+    notePt: '2024-11-13',
+  },
+  {
+    favorNo: 4,
+    favoriteTitle: '实训',
+    fromUsername: '姜天亦',
+    notePt: '2024-11-13',
+  },
+  {
+    favorNo: 5,
+    favoriteTitle: '实训',
+    fromUsername: '姜天亦',
+    notePt: '2024-11-13',
+  },
+]);
 
 // 获取用户信息和课程列表
 onMounted(async () => {
   try {
     const userResponse = await reqUserInfo();
-    const favorResponse = await reqFavorList();
+    const notesResponse = await reqLikeNote();
     const avatarResponse = await requireAvatar()
     userInfo.value = userResponse.data;
-    favors.value = favorResponse.data;
+    likeNotes.value = notesResponse.data;
     userInfo.value.avatarUrl = avatarResponse.data;
   } catch (error) {
     console.log(error)
     userInfo.value = mockData;
-    favors.value = mockFavor.value;
+    likeNotes.value = mockNotes.value;
     ElNotification({
       type: 'error',
       message: '获取信息失败',

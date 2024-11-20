@@ -61,7 +61,7 @@ export const constantRoute = [
     component: () => import('@/views/Bookmarks/othersnotes.vue'),
     name: 'othersnotes',
     meta: {
-      title: '浏览笔记',
+      title: '所有笔记',
       hidden: true,//是否在菜单隐藏
       icon: 'CircleCloseFilled',
       key: 'unique-key'

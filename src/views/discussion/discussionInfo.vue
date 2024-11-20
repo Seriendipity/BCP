@@ -39,7 +39,7 @@
 <script>
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
-import { reqAllComment, reqOneDiscussion, reqUpdateVisible, reqLikeDiscussion, addComment } from '@/api/api'; // 假设这是更新帖子权限状态的API
+import { reqAllComment, reqOneDiscussion, reqUpdateVisible, addComment, addLikeDiscussion } from '@/api/api'; // 假设这是更新帖子权限状态的API
 import { ElNotification, ElMessage } from 'element-plus';
 
 export default {
@@ -190,7 +190,7 @@ export default {
       formData.append('favoriteInformationNo', discussionId)
       formData.append('favoriteTitle', title.value)
       try {
-        const response = await reqLikeDiscussion(formData)
+        const response = await addLikeDiscussion(formData)
         if (response.code === 0) {
           ElMessage.success('收藏成功')
         }
