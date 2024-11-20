@@ -205,6 +205,16 @@ export const constantRoute = [
           hidden: false,
           icon: 'Files',
         }
+      },
+      {
+        path: '/discussion/createDiscussion',
+        component: () => import('@/views/discussion/createDiscussion.vue'),
+        name: 'createDiscussion',
+        meta: {
+          title: '新建帖子',
+          hidden: true,
+          icon: 'Files',
+        }
       }
     ]
   },

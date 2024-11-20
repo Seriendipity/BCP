@@ -46,7 +46,8 @@ enum API {
   LIKE_DISCUSSION = "/favorite/insertDiscussionFavoriteOther",
   ONE_DISCUSSION = "/discussion/getOneDiscussion",
   ALL_COMMENT = "/comment/all",
-  ADD_COMMENT = "/comment/insert"
+  ADD_COMMENT = "/comment/insert",
+  ADD_DISCUSSION = "/discussion/insert",
 }
 //登录接口
 export const reqLogin = (data: any) => request.post<any, any>(API.LOGIN_URL, data);
@@ -137,4 +138,6 @@ export const createHomework = (data: any) => request.post<any, any>(API.CREATE_H
 export const reqLikeDiscussion = (data: any) => request.post<any, any>(API.LIKE_DISCUSSION, data);
 //评论帖子
 export const addComment = (data: any) => request.post<any, any>(API.ADD_COMMENT, data);
+//新建帖子
+export const addDiscussion = (data: any) => request.post<any, any>(API.ADD_DISCUSSION, data);
 // export const awardPost = (data: any) => request.post<any>(API.AWARD_POST, data);

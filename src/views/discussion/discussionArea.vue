@@ -1,6 +1,11 @@
 <template>
 
-  <h1 class="ziti03" style="margin-bottom: 20px;">{{ courseName }}讨论区 </h1>
+  <div class="DiscussionTitle" style="margin-bottom: 30px;">{{ courseName }}讨论区
+    <el-button type="primary" round
+      style="padding: 15px;font-size: large;font-weight: bold;float: right;margin-right: 20px;"
+      @click="newDiscussion()">新建帖子</el-button>
+  </div>
+
   <el-scrollbar max-height="615px">
     <div class="grid-content bg-white" style="padding-left: 10px;" v-for="post in posts" :key="post.index">
       <el-row :gutter="20">
@@ -157,6 +162,10 @@ export default {
       $router.push({ name: 'discussionInfo' })
     }
 
+    const newDiscussion = () => {
+      $router.push({ name: 'createDiscussion' });
+    }
+
     return {
       posts,
       updatePostStatus,
@@ -167,6 +176,7 @@ export default {
       lesson,
       courseName,
       goToDiscussionInfo,
+      newDiscussion,
     };
   },
 };
@@ -222,6 +232,14 @@ export default {
   margin-bottom: 2px;
   font-size: 14px;
   margin-left: 10px;
+}
+
+.DiscussionTitle {
+  text-align: left;
+  font-weight: bold;
+  font-size: 20px;
+  margin-left: 10px;
+  padding-top: 10px;
 }
 
 .backleft {
