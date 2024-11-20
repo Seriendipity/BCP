@@ -41,7 +41,12 @@ enum API {
   UPLOAD_HOMEWORK = "/studentHomework/upload",
   POST_FINALGRADE = "/studentHomework/updateVisible",
   UNFINISHED_HOMEWORK = "/studentHomework/getAllUnfinishedHomework",
-  CREATE_HOMEWORK = "/homework/upload"
+  CREATE_HOMEWORK = "/homework/upload",
+  ALL_DISCUSSION = "/discussion/all",
+  LIKE_DISCUSSION = "/favorite/insertDiscussionFavoriteOther",
+  ONE_DISCUSSION = "/discussion/getOneDiscussion",
+  ALL_COMMENT = "/comment/all",
+  ADD_COMMENT = "/comment/insert"
 }
 //登录接口
 export const reqLogin = (data: any) => request.post<any, any>(API.LOGIN_URL, data);
@@ -87,6 +92,12 @@ export const getFinalGrade = (homeworkNO: any) => request.get<any, any>(API.FINA
 export const getEvaluationEndTime = (homeworkNO: any) => request.get<any, any>(API.GET_HOMEWORK_EVALUATION_TIME + `?homeworkNo=${homeworkNO}`)
 //获得未完成作业
 export const reqUnfinishedHomework = () => request.get<any, any>(API.UNFINISHED_HOMEWORK)
+//获得讨论区所有帖子
+export const reqDiscussionList = (data: any) => request.get<any, any>(API.ALL_DISCUSSION, data)
+//获得一个帖子
+export const reqOneDiscussion = (data: any) => request.get<any, any>(API.ONE_DISCUSSION, data)
+//获得所有评论
+export const reqAllComment = (data: any) => request.get<any, any>(API.ALL_COMMENT, data)
 // export const awardInfo = () => request.get<any, any>(API.AWARD_GET);
 
 
@@ -122,4 +133,8 @@ export const reqUploadHomework = (data: any) => request.post<any, any>(API.UPLOA
 export const postScore = (data: any) => request.post<any, any>(API.POST_FINALGRADE, data);
 //老师发布作业
 export const createHomework = (data: any) => request.post<any, any>(API.CREATE_HOMEWORK, data);
+//收藏帖子
+export const reqLikeDiscussion = (data: any) => request.post<any, any>(API.LIKE_DISCUSSION, data);
+//评论帖子
+export const addComment = (data: any) => request.post<any, any>(API.ADD_COMMENT, data);
 // export const awardPost = (data: any) => request.post<any>(API.AWARD_POST, data);

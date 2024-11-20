@@ -1,65 +1,61 @@
 <template>
-  
-    <!-- <h1 class="ziti03" style="margin-bottom: 20px;">{{ lesson.lessonName }}讨论区  </h1> -->
+
+  <!-- <h1 class="ziti03" style="margin-bottom: 20px;">{{ lesson.lessonName }}讨论区  </h1> -->
+  <div class="grid-content bg-white" style="padding: 10px;">
+    <el-row :gutter="20">
+      <el-col :span="22">
+        <h1 class="ziti03"> {{ posts.username }} </h1>
+        <h1 class="ziti04" style="line-height: 1.5 ;margin-top: 5px;"> {{ posts.Information }} </h1>
+        <h1 class="ziti04" style="color: gray;margin-top: 15px;">{{ posts.PostingTime }} 上传</h1>
+        <h1 class="ziti04" style="color: gray;margin-top: 5px;margin-bottom: 15px;">{{ posts.commentTimes }}条回复 {{
+          posts.starTimes }}次收藏</h1>
+      </el-col>
+      <el-col :span="2">
+        <el-button type="primary" style="margin-top: 10px;" @click="starPost()">收藏</el-button>
+      </el-col>
+    </el-row>
+  </div>
+  <el-scrollbar max-height=300px>
     <div class="grid-content bg-white" style="padding: 10px;">
-      <el-row :gutter="20">
-              <el-col :span="22">
-                <h1 class="ziti03" > {{ posts.postAuthor }}  </h1>
-                <h1 class="ziti04" style="line-height: 1.5 ;margin-top: 5px;"> {{ posts.postInfo }} </h1>
-                <h1 class="ziti04" style="color: gray;margin-top: 15px;">{{ posts.uploadDate }}   上传</h1>
-                <h1 class="ziti04" style="color: gray;margin-top: 5px;margin-bottom: 15px;">{{ posts.replynum }}条回复 {{ posts.favornum }}次收藏</h1>
-              </el-col>
-              <el-col :span="2">
-                <el-button type="primary" style="margin-top: 10px;" @click="updatepost(post)">收藏</el-button>
-              </el-col>
-            </el-row>
-          </div>
-          <!-- <h1 class="ziti03" style="padding-right: 30px; text-align: right;margin-bottom: 10px;">共{{ posts.replynum }}条回复</h1> -->
-          <!-- <el-button type="primary" round>新建回复</el-button> -->
-            <el-scrollbar max-height="400px">
-              <div class="grid-content bg-white" style="padding: 10px;">
-<div v-for="reply in replies" :key="reply.replyNo">
-  <h1 class="ziti04" style="margin-top: 5px;font-weight: bold;"> {{ reply.replyAuthor }}  </h1>
-                <h1 class="ziti04" style="line-height: 1.5 ;margin-top: 5px;"> {{ reply.replyInfo }} </h1>
-                <h1 class="ziti04" style="color: gray;margin-top: 5px;margin-bottom: 5px;">{{ reply.uploadDate }}</h1>
-                <el-divider></el-divider>
-          </div>
-        </div>
-          </el-scrollbar>
-          <div class="main_content_footer">
-        <div class="input_box" width="100%">
-          <textarea class="chat-input no-border" v-model="question" />
-        </div>
-        <div class="btn_box">
-          <el-button type="primary" class="btn" @click="askClick(question)" style="float: right;">发送</el-button>
-        </div>
-      </div> 
+      <div v-for="reply in comments" :key="reply.index">
+        <h1 class="ziti04" style="margin-top: 5px;font-weight: bold;"> {{ reply.commentUserName }} </h1>
+        <h1 class="ziti04" style="line-height: 1.5 ;margin-top: 5px;"> {{ reply.Information }} </h1>
+        <h1 class="ziti04" style="color: gray;margin-top: 5px;margin-bottom: 5px;">{{ reply.PostingTime }}</h1>
+        <el-divider></el-divider>
+      </div>
+    </div>
+  </el-scrollbar>
+  <div class="main_content_footer">
+    <div class="input_box" width="100%">
+      <textarea class="chat-input no-border" v-model="newMessage" />
+    </div>
+    <div class="btn_box">
+      <el-button type="primary" class="btn" @click="returnDiscussion(newMessage)" style="float: right;">返回</el-button>
+      <el-button type="primary" class="btn" @click="addOneComment(newMessage)" style="float: right;">发送</el-button>
+    </div>
+  </div>
 </template>
 
 <script>
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
-import { reqFavoriteStatus, reqUpdateVisible } from '@/api/api'; // 假设这是更新帖子权限状态的API
-import { ElNotification,ElMessage } from 'element-plus';
-import { reqUserInfo,reqCourseList } from '@/api/api';
+import { reqAllComment, reqOneDiscussion, reqUpdateVisible, reqLikeDiscussion, addComment } from '@/api/api'; // 假设这是更新帖子权限状态的API
+import { ElNotification, ElMessage } from 'element-plus';
 
 export default {
-setup() {
-  // 使用ref创建响应式数据
-  const mockPost = 
+  setup() {
+    // 使用ref创建响应式数据
+    const mockPost =
     {
       postNo: 1,
       postLesson: '人工智能基础',
-      postInfo: 'line-height的值应该大于或等于文本的字体大小，以确保行间距生效。如果文本的字体大小小于line-height的值，行间距将不会显示出来。如果你的文本字体大小小于1.25或1.5，你可能需要调整line-height的值或字体大小以得到期望的行间距效果。',
-      postAuthor: '郑宇煊',
-      uploadDate: '2024-11-11',
-      replynum: 5,
-      favornum: 4,
+      Information: 'line-height的值应该大于或等于文本的字体大小，以确保行间距生效。如果文本的字体大小小于line-height的值，行间距将不会显示出来。如果你的文本字体大小小于1.25或1.5，你可能需要调整line-height的值或字体大小以得到期望的行间距效果。',
+      username: '郑宇煊',
+      PostingTime: '2024-11-11',
+      commentTimes: 5,
+      starTimes: 4,
     };
-  const mocklessonData = {
-lessonName:'课程实训',
-};
-const mockMessages = ref([
+    const mockMessages = ref([
       {
         text: "我需要帮助进行Vue.js开发我需要帮助进行Vue.js开发我需要帮助进行Vue.js开发我需要帮助进行Vue.js开发",
         // align: "left",
@@ -67,99 +63,101 @@ const mockMessages = ref([
         time: "22:37",
       },
     ]);
-const mockReply = ref([
-    {
-      replyNo: 1,
-      replyInfo: 'line-height的值应该大于或等于文本的字体大小，以确保行间距生效。如果文本的字体大小小于line-height的值，行间距将不会显示出来。如果你的文本字体大小小于1.25或1.5，你可能需要调整line-height的值或字体大小以得到期望的行间距效果。',
-      replyAuthor: '郑宇煊',
-      uploadDate: '2024-11-11',
-    },
-    {
-      replyNo: 2,
-      replyInfo: 'line-height的值应该大于或等于文本的字体大小，以确保行间距生效。如果文本的字体大小小于line-height的值，行间距将不会显示出来。如果你的文本字体大小小于1.25或1.5，你可能需要调整line-height的值或字体大小以得到期望的行间距效果。',
-      replyAuthor: 'zxc',
-      uploadDate: '2024-11-12',
-    },
-    {
-      replyNo: 3,
-      replyInfo: 'line-height的值应该大于或等于文本的字体大小，以确保行间距生效。如果文本的字体大小小于line-height的值，行间距将不会显示出来。如果你的文本字体大小小于1.25或1.5，你可能需要调整line-height的值或字体大小以得到期望的行间距效果。',
-      replyAuthor: '爱学习',
-      uploadDate: '2024-11-14',
-    },
-    {
-      replyNo: 4,
-      replyInfo: 'line-height的值应该大于或等于文本的字体大小，以确保行间距生效。如果文本的字体大小小于line-height的值，行间距将不会显示出来。如果你的文本字体大小小于1.25或1.5，你可能需要调整line-height的值或字体大小以得到期望的行间距效果。line-height的值应该大于或等于文本的字体大小，以确保行间距生效。如果文本的字体大小小于line-height的值，行间距将不会显示出来。如果你的文本字体大小小于1.25或1.5，你可能需要调整line-height的值或字体大小以得到期望的行间距效果。line-height的值应该大于或等于文本的字体大小，以确保行间距生效。如果文本的字体大小小于line-height的值，行间距将不会显示出来。如果你的文本字体大小小于1.25或1.5，你可能需要调整line-height的值或字体大小以得到期望的行间距效果。',
-      replyAuthor: '爱学习',
-      uploadDate: '2024-11-14',
-    },
-    {
-      replyNo: 5,
-      replyInfo: 'line-height的值应该大于或等于文本的字体大小，以确保行间距生效。如果文本的字体大小小于line-height的值，行间距将不会显示出来。如果你的文本字体大小小于1.25或1.5，你可能需要调整line-height的值或字体大小以得到期望的行间距效果。',
-      replyAuthor: '爱学习',
-      uploadDate: '2024-11-14',
-    },
-  ]);
-  const posts = ref([]);//界面展示的
-  const lesson  = ref([]);
-  const router = useRouter(); // 获取路由实例
-  const replies = ref([]);//界面展示的
-  const newmessage = ref(""); // 输入框的绑定值
-  // 定义方法
-  //TODO
-  const updatePostStatus = (post) => {
-    console.log(`更新帖子${post.postNo}的权限状态为：${post.authority}`);
-    // 假设更新操作成功，可以在这里更新界面显示或者状态
-  };
+    const mockReply = ref([
+      {
+        index: 1,
+        Information: 'line-height的值应该大于或等于文本的字体大小，以确保行间距生效。如果文本的字体大小小于line-height的值，行间距将不会显示出来。如果你的文本字体大小小于1.25或1.5，你可能需要调整line-height的值或字体大小以得到期望的行间距效果。',
+        commentUserName: '郑宇煊',
+        PostingTime: '2024-11-11',
+      },
+      {
+        index: 2,
+        Information: 'line-height的值应该大于或等于文本的字体大小，以确保行间距生效。如果文本的字体大小小于line-height的值，行间距将不会显示出来。如果你的文本字体大小小于1.25或1.5，你可能需要调整line-height的值或字体大小以得到期望的行间距效果。',
+        commentUserName: 'zxc',
+        PostingTime: '2024-11-12',
+      },
+      {
+        index: 3,
+        Information: 'line-height的值应该大于或等于文本的字体大小，以确保行间距生效。如果文本的字体大小小于line-height的值，行间距将不会显示出来。如果你的文本字体大小小于1.25或1.5，你可能需要调整line-height的值或字体大小以得到期望的行间距效果。',
+        commentUserName: '爱学习',
+        PostingTime: '2024-11-14',
+      },
+      {
+        index: 4,
+        Information: 'line-height的值应该大于或等于文本的字体大小，以确保行间距生效。如果文本的字体大小小于line-height的值，行间距将不会显示出来。如果你的文本字体大小小于1.25或1.5，你可能需要调整line-height的值或字体大小以得到期望的行间距效果。line-height的值应该大于或等于文本的字体大小，以确保行间距生效。如果文本的字体大小小于line-height的值，行间距将不会显示出来。如果你的文本字体大小小于1.25或1.5，你可能需要调整line-height的值或字体大小以得到期望的行间距效果。line-height的值应该大于或等于文本的字体大小，以确保行间距生效。如果文本的字体大小小于line-height的值，行间距将不会显示出来。如果你的文本字体大小小于1.25或1.5，你可能需要调整line-height的值或字体大小以得到期望的行间距效果。',
+        commentUserName: '爱学习',
+        PostingTime: '2024-11-14',
+      },
+      {
+        index: 5,
+        Information: 'line-height的值应该大于或等于文本的字体大小，以确保行间距生效。如果文本的字体大小小于line-height的值，行间距将不会显示出来。如果你的文本字体大小小于1.25或1.5，你可能需要调整line-height的值或字体大小以得到期望的行间距效果。',
+        commentUserName: '爱学习',
+        PostingTime: '2024-11-14',
+      },
+    ]);
+    const posts = ref([]);//界面展示的
+    const lesson = ref([]);
+    const $router = useRouter(); // 获取路由实例
+    const comments = ref([]);//界面展示的
+    const newMessage = ref(""); // 输入框的绑定值
+    const title = ref('测试1')
 
-  const updatePost = (post) => {
-    console.log(`更新帖子${post.postNo}的内容`);
-    // 假设更新操作成功，可以在这里更新界面显示或者状态
-  };
+    const updatePostStatus = (post) => {
+      console.log(`更新帖子${post.postNo}的权限状态为：${post.authority}`);
+      // 假设更新操作成功，可以在这里更新界面显示或者状态
+    };
 
-  const previewPost = (post) => {
-    console.log(`预览帖子${post.postNo}`);
-    // 假设跳转操作成功，可以在这里更新界面显示或者状态
-  };
+    const updatePost = (post) => {
+      console.log(`更新帖子${post.postNo}的内容`);
+      // 假设更新操作成功，可以在这里更新界面显示或者状态
+    };
 
-  const updatePostFavStatus = async (post) => {
-    // 更新收藏状态
-    try {
-       await reqUpdateVisible({
-         postNo: post.postNo,
-       });
-     } catch (error) {
+    const previewPost = (post) => {
+      console.log(`预览帖子${post.postNo}`);
+      // 假设跳转操作成功，可以在这里更新界面显示或者状态
+    };
+
+    const updatePostFavStatus = async (post) => {
+      // 更新收藏状态
+      try {
+        await reqUpdateVisible({
+          postNo: post.postNo,
+        });
+      } catch (error) {
         console.error('取消收藏失败:', error);
         ElNotification({
           type: 'error',
           message: '取消收藏失败，请重试。',
-       });
-     }
-   };
-   const askClick = async (val) => {
-      if (val.trim()) {
-        const userName = localStorage.getItem("userName") || "默认用户";
-        messages.value.push({
-          text: val, // 用户输入的消息
-          name: userName, // 用户名
-          align: "right",
         });
-        newmessage.value = ""; // 发送消息后清空输入框
-      } else {
-        ElMessage.warning("不能发送空白消息");
       }
+    };
+    const addOneComment = async (val) => {
+      const userName = localStorage.getItem("userName") || "默认用户";
+      const currentTime = new Date()
+      const discussionId = localStorage.getItem('discussionId')
       const formData = new FormData()
-      formData.append('question', val)
+      formData.append('discussionId', discussionId)
+      formData.append('commentInfo', val)
+      //TODO:添加评论图片和@其他人
+      formData.append('imgUrl', null)
+      formData.append('mentionedUser', null)
       try {
-        //const response = await ai_Helper(formData)
-        // if (response.code === 0) {
-        //   messages.value.push({
-        //     text: response.data,
-        //     name: "智慧课堂小助手",
-        //     align: "left",
-        //   });
-        // }
+        if (val.trim()) {
+          const response = await addComment(formData)
+          if (response.code === 0) {
+            ElMessage.success('评论成功')
+            comments.value.push({
+              Information: val,
+              commentUserName: userName,
+              PostingTime: currentTime
+            });
+            newMessage.value = ""; // 发送消息后清空输入框
+          }
+        } else {
+          ElMessage.warning("不能发送空白消息");
+        }
       } catch (error) {
-        newmessage.value = mockMessages.value
+        newMessage.value = mockMessages.value
         console.log(error)
         ElNotification({
           message: '发送失败，请重试',
@@ -167,41 +165,64 @@ const mockReply = ref([
         });
       }
     };
-//TODO
-// 如何传对应讨论内容的参数以达到打开对应讨论详情我还没写
-  onMounted(async () => {
-try {
-  const classResponse = await reqClassInfo();
-  const postResponse = await reqPostList();
-  const replyResponse = await reqReplyList();
-  lesson.value = classResponse.data;
-  posts.value = postResponse.data;
-  reply.value = replyResponse.data;
-} catch (error) {
-    lesson.value = mocklessonData;
-    posts.value = mockPost;
-    replies.value = mockReply.value;
-  ElNotification({
-    type: 'error',
-    message: '获取信息失败',
-  });
-}
-});
+    //TODO
+    // 如何传对应讨论内容的参数以达到打开对应讨论详情我还没写
+    onMounted(async () => {
+      try {
+        const postResponse = await reqOneDiscussion();
+        const commentResponse = await reqAllComment();
+        posts.value = postResponse.data;
+        comments.value = commentResponse.data;
+      } catch (error) {
+        console.log(error)
+        posts.value = mockPost;
+        comments.value = mockReply.value;
+        ElNotification({
+          type: 'error',
+          message: '获取帖子详细信息失败',
+        });
+      }
+    });
 
-  return {
-    posts,
-    updatePostStatus,
-    updatePost,
-    previewPost,
-    updatePostFavStatus,
-    mocklessonData,
-    lesson,
-    posts,
-    newmessage,
-    mockMessages,
-    replies,
-  };
-},
+    const starPost = async () => {
+      const formData = new FormData()
+      const discussionId = localStorage.getItem('discussionId')
+      formData.append('favoriteInformationNo', discussionId)
+      formData.append('favoriteTitle', title.value)
+      try {
+        const response = await reqLikeDiscussion(formData)
+        if (response.code === 0) {
+          ElMessage.success('收藏成功')
+        }
+      } catch (error) {
+        console.error('收藏失败:', error);
+        ElNotification({
+          type: 'error',
+          message: '收藏失败，请重试。',
+        });
+      }
+      // 假设更新操作成功，可以在这里更新界面显示或者状态
+    };
+
+    const returnDiscussion = () => {
+      $router.push({ name: 'discussionArea' })
+    }
+
+    return {
+      posts,
+      updatePostStatus,
+      updatePost,
+      previewPost,
+      updatePostFavStatus,
+      lesson,
+      newMessage,
+      mockMessages,
+      comments,
+      starPost,
+      addOneComment,
+      returnDiscussion,
+    };
+  },
 };
 </script>
 
@@ -233,20 +254,20 @@ try {
 }
 
 .chat-input {
-    width: 100%;
-    height: 80px;
-    padding: 12px 16px;
-    border: 1px solid #dcdfe6;
-    border-radius: 8px;
-    resize: none;
-    font-size: 14px;
-    color: #606266;
-    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
-    transition: border-color 0.3s, box-shadow 0.3s;
-    margin-top: 10px;
-  }
+  width: 100%;
+  height: 80px;
+  padding: 12px 16px;
+  border: 1px solid #dcdfe6;
+  border-radius: 8px;
+  resize: none;
+  font-size: 14px;
+  color: #606266;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
+  transition: border-color 0.3s, box-shadow 0.3s;
+  margin-top: 10px;
+}
 
-  
+
 .backmain1 {
   height: 770px;
   background-color: #eaf6ff;
@@ -388,5 +409,4 @@ body>.el-container {
     background-color: #66b1ff;
   }
 }
-
 </style>
