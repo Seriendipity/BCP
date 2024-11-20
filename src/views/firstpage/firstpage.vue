@@ -472,7 +472,7 @@ body>.el-container {
   border-radius: 15px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   width: 100%;
-  max-height: 360px;
+  height: 600px;
   overflow-y: auto;
 }
 

@@ -24,6 +24,8 @@ enum API {
   UPDATE_AVATAR = "/users/updateAvatar",
   GET_MYNOTELIST = "/note/getStudentAllNote",
   GET_ALLNOTE = "/note/allPublicNote",
+  GET_MYFAVORLIST = "",
+  GET_MYFAVORPOSTLIST = "hhhh",
   ADD_NOTE = "/note/upload",
   DELETE_NOTE = "/note/deleteNote",
   UPDATE_NOTEINFO = "/note/updateNoteInformation",
@@ -77,6 +79,10 @@ export const requireAvatar = () => request.get<any, any>(API.GET_AVATAR)
 export const requireMyNote = () => request.get<any, any>(API.GET_MYNOTELIST)
 //获取公开笔记
 export const requireAllNote = () => request.get<any, any>(API.GET_ALLNOTE)
+//获取收藏夹笔记内容 
+export const reqFavorList = () => request.get<any, any>(API.GET_MYFAVORLIST)
+//获取已收藏帖子内容
+export const reqfavorPostList = () => request.get<any, any>(API.GET_MYFAVORPOSTLIST)
 //获取笔记收藏状态
 export const reqFavoriteStatus = () => request.get<any, any>(API.GET_FAVORITE)
 //导出选课学生名单

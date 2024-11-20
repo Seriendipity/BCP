@@ -351,6 +351,16 @@ export const constantRoute = [
           hidden: false,
           icon: 'Files',
         }
+      },
+      {
+        path: '/homework/homeworkCheckbystu',
+        component: () => import('@/views/homework/homeworkCheckbystu.vue'),
+        name: 'homeworkCheckbystu',
+        meta: {
+          title: '作业互评',
+          hidden: false,
+          icon: 'Files',
+        }
       }
     ]
   },

@@ -4,6 +4,8 @@
       class="homeworkTable">
       <el-table-column prop="name" label="作业名称">
       </el-table-column>
+      <el-table-column prop="homeworkNO" label="作业ID" width="130px">
+      </el-table-column>
       <el-table-column prop="starttime" label="作业开始时间" width="180px">
       </el-table-column>
       <el-table-column prop="endtime" label="作业结束时间" width="180px">
@@ -134,6 +136,7 @@ const homeworkList = {
         });
         return;
       }
+      console.log(selectedHomeworkNo.value)
       const formData = new FormData();
       const studentNo = localStorage.getItem('userId')
       const submitTime = getFormattedDate()
@@ -168,7 +171,9 @@ const homeworkList = {
     };
 
     const handleUpload = (index, row) => {
+      console.log(row.homeworkNO)
       selectedHomeworkNo.value = row.homeworkNO
+      console.log(selectedHomeworkNo.value)
       dialogVisible.value = true;
       //TODO: 文件上传
     };
@@ -179,6 +184,7 @@ const homeworkList = {
         if (response.code === 0) {
           // 将后端数据转为数组格式并赋值给 tableData
           homeworkListData.value = Object.values(response.data).map(homework => ({
+            homeworkNO:homework.homeworkNO,
             name: homework.homeworkDescription,
             starttime: homework.homeworkStartTime,
             endtime: homework.homeworkEndTime,

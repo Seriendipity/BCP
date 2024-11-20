@@ -12,7 +12,7 @@
         </el-col>
         <el-col :span="1">
           <div class="grid-content ">
-            <router-link to="/posts" style="text-decoration: none;">
+            <router-link to="/notes" style="text-decoration: none;">
               <h1 style="font-size:larger;margin-top: 21px;color: aliceblue;font-weight: 550;">笔记
               </h1>
             </router-link>
@@ -76,7 +76,7 @@
             </el-col>
           </el-row>
           <!-- <div class="scrollable"> -->
-          <div class="grid-content bg-white" style="padding-left: 10px;" v-for="post in posts" :key="post.postNo">
+          <div class="grid-postcontent bg-postwhite" style="padding-left: 10px;" v-for="post in posts" :key="post.postNo">
             <el-row :gutter="20">
               <el-col :span="21">
                 <h1 class="ziti03" style="margin-top: 5px;">{{ post.postLesson }} </h1>
@@ -102,7 +102,8 @@
 import { ref, onMounted } from 'vue';
 import { reqUpdateVisible } from '@/api/api'; // 假设这是更新帖子权限状态的API
 import { ElNotification } from 'element-plus';
-import { reqUserInfo, reqPostList } from '@/api/api';
+import { useRouter } from 'vue-router';
+import { reqUserInfo, reqfavorPostList } from '@/api/api';
 
 export default {
   setup() {
@@ -183,9 +184,9 @@ export default {
     onMounted(async () => {
       try {
         const userResponse = await reqUserInfo();
-        const postResponse = await reqPostList();
+        const favpostResponse = await reqfavorPostList();
         userInfo.value = userResponse.data;
-        posts.value = postResponse.data;
+        posts.value = favpostResponse.data;
       } catch (error) {
         console.log(error)
         userInfo.value = mockData;
@@ -310,18 +311,17 @@ export default {
   border-radius: 4px;
 }
 
-.bg-white {
+.bg-postwhite {
   background: #ffffff;
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
-  border-radius: 30px
 }
 
-.grid-content {
+.grid-postcontent {
   border-radius: 4px;
   min-height: 36px;
   /* height: 250px; */
   margin-bottom: 10px;
-
+  
 }
 
 body>.el-container {

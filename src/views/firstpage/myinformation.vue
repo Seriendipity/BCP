@@ -72,7 +72,7 @@
             <el-button @click="confirmUpload" type="primary">确认上传</el-button>
             <el-button @click="dialogVisible = false">取 消</el-button>
           </el-col>
-          <div  v-slot:tip class="el-upload__tip">只能上传jpg/png文件 且不超过500kb</div>
+          <div slot="tip" class="el-upload__tip">只能上传jpg/png文件 且不超过500kb</div>
         </el-row>
       </el-dialog>
     </el-main>
