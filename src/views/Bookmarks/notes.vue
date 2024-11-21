@@ -68,7 +68,7 @@
             <el-col :span="21">
               <router-link to="/othersnotes" style="text-decoration: none;">
                 <el-button type="primary" style="text-align: left; font-weight: bold;font-size: large;"
-                  plain>浏览笔记</el-button>
+                  plain>所有笔记</el-button>
               </router-link>
             </el-col>
             <div style="margin-left: 87%;">

@@ -59,7 +59,7 @@
 </template>
 
 <script>
-import { updateHomeworkSetting, editSingleHomework } from '@/api/api';
+import { updateHomeworkSetting, reqSingleHomework } from '@/api/api';
 import { ElNotification, ElMessage } from 'element-plus';
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
@@ -93,7 +93,7 @@ export default {
       try {
 
         const homeworkNO = localStorage.getItem('homeworkNO');
-        const response = await editSingleHomework(homeworkNO); // 请求后端老师布置作业数据
+        const response = await reqSingleHomework(homeworkNO); // 请求后端老师布置作业数据
         if (response.code === 0) {
           currentData.value = response.data;
           changedData.value = response.data;

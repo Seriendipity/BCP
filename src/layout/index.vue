@@ -1,41 +1,37 @@
 <template>
   <div class="common-layout">
     <el-container style="height: 100vh;">
-      <el-header class="header" style="height: 8%;">
-        <el-row>
-          <el-col :span="24">
-            <span>1</span>
-          </el-col>
-        </el-row>
-        <el-row :gutter="40" class="row1">
-          <el-col :span="20">
-            <span class="lesson-name">{{ courseName }}</span>
-          </el-col>
-          <el-col :span="4" class="right-align">
-            <span class="school-text">{{ establishCollege }}</span>
-          </el-col>
-        </el-row>
-        <!-- 添加的空行 -->
-        <el-row class="empty-row" :gutter="20">
-          <el-col :span="24" style="height: 10px;"></el-col>
-        </el-row>
-        <el-row :gutter="20" class="row2">
-          <el-col :span="16">
-            <div class="teacherName-number">
-              <span>主讲教师：{{ teacherName }}</span>
-              <el-divider direction="vertical" border-style="dashed" />
-              <span>课程编号: {{ courseNo }}</span>
-              <el-divider direction="vertical" border-style="dashed" />
-              <span>课序号：{{ cid }}</span>
-            </div>
-          </el-col>
-          <el-col :span="8" class="right-align">
-            <div class="semester">
-              <span>学期：{{ semester }}</span>
-              <span style="margin-left: 10px;font-weight: bold;">教学周：第{{ week }}周</span>
-            </div>
-          </el-col>
-        </el-row>
+      <el-header class="out_header" style="height: 8%;">
+        <div class="row1">
+          <el-row :gutter="40">
+            <el-col :span="20">
+              <span class="lesson-name">{{ courseName }}</span>
+            </el-col>
+            <el-col :span="4" class="right-align">
+              <span class="school-text">{{ establishCollege }}</span>
+            </el-col>
+          </el-row>
+        </div>
+        <div class="row2">
+          <el-row :gutter="20">
+            <el-col :span="16">
+              <div class="teacherName-number">
+                <span>主讲教师：{{ teacherName }}</span>
+                <el-divider direction="vertical" border-style="dashed" />
+                <span>课程编号: {{ courseNo }}</span>
+                <el-divider direction="vertical" border-style="dashed" />
+                <span>课序号：{{ cid }}</span>
+              </div>
+            </el-col>
+            <el-col :span="8" class="right-align">
+              <div class="semester">
+                <span>学期：{{ semester }}</span>
+                <span style="margin-left: 10px;">教学周：第{{ week }}周</span>
+              </div>
+            </el-col>
+          </el-row>
+        </div>
+
       </el-header>
       <el-container>
         <el-aside width="20%" style="height: 100%;">
@@ -106,7 +102,16 @@ export default {
 </script>
 
 <style scoped>
-.header {
+.row1 {
+  margin-top: 15px;
+  margin-bottom: 10px;
+}
+
+.row2 {
+  margin-top: 10px;
+}
+
+.out_header {
   position: relative;
   background: url(head-background.png) no-repeat;
   background-size: cover;

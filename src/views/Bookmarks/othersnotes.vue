@@ -72,7 +72,7 @@
             </el-col>
             <el-col :span="21">
               <!-- <h1 style="text-align: left; font-weight: bold;font-size: large;margin-top:-12px;"> 我的笔记</h1> -->
-              <el-button type="primary" style="text-align: left; font-weight: bold;font-size: large;">浏览笔记</el-button>
+              <el-button type="primary" style="text-align: left; font-weight: bold;font-size: large;">所有笔记</el-button>
             </el-col>
             <!-- <div style="margin-left: 87%;">
                 <el-button type="primary" round style="width: 80px;font-size: large; font-weight: bold;margin-bottom: -5px;">上传</el-button>
@@ -111,7 +111,7 @@
 
 <script setup>
 import { ref, onMounted } from 'vue';
-import { reqFavoriteStatus, requireAllNote, reqUpdateLike, reqUserInfo, requireAvatar } from '@/api/api';
+import { requireAllNote, reqUpdateLike, reqUserInfo, requireAvatar } from '@/api/api';
 import { ElNotification } from 'element-plus';
 
 const userInfo = ref([]);
@@ -153,17 +153,9 @@ onMounted(async () => {
     const response = await requireAvatar();
     const userResponse = await reqUserInfo();
     const noteResponse = await requireAllNote();
-    const favoriteResponse = await reqFavoriteStatus();
-    const favoriteArray = favoriteResponse.data;
     userInfo.value = userResponse.data;
     notes.value = noteResponse.data;
     userInfo.value.avatarUrl = response.data;
-    // 遍历 notes 并赋值 favorite 属性
-    for (let i = 0; i < notes.value.length; i++) {
-      if (favoriteArray[i]) {
-        notes.value[i].favorite = favoriteArray[i].favoriteAuthority;
-      }
-    }
   } catch (error) {
     console.log(error)
     userInfo.value = mockData;

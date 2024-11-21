@@ -2,66 +2,136 @@
   <el-container>
     <el-aside width="200px">
       <div class="homework-scrollable">
-        <el-row :gutter="20">
-          <el-col :span="24" v-for="(homework, index) in homeworks" :key="index">
-            <div class="homework-bar">
-              <div class="homework-info" @click="viewhomework(homework)">
-                <h2 class="homework-lesson">{{ homework.courseName }}</h2>
-                <h2 class="homework-title">{{ homework.homeworkTitle }}</h2>
-                <p class="homework-time">{{ homework.homeworkPostingTime }}</p>
-              </div>
-              <el-tag :type="homework.homeworkState === '已读' ? 'success' : 'warning'">
-                {{ homework.homeworkState }}
+          <div  v-for="homework in homeworks" :key="homework.homeworkNo">
+            <el-row :gutter="20">
+          <el-col :span="24" >
+                <h2 class="homework-nameid">{{ homework.homeworkstuName }} {{ homework.homeworkstuID }}</h2>
+                <p class="homework-time" style="margin-top: 10px;">{{ homework.homeworkUpdateTime }} 提交</p>
+              <el-tag :type="homework.homeworkCheckState === '已批改' ? 'success' : 'warning'" style="margin-top: 5px;float: right;">
+                {{ homework.homeworkCheckState }}:{{ homework.homeworkGrade }}
               </el-tag>
-            </div>
+              <el-divider style="margin-top: 40px;"></el-divider>
           </el-col>
         </el-row>
       </div>
+      </div>
     </el-aside>
-    <el-main>Main</el-main>
-    <el-aside width="200px">Aside</el-aside>
+    <el-main>
+      <iframe class="preview_back" :src="homeworkSrc" width="100%" height=650px style="margin-top: -20px;border:none;"></iframe>
+    </el-main>
+    <el-aside width="200px">
+      
+      <div class="bg-reply">
+        <h1 class="word-reply">评语</h1>
+        <textarea class="reply-input " v-model="question" />
+      <div>
+        <el-button type="primary" style="margin-top: 5px; float: right;">保存</el-button>
+      </div>
+      </div>
+      <div style="margin-top: 60px;"></div>
+      <!-- 分隔 -->
+      <div class="bg-inputgrade">
+        <h1 class="word-reply">打分</h1>
+        <textarea class="grade-input " v-model="question" />
+      <div>
+        <el-button type="primary" style="margin-top: 5px; float: right;">打分</el-button>
+      </div>
+      </div>
+      
+    </el-aside>
   </el-container>
 </template>
 
 <script setup>
-import { ref, onMounted, reactive } from 'vue';
-import { useRouter } from 'vue-router';
-import { reqUserInfo, reqCourseList, reqCourseIntro, requireTeacherSendHomework } from '@/api/api';
+import { ref, onMounted } from 'vue';
+// import { useRouter } from 'vue-router';
+import { reqSingleHomework,  requireTeacherSendHomework } from '@/api/api';
 import { ElNotification } from 'element-plus';
-import { requireAvatar } from '../../api/api';
 
-const courses = ref([]);
+// const courses = ref([]);
 const userInfo = ref([]);
-const router = useRouter();
-const dialogVisible = ref(false);
-const currenthomework = ref({});
-const homeworks = ref([]);
+// const currenthomework = ref({});
+const homeworks = ref([]); //显示的作业
 
+
+
+const props = defineProps({
+  previewSrc: {
+    type: String,
+    required: false,
+    default: () => 'https://book.yunzhan365.com/tnhkz/uvaj/mobile/index.html'
+  }
+});
+
+const homeworkSrc = ref(props.previewSrc);
 
 // 模拟数据
-const mockDataNotify = [
+const mockDataHomework = ref([
   {
-    courseName: '数据库系统',
-    homeworkTitle: '课程调整通知',
-    homeworkInfo: '由于特殊情况，本周的课程时间将调整，请查看具体时间安排。',
-    homeworkPostingTime: '2024-10-28 14:00',
-    homeworkState: '未读',
+    homeworkNo: 1,
+    homeworkstuName: '姜天亦',
+    homeworkstuID: '22301149',
+    homeworkGrade: '99',
+    homeworkUpdateTime: '2024-10-28 14:00',
+    homeworkCheckState: '已批改',
   },
   {
-    courseName: '人工智能基础',
-    homeworkTitle: '期末考试安排',
-    homeworkInfo: '请注意，期末考试将在12月1日举行，请提前做好复习准备。',
-    homeworkPostingTime: '2024-10-29 09:00',
-    homeworkState: '已读',
+    homeworkNo: 2,
+    homeworkstuName: '马海博',
+    homeworkstuID: '22301157',
+    homeworkGrade: '98',
+    homeworkUpdateTime: '2024-10-28 14:00',
+    homeworkCheckState: '已批改',
   },
   {
-    courseName: '软件学院团委宣传部',
-    homeworkTitle: '社团活动通知',
-    homeworkInfo: '下周五有社团活动，欢迎大家参加！',
-    homeworkPostingTime: '2024-10-30 11:00',
-    homeworkState: '未读',
+    homeworkNo: 3,
+    homeworkstuName: '张学琛',
+    homeworkstuID: '22301168',
+    homeworkGrade: '100',
+    homeworkUpdateTime: '2024-10-28 14:00',
+    homeworkCheckState: '已批改',
   },
-];
+  {
+    homeworkNo: 4,
+    homeworkstuName: '郑宇煊',
+    homeworkstuID: '22301170',
+    homeworkGrade: ' 0',
+    homeworkUpdateTime: '2024-10-28 14:00',
+    homeworkCheckState: '未批改',
+  },
+  {
+    homeworkNo: 5,
+    homeworkstuName: '刘艺凡',
+    homeworkstuID: '22301153',
+    homeworkGrade: '0 ',
+    homeworkUpdateTime: '2024-10-28 14:00',
+    homeworkCheckState: '未批改',
+  },
+  {
+    homeworkNo: 6,
+    homeworkstuName: '张胤麟',
+    homeworkstuID: '22301153',
+    homeworkGrade: ' 0',
+    homeworkUpdateTime: '2024-10-28 14:00',
+    homeworkCheckState: '未批改',
+  },
+  {
+    homeworkNo: 7,
+    homeworkstuName: '赵纾熳',
+    homeworkstuID: '22301153',
+    homeworkGrade: '0 ',
+    homeworkUpdateTime: '2024-10-28 14:00',
+    homeworkCheckState: '未批改',
+  },
+  {
+    homeworkNo: 8,
+    homeworkstuName: '马仕承',
+    homeworkstuID: '22301153',
+    homeworkGrade: '95',
+    homeworkUpdateTime: '2024-10-28 14:00',
+    homeworkCheckState: '已批改',
+  },
+]);
 
 const mockDataUser = {
   userName: '张三',
@@ -71,69 +141,36 @@ const mockDataUser = {
   avatarUrl: 'src/assets/images/example.jpg'
 };
 
-// 获取通知数据
-const fetchhomeworks = async () => {
-  try {
-    const courseId = localStorage.getItem('courseId')
-    const response = await requireTeacherSendHomework(courseId); // 获取通知数据
-    homeworks.value = response.data || []; // 更新通知数据
-  } catch (err) {
-    // 捕获错误并使用模拟数据
-    homeworks.value = mockDataNotify;
-    ElNotification({
-      message: '获取通知失败',
-      type: 'error',
-    });
-  }
-};
 
-onMounted(() => {
-  fetchhomeworks(); // 组件挂载时获取通知数据
-});
+// const fetchhomeworks = async () => {
+//   try {
+//     const courseId = localStorage.getItem('courseId')
+//     const response = await requireTeacherSendHomework(courseId); // 获取通知数据
+//     homeworkSrc.value = response.data || []; // 更新通知数据
+//   } catch (err) {
+//     // 捕获错误并使用模拟数据
+//     homeworkSrc.value = props.previewSrc;
+//     ElNotification({
+//       message: '获取通知失败',
+//       type: 'error',
+//     });
+//   }
+// };
 
-// 查看通知详情
-const viewhomework = async (homework) => {
-  //   currenthomework.value = homework; // 设置当前通知
-  //   dialogVisible.value = true; // 打开弹出框
-
-  //   if (homework.homeworkState === '未读') {
-  //     // 将状态更新为已读
-  //     homework.homeworkState = '已读';
-
-  //     // 调用后端API更新状态
-  //     try {
-  //       await updatehomeworkState({
-  //         homeworkId: homework.homeworkId, // 传递通知ID
-  //       });
-  //     } catch (error) {
-  //       console.error('更新通知状态失败:', error);
-  //       ElNotification({
-  //         type: 'error',
-  //         message: '更新通知状态失败，请重试。',
-  //       });
-  //     }
-  //   }
-};
-
-
-// 关闭弹出框
-const closeDialog = () => {
-  dialogVisible.value = false; // 关闭弹出框
-};
 
 // 获取用户信息和课程列表
 onMounted(async () => {
   try {
-    const avatarResponse = await requireAvatar();
-    const userResponse = await reqUserInfo();
-    const courseResponse = await reqCourseList();
-    userInfo.value = userResponse.data;
-    courses.value = courseResponse.data;
-    userInfo.value.avatarUrl = avatarResponse.data;
-    localStorage.setItem('userName', userInfo.value.userName);
-    localStorage.setItem('userId', userInfo.value.userId)
+    const homeworkResponse = await requireTeacherSendHomework();
+    homeworks.value = homeworkResponse.data;
+    localStorage.setItem('homeworkId');
+    const storedHomeworkId = localStorage.getItem('homeworkId');
+    const response = await reqSingleHomework(storedHomeworkId); // 获取后端日历URL
+    homeworkSrc.value = response.data.Homework || homeworkSrc.value;
   } catch (error) {
-    console.log(error)
+    // console.log(error)
+    homeworks.value = mockDataHomework.value;
+    // console.log(error)
     userInfo.value = mockDataUser;
     ElNotification({
       type: 'error',
@@ -142,173 +179,64 @@ onMounted(async () => {
   }
 });
 
-const goToCourseInfo = async (courseId) => {
-  try {
-    const response = await reqCourseIntro(courseId);
-    if (response && response.data) {
-      const currentQuery = router.currentRoute.value.query; // 获取当前查询参数
-      localStorage.setItem('courseId', courseId);
-      router.push({
-        path: '/CourseInfo',
-        query: {
-          ...currentQuery, // 保留当前查询参数
-          courseId,
-          courseIntro: response.data.courseInfo,
-          courseName: response.data.courseName,
-          courseNo: response.data.courseNo,
-          teacherName: response.data.teacherName,
-          establishCollege: response.data.establishCollege,
-          semester: response.data.semester,
-        },
-      });
-    }
-  } catch (error) {
-    ElNotification({
-      type: 'error',
-      message: '获取课程信息失败',
-    });
-  }
-};
+
 </script>
 
 <style>
-.main {
-  height: 600px;
-}
 
-.head {
-  background-color: #005bac;
-
-}
-
-.backmain1 {
-  height: 700px;
-  background-color: #eaf6ff;
-}
-
-.zitihead {
+.homework-nameid {
   text-align: left;
   font-weight: bold;
-  font-size: 24px;
-  margin-top: 15px;
-  color: #ffffff;
+  font-size: 16px;
 }
 
-.ziti01 {
-  text-align: center;
+.homework-time {
+  text-align: left;
   font-weight: 400;
-  font-size: 14px;
-  margin-bottom: 25px;
-  margin-top: 10px;
+  font-size: 12px;
+  color: #424242;
 }
 
-.ziti02 {
-  text-align: center;
-  font-weight: bold;
-  font-size: 16px;
-}
 
-.ziti03 {
+.word-reply{
   text-align: left;
   font-weight: bold;
-  margin-bottom: 5px;
   font-size: 16px;
-  margin-left: 10px;
+  padding-left: 10px;
   padding-top: 10px;
 }
 
-.ziti04 {
-  text-align: left;
-  font-weight: 400;
-  margin-bottom: 2px;
-  font-size: 14px;
-  margin-left: 10px;
-}
-
-.backleft {
-  width: "350px";
-  max-height: "550px";
-  background-color: #eaf6ff;
-}
-
-.backright {
-  width: "350px";
-  max-height: "550px";
-  background-color: #eaf6ff;
-}
-
-.whiteback {
-  border-radius: 4px;
-  max-height: 350px;
-  background-color: #ffffff;
-  padding: 10px;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
-
-}
-
-.whiteback2 {
-  margin-top: 20px;
-  border-radius: 4px;
-  height: 200px;
-  background-color: #ffffff;
-  padding: 10px;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
-}
-
-.whiteback3 {
+.preview_back {
   /* margin-top: 20px; */
   border-radius: 4px;
-  height: 400px;
   background-color: #ffffff;
-  padding: 10px;
+  padding-top: 10px;
+  padding-bottom: 10px;
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
 }
 
-.scrollable {
-  overflow-y: auto;
-  /* 垂直方向上的滚动条 */
-  overflow-x: hidden;
-  padding-right: 10px;
-}
 
-.el-row {
-  margin-bottom: 20px;
-
-  &:last-child {
-    margin-bottom: 0;
-  }
-}
-
-.el-col {
-  border-radius: 4px;
-}
-
-.bg-white {
+.bg-reply {
   background: #ffffff;
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
-  border-radius: 30px
+  border-radius: 4px
 }
 
-.grid-content {
-  border-radius: 4px;
-  min-height: 36px;
-  height: 250px;
-  margin-bottom: 10px;
-
+.bg-inputgrade {
+  background: #ffffff;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+  border-radius: 4px
 }
 
-body>.el-container {
-  margin-bottom: 40px;
-}
 
 .homework-scrollable {
   padding: 20px;
   background-color: #fff;
-  border-radius: 15px;
+  border-radius: 8px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   width: 100%;
-  max-height: 360px;
   overflow-y: auto;
+  height: 650px;
 }
 
 .homework-bar {
@@ -316,56 +244,40 @@ body>.el-container {
   align-items: center;
   justify-content: space-between;
   padding: 12px 20px;
-  border-bottom: 1px solid #e4e7ed;
+  border-bottom: 4px solid #e4e7ed;
   background: #ffffff;
   transition: background 0.3s ease;
+  height: 100%;
 }
 
-.homework-bar:hover {
-  background: #f5f7fa;
-}
 
-.homework-info {
-  display: flex;
-  flex-direction: column;
-}
-
-.homework-title {
+.reply-input {
+  width: 95%;
+  height: 180px;
+  margin: 5px;
+  border: 1px solid #dcdfe6;
+  border-radius: 0px;
+  resize: none;
   font-size: 14px;
-  font-weight: normal;
+  color: #606266;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
+  transition: border-color 0.3s, box-shadow 0.3s;
+  
 }
 
-.homework-lesson {
-  font-size: 16px;
-  font-weight: bold;
-  margin-bottom: 5px;
+.grade-input {
+  width: 95%;
+  height: 30px;
+  margin: 5px;
+  border: 1px solid #dcdfe6;
+  border-radius: 0px;
+  resize: none;
+  font-size: 14px;
+  color: #606266;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
+  transition: border-color 0.3s, box-shadow 0.3s;
+  
 }
 
-.homework-time {
-  color: #999;
-  font-size: 12px;
-  margin-top: 10px;
-}
 
-/* 弹出框样式 */
-.homework-dialog .dialog-content {
-  padding: 15px;
-}
-
-.dialog-title {
-  font-size: 18px;
-  font-weight: bold;
-  color: #333;
-  margin-bottom: 10px;
-}
-
-.dialog-info {
-  font-size: 16px;
-  line-height: 1.6;
-  color: #666;
-}
-
-.dialog-footer {
-  text-align: right;
-}
 </style>

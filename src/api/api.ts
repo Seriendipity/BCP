@@ -29,11 +29,10 @@ enum API {
   UPDATE_NOTEINFO = "/note/updateNoteInformation",
   UPDATENOTEVISIBLE = "/note/updateNoteAuthority",
   UPDATENOTEFAVORITE = "/favorite/insertFavoriteOther",
-  GET_FAVORITE = "/favorite/selectByStarNoteFromOthers",
   EXPORTSTUDENTLIST = "/StudentCourse/exportStudentList",
   GET_HOMEWORKLIST = "/homework/allCidHomework",
   UPDATE_HOMEWORK_SETTINGS = "/homework/updateHomework",
-  EDIT_HOMEWORK = "/homework/oneHomework",
+  ONE_HOMEWORK = "/homework/oneHomework",
   FINAL_GRADE = "/peerAssignment/finalGrade",
   GET_HOMEWORK_EVALUATION_TIME = "/peerAssignment/endTime",
   SEND_HOMEWORK = "/homework/updateVisible",
@@ -41,7 +40,18 @@ enum API {
   UPLOAD_HOMEWORK = "/studentHomework/upload",
   POST_FINALGRADE = "/studentHomework/updateVisible",
   UNFINISHED_HOMEWORK = "/studentHomework/getAllUnfinishedHomework",
-  CREATE_HOMEWORK = "/homework/upload"
+  CREATE_HOMEWORK = "/homework/upload",
+  ALL_DISCUSSION = "/discussion/all",
+  LIKE_DISCUSSION = "/favorite/insertDiscussionFavoriteOther",
+  ONE_DISCUSSION = "/discussion/getOneDiscussion",
+  ALL_COMMENT = "/comment/all",
+  ADD_COMMENT = "/comment/insert",
+  ADD_DISCUSSION = "/discussion/insert",
+  ALL_LIKE_NOTE = "/favorite/selectByStarNoteFromOthers",
+  ALL_LIKE_DISCUSSION = "/favorite/selectByStarDiscussionFromOthers",
+  //TODO
+  GET_MYHOMEWORK_SRC = "1122334",
+
 }
 //登录接口
 export const reqLogin = (data: any) => request.post<any, any>(API.LOGIN_URL, data);
@@ -71,8 +81,6 @@ export const requireAvatar = () => request.get<any, any>(API.GET_AVATAR)
 export const requireMyNote = () => request.get<any, any>(API.GET_MYNOTELIST)
 //获取公开笔记
 export const requireAllNote = () => request.get<any, any>(API.GET_ALLNOTE)
-//获取笔记收藏状态
-export const reqFavoriteStatus = () => request.get<any, any>(API.GET_FAVORITE)
 //导出选课学生名单
 export const requireStudentList = (courseId: any) => request.get<any, any>(API.EXPORTSTUDENTLIST + `?cid=${courseId}`)
 //得到学生端作业列表
@@ -80,15 +88,26 @@ export const requireStudentHomework = (courseId: any) => request.get<any, any>(A
 //得到老师端作业布置列表
 export const requireTeacherSendHomework = (courseId: any) => request.get<any, any>(API.GET_HOMEWORKLIST + `?cid=${courseId}`)
 //得到要编辑的作业
-export const editSingleHomework = (homeworkNO: any) => request.get<any, any>(API.EDIT_HOMEWORK + `?homeworkNO=${homeworkNO}`)
+export const reqSingleHomework = (homeworkNO: any) => request.get<any, any>(API.ONE_HOMEWORK + `?homeworkNO=${homeworkNO}`)
 //得到最终成绩
 export const getFinalGrade = (homeworkNO: any) => request.get<any, any>(API.FINAL_GRADE + `?homeworkNo=${homeworkNO}`)
 //得到互评最终时间
 export const getEvaluationEndTime = (homeworkNO: any) => request.get<any, any>(API.GET_HOMEWORK_EVALUATION_TIME + `?homeworkNo=${homeworkNO}`)
 //获得未完成作业
 export const reqUnfinishedHomework = () => request.get<any, any>(API.UNFINISHED_HOMEWORK)
+//获得讨论区所有帖子
+export const reqDiscussionList = (data: any) => request.get<any, any>(API.ALL_DISCUSSION, data)
+//获得一个帖子
+export const reqOneDiscussion = (data: any) => request.get<any, any>(API.ONE_DISCUSSION, data)
+//获得所有评论
+export const reqAllComment = (data: any) => request.get<any, any>(API.ALL_COMMENT, data)
+//获得收藏的笔记
+export const reqLikeNote = () => request.get<any, any>(API.ALL_LIKE_NOTE)
+//获得收藏的帖子
+export const reqLikeDiscussion = () => request.get<any, any>(API.ALL_LIKE_DISCUSSION)
 // export const awardInfo = () => request.get<any, any>(API.AWARD_GET);
-
+//获得作业的src //TODO
+export const reqHomework = () => request.get<any, any>(API.GET_MYHOMEWORK_SRC)
 
 //发布通知
 export const postNotification = (data: any) => request.post<any, any>(API.NOTIFICATION_POST, data);
@@ -122,4 +141,10 @@ export const reqUploadHomework = (data: any) => request.post<any, any>(API.UPLOA
 export const postScore = (data: any) => request.post<any, any>(API.POST_FINALGRADE, data);
 //老师发布作业
 export const createHomework = (data: any) => request.post<any, any>(API.CREATE_HOMEWORK, data);
+//收藏帖子
+export const addLikeDiscussion = (data: any) => request.post<any, any>(API.LIKE_DISCUSSION, data);
+//评论帖子
+export const addComment = (data: any) => request.post<any, any>(API.ADD_COMMENT, data);
+//新建帖子
+export const addDiscussion = (data: any) => request.post<any, any>(API.ADD_DISCUSSION, data);
 // export const awardPost = (data: any) => request.post<any>(API.AWARD_POST, data);

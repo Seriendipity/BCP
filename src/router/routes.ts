@@ -61,7 +61,7 @@ export const constantRoute = [
     component: () => import('@/views/Bookmarks/othersnotes.vue'),
     name: 'othersnotes',
     meta: {
-      title: '浏览笔记',
+      title: '所有笔记',
       hidden: true,//是否在菜单隐藏
       icon: 'CircleCloseFilled',
       key: 'unique-key'
@@ -205,6 +205,16 @@ export const constantRoute = [
           hidden: false,
           icon: 'Files',
         }
+      },
+      {
+        path: '/discussion/createDiscussion',
+        component: () => import('@/views/discussion/createDiscussion.vue'),
+        name: 'createDiscussion',
+        meta: {
+          title: '新建帖子',
+          hidden: true,
+          icon: 'Files',
+        }
       }
     ]
   },
@@ -338,6 +348,16 @@ export const constantRoute = [
         name: 'homeworkPreview',
         meta: {
           title: '作业预览',
+          hidden: false,
+          icon: 'Files',
+        }
+      },
+      {
+        path: '/homework/homeworkCheckbystu',
+        component: () => import('@/views/homework/homeworkCheckbystu.vue'),
+        name: 'homeworkCheckbystu',
+        meta: {
+          title: '作业互评',
           hidden: false,
           icon: 'Files',
         }
