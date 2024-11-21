@@ -1,6 +1,5 @@
 <template>
 
-  <!-- <h1 class="ziti03" style="margin-bottom: 20px;">{{ lesson.lessonName }}讨论区  </h1> -->
   <div class="grid-content bg-white" style="padding: 10px;">
     <el-row :gutter="20">
       <el-col :span="22">
@@ -18,7 +17,7 @@
   <el-scrollbar max-height=300px>
     <div class="grid-content bg-white" style="padding: 10px;">
       <div v-for="reply in comments" :key="reply.index">
-        <h1 class="ziti04" style="margin-top: 5px;font-weight: bold;"> {{ reply.commentUserName }} </h1>
+        <h1 class="ziti04" style="margin-top: 5px;font-weight: bold;"> {{ reply.commentUsername }} </h1>
         <h1 class="ziti04" style="line-height: 1.5 ;margin-top: 5px;"> {{ reply.Information }} </h1>
         <h1 class="ziti04" style="color: gray;margin-top: 5px;margin-bottom: 5px;">{{ reply.PostingTime }}</h1>
         <el-divider></el-divider>
@@ -27,7 +26,7 @@
   </el-scrollbar>
   <div class="main_content_footer">
     <div class="input_box" width="100%">
-      <textarea class="chat-input no-border" v-model="newMessage" />
+      <textarea class="chat-input no-border" v-model="newMessage" ></textarea>
     </div>
     <div class="btn_box">
       <el-button type="primary" class="btn" @click="returnDiscussion(newMessage)" style="float: right;">返回</el-button>
@@ -39,7 +38,7 @@
 <script>
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
-import { reqAllComment, reqOneDiscussion, reqUpdateVisible, addComment, addLikeDiscussion } from '@/api/api'; // 假设这是更新帖子权限状态的API
+import { reqAllComment, reqOneDiscussion, addComment, addLikeDiscussion } from '@/api/api'; // 假设这是更新帖子权限状态的API
 import { ElNotification, ElMessage } from 'element-plus';
 
 export default {
@@ -55,14 +54,7 @@ export default {
       commentTimes: 5,
       starTimes: 4,
     };
-    const mockMessages = ref([
-      {
-        text: "我需要帮助进行Vue.js开发我需要帮助进行Vue.js开发我需要帮助进行Vue.js开发我需要帮助进行Vue.js开发",
-        // align: "left",
-        name: "丽丝",
-        time: "22:37",
-      },
-    ]);
+
     const mockReply = ref([
       {
         index: 1,
@@ -96,41 +88,11 @@ export default {
       },
     ]);
     const posts = ref([]);//界面展示的
-    const lesson = ref([]);
     const $router = useRouter(); // 获取路由实例
     const comments = ref([]);//界面展示的
     const newMessage = ref(""); // 输入框的绑定值
     const title = ref('测试1')
 
-    const updatePostStatus = (post) => {
-      console.log(`更新帖子${post.postNo}的权限状态为：${post.authority}`);
-      // 假设更新操作成功，可以在这里更新界面显示或者状态
-    };
-
-    const updatePost = (post) => {
-      console.log(`更新帖子${post.postNo}的内容`);
-      // 假设更新操作成功，可以在这里更新界面显示或者状态
-    };
-
-    const previewPost = (post) => {
-      console.log(`预览帖子${post.postNo}`);
-      // 假设跳转操作成功，可以在这里更新界面显示或者状态
-    };
-
-    const updatePostFavStatus = async (post) => {
-      // 更新收藏状态
-      try {
-        await reqUpdateVisible({
-          postNo: post.postNo,
-        });
-      } catch (error) {
-        console.error('取消收藏失败:', error);
-        ElNotification({
-          type: 'error',
-          message: '取消收藏失败，请重试。',
-        });
-      }
-    };
     const addOneComment = async (val) => {
       const userName = localStorage.getItem("userName") || "默认用户";
       const currentTime = new Date()
@@ -146,18 +108,13 @@ export default {
           const response = await addComment(formData)
           if (response.code === 0) {
             ElMessage.success('评论成功')
-            comments.value.push({
-              Information: val,
-              commentUserName: userName,
-              PostingTime: currentTime
-            });
             newMessage.value = ""; // 发送消息后清空输入框
+            window.location.reload();
           }
         } else {
           ElMessage.warning("不能发送空白消息");
         }
       } catch (error) {
-        newMessage.value = mockMessages.value
         console.log(error)
         ElNotification({
           message: '发送失败，请重试',
@@ -165,12 +122,11 @@ export default {
         });
       }
     };
-    //TODO
-    // 如何传对应讨论内容的参数以达到打开对应讨论详情我还没写
     onMounted(async () => {
       try {
-        const postResponse = await reqOneDiscussion();
-        const commentResponse = await reqAllComment();
+        const discussionId = localStorage.getItem('discussionId')
+        const postResponse = await reqOneDiscussion(discussionId);
+        const commentResponse = await reqAllComment(discussionId);
         posts.value = postResponse.data;
         comments.value = commentResponse.data;
       } catch (error) {
@@ -210,13 +166,7 @@ export default {
 
     return {
       posts,
-      updatePostStatus,
-      updatePost,
-      previewPost,
-      updatePostFavStatus,
-      lesson,
       newMessage,
-      mockMessages,
       comments,
       starPost,
       addOneComment,

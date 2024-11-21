@@ -51,7 +51,11 @@ enum API {
   ALL_LIKE_DISCUSSION = "/favorite/selectByStarDiscussionFromOthers",
   //TODO
   GET_MYHOMEWORK_SRC = "1122334",
-
+   //TODO
+  GET_HOMEWORKBYSTU = "20000628",
+  DELETE_STAR = "/favorite/deleteFavorite",
+  //TODO 
+  UPDATE_HOMEWORKCHECK = "19970805",
 }
 //登录接口
 export const reqLogin = (data: any) => request.post<any, any>(API.LOGIN_URL, data);
@@ -96,11 +100,11 @@ export const getEvaluationEndTime = (homeworkNO: any) => request.get<any, any>(A
 //获得未完成作业
 export const reqUnfinishedHomework = () => request.get<any, any>(API.UNFINISHED_HOMEWORK)
 //获得讨论区所有帖子
-export const reqDiscussionList = (data: any) => request.get<any, any>(API.ALL_DISCUSSION, data)
+export const reqDiscussionList = (courseId: any) => request.get<any, any>(API.ALL_DISCUSSION+ `?cid=${courseId}`)
 //获得一个帖子
-export const reqOneDiscussion = (data: any) => request.get<any, any>(API.ONE_DISCUSSION, data)
+export const reqOneDiscussion = (discussionId: any) => request.get<any, any>(API.ONE_DISCUSSION+`?discussionId=${discussionId}`)
 //获得所有评论
-export const reqAllComment = (data: any) => request.get<any, any>(API.ALL_COMMENT, data)
+export const reqAllComment = (discussionId: any) => request.get<any, any>(API.ALL_COMMENT+`?discussionId=${discussionId}`)
 //获得收藏的笔记
 export const reqLikeNote = () => request.get<any, any>(API.ALL_LIKE_NOTE)
 //获得收藏的帖子
@@ -108,6 +112,11 @@ export const reqLikeDiscussion = () => request.get<any, any>(API.ALL_LIKE_DISCUS
 // export const awardInfo = () => request.get<any, any>(API.AWARD_GET);
 //获得作业的src //TODO
 export const reqHomework = () => request.get<any, any>(API.GET_MYHOMEWORK_SRC)
+//获得互评作业的内容 //TODO
+export const reqSendHomeworkbystu = () => request.get<any, any>(API.GET_HOMEWORKBYSTU)
+
+
+
 
 
 //发布通知
@@ -148,4 +157,8 @@ export const addLikeDiscussion = (data: any) => request.post<any, any>(API.LIKE_
 export const addComment = (data: any) => request.post<any, any>(API.ADD_COMMENT, data);
 //新建帖子
 export const addDiscussion = (data: any) => request.post<any, any>(API.ADD_DISCUSSION, data);
+//取消收藏
+export const deleteStar = (data: any) => request.post<any, any>(API.DELETE_STAR, data);
 // export const awardPost = (data: any) => request.post<any>(API.AWARD_POST, data);
+//更新作业互评状态
+export const updateHomeworkCheckStatus = (data: any) => request.post<any, any>(API.UPDATE_HOMEWORKCHECK, data);

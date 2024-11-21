@@ -1,34 +1,35 @@
 <template>
     <el-container>
       <el-main>
-        <iframe class="preview_back" :src="homeworkSrc" width="100%" height=650px style="margin-top: -20px;border:none;"></iframe>
+        <iframe class="preview_back" :src="currenthomework" width="100%" height=650px style="margin-top: -20px;border:none;"></iframe>
       </el-main>
       <el-aside width="200px">
         
         <div class="bg-reply">
           <h1 class="word-reply">评语</h1>
-          <textarea class="reply-input " v-model="question" />
+          <textarea class="reply-input " v-model="currentreply" />
         <div>
-          <el-button type="primary" style="margin-top: 5px; float: right;">保存</el-button>
+          <el-button type="primary" style="margin-top: 5px; float: right;" @click="submitReply">保存</el-button>
         </div>
         </div>
         <div style="margin-top: 60px;"></div>
         <!-- 分隔 -->
         <div class="bg-inputgrade">
           <h1 class="word-reply">打分</h1>
-          <textarea class="grade-input " v-model="question" />
+          <textarea class="grade-input " v-model="currentgrade" />
         <div>
-          <el-button type="primary" style="margin-top: 5px; float: right;">打分</el-button>
+          <el-button type="primary" style="margin-top: 5px; float: right;" @click="submitGrades">打分</el-button>
         </div>
         </div>
-        <el-button type="success" style="margin-top: 150px;width: 80%;margin-left: 10%; ">下一个</el-button>
+<br><br><br><br><br>
 
         <div class="navigation">
         <el-button
-          v-for="(hw, index) in hws"
+          style="margin-left: 20px;"
+          v-for="(homework, index) in homeworks"
           :key="index"
-          :type="hw.hw !== null ? 'success' : 'info'"
-          @click="goToHW(index)"
+          :type="homework.homeworkSrc !== null ? 'success' : 'info'"
+          @click="goTohomework(index)"
         >
           题目 {{ index + 1 }}
         </el-button>
@@ -43,142 +44,108 @@
   <script setup>
   import { ref, onMounted } from 'vue';
   // import { useRouter } from 'vue-router';
-  import { reqSingleHomework,  requireTeacherSendHomework } from '@/api/api';
+  import { reqSendHomeworkbystu } from '@/api/api';
   import { ElNotification } from 'element-plus';
-  
-  // const courses = ref([]);
-  const userInfo = ref([]);
-  // const currenthomework = ref({});
-  const homeworks = ref([]); //显示的作业
-  const hws = ref([]); 
-  
-  const mockHWS = ref([
+  import { ElMessage } from 'element-plus'
+  import { useRouter } from 'vue-router';
+
+  let $router = useRouter()
+  const currenthomework = ref({});//显示的作业
+  const homeworks = ref([]); 
+  const currentreply = ref(''); // 存储当前的评语
+  const currentgrade = ref(''); // 存储当前的答案
+  //const grades = ref([]); // 存储用户的答案（{ homework_index, grade } 格式）
+  const currentIndex = ref(0) // 当前题目索引
+  const mockHomeworks = ref([
     {
       index :0,
-      hwcontentSRC:'xxxxxxxxxxxxxxxxxxx',
-    },
-    {
-      index :1,
-      hwcontentSRC:'2222222222222',
-    },
-  ]); 
-
-  const props = defineProps({
-    previewSrc: {
+      homeworkSrc:{
       type: String,
       required: false,
       default: () => 'https://book.yunzhan365.com/tnhkz/uvaj/mobile/index.html'
-    }
-  });
-  
-  const homeworkSrc = ref(props.previewSrc);
-  
-  // 模拟数据
-  const mockDataHomework = ref([
-    {
-      homeworkNo: 1,
-      homeworkstuName: '姜天亦',
-      homeworkstuID: '22301149',
-      homeworkGrade: '99',
-      homeworkUpdateTime: '2024-10-28 14:00',
-      homeworkCheckState: '已批改',
+      },
+      grade: '',
+      reply: '',
     },
     {
-      homeworkNo: 2,
-      homeworkstuName: '马海博',
-      homeworkstuID: '22301157',
-      homeworkGrade: '98',
-      homeworkUpdateTime: '2024-10-28 14:00',
-      homeworkCheckState: '已批改',
+      index :1,
+      homeworkSrc:{
+      type: String,
+      required: false,
+      default: () => 'https://book.yunzhan365.com/tnhkz/uvaj/mobile/index.html'
+      },
+      grade : '',
+      reply: '',
     },
-    {
-      homeworkNo: 3,
-      homeworkstuName: '张学琛',
-      homeworkstuID: '22301168',
-      homeworkGrade: '100',
-      homeworkUpdateTime: '2024-10-28 14:00',
-      homeworkCheckState: '已批改',
-    },
-    {
-      homeworkNo: 4,
-      homeworkstuName: '郑宇煊',
-      homeworkstuID: '22301170',
-      homeworkGrade: ' 0',
-      homeworkUpdateTime: '2024-10-28 14:00',
-      homeworkCheckState: '未批改',
-    },
-    {
-      homeworkNo: 5,
-      homeworkstuName: '刘艺凡',
-      homeworkstuID: '22301153',
-      homeworkGrade: '0 ',
-      homeworkUpdateTime: '2024-10-28 14:00',
-      homeworkCheckState: '未批改',
-    },
-    {
-      homeworkNo: 6,
-      homeworkstuName: '张胤麟',
-      homeworkstuID: '22301153',
-      homeworkGrade: ' 0',
-      homeworkUpdateTime: '2024-10-28 14:00',
-      homeworkCheckState: '未批改',
-    },
-    {
-      homeworkNo: 7,
-      homeworkstuName: '赵纾熳',
-      homeworkstuID: '22301153',
-      homeworkGrade: '0 ',
-      homeworkUpdateTime: '2024-10-28 14:00',
-      homeworkCheckState: '未批改',
-    },
-    {
-      homeworkNo: 8,
-      homeworkstuName: '马仕承',
-      homeworkstuID: '22301153',
-      homeworkGrade: '95',
-      homeworkUpdateTime: '2024-10-28 14:00',
-      homeworkCheckState: '已批改',
-    },
-  ]);
-  
-  const mockDataUser = {
-    userName: '张三',
-    userId: '20220001',
-    dept: '计算机科学与技术',
-    email: 'zhangsan@example.com',
-    avatarUrl: 'src/assets/images/example.jpg'
-  };
-  
-  
-  // const fetchhomeworks = async () => {
-  //   try {
-  //     const courseId = localStorage.getItem('courseId')
-  //     const response = await requireTeacherSendHomework(courseId); // 获取通知数据
-  //     homeworkSrc.value = response.data || []; // 更新通知数据
-  //   } catch (err) {
-  //     // 捕获错误并使用模拟数据
-  //     homeworkSrc.value = props.previewSrc;
-  //     ElNotification({
-  //       message: '获取通知失败',
-  //       type: 'error',
-  //     });
+    
+  ]); 
+
+  // const props = defineProps({
+  //   previewSrc: {
+  //     type: String,
+  //     required: false,
+  //     default: () => 'https://book.yunzhan365.com/tnhkz/uvaj/mobile/index.html'
   //   }
-  // };
+  // });
   
+  // 初始化题目，并加载第一道题
+  if (homeworks.value.length > 0) {
+    //currentgrade.value = homeworks.value.map(q => ({ question_id: q.question_id, grade: null }))
+      loadHomework()
+    } else {
+      ElMessage.error('没有加载到任何试题')
+    }
+
+
   
+    // 加载当前题目
+    const loadHomework = () => {
+      //TODO //应该是这个地方的问题，预览显示不出来
+      currenthomework.value = homeworks.value[currentIndex.value].homeworkSrc;
+  }
+
+  // 跳转到指定题目
+  const goTohomework = (index) => {
+    if (index < 0 || index >= homeworks.value.length) return
+    currentIndex.value = index
+  }
+
+  //   // 切换到下一题
+  //   const nextHomework = () => {
+  //   if (grades.value[currentIndex.value].grade === null) {
+  //     ElMessage.warning('请选择一个答案')
+  //     return
+  //   }
+  //   currentIndex.value++
+  //   loadHomework()
+  // }
+  
+  // 提交本题答案
+  const submitGrades = async() => {
+    homeworks.value[currentIndex.value].grade = currentgrade.value;
+    //TODO //检测grade是否为空,明显现在还不行，原因未知
+    if (homeworks.value[currentIndex.value].grade === null)
+      ElMessage.warning('请选择一个答案');
+    if (homeworks.value.grade(a => a.grade === null)) {
+      return
+    }else{
+      $router.push({name:'homeworkCheckbystuEND'})
+    }
+  }
+
+  // 提交本题评语
+  const submitReply = async() => {
+    homeworks.value[currentIndex.value].reply = currentreply.value;
+  }
+  
+
   onMounted(async () => {
     try {
-      const homeworkResponse = await requireTeacherSendHomework();
-      homeworks.value = homeworkResponse.data;
-      localStorage.setItem('homeworkId');
-      const storedHomeworkId = localStorage.getItem('homeworkId');
-      const response = await reqSingleHomework(storedHomeworkId); // 获取后端日历URL
-      homeworkSrc.value = response.data.Homework || homeworkSrc.value;
+      const homeworkbystuResponse = await reqSendHomeworkbystu();
+      homeworks.value = homeworkbystuResponse.data;
+      // homeworkSrc.value = response.data.Homework || homeworkSrc.value;
     } catch (error) {
-      // console.log(error)
-      homeworks.value = mockDataHomework.value;
-      // console.log(error)
-      userInfo.value = mockDataUser;
+      homeworks.value = mockHomeworks.value;
       ElNotification({
         type: 'error',
         message: '获取信息失败',

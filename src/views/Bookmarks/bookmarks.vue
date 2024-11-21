@@ -65,7 +65,7 @@
               <el-button type="primary"
                 style="text-align: left; font-weight: bold;font-size: large;width: 100px;">笔记</el-button>
             </el-col>
-            <el-col :span="21">
+            <el-col :span="3">
               <router-link to="/bemarkedposts" style="text-decoration: none;">
                 <el-button type="primary" style="text-align: left; font-weight: bold;font-size: large;width: 100px;"
                   plain>帖子</el-button>
@@ -75,15 +75,20 @@
           <!-- <div class="scrollable"> -->
           <div class="grid-content bg-white" style="height: 75px;" v-for="favor in likeNotes" :key="favor.favorNo">
             <el-row :gutter="20">
-              <el-col :span="19">
+              <el-col :span="17">
                 <h1 class="ziti03" style="margin-top: 5px;">{{ favor.favoriteTitle }}</h1>
                 <h1 class="ziti04">{{ favor.fromUsername }}</h1>
                 <h1 class="ziti04" style="color: gray;">{{ favor.notePt }} 上传 </h1>
               </el-col>
               <el-col :span="2">
-                <el-button type="primary" style="margin-top: 20px;" plain>预览</el-button></el-col>
+                <el-button type="primary" style="margin-top: 20px;" plain
+                  @click="previewNote(favor)">预览</el-button></el-col>
+              <el-col :span="2">
+                <el-button type="primary" style="margin-top: 20px;" plain
+                  @click="downloadNote(favor)">下载</el-button></el-col>
               <el-col :span="3">
-                <el-button type="primary" style="margin-top: 20px;" plain>下载</el-button></el-col>
+                <el-button type="primary" style="margin-top: 20px;" plain
+                  @click="deleteNoteStar(favor)">取消收藏</el-button></el-col>
             </el-row>
           </div>
 
@@ -92,17 +97,24 @@
       </el-container>
     </el-main>
   </el-container>
+
+  <el-dialog v-model="previewVisible" title="预览" width="800px">
+    <iframe class="notes" :src="noteSrc" width="100%" height="400px" style="border:none;"></iframe>
+    <template v-slot:footer>
+      <span class="dialog-footer">
+        <el-button @click="previewVisible = false">关闭</el-button>
+      </span>
+    </template>
+  </el-dialog>
 </template>
 
 <script setup>
 import { ref, onMounted } from 'vue';
-import { useRouter } from 'vue-router';
-import { reqUserInfo, requireAvatar, reqLikeNote } from '@/api/api';
-import { ElNotification } from 'element-plus';
+import { reqUserInfo, requireAvatar, reqLikeNote,deleteStar} from '@/api/api';
+import { ElNotification, ElMessage } from 'element-plus';
 
 const likeNotes = ref([]);
 const userInfo = ref([]);
-const $router = useRouter();
 
 const mockData = {
   userName: '张三',
@@ -164,6 +176,54 @@ onMounted(async () => {
     });
   }
 });
+const props = defineProps({
+  previewSrc: {
+    type: String,
+    required: false,
+    default: () => 'https://book.yunzhan365.com/tnhkz/uvaj/mobile/index.html'
+  }
+});
+const noteSrc = ref(props.previewSrc)
+const previewVisible = ref(false);
+
+const previewNote = (note) => {//TODO:跳转到一个专门的预览界面
+  console.log(note)
+  noteSrc.value = note.notePath.split('/').pop();
+  console.log(noteSrc)
+  previewVisible.value = true;
+};
+
+const downloadNote = (resource) => {
+  try {
+    window.open(resource.notePath); // 打开文件链接
+  } catch (error) {
+    console.log(error)
+    ElNotification({
+      message: '下载文件失败，请重试',
+      type: 'error',
+    });
+  }
+};
+
+const deleteNoteStar = async (note) => {
+  // 取消收藏
+  const formData = new FormData()
+  formData.append('favoriteNo', note.favoriteNo)
+  formData.append('favoriteInformationNo', note.noteNo)
+  try {
+    const response = await deleteStar(formData)
+    if (response.code === 0) {
+      ElMessage.success('取消收藏成功')
+      window.location.reload();
+    }
+  } catch (error) {
+    console.error('取消收藏失败:', error);
+    ElNotification({
+      type: 'error',
+      message: '取消收藏失败，请重试。',
+    });
+  }
+}
 
 </script>
 

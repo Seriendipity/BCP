@@ -2,16 +2,21 @@
     <div class="bg-info-content">
         <h1 class="info-title">互评详情</h1>
         <p class="info-content">{{ content }}</p>
-        <router-link to="/homeworkCheckbystu" style="text-decoration: none;">
-        <el-button type="success" style="margin-top: 400px;width: 50%;margin-left: 25%; ">开始互评</el-button>
-    </router-link>
+        <el-button type="success" style="margin-top: 300px;width: 50%;margin-left: 25%; " @click="startCheck()">开始互评</el-button>
     </div>
     
 </template>
 
 <script setup>
 // import { ref, onMounted } from 'vue';
+
+import { useRouter } from 'vue-router';
+
+let $router = useRouter()
 const content = "数据未正确加载：确保homeworks数组在组件加载时被正确填充。检查requireTeacherSendHomework函数是否成功返回了数据，并且数据格式是否与你的模板中预期的格式相匹配。数据未正确加载：确保homeworks数组在组件加载时被正确填充。检查requireTeacherSendHomework函数是否成功返回了数据，并且数据格式是否与你的模板中预期的格式相匹配。";
+const startCheck =() =>{
+    $router.push({name:'homeworkCheckbystu'})
+}
 </script>
 
 <style>
@@ -23,7 +28,7 @@ const content = "数据未正确加载：确保homeworks数组在组件加载时
   margin-top: 15px;
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
   background: #ffffff;
-  padding: 20px;
+  padding: 40px;
 }
 
 .info-title{
@@ -38,6 +43,6 @@ const content = "数据未正确加载：确保homeworks数组在组件加载时
     font-weight:500;
     font-size: 14px;
     line-height: 1.5;
-    margin-top: 10px;
+    margin: 40px;
 }
 </style>

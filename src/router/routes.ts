@@ -68,6 +68,17 @@ export const constantRoute = [
     },
   },
   {
+    path: '/postsDetail',
+    component: () => import('@/views/Bookmarks/postsDetail.vue'),
+    name: 'postsDetail',
+    meta: {
+      title: '帖子详情',
+      hidden: true,//是否在菜单隐藏
+      icon: 'CircleCloseFilled',
+      key: 'unique-key'
+    },
+  },
+  {
     path: '/myinformation',
     component: () => import('@/views/firstpage/myinformation.vue'),
     name: 'myinformation',
@@ -348,7 +359,7 @@ export const constantRoute = [
         name: 'homeworkPreview',
         meta: {
           title: '作业预览',
-          hidden: false,
+          hidden: true,
           icon: 'Files',
         }
       },
@@ -358,6 +369,16 @@ export const constantRoute = [
         name: 'homeworkCheckbystu',
         meta: {
           title: '互评',
+          hidden: true,
+          icon: 'Files',
+        }
+      },
+      {
+        path: '/homework/homeworkCheckbystuEND',
+        component: () => import('@/views/homework/homeworkCheckbystuEND.vue'),
+        name: 'homeworkCheckbystuEND',
+        meta: {
+          title: '互评完成',
           hidden: true,
           icon: 'Files',
         }

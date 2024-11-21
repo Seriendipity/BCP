@@ -67,6 +67,10 @@ import Tabbar from './tabbar/index.vue';
 import useUserStore from '@/store/modules/user';
 import { useRoute } from 'vue-router';
 import useLayOutSettingStore from '@/store/modules/setting';
+import { ElNotification } from 'element-plus';
+import { reqCourseIntro } from '@/api/api';
+import { ref } from 'vue';
+import { onMounted } from 'vue';
 
 let LayOutSettingStore = useLayOutSettingStore();
 let $route = useRoute();
@@ -84,15 +88,35 @@ function calculateTeachingWeek(startDate: any, currentDate = new Date()) {
 const startDate = '2024-09-09';
 const currentDate = new Date();
 const currentWeek = calculateTeachingWeek(startDate, currentDate);
-
 // 获取从 URL 传递的 query 参数
-let courseName = $route.query.courseName || '默认课程名称';
-let establishCollege = $route.query.establishCollege || '默认学院名称';
-let teacherName = $route.query.teacherName || '默认教师';
-let courseNo = $route.query.courseNo || '默认课程编号';
-let cid = $route.query.cid || '默认课序号';
-let semester = $route.query.semester || '默认学期';
-let week = currentWeek || '默认教学周';
+const courseName = ref('默认课程名称');
+const establishCollege = ref( '默认学院名称');
+const teacherName = ref('默认教师');
+const courseNo = ref('默认课程编号');
+const cid = ref('默认课序号');
+const semester = ref('默认学期');
+const week = ref(currentWeek || '默认教学周');
+onMounted(async () => {
+try {
+  const courseId = localStorage.getItem('courseId')
+  const response = await reqCourseIntro(courseId);
+  if(response.code===0){
+    courseName.value = response.data.courseName;
+    establishCollege.value = response.data.establishCollege;
+    teacherName.value = response.data.teacherName ;
+    courseNo.value = response.data.courseNo;
+    cid.value = response.data.cid;
+    semester.value = response.data.semester;
+  }
+}catch(error){
+  console.log(error)
+    ElNotification({
+      type: 'error',
+      message: '获取课程信息失败',
+    });
+}
+});
+
 </script>
 
 <script lang="ts">

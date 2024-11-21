@@ -19,7 +19,7 @@
       </el-table-column>
       <el-table-column label="状态" width="100px">
         <template v-slot="scope">
-          <el-tag size="small" :type="scope.row.ifsubmit === '已完成' ? 'success' : 'danger'">{{ scope.row.ifsubmit
+          <el-tag size="small" :type="scope.row.ifsubmit === '已提交' ? 'success' : 'danger'">{{ scope.row.ifsubmit
             }}</el-tag>
         </template>
       </el-table-column>
@@ -27,7 +27,8 @@
         <el-button size="mini" type="primary" @click="handlePreview(scope.$index, scope.row)">预览</el-button>
         <el-button size="mini" type="danger" @click="handleUpload(scope.$index, scope.row)"
           style="margin-left: 10px;">上传</el-button>
-
+        <el-button size="mini" type="success" @click="checkBystu(scope.$index, scope.row)"
+          style="margin-left: 10px;">互评</el-button>
       </el-table-column>
 
     </el-table>
@@ -57,7 +58,7 @@
 <script>
 import { requireStudentHomework, reqUploadHomework } from '@/api/api';
 import { ref, onMounted } from 'vue';
-import { ElMessage, ElNotification } from 'element-plus';
+import { ElMessage, ElNotification,ElMessageBox } from 'element-plus';
 import { useRouter } from 'vue-router';
 
 
@@ -72,7 +73,8 @@ const homeworkList = {
         number: 44,
         submitted: 3,
         grade: null,
-        ifsubmit: '未完成'
+        ifsubmit: '未完成',
+        checkbystuStatus: false
       },
       {
         name: '感知机2',
@@ -81,7 +83,8 @@ const homeworkList = {
         number: 45,
         submitted: 45,
         grade: 88,
-        ifsubmit: '已完成'
+        ifsubmit: '已完成',
+        checkbystuStatus: false
       },
       {
         name: '感知机3',
@@ -90,7 +93,8 @@ const homeworkList = {
         number: 45,
         submitted: 44,
         grade: 65,
-        ifsubmit: '已完成'
+        ifsubmit: '已完成',
+        checkbystuStatus: true
       },
       {
         name: '感知机4',
@@ -99,7 +103,8 @@ const homeworkList = {
         number: 45,
         submitted: 45,
         grade: 90,
-        ifsubmit: '已完成'
+        ifsubmit: '已完成',
+        checkbystuStatus: false
       }
     ]);
 
@@ -108,13 +113,14 @@ const homeworkList = {
     const homeworkAnswer = ref('');
     const selectedFile = ref(null);
     const selectedHomeworkNo = ref();
+    const router = useRouter()
 
     const handlePreview = (index, row) => {
-      if (row.ifsubmit === '未完成') {
-        ElMessage.error('作业未完成，不可预览')
+      if (row.ifsubmit === '未提交') {
+        ElMessage.error('作业未提交，不可预览')
       } else {
         localStorage.setItem('homeworkNO', row.homeworkNO)
-        localStorage.setItem('fileURL', row.file)
+        localStorage.setItem('homeworkPath', row.homeworkPath)
         $router.push({ name: 'homeworkPreview' });
       }
 
@@ -177,6 +183,25 @@ const homeworkList = {
       dialogVisible.value = true;
       //TODO: 文件上传
     };
+
+    const checkBystu = (index, row) => {
+      console.log(row.homeworkNO)
+      // selectedHomeworkNo.value = row.homeworkNO
+      // console.log(selectedHomeworkNo.value)
+      // dialogVisible.value = true;
+      //TODO: 互评传输作业数据并跳转
+      if (row.checkbystuStatus == true){
+        router.push('/homework/hwCheckBystuInfo');
+      }else{
+        // 使用ElMessageBox来弹出提醒
+    ElMessageBox.alert('这次作业不需互评', '提醒', {
+      confirmButtonText: '确定',
+      type: 'warning',
+    });
+      }
+      
+    };
+
     onMounted(async () => {
       try {
         const storedCourseId = localStorage.getItem('courseId');
@@ -192,6 +217,7 @@ const homeworkList = {
             number: homework.studentNumbers,
             grade: homework.grade,
             ifsubmit: homework.status,
+            homeworkPath:homework.homeworkPath,
           }));
         } else {
           ElNotification({
@@ -228,6 +254,7 @@ const homeworkList = {
       handleChange,
       uploadFile,
       getFormattedDate,
+      checkBystu,
       dialogVisible,
       homeworkAnswer,
 

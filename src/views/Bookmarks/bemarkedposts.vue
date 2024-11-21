@@ -68,7 +68,7 @@
                   plain>笔记</el-button>
               </router-link>
             </el-col>
-            <el-col :span="21">
+            <el-col :span="3">
               <router-link to="/othersposts" style="text-decoration: none;">
                 <el-button type="primary"
                   style="text-align: left; font-weight: bold;font-size: large;width: 100px;">帖子</el-button>
@@ -79,7 +79,8 @@
           <div class="grid-postcontent bg-postwhite" style="padding-left: 10px;" v-for="post in posts"
             :key="post.postNo">
             <el-row :gutter="20">
-              <el-col :span="21">
+
+              <el-col :span="21" @click="goToDiscussionInfo(post.discussionId)">
                 <h1 class="ziti03" style="margin-top: 5px;">{{ post.fromCourseName }} </h1>
                 <h1 class="ziti04" style="line-height: 1.5"> {{ post.discussionInfo }} </h1>
                 <h1 class="ziti04" style="color: gray;margin-top: 15px;margin-bottom: 15px;">{{ post.discussionPt }} {{
@@ -87,11 +88,10 @@
               </el-col>
 
               <el-col :span="3">
-                <el-button type="primary" style="margin-top: 10px;" @click="updatepost(post)">取消收藏</el-button>
+                <el-button type="primary" style="margin-top: 10px;" @click="deletePostStar(post)">取消收藏</el-button>
               </el-col>
             </el-row>
           </div>
-
         </el-main>
 
       </el-container>
@@ -101,8 +101,8 @@
 
 <script>
 import { ref, onMounted } from 'vue';
-import { reqLikeDiscussion, reqUpdateVisible, reqUserInfo } from '@/api/api'; // 假设这是更新帖子权限状态的API
-import { ElNotification } from 'element-plus';
+import { deleteStar, reqLikeDiscussion, reqUserInfo ,requireAvatar} from '@/api/api'; // 假设这是更新帖子权限状态的API
+import { ElMessage, ElNotification } from 'element-plus';
 import { useRouter } from 'vue-router';
 
 export default {
@@ -150,28 +150,19 @@ export default {
     let $router = useRouter(); // 获取路由实例
 
     // 定义方法
-    //TODO
-    const updatePostStatus = (post) => {
-      console.log(`更新帖子${post.postNo}的权限状态为：${post.authority}`);
-      // 假设更新操作成功，可以在这里更新界面显示或者状态
-    };
 
-    const updatePost = (post) => {
-      console.log(`更新帖子${post.postNo}的内容`);
-      // 假设更新操作成功，可以在这里更新界面显示或者状态
-    };
 
-    const previewPost = (post) => {
-      console.log(`预览帖子${post.postNo}`);
-      // 假设跳转操作成功，可以在这里更新界面显示或者状态
-    };
-
-    const updatePostFavStatus = async (post) => {
-      // 更新收藏状态
+    const deletePostStar = async (post) => {
+      // 取消收藏
+      const formData = new FormData()
+      formData.append('favoriteNo', post.favoriteNo)
+      formData.append('favoriteInformationNo', post.discussionId)
       try {
-        await reqUpdateVisible({
-          postNo: post.postNo,
-        });
+        const response = await deleteStar(formData)
+        if (response.code === 0) {
+          ElMessage.success('取消收藏成功')
+           window.location.reload();
+        }
       } catch (error) {
         console.error('取消收藏失败:', error);
         ElNotification({
@@ -181,12 +172,21 @@ export default {
       }
     };
 
+    const goToDiscussionInfo = async (discussionId) => {
+      localStorage.setItem('discussionId', discussionId)
+      $router.push({ name: 'postsDetail' })
+    }
+
+
+
     onMounted(async () => {
       try {
         const userResponse = await reqUserInfo();
         const discussionResponse = await reqLikeDiscussion();
+        const avatarResponse = await requireAvatar();
         userInfo.value = userResponse.data;
         posts.value = discussionResponse.data;
+        userInfo.value.avatarUrl = avatarResponse.data;
       } catch (error) {
         console.log(error)
         userInfo.value = mockData;
@@ -202,12 +202,10 @@ export default {
 
     return {
       posts,
-      updatePostStatus,
-      updatePost,
-      previewPost,
-      updatePostFavStatus,
+      deletePostStar,
       mockData,
       userInfo,
+      goToDiscussionInfo,
 
     };
   },
