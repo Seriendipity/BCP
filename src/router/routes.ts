@@ -68,6 +68,17 @@ export const constantRoute = [
     },
   },
   {
+    path: '/postsDetail',
+    component: () => import('@/views/Bookmarks/postsDetail.vue'),
+    name: 'postsDetail',
+    meta: {
+      title: '帖子详情',
+      hidden: true,//是否在菜单隐藏
+      icon: 'CircleCloseFilled',
+      key: 'unique-key'
+    },
+  },
+  {
     path: '/myinformation',
     component: () => import('@/views/firstpage/myinformation.vue'),
     name: 'myinformation',

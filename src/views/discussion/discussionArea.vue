@@ -28,7 +28,7 @@
 //TODO:添加主题，添加@其他人
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
-import { addLikeDiscussion, reqUpdateVisible } from '@/api/api'; // 假设这是更新帖子权限状态的API
+import { addLikeDiscussion } from '@/api/api'; // 假设这是更新帖子权限状态的API
 import { ElMessage, ElNotification } from 'element-plus';
 import { reqDiscussionList } from '@/api/api';
 
@@ -93,10 +93,7 @@ export default {
 
     // 定义方法
     //TODO
-    const updatePostStatus = (post) => {
-      console.log(`更新帖子${post.index}的权限状态为：${post.authority}`);
-      // 假设更新操作成功，可以在这里更新界面显示或者状态
-    };
+
 
     const starPost = async (post) => {
       const formData = new FormData()
@@ -119,30 +116,10 @@ export default {
       // 假设更新操作成功，可以在这里更新界面显示或者状态
     };
 
-    const previewPost = (post) => {
-      console.log(`预览帖子${post.index}`);
-      // 假设跳转操作成功，可以在这里更新界面显示或者状态
-    };
-
-    const updatePostFavStatus = async (post) => {
-      // 更新收藏状态
-      try {
-        await reqUpdateVisible({
-          index: post.index,
-        });
-      } catch (error) {
-        console.error('取消收藏失败:', error);
-        ElNotification({
-          type: 'error',
-          message: '取消收藏失败，请重试。',
-        });
-      }
-    };
 
     onMounted(async () => {
       try {
         const courseId = localStorage.getItem('courseId')
-
         const formData = new FormData()
         formData.append('cid', courseId)
         const postResponse = await reqDiscussionList(formData);
@@ -168,10 +145,7 @@ export default {
 
     return {
       posts,
-      updatePostStatus,
       starPost,
-      previewPost,
-      updatePostFavStatus,
       mocklessonData,
       lesson,
       courseName,

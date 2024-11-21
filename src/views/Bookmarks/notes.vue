@@ -145,7 +145,7 @@
     </template>
   </el-dialog>
   <el-dialog v-model="previewVisible" title="预览" width="800px">
-    <iframe class="calendar" :src="noteSrc" width="100%" height="400px" style="border:none;"></iframe>
+    <iframe class="notes" :src="noteSrc" width="100%" height="400px" style="border:none;"></iframe>
     <template v-slot:footer>
       <span class="dialog-footer">
         <el-button @click="previewVisible = false">关闭</el-button>

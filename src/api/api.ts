@@ -51,6 +51,7 @@ enum API {
   ALL_LIKE_DISCUSSION = "/favorite/selectByStarDiscussionFromOthers",
   //TODO
   GET_MYHOMEWORK_SRC = "1122334",
+  DELETE_STAR = "/favorite/deleteFavorite",
 
 }
 //登录接口
@@ -147,4 +148,6 @@ export const addLikeDiscussion = (data: any) => request.post<any, any>(API.LIKE_
 export const addComment = (data: any) => request.post<any, any>(API.ADD_COMMENT, data);
 //新建帖子
 export const addDiscussion = (data: any) => request.post<any, any>(API.ADD_DISCUSSION, data);
+//取消收藏
+export const deleteStar = (data: any) => request.post<any, any>(API.DELETE_STAR, data);
 // export const awardPost = (data: any) => request.post<any>(API.AWARD_POST, data);

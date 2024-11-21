@@ -1,49 +1,126 @@
+<!-- eslint-disable vue/multi-word-component-names -->
 <template>
+  <el-container>
+    <el-header class="head">
+      <el-row :gutter="20">
+        <el-col :span="18">
+          <div class="grid-content">
+            <router-link to="/firstpage" style="text-decoration: none; ">
+              <h1 class="zitihead">智慧课程平台</h1>
+            </router-link>
+          </div>
+        </el-col>
+        <el-col :span="1">
+          <div class="grid-content ">
+            <router-link to="/notes" style="text-decoration: none;">
+              <h1 style="font-size:larger;margin-top: 21px;color: aliceblue;font-weight: 550;">笔记
+              </h1>
+            </router-link>
+          </div>
+        </el-col>
+        <el-col :span="2">
+          <div class="grid-content ">
+            <router-link to="/firstpage" style="text-decoration: none;">
+              <h1
+                style="font-size:x-large;margin-top: 17px;color: white;text-shadow: 2px 3px rgba(0, 0, 0, 0.5);font-weight: 550;">
+                收藏夹
+              </h1>
+            </router-link>
+          </div>
+        </el-col>
+        <el-col :span="1">
+          <div class="grid-content ">
+            <router-link to="/myinformation" style="text-decoration: none;">
+              <div style="margin-top: 10px"><el-avatar :size="40" :src="userInfo.avatarUrl"></el-avatar></div>
+            </router-link>
+          </div>
+        </el-col>
+        <el-col :span="2">
+          <router-link to="/myinformation" style="text-decoration: none;">
+            <h1 style="font-size: medium;margin-top: 21px;color: aliceblue;font-weight: 550;">{{ userInfo.userName }}
+            </h1>
+          </router-link>
+        </el-col>
+      </el-row>
+    </el-header>
 
-  <div class="grid-content bg-white" style="padding: 10px;">
-    <el-row :gutter="20">
-      <el-col :span="22">
-        <h1 class="ziti03"> {{ posts.username }} </h1>
-        <h1 class="ziti04" style="line-height: 1.5 ;margin-top: 5px;"> {{ posts.Information }} </h1>
-        <h1 class="ziti04" style="color: gray;margin-top: 15px;">{{ posts.PostingTime }} 上传</h1>
-        <h1 class="ziti04" style="color: gray;margin-top: 5px;margin-bottom: 15px;">{{ posts.commentTimes }}条回复 {{
-          posts.starTimes }}次收藏</h1>
-      </el-col>
-      <el-col :span="2">
-        <el-button type="primary" style="margin-top: 10px;" @click="starPost()">收藏</el-button>
-      </el-col>
-    </el-row>
-  </div>
-  <el-scrollbar max-height=300px>
-    <div class="grid-content bg-white" style="padding: 10px;">
-      <div v-for="reply in comments" :key="reply.index">
-        <h1 class="ziti04" style="margin-top: 5px;font-weight: bold;"> {{ reply.commentUserName }} </h1>
-        <h1 class="ziti04" style="line-height: 1.5 ;margin-top: 5px;"> {{ reply.Information }} </h1>
-        <h1 class="ziti04" style="color: gray;margin-top: 5px;margin-bottom: 5px;">{{ reply.PostingTime }}</h1>
-        <el-divider></el-divider>
-      </div>
-    </div>
-  </el-scrollbar>
-  <div class="main_content_footer">
-    <div class="input_box" width="100%">
-      <textarea class="chat-input no-border" v-model="newMessage" />
-    </div>
-    <div class="btn_box">
-      <el-button type="primary" class="btn" @click="returnDiscussion(newMessage)" style="float: right;">返回</el-button>
-      <el-button type="primary" class="btn" @click="addOneComment(newMessage)" style="float: right;">发送</el-button>
-    </div>
-  </div>
+    <el-main class="backmain1">
+      <el-container>
+        <el-aside class="backleft">
+          <div class="whiteback" :data="userInfo">
+            <h1 style="text-align: left; font-weight: bold;margin-bottom: 5px;">个人信息</h1>
+            <div style="margin-top: 20px;text-align: center; "><el-avatar :size="100"
+                :src="userInfo.avatarUrl"></el-avatar>
+            </div>
+            <h1 class="ziti01">学生</h1>
+            <h1 class="ziti02" style="text-align: left;padding-left: 15px;">姓名：{{ userInfo.userName }}</h1>
+            <h1 class="ziti02" style="text-align: left;padding-left: 15px;">学号：{{ userInfo.userId }}</h1>
+            <h1 class="ziti02" style="text-align: left;padding-left: 15px;">学院：{{ userInfo.dept }}</h1>
+            <h1 class="ziti02" style="text-align: left;padding-left: 15px;">邮箱：{{ userInfo.email }}</h1>
+          </div>
+        </el-aside>
+        <el-main class="postDetailMain">
+          <div class="grid-content bg-white" style="padding: 10px;">
+            <el-row :gutter="20">
+              <el-col :span="22">
+                <h1 class="ziti03"> {{ posts.username }} </h1>
+                <h1 class="ziti04" style="line-height: 1.5 ;margin-top: 5px;"> {{ posts.Information }} </h1>
+                <h1 class="ziti04" style="color: gray;margin-top: 15px;">{{ posts.PostingTime }} 上传</h1>
+                <h1 class="ziti04" style="color: gray;margin-top: 5px;margin-bottom: 15px;">{{ posts.commentTimes }}条回复
+                  {{
+                    posts.starTimes }}次收藏</h1>
+              </el-col>
+              <el-col :span="2">
+                <el-button type="primary" style="margin-top: 10px;" @click="deletePostStar()">取消收藏</el-button>
+              </el-col>
+            </el-row>
+          </div>
+          <el-scrollbar class="scrollbar-comment">
+            <div class="like-grid-content" style="padding: 10px;">
+              <div v-for="reply in comments" :key="reply.index">
+                <h1 class="ziti04" style="margin-top: 5px;font-weight: bold;"> {{ reply.commentUserName }} </h1>
+                <h1 class="ziti04" style="line-height: 1.5 ;margin-top: 5px;"> {{ reply.Information }} </h1>
+                <h1 class="ziti04" style="color: gray;margin-top: 5px;margin-bottom: 5px;">{{ reply.PostingTime }}</h1>
+                <el-divider></el-divider>
+              </div>
+            </div>
+          </el-scrollbar>
+          <div class="main_content_footer">
+            <div class="input_box" width="100%">
+              <textarea class="chat-input no-border" v-model="newMessage" />
+            </div>
+            <div class="btn_box">
+              <el-button type="primary" class="btn" @click="returnDiscussion(newMessage)"
+                style="float: right;">返回</el-button>
+              <el-button type="primary" class="btn" @click="addOneComment(newMessage)"
+                style="float: right;">发送</el-button>
+            </div>
+          </div>
+        </el-main>
+
+      </el-container>
+    </el-main>
+  </el-container>
 </template>
 
 <script>
 import { ref, onMounted } from 'vue';
-import { useRouter } from 'vue-router';
-import { reqAllComment, reqOneDiscussion, addComment, addLikeDiscussion } from '@/api/api'; // 假设这是更新帖子权限状态的API
+import { reqUserInfo, addComment, reqOneDiscussion, reqAllComment, deleteStar } from '@/api/api'; // 假设这是更新帖子权限状态的API
 import { ElNotification, ElMessage } from 'element-plus';
+import { useRouter } from 'vue-router';
 
 export default {
   setup() {
     // 使用ref创建响应式数据
+
+    const mockData = {
+      userName: '张三',
+      userId: '20220001',
+      dept: '计算机科学与技术',
+      email: 'zhangsan@example.com',
+      avatarUrl: 'src/assets/images/example.jpg'
+    };
+
     const mockPost =
     {
       postNo: 1,
@@ -87,11 +164,13 @@ export default {
         PostingTime: '2024-11-14',
       },
     ]);
+    const userInfo = ref([]);
+
+    // 定义方法
     const posts = ref([]);//界面展示的
     const $router = useRouter(); // 获取路由实例
     const comments = ref([]);//界面展示的
     const newMessage = ref(""); // 输入框的绑定值
-    const title = ref('测试1')
 
     const addOneComment = async (val) => {
       const userName = localStorage.getItem("userName") || "默认用户";
@@ -126,17 +205,45 @@ export default {
         });
       }
     };
+    const returnDiscussion = () => {
+      $router.push({ name: 'bemarkedposts' })
+    }
+
+    const deletePostStar = async (post) => {
+      // 取消收藏
+      const formData = new FormData()
+
+      formData.append('favoriteInformationNo', post.DiscussionId)
+      try {
+        const response = await deleteStar(formData)
+        if (response.code === 0) {
+          ElMessage.success('取消收藏成功')
+          $router.push({ name: 'bemarkedposts' })
+        }
+      } catch (error) {
+        console.error('取消收藏失败:', error);
+        ElNotification({
+          type: 'error',
+          message: '取消收藏失败，请重试。',
+        });
+      }
+    };
+
+
     onMounted(async () => {
       try {
         const formData = new FormData()
         const discussionId = localStorage.getItem('discussionId')
         formData.append('discussionId', discussionId)
+        const userResponse = await reqUserInfo();
         const postResponse = await reqOneDiscussion(formData);
         const commentResponse = await reqAllComment(formData);
+        userInfo.value = userResponse.data;
         posts.value = postResponse.data;
         comments.value = commentResponse.data;
       } catch (error) {
         console.log(error)
+        userInfo.value = mockData;
         posts.value = mockPost;
         comments.value = mockReply.value;
         ElNotification({
@@ -146,86 +253,41 @@ export default {
       }
     });
 
-    const starPost = async () => {
-      const formData = new FormData()
-      const discussionId = localStorage.getItem('discussionId')
-      formData.append('favoriteInformationNo', discussionId)
-      formData.append('favoriteTitle', title.value)
-      try {
-        const response = await addLikeDiscussion(formData)
-        if (response.code === 0) {
-          ElMessage.success('收藏成功')
-        }
-      } catch (error) {
-        console.error('收藏失败:', error);
-        ElNotification({
-          type: 'error',
-          message: '收藏失败，请重试。',
-        });
-      }
-      // 假设更新操作成功，可以在这里更新界面显示或者状态
-    };
 
-    const returnDiscussion = () => {
-      $router.push({ name: 'discussionArea' })
-    }
+
 
     return {
       posts,
-      newMessage,
-      comments,
-      starPost,
+      mockData,
+      userInfo,
+      mockPost,
+      mockReply,
       addOneComment,
+      comments,
       returnDiscussion,
+      deletePostStar,
+
     };
   },
 };
 </script>
 
-
-
 <style>
+.postDetailMain {
+  height: 660px;
+}
+
+.scrollbar-comment {
+  height: 280px;
+}
+
 .head {
   background-color: #005bac;
 
 }
 
-.main_content_footer {
-  width: 100%;
-  height: 150px;
-  background-color: #ffffff;
-  border-top: 1px solid #e4e7ed;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding: 10px 16px;
-  margin-top: 10px;
-}
-
-.input_box {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  width: 100%
-}
-
-.chat-input {
-  width: 100%;
-  height: 80px;
-  padding: 12px 16px;
-  border: 1px solid #dcdfe6;
-  border-radius: 8px;
-  resize: none;
-  font-size: 14px;
-  color: #606266;
-  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
-  transition: border-color 0.3s, box-shadow 0.3s;
-  margin-top: 10px;
-}
-
-
 .backmain1 {
-  height: 770px;
+  height: 705px;
   background-color: #eaf6ff;
 }
 
@@ -268,18 +330,19 @@ export default {
   margin-left: 10px;
 }
 
+.like-grid-content {
+  border-radius: 4px;
+  min-height: 36px;
+  height: 100px;
+  margin-bottom: 10px;
+
+}
+
 .backleft {
   width: "350px";
   max-height: "550px";
   background-color: #eaf6ff;
 }
-
-.backright {
-  width: "350px";
-  height: "600px";
-  background-color: #eaf6ff;
-}
-
 
 .whiteback {
   border-radius: 4px;
@@ -290,26 +353,43 @@ export default {
 
 }
 
-.whiteback2 {
-  margin-top: 20px;
-  border-radius: 4px;
-  height: 200px;
+
+.main_content_footer {
+  width: 100%;
+  height: 150px;
   background-color: #ffffff;
-  padding: 10px;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+  border-top: 1px solid #e4e7ed;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 10px 16px;
+  margin-top: 10px;
 }
 
-.whiteback3 {
-  /* margin-top: 20px; */
-  border-radius: 4px;
-  height: 400px;
-  background-color: #ffffff;
-  padding: 10px;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+.input_box {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  width: 100%
 }
+
+.chat-input {
+  width: 100%;
+  height: 80px;
+  padding: 12px 16px;
+  border: 1px solid #dcdfe6;
+  border-radius: 8px;
+  resize: none;
+  font-size: 14px;
+  color: #606266;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
+  transition: border-color 0.3s, box-shadow 0.3s;
+  margin-top: 10px;
+}
+
 
 .scrollable {
-  height: 690px;
+  height: 290px;
   /* 固定高度 */
   overflow-y: auto;
   /* 垂直方向上的滚动条 */
@@ -335,13 +415,6 @@ export default {
   border-radius: 30px
 }
 
-.grid-content {
-  border-radius: 4px;
-  min-height: 36px;
-  /* height: 250px; */
-  margin-bottom: 10px;
-
-}
 
 body>.el-container {
   margin-bottom: 40px;
