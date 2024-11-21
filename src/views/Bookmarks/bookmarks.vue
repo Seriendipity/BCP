@@ -207,7 +207,7 @@ const downloadNote = (resource) => {
 const deleteStar = async (note) => {
   // 取消收藏
   const formData = new FormData()
-
+  formData.append('favoriteNo', note.favoriteNo)
   formData.append('favoriteInformationNo', note.noteNo)
   try {
     const response = await deleteStar(formData)

@@ -212,7 +212,7 @@ export default {
     const deletePostStar = async (post) => {
       // 取消收藏
       const formData = new FormData()
-
+      formData.append('favoriteNo', post.favoriteNo)
       formData.append('favoriteInformationNo', post.DiscussionId)
       try {
         const response = await deleteStar(formData)
