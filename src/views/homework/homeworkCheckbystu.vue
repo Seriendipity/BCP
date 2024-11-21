@@ -1,21 +1,5 @@
 <template>
     <el-container>
-      <el-aside width="200px">
-        <div class="homework-scrollable">
-            <div  v-for="homework in homeworks" :key="homework.homeworkNo">
-              <el-row :gutter="20">
-            <el-col :span="24" >
-                  <h2 class="homework-nameid">{{ homework.homeworkstuName }} {{ homework.homeworkstuID }}</h2>
-                  <p class="homework-time" style="margin-top: 10px;">{{ homework.homeworkUpdateTime }} 提交</p>
-                <el-tag :type="homework.homeworkCheckState === '已批改' ? 'success' : 'warning'" style="margin-top: 5px;float: right;">
-                  {{ homework.homeworkCheckState }}:{{ homework.homeworkGrade }}
-                </el-tag>
-                <el-divider style="margin-top: 40px;"></el-divider>
-            </el-col>
-          </el-row>
-        </div>
-        </div>
-      </el-aside>
       <el-main>
         <iframe class="preview_back" :src="homeworkSrc" width="100%" height=650px style="margin-top: -20px;border:none;"></iframe>
       </el-main>
@@ -37,10 +21,24 @@
           <el-button type="primary" style="margin-top: 5px; float: right;">打分</el-button>
         </div>
         </div>
-        
+        <el-button type="success" style="margin-top: 150px;width: 80%;margin-left: 10%; ">下一个</el-button>
+
+        <div class="navigation">
+        <el-button
+          v-for="(hw, index) in hws"
+          :key="index"
+          :type="hw.hw !== null ? 'success' : 'info'"
+          @click="goToHW(index)"
+        >
+          题目 {{ index + 1 }}
+        </el-button>
+      </div>
+
       </el-aside>
     </el-container>
   </template>
+
+  
   
   <script setup>
   import { ref, onMounted } from 'vue';
@@ -52,9 +50,19 @@
   const userInfo = ref([]);
   // const currenthomework = ref({});
   const homeworks = ref([]); //显示的作业
+  const hws = ref([]); 
   
-  
-  
+  const mockHWS = ref([
+    {
+      index :0,
+      hwcontentSRC:'xxxxxxxxxxxxxxxxxxx',
+    },
+    {
+      index :1,
+      hwcontentSRC:'2222222222222',
+    },
+  ]); 
+
   const props = defineProps({
     previewSrc: {
       type: String,
@@ -158,7 +166,6 @@
   // };
   
   
-  // 获取用户信息和课程列表
   onMounted(async () => {
     try {
       const homeworkResponse = await requireTeacherSendHomework();

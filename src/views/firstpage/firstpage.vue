@@ -476,15 +476,6 @@ body>.el-container {
   overflow-y: auto;
 }
 
-.homework-scrollable {
-  padding: 20px;
-  background-color: #fff;
-  border-radius: 15px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  width: 100%;
-  max-height: 300px;
-  overflow-y: auto;
-}
 
 .notification-bar {
   display: flex;
@@ -536,27 +527,6 @@ body>.el-container {
   margin-top: 10px;
 }
 
-.homework-info {
-  display: flex;
-  flex-direction: column;
-}
-
-.homework-title {
-  font-size: 14px;
-  font-weight: normal;
-}
-
-.homework-lesson {
-  font-size: 16px;
-  font-weight: bold;
-  margin-bottom: 5px;
-}
-
-.homework-time {
-  color: #999;
-  font-size: 12px;
-  margin-top: 10px;
-}
 
 /* 弹出框样式 */
 .notification-dialog .dialog-content {
