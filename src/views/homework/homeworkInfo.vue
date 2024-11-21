@@ -1,100 +1,98 @@
 <template>
   <div class="Intro">
-    <el-descriptions class="margin-top" title="作业信息" :column="3" :size="size">
-      <el-descriptions-item label="作业名称">{{ currentData.name }}</el-descriptions-item>
-      <el-descriptions-item label="开始时间">{{ currentData.starttime }}</el-descriptions-item>
-      <el-descriptions-item label="结束时间">{{ currentData.endtime }}</el-descriptions-item>
-      <el-descriptions-item label="提交人数">{{ currentData.submitted }}/{{ currentData.number }}</el-descriptions-item>
-
-      <el-descriptions-item label="状态">
-        <el-tag size="small" :type="currentData.check === '已完成' ? 'success' : 'danger'">{{ currentData.check }}</el-tag>
-      </el-descriptions-item>
+    <el-descriptions class="margin-top" title="作业信息" :column="1" :size="size">
+      <el-descriptions-item label="作业名称">{{ currentData.homeworkDescription }}</el-descriptions-item>
+      <el-descriptions-item label="开始时间">{{ currentData.homeworkStartTime }}</el-descriptions-item>
+      <el-descriptions-item label="结束时间">{{ currentData.homeworkEndTIme }}</el-descriptions-item>
+      <el-descriptions-item label="作业详情">{{ currentData.homeworkInfo }}</el-descriptions-item>
+      <el-descriptions-item label="满分：">{{ currentData.scores }}</el-descriptions-item>
     </el-descriptions>
-
-
 
     <el-row :gutter="20">
       <el-col :span="2">
         <!-- 为空格空出来的 -->
       </el-col>
       <el-col :span="10">
-        <router-link to="/homeworkPreview" style="text-decoration: none;">
-          <el-button type="primary" @click="previewAttachment" style="margin-left: 10px;" plain>预览附件</el-button>
-        </router-link>
+        <el-button type="primary" @click="previewAttachment()" style="margin-left: 10px;" plain>预览附件</el-button>
       </el-col>
-      <el-col :span="12">
-        <el-button type="primary" @click="saveData" round style="font-size: medium;font-weight:bold;">上传作业</el-button>
+      <el-col :span="10">
+        <el-button type="primary" @click="goBackToList()" style="margin-left: 10px;" plain>返回</el-button>
       </el-col>
     </el-row>
-
-
   </div>
+
+  <el-dialog v-model="previewVisible" title="预览" width="800px">
+    <iframe class="notes" :src="homeworkSrc" width="100%" height="400px" style="border:none;"></iframe>
+    <template v-slot:footer>
+      <span class="dialog-footer">
+        <el-button @click="previewVisible = false">关闭</el-button>
+      </span>
+    </template>
+  </el-dialog>
+
 </template>
 
 <script>
-import { ref, reactive, onMounted } from 'vue';
-
+import { ref, onMounted } from 'vue';
+import { useRouter } from 'vue-router';
+import { ElNotification } from 'element-plus';
+import { reqSingleHomework } from '@/api/api';
 export default {
   setup() {
+    let $router = useRouter()
+    const homeworkSrc = ref('https://book.yunzhan365.com/tnhkz/uvaj/mobile/index.html')
     const tableData = ref([
-      { name: '感知机1', starttime: '2024-05-02 10:00:00', endtime: '2024-05-02 10:00:00', number: 45, submitted: 3, check: '未完成', value: false },
+      {
+        homeworkDescription: '感知机1', homeworkStartTime: '2024-05-02 10:00:00', homeworkEndTIme: '2024-05-02 10:00:00', number: 45, submitted: 3, check: '未完成', value: false, homeworkInfo: '作业介绍',
+        scores: 100,
+      },
     ]);
 
-    const formData = reactive({
-      name: '感知机1',
-      starttime: '2024-05-02 10:00:00',
-      endtime: '2024-05-02 10:00:00',
-      fullscore: 100,
-      number: 45,
-      check: '未完成',
-      content: '见附件',
-    });
-
+    const previewVisible = ref(false);
     const currentData = ref({});
 
-    onMounted(() => {
+    onMounted(async () => {
       // 初始化时设置当前数据
-      currentData.value = tableData.value[0];
-      formData.name = currentData.value.name; // 初始化名称
-      formData.number = currentData.value.number; // 初始化应提交人数
+      try {
+        const homeworkNO = localStorage.getItem('homeworkNO');
+        const response = await reqSingleHomework(homeworkNO); // 请求后端老师布置作业数据
+        if (response.code === 0) {
+          currentData.value = response.data;
+          homeworkSrc.value = response.data.file;
+        }
+      } catch (error) {
+        currentData.value = tableData.value[0];
+        console.log(error)
+        ElNotification({
+          type: 'error',
+          message: '获取布置作业数据失败'
+        });
+      }
+
+
+
     });
 
-    const handleUpdateCheck = (status) => {
-      formData.check = status;
-    };
 
     const previewAttachment = () => {
-      // 实现预览附件的逻辑
-      console.log('预览附件');
+      previewVisible.value = true;
     };
 
-    const handleUpload = (response, file) => {
-      // 处理上传成功的逻辑
-      console.log('上传成功', response);
-    };
+    const goBackToList = () => {
+      $router.push({ name: 'homeworkList' })
 
-    const saveData = () => {
-      // 更新 tableData 中对应的数据
-      currentData.value.name = formData.name;
-      currentData.value.starttime = formData.starttime;
-      currentData.value.endtime = formData.endtime;
-      currentData.value.number = formData.number;
-      currentData.value.fullscore = formData.fullscore;
-      currentData.value.check = formData.check;
+    }
 
-      // 提示保存成功
-      // 假设 this.$message.success 可用
-      console.log('保存成功');
-    };
+
+
 
     return {
       tableData,
-      formData,
       currentData,
-      handleUpdateCheck,
       previewAttachment,
-      handleUpload,
-      saveData,
+      previewVisible,
+      homeworkSrc,
+      goBackToList,
     };
   },
 };
@@ -113,10 +111,31 @@ export default {
   max-width: 100%;
   /* 最大宽度100% */
   padding: 20px;
+  display: flex;
+  flex-direction: column;
+  /* 垂直排列 */
+  align-items: center;
+  /* 水平居中 */
+  justify-content: center;
+  /* 垂直居中 */
+  height: 500px;
+  /* 占满整个视口高度 */
   /* 内边距 */
 }
 
 .form {
   margin-top: 20px;
+}
+
+.margin-top {
+  margin-bottom: 20px;
+  /* 调整标题与按钮之间的间距 */
+}
+
+.button-row {
+  display: flex;
+  /* 使按钮行也居中 */
+  justify-content: center;
+  /* 水平居中 */
 }
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <div class="Intro">
+  <div class="homeworkList-Intro">
     <el-table :data="tableData.filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase()))"
       class="homeworkTable">
       <el-table-column prop="name" label="作业名称">
@@ -24,9 +24,11 @@
         </template>
       </el-table-column>
       <el-table-column label="操作" v-slot="scope" width="240px">
-        <el-button size="mini" type="primary" @click="handlePreview(scope.$index, scope.row)">预览</el-button>
-        <el-button size="mini" type="danger" @click="handleUpload(scope.$index, scope.row)"
+        <el-button size="mini" type="success" @click="handlePreview(scope.$index, scope.row)">预览</el-button>
+        <el-button size="mini" type="primary" @click="handleUpload(scope.$index, scope.row)"
           style="margin-left: 10px;">上传</el-button>
+        <el-button size="mini" type="Info" @click="goToInfo(scope.$index, scope.row)"
+          style="margin-left: 10px;">详情</el-button>
 
       </el-table-column>
 
@@ -120,6 +122,11 @@ const homeworkList = {
 
     };
 
+    const goToInfo = (index, row) => {
+      localStorage.setItem('homeworkNO', row.homeworkNO)
+      $router.push({ name: 'homeworkInfo' })
+    }
+
     const handleChange = (event) => {
       const target = event.target;
       if (target.files && target.files.length > 0) {
@@ -184,7 +191,7 @@ const homeworkList = {
         if (response.code === 0) {
           // 将后端数据转为数组格式并赋值给 tableData
           homeworkListData.value = Object.values(response.data).map(homework => ({
-            homeworkNO:homework.homeworkNO,
+            homeworkNO: homework.homeworkNO,
             name: homework.homeworkDescription,
             starttime: homework.homeworkStartTime,
             endtime: homework.homeworkEndTime,
@@ -230,7 +237,7 @@ const homeworkList = {
       getFormattedDate,
       dialogVisible,
       homeworkAnswer,
-
+      goToInfo,
 
     };
   }
@@ -241,7 +248,7 @@ export default homeworkList;
 </script>
 
 <style>
-.Intro {
+.homeworkList-Intro {
   border-radius: 20px;
   box-shadow: --el-box-shadow-light;
   background-color: #FFFFFF;
