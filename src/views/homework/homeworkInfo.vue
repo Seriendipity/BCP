@@ -3,7 +3,7 @@
     <el-descriptions class="margin-top" title="作业信息" :column="1" :size="size">
       <el-descriptions-item label="作业名称">{{ currentData.homeworkDescription }}</el-descriptions-item>
       <el-descriptions-item label="开始时间">{{ currentData.homeworkStartTime }}</el-descriptions-item>
-      <el-descriptions-item label="结束时间">{{ currentData.homeworkEndTIme }}</el-descriptions-item>
+      <el-descriptions-item label="结束时间">{{ currentData.homeworkEndTime }}</el-descriptions-item>
       <el-descriptions-item label="作业详情">{{ currentData.homeworkInfo }}</el-descriptions-item>
       <el-descriptions-item label="满分：">{{ currentData.scores }}</el-descriptions-item>
     </el-descriptions>
@@ -58,7 +58,7 @@ export default {
         const response = await reqSingleHomework(homeworkNO); // 请求后端老师布置作业数据
         if (response.code === 0) {
           currentData.value = response.data;
-          homeworkSrc.value = response.data.file;
+          homeworkSrc.value = response.data.file.split('/').pop();
         }
       } catch (error) {
         currentData.value = tableData.value[0];
