@@ -120,9 +120,7 @@ export default {
     onMounted(async () => {
       try {
         const courseId = localStorage.getItem('courseId')
-        const formData = new FormData()
-        formData.append('cid', courseId)
-        const postResponse = await reqDiscussionList(formData);
+        const postResponse = await reqDiscussionList(courseId);
         posts.value = postResponse.data;
       } catch (error) {
         console.log(error)

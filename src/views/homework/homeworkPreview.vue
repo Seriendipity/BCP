@@ -7,11 +7,11 @@
 
 <script setup>
 import { ref, onMounted } from 'vue';
-import { reqHomework } from '@/api/api';
 import { ElNotification } from 'element-plus';
 import { useRouter } from 'vue-router';
 
-const $router = useRouter()
+let $router = useRouter()
+
 const props = defineProps({
   previewSrc: {
     type: String,
@@ -20,26 +20,26 @@ const props = defineProps({
   }
 });
 
-const HomeworkSrc = ref(props.previewSrc); // 使用ref保存课程大纲的URL
+const HomeworkSrc = ref(props.previewSrc);
 
-const returnHomeworkList = () => {
-  $router.push({ name: 'homeworkList' });
-}
 onMounted(async () => {
   try {
-    const storedCourseId = localStorage.getItem('courseId');
-    const response = await reqHomework(storedCourseId); // 获取后端课程大纲URL
-    console.log(response)
-    HomeworkSrc.value = response.data.homeworkPath
+    const homeworkPath = localStorage.getItem('homeworkPath');
+
+    HomeworkSrc.value = homeworkPath.split('/').pop();// 更新URL或保持默认
     console.log(HomeworkSrc)
   } catch (error) {
     console.log(error)
     ElNotification({
       type: 'error',
-      message: '获取课程大纲失败',
+      message: '获取作业预览失败',
     });
   }
 });
+
+const returnHomeworkList = () => {
+  $router.push({ name: 'homeworkList' });
+}
 </script>
 
 <style>

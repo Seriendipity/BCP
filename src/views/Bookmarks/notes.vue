@@ -119,7 +119,7 @@
     </el-form>
     <template v-slot:footer>
       <span class="dialog-footer">
-        <el-button @click="dialogVisible = false">取 消</el-button>
+        <el-button @click="cancelUpload">取 消</el-button>
         <el-button type="primary" @click="uploadFile">确 定</el-button>
       </span>
     </template>
@@ -139,7 +139,7 @@
     </el-form>
     <template v-slot:footer>
       <span class="dialog-footer">
-        <el-button @click="dialogUpdateVisible = false">取 消</el-button>
+        <el-button @click="cancelUpdateUpload">取 消</el-button>
         <el-button type="primary" @click="uploadNewFile">确 定</el-button>
       </span>
     </template>
@@ -205,7 +205,20 @@ const handleChange = (event) => {
   console.log(selectedFile.value)
 };
 
+const cancelUpload = () =>{
+ 
+  newNoteInfo.value = '';
+  selectedFile.value = null;
+  dialogVisible.value = false;
 
+}
+const cancelUpdateUpload = () =>{
+ 
+ newNoteInfo.value = '';
+ selectedFile.value = null;
+ dialogUpdateVisible.value = false;
+
+}
 
 const uploadFile = async () => {
   if (!selectedFile.value) {
@@ -236,7 +249,7 @@ const uploadFile = async () => {
     });
   }
   newNoteInfo.value = '';
-  selectedFile.value = '';
+  selectedFile.value = null;
   dialogVisible.value = false;
 };
 
@@ -275,6 +288,7 @@ const uploadNewFile = async () => {
     selectedFile.value = null; // 更新后清空选择的文件
     if (response.code === 0) {
       ElMessage.success("笔记更新成功");
+      window.location.reload();
     }
   } catch (error) {
     console.error('更新笔记失败', error);

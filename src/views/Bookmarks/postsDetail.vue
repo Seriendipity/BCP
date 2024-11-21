@@ -78,7 +78,7 @@
           <el-scrollbar class="scrollbar-comment">
             <div class="like-grid-content" style="padding: 10px;">
               <div v-for="reply in comments" :key="reply.index">
-                <h1 class="ziti04" style="margin-top: 5px;font-weight: bold;"> {{ reply.commentUserName }} </h1>
+                <h1 class="ziti04" style="margin-top: 5px;font-weight: bold;"> {{ reply.commentUsername }} </h1>
                 <h1 class="ziti04" style="line-height: 1.5 ;margin-top: 5px;"> {{ reply.Information }} </h1>
                 <h1 class="ziti04" style="color: gray;margin-top: 5px;margin-bottom: 5px;">{{ reply.PostingTime }}</h1>
                 <el-divider></el-divider>
@@ -87,7 +87,7 @@
           </el-scrollbar>
           <div class="main_content_footer">
             <div class="input_box" width="100%">
-              <textarea class="chat-input no-border" v-model="newMessage" />
+              <textarea class="chat-input no-border" v-model="newMessage" ></textarea>
             </div>
             <div class="btn_box">
               <el-button type="primary" class="btn" @click="returnDiscussion(newMessage)"
@@ -105,7 +105,7 @@
 
 <script>
 import { ref, onMounted } from 'vue';
-import { reqUserInfo, addComment, reqOneDiscussion, reqAllComment, deleteStar } from '@/api/api'; // 假设这是更新帖子权限状态的API
+import { reqUserInfo, addComment, reqOneDiscussion, reqAllComment, deleteStar,requireAvatar } from '@/api/api'; // 假设这是更新帖子权限状态的API
 import { ElNotification, ElMessage } from 'element-plus';
 import { useRouter } from 'vue-router';
 
@@ -180,19 +180,15 @@ export default {
       formData.append('discussionId', discussionId)
       formData.append('commentInfo', val)
       //TODO:添加评论图片和@其他人
-      formData.append('imgUrl', null)
-      formData.append('mentionedUser', null)
+      formData.append('imgUrl', '1')
+      formData.append('mentionedUser', '2')
       try {
         if (val.trim()) {
           const response = await addComment(formData)
           if (response.code === 0) {
             ElMessage.success('评论成功')
-            comments.value.push({
-              Information: val,
-              commentUserName: userName,
-              PostingTime: currentTime
-            });
             newMessage.value = ""; // 发送消息后清空输入框
+            window.location.reload();
           }
         } else {
           ElMessage.warning("不能发送空白消息");
@@ -232,15 +228,15 @@ export default {
 
     onMounted(async () => {
       try {
-        const formData = new FormData()
         const discussionId = localStorage.getItem('discussionId')
-        formData.append('discussionId', discussionId)
         const userResponse = await reqUserInfo();
-        const postResponse = await reqOneDiscussion(formData);
-        const commentResponse = await reqAllComment(formData);
+        const postResponse = await reqOneDiscussion(discussionId);
+        const commentResponse = await reqAllComment(discussionId);
+        const avatarResponse = await requireAvatar();
         userInfo.value = userResponse.data;
         posts.value = postResponse.data;
         comments.value = commentResponse.data;
+        userInfo.value.avatarUrl = avatarResponse.data;
       } catch (error) {
         console.log(error)
         userInfo.value = mockData;

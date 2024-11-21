@@ -97,11 +97,11 @@ export const getEvaluationEndTime = (homeworkNO: any) => request.get<any, any>(A
 //获得未完成作业
 export const reqUnfinishedHomework = () => request.get<any, any>(API.UNFINISHED_HOMEWORK)
 //获得讨论区所有帖子
-export const reqDiscussionList = (data: any) => request.get<any, any>(API.ALL_DISCUSSION, data)
+export const reqDiscussionList = (courseId: any) => request.get<any, any>(API.ALL_DISCUSSION+ `?cid=${courseId}`)
 //获得一个帖子
-export const reqOneDiscussion = (data: any) => request.get<any, any>(API.ONE_DISCUSSION, data)
+export const reqOneDiscussion = (discussionId: any) => request.get<any, any>(API.ONE_DISCUSSION+`?discussionId=${discussionId}`)
 //获得所有评论
-export const reqAllComment = (data: any) => request.get<any, any>(API.ALL_COMMENT, data)
+export const reqAllComment = (discussionId: any) => request.get<any, any>(API.ALL_COMMENT+`?discussionId=${discussionId}`)
 //获得收藏的笔记
 export const reqLikeNote = () => request.get<any, any>(API.ALL_LIKE_NOTE)
 //获得收藏的帖子

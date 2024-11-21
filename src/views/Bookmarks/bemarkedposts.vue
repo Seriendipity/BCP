@@ -80,7 +80,7 @@
             :key="post.postNo">
             <el-row :gutter="20">
 
-              <el-col :span="21" @click="goToDiscussionInfo(post.DiscussionId)">
+              <el-col :span="21" @click="goToDiscussionInfo(post.discussionId)">
                 <h1 class="ziti03" style="margin-top: 5px;">{{ post.fromCourseName }} </h1>
                 <h1 class="ziti04" style="line-height: 1.5"> {{ post.discussionInfo }} </h1>
                 <h1 class="ziti04" style="color: gray;margin-top: 15px;margin-bottom: 15px;">{{ post.discussionPt }} {{
@@ -101,7 +101,7 @@
 
 <script>
 import { ref, onMounted } from 'vue';
-import { deleteStar, reqLikeDiscussion, reqUserInfo } from '@/api/api'; // 假设这是更新帖子权限状态的API
+import { deleteStar, reqLikeDiscussion, reqUserInfo ,requireAvatar} from '@/api/api'; // 假设这是更新帖子权限状态的API
 import { ElMessage, ElNotification } from 'element-plus';
 import { useRouter } from 'vue-router';
 
@@ -156,15 +156,12 @@ export default {
       // 取消收藏
       const formData = new FormData()
       formData.append('favoriteNo', post.favoriteNo)
-      formData.append('favoriteInformationNo', post.DiscussionId)
+      formData.append('favoriteInformationNo', post.discussionId)
       try {
         const response = await deleteStar(formData)
         if (response.code === 0) {
           ElMessage.success('取消收藏成功')
-          const index = posts.value.findIndex(deletePost => deletePost.DiscussionId === post.DiscussionId);
-          if (index !== -1) {
-            posts.value.splice(index, 1); // 从数组中移除该元素
-          }
+           window.location.reload();
         }
       } catch (error) {
         console.error('取消收藏失败:', error);
@@ -186,8 +183,10 @@ export default {
       try {
         const userResponse = await reqUserInfo();
         const discussionResponse = await reqLikeDiscussion();
+        const avatarResponse = await requireAvatar();
         userInfo.value = userResponse.data;
         posts.value = discussionResponse.data;
+        userInfo.value.avatarUrl = avatarResponse.data;
       } catch (error) {
         console.log(error)
         userInfo.value = mockData;

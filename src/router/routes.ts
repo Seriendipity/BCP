@@ -359,7 +359,7 @@ export const constantRoute = [
         name: 'homeworkPreview',
         meta: {
           title: '作业预览',
-          hidden: false,
+          hidden: true,
           icon: 'Files',
         }
       },

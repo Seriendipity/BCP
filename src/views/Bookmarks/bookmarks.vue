@@ -82,13 +82,13 @@
               </el-col>
               <el-col :span="2">
                 <el-button type="primary" style="margin-top: 20px;" plain
-                  @click="previewNote(note)">预览</el-button></el-col>
+                  @click="previewNote(favor)">预览</el-button></el-col>
               <el-col :span="2">
                 <el-button type="primary" style="margin-top: 20px;" plain
-                  @click="downloadNote(note)">下载</el-button></el-col>
+                  @click="downloadNote(favor)">下载</el-button></el-col>
               <el-col :span="3">
                 <el-button type="primary" style="margin-top: 20px;" plain
-                  @click="deleteStar(note)">取消收藏</el-button></el-col>
+                  @click="deleteNoteStar(favor)">取消收藏</el-button></el-col>
             </el-row>
           </div>
 
@@ -110,7 +110,7 @@
 
 <script setup>
 import { ref, onMounted } from 'vue';
-import { reqUserInfo, requireAvatar, reqLikeNote } from '@/api/api';
+import { reqUserInfo, requireAvatar, reqLikeNote,deleteStar} from '@/api/api';
 import { ElNotification, ElMessage } from 'element-plus';
 
 const likeNotes = ref([]);
@@ -187,6 +187,7 @@ const noteSrc = ref(props.previewSrc)
 const previewVisible = ref(false);
 
 const previewNote = (note) => {//TODO:跳转到一个专门的预览界面
+  console.log(note)
   noteSrc.value = note.notePath.split('/').pop();
   console.log(noteSrc)
   previewVisible.value = true;
@@ -194,7 +195,7 @@ const previewNote = (note) => {//TODO:跳转到一个专门的预览界面
 
 const downloadNote = (resource) => {
   try {
-    window.open(resource.url); // 打开文件链接
+    window.open(resource.notePath); // 打开文件链接
   } catch (error) {
     console.log(error)
     ElNotification({
@@ -204,7 +205,7 @@ const downloadNote = (resource) => {
   }
 };
 
-const deleteStar = async (note) => {
+const deleteNoteStar = async (note) => {
   // 取消收藏
   const formData = new FormData()
   formData.append('favoriteNo', note.favoriteNo)
@@ -213,10 +214,7 @@ const deleteStar = async (note) => {
     const response = await deleteStar(formData)
     if (response.code === 0) {
       ElMessage.success('取消收藏成功')
-      const index = likeNotes.value.findIndex(deleteNote => deleteNote.NoteNo === note.noteNo);
-      if (index !== -1) {
-        likeNotes.value.splice(index, 1); // 从数组中移除该元素
-      }
+      window.location.reload();
     }
   } catch (error) {
     console.error('取消收藏失败:', error);
