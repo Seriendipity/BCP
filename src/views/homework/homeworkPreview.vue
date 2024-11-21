@@ -7,7 +7,6 @@
 
 <script setup>
 import { ref, onMounted } from 'vue';
-import { reqHomework } from '@/api/api';
 import { ElNotification } from 'element-plus';
 import { useRouter } from 'vue-router';
 
@@ -30,6 +29,7 @@ onMounted(async () => {
     HomeworkSrc.value = homeworkPath.split('/').pop();// 更新URL或保持默认
     console.log(HomeworkSrc)
   } catch (error) {
+    console.log(error)
     ElNotification({
       type: 'error',
       message: '获取作业预览失败',
