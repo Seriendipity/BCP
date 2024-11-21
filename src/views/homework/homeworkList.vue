@@ -19,7 +19,7 @@
       </el-table-column>
       <el-table-column label="状态" width="100px">
         <template v-slot="scope">
-          <el-tag size="small" :type="scope.row.ifsubmit === '已完成' ? 'success' : 'danger'">{{ scope.row.ifsubmit
+          <el-tag size="small" :type="scope.row.ifsubmit === '已提交' ? 'success' : 'danger'">{{ scope.row.ifsubmit
             }}</el-tag>
         </template>
       </el-table-column>
@@ -110,11 +110,11 @@ const homeworkList = {
     const selectedHomeworkNo = ref();
 
     const handlePreview = (index, row) => {
-      if (row.ifsubmit === '未完成') {
-        ElMessage.error('作业未完成，不可预览')
+      if (row.ifsubmit === '未提交') {
+        ElMessage.error('作业未提交，不可预览')
       } else {
         localStorage.setItem('homeworkNO', row.homeworkNO)
-        localStorage.setItem('fileURL', row.file)
+        localStorage.setItem('homeworkPath', row.homeworkPath)
         $router.push({ name: 'homeworkPreview' });
       }
 
@@ -192,6 +192,7 @@ const homeworkList = {
             number: homework.studentNumbers,
             grade: homework.grade,
             ifsubmit: homework.status,
+            homeworkPath:homework.homeworkPath,
           }));
         } else {
           ElNotification({
