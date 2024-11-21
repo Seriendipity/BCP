@@ -31,10 +31,11 @@ public interface FavoriteMapper {
     @Select("Select * from Favorite Where StudentNo = #{StudentNo} and FavoriteTitle like concat('%', #{FavoriteTitle}, '%')")
     List<Favorite> selectByFavoriteTitle(String StudentNo,String FavoriteTitle);
 
-    @Insert("Insert into Favorite(FavoriteNo,StudentNo,FavoriteInformationNo,FavoriteTitle,Authority,IsOwn)" +
-            " values(#{FavoriteNo},#{StudentNo},#{FavoriteInformationNo},#{FavoriteTitle},#{Authority},1)")
+    @Insert("Insert into Favorite(FavoriteNo,StudentNo,FavoriteInformationNo,FavoriteTitle,Authority,IsOwn,FromStudentNo)" +
+            " values(#{FavoriteNo},#{StudentNo},#{FavoriteInformationNo},#{FavoriteTitle},#{Authority},1,#{FromStudentNo})")
     void insertFavoriteOwn(String FavoriteNo,String StudentNo,
-                        String FavoriteInformationNo,String FavoriteTitle,int Authority);
+                        String FavoriteInformationNo,String FavoriteTitle,int Authority,
+                           String FromStudentNo);
 
     @Insert("Insert into Favorite(FavoriteNo,StudentNo,FavoriteInformationNo,FavoriteTitle,Authority,IsOwn,FromStudentNo)" +
             " values(#{FavoriteNo},#{StudentNo},#{FavoriteInformationNo},#{FavoriteTitle},0,0,#{FromStudentNo})")

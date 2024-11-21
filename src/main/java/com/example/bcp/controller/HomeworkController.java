@@ -221,6 +221,7 @@ public class HomeworkController {
     @GetMapping("/allCidHomework")
     public Result selectByCid(@RequestParam String cid, HttpServletRequest request) {
         String userNo = request.getAttribute("username").toString();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         if (userNo.startsWith("S")) {
             List<Homework> homeworks = homeworkService.selectByCidAndVisible(cid);
             Map<String, Object> responseData = new HashMap<>();
@@ -229,20 +230,22 @@ public class HomeworkController {
                 Map<String, Object> hw = new HashMap<>();
                 hw.put("homeworkNO", homework.getHomeworkNo());
                 hw.put("homeworkDescription", homework.getHomeworkDescription());
-                hw.put("homeworkStartTime", homework.getStartTime());
-                hw.put("homeworkEndTime", homework.getEndTime());
+                hw.put("homeworkStartTime", homework.getStartTime().format(formatter));
+                hw.put("homeworkEndTime", homework.getEndTime().format(formatter));
+                hw.put("homeworkInfo",homework.getHomeworkInfo());
 
                 int studentNumbers = studentCourseService.selectByCid(cid).size();
                 int submitNumbers = studentHomeworkService.selectByHomeworkNo(homework.getHomeworkNo()).size();
                 hw.put("submitNumbers", submitNumbers);
                 hw.put("studentNumbers", studentNumbers);
-
                 StudentHomework sh = studentHomeworkService.selectByStudentNoAndHomeworkNo(userNo, homework.getHomeworkNo());
                 if (sh == null) {
                     hw.put("status", "未提交");
                     hw.put("grade", null);
                 } else {
                     hw.put("status", "已提交");
+                    hw.put("homeworkPath",sh.getSubmitPath());
+
                     if(sh.isVisible()){
                         hw.put("grade", sh.getSubmitGrade());
                     }else{
@@ -263,8 +266,8 @@ public class HomeworkController {
                 Map<String, Object> hw = new HashMap<>();
                 hw.put("homeworkNO", homework.getHomeworkNo());
                 hw.put("homeworkDescription", homework.getHomeworkDescription());
-                hw.put("homeworkStartTime", homework.getStartTime());
-                hw.put("homeworkEndTime", homework.getEndTime());
+                hw.put("homeworkStartTime", homework.getStartTime().format(formatter));
+                hw.put("homeworkEndTime", homework.getEndTime().format(formatter));
 
                 int studentNumbers = studentCourseService.selectByCid(cid).size();
                 int submitNumbers = studentHomeworkService.selectByHomeworkNo(homework.getHomeworkNo()).size();

@@ -5,13 +5,12 @@ import com.example.bcp.entity.Discussion;
 import com.example.bcp.entity.Favorite;
 import com.example.bcp.entity.Note;
 import com.example.bcp.entity.Result;
-import com.example.bcp.service.DiscussionService;
-import com.example.bcp.service.FavoriteService;
-import com.example.bcp.service.NoteService;
+import com.example.bcp.service.*;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,12 +20,16 @@ import java.util.Map;
 public class FavoriteController {
     @Autowired
     FavoriteService favoriteService;
-
     @Autowired
     DiscussionService discussionService;
-
     @Autowired
     NoteService noteService;
+    @Autowired
+    StudentService studentService;
+    @Autowired
+    TeachingService teachingService;
+    @Autowired
+    CourseService courseService;
 
     @GetMapping("/selectByStudentNo")
     public Result selectByStudentNo(HttpServletRequest request) {
@@ -40,9 +43,11 @@ public class FavoriteController {
             favorite.put("favoriteTitle", f.getFavoriteTitle());
             favorite.put("favoriteAuthority", f.getAuthority());
             favorite.put("fromStudentNo", f.getFromStudentNo());
+            favorite.put("favoriteNo",f.getFavoriteNo());
             String favoriteInfoNo = f.getFavoriteInformationNO();
             if (favoriteInfoNo.startsWith("D")) {
                 Discussion d = discussionService.selectByDiscussionId(favoriteInfoNo);
+                favorite.put("discussionId",d.getDiscussionId());
                 favorite.put("discussionInfo", d.getDiscussionInformation());
                 favorite.put("mentionedUser", d.getMentionedUser());
                 favorite.put("discussionPt", d.getDiscussionPostingTime());
@@ -63,17 +68,23 @@ public class FavoriteController {
         String studentNo = request.getAttribute("username").toString();
         List<Favorite> favoritesStarOthers = favoriteService.selectByStudentOthers(studentNo);
         Map<String, Object> responseData = new HashMap<>();
-        int index = 1;
+        int index = 1; DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         for (Favorite f : favoritesStarOthers) {
             Map<String, Object> favorite = new HashMap<>();
             favorite.put("favoriteTitle", f.getFavoriteTitle());
             favorite.put("favoriteAuthority", f.getAuthority());
             favorite.put("fromStudentNo", f.getFromStudentNo());
+            favorite.put("favoriteNo",f.getFavoriteNo());
+            favorite.put("fromUsername",studentService.selectByStudentNo(f.getFromStudentNo()).getStudentName());
             String favoriteInfoNo = f.getFavoriteInformationNO();
+            System.out.println(favoriteInfoNo);
             if (favoriteInfoNo.startsWith("N")) {
                 Note n = noteService.selectByNoteNo(favoriteInfoNo);
+                favorite.put("noteNo",n.getNoteNo());
                 favorite.put("noteInfo", n.getNoteInformation());
                 favorite.put("favoriteInfoId", f.getFavoriteInformationNO());
+                favorite.put("notePt",n.getLoadTime().format(formatter));
+                favorite.put("notePath",n.getNotePath());
                 responseData.put("favorite" + index, favorite);
                 index++;
             }
@@ -84,23 +95,31 @@ public class FavoriteController {
     @GetMapping("/selectByStarDiscussionFromOthers")
     public Result selectByStarDiscussionOthers(HttpServletRequest request) {
         String studentNo = request.getAttribute("username").toString();
-        List<Favorite> favoritesStarOthers = favoriteService.selectByStudentOthers(studentNo);
+        List<Favorite> favoritesStarOthers = favoriteService.selectByStudentNo(studentNo);
         Map<String, Object> responseData = new HashMap<>();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         int index = 1;
         for (Favorite f : favoritesStarOthers) {
             Map<String, Object> favorite = new HashMap<>();
             favorite.put("favoriteTitle", f.getFavoriteTitle());
             favorite.put("favoriteAuthority", f.getAuthority());
+            favorite.put("favoriteNo",f.getFavoriteNo());
             favorite.put("fromStudentNo", f.getFromStudentNo());
+            favorite.put("fromUsername",studentService.selectByStudentNo(f.getFromStudentNo()).getStudentName());
             String favoriteInfoNo = f.getFavoriteInformationNO();
 
             if (favoriteInfoNo.startsWith("D")) {
                 Discussion d = discussionService.selectByDiscussionId(favoriteInfoNo);
                 favorite.put("discussionInfo", d.getDiscussionInformation());
+                favorite.put("discussionId",d.getDiscussionId());
                 favorite.put("mentionedUser", d.getMentionedUser());
-                favorite.put("discussionPt", d.getDiscussionPostingTime());
+                favorite.put("discussionPt", d.getDiscussionPostingTime().format(formatter));
                 favorite.put("imageUrl", d.getImageUrl());
                 favorite.put("topic", d.getTopic());
+                String cid = d.getCid();
+                String courseNo = teachingService.selectByCid(cid).getCourseNo();
+                String courseName = courseService.selectByCourseNo(courseNo).getCourseName();
+                favorite.put("fromCourseName",courseName);
                 responseData.put("favorite" + index, favorite);
                 index++;
             }
@@ -116,17 +135,21 @@ public class FavoriteController {
         List<Favorite> selectByStudentNoAndFavoriteTitle = favoriteService.selectByStudentNoAndFavoriteTitle(studentNo, favoriteTitle);
         int index = 1;
         Map<String, Object> responseData = new HashMap<>();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         for (Favorite f : selectByStudentNoAndFavoriteTitle) {
             Map<String, Object> favorite = new HashMap<>();
             favorite.put("favoriteTitle", f.getFavoriteTitle());
             favorite.put("favoriteAuthority", f.getAuthority());
             favorite.put("fromStudentNo", f.getFromStudentNo());
+            favorite.put("favoriteNo",f.getFavoriteNo());
+            favorite.put("fromUsername",studentService.selectByStudentNo(f.getFromStudentNo()).getStudentName());
             String favoriteInfoNo = f.getFavoriteInformationNO();
             if (favoriteInfoNo.startsWith("D")) {
                 Discussion d = discussionService.selectByDiscussionId(favoriteInfoNo);
                 favorite.put("discussionInfo", d.getDiscussionInformation());
+                favorite.put("discussionId",d.getDiscussionId());
                 favorite.put("mentionedUser", d.getMentionedUser());
-                favorite.put("discussionPt", d.getDiscussionPostingTime());
+                favorite.put("discussionPt", d.getDiscussionPostingTime().format(formatter));
                 favorite.put("imageUrl", d.getImageUrl());
                 favorite.put("topic", d.getTopic());
             } else if (favoriteInfoNo.startsWith("N")) {
@@ -147,17 +170,20 @@ public class FavoriteController {
         List<Favorite> selectByStudentNoAndFavoriteNo = favoriteService.selectByStudentNoAndFavoriteNo(studentNo, favoriteNo);
         int index = 1;
         Map<String, Object> responseData = new HashMap<>();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         for (Favorite f : selectByStudentNoAndFavoriteNo) {
             Map<String, Object> favorite = new HashMap<>();
             favorite.put("favoriteTitle", f.getFavoriteTitle());
             favorite.put("favoriteAuthority", f.getAuthority());
             favorite.put("fromStudentNo", f.getFromStudentNo());
+            favorite.put("favoriteNo",f.getFavoriteNo());
             String favoriteInfoNo = f.getFavoriteInformationNO();
             if (favoriteInfoNo.startsWith("D")) {
                 Discussion d = discussionService.selectByDiscussionId(favoriteInfoNo);
                 favorite.put("discussionInfo", d.getDiscussionInformation());
                 favorite.put("mentionedUser", d.getMentionedUser());
-                favorite.put("discussionPt", d.getDiscussionPostingTime());
+                favorite.put("discussionId",d.getDiscussionId());
+                favorite.put("discussionPt", d.getDiscussionPostingTime().format(formatter));
                 favorite.put("imageUrl", d.getImageUrl());
                 favorite.put("topic", d.getTopic());
             } else if (favoriteInfoNo.startsWith("N")) {
@@ -186,7 +212,7 @@ public class FavoriteController {
         try {
             String favoriteNo = "F" + studentNo.substring(1);
 
-            favoriteService.insertFavoriteOwn(favoriteNo, studentNo, favoriteInformationNo, favoriteTitle, authority);
+            favoriteService.insertFavoriteOwn(favoriteNo, studentNo, favoriteInformationNo, favoriteTitle, authority,studentNo);
             return Result.success("向收藏夹中添加内容成功");
         } catch (Exception e) {
             return Result.error("向收藏夹中添加内容失败");
@@ -260,11 +286,11 @@ public class FavoriteController {
         }
 
     }
-    @PostMapping("/deleteFavorite")
-    public Result deleteFavorite(@RequestBody Map<String, String> requestData, HttpServletRequest request) {
-        String favoriteNo = requestData.get("favoriteNo");
+    @PostMapping(value = "/deleteFavorite" ,consumes = "multipart/form-data")
+    public Result deleteFavorite(@RequestParam String favoriteNo,
+                                 @RequestParam String favoriteInformationNo,
+                                 HttpServletRequest request) {
         String studentNo = request.getAttribute("username").toString();
-        String favoriteInformationNo = request.getAttribute("favoriteInformationNo").toString();
         favoriteService.deleteFavorite(favoriteNo, studentNo, favoriteInformationNo);
         return Result.success();
     }

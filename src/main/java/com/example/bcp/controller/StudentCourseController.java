@@ -4,10 +4,13 @@ import com.example.bcp.entity.Result;
 import com.example.bcp.entity.StudentCourse;
 import com.example.bcp.entity.Teaching;
 import com.example.bcp.service.*;
+import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -79,50 +82,101 @@ public class StudentCourseController {
      *
      */
 
+//    @GetMapping("/exportStudentList")
+//    public ResponseEntity<byte[]> exportStudentList(@RequestParam String cid) {
+//        List<StudentCourse> studentList = studentCourseService.selectByCid(cid);
+//
+//        Workbook workbook = new XSSFWorkbook();
+//        Sheet sheet = workbook.createSheet("Student List");
+//
+//        // 创建表头
+//        Row headerRow = sheet.createRow(0);
+//        headerRow.createCell(0).setCellValue("Index");
+//        headerRow.createCell(1).setCellValue("StudentNo");
+//        headerRow.createCell(2).setCellValue("StudentName");
+//        headerRow.createCell(3).setCellValue("Grade");
+//        headerRow.createCell(4).setCellValue("ClassNo");
+//        headerRow.createCell(5).setCellValue("ClassName");
+//
+//        // 填充学生信息
+//        int rowIndex = 1;
+//        for (StudentCourse sc : studentList) {
+//            Row row = sheet.createRow(rowIndex++);
+//            row.createCell(0).setCellValue(rowIndex - 1);
+//            row.createCell(1).setCellValue(sc.getStudentNo());
+//            row.createCell(2).setCellValue(studentService.selectByStudentNo(sc.getStudentNo()).getStudentName());
+//            row.createCell(3).setCellValue(sc.getGrade());
+//            String classNo = studentService.selectByStudentNo(sc.getStudentNo()).getClassNo();
+//            row.createCell(4).setCellValue(classNo);
+//            row.createCell(5).setCellValue(classService.selectByClassNo(classNo).getClassName());
+//        }
+//
+//        // 导出为 Excel 文件并返回为 byte[]
+//        try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
+//            workbook.write(outputStream);
+//            byte[] content = outputStream.toByteArray();
+//
+//            HttpHeaders headers = new HttpHeaders();
+//            headers.add("Content-Disposition", "attachment; filename=student_list.xlsx");
+//            headers.add("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+//
+//            // 直接返回 byte 数组
+//            return new ResponseEntity<>(content, headers, HttpStatus.OK);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+//        }
+//    }
     @GetMapping("/exportStudentList")
-    public ResponseEntity<byte[]> exportStudentList(@RequestParam String cid) {
+    public void exportStudentList(@RequestParam String cid, HttpServletResponse response) throws IOException {
         List<StudentCourse> studentList = studentCourseService.selectByCid(cid);
 
-        Workbook workbook = new XSSFWorkbook();
-        Sheet sheet = workbook.createSheet("Student List");
+        // 生成唯一的文件名
+        String filenames = "student_list_" + System.currentTimeMillis() + ".xlsx";
 
-        // 创建表头
-        Row headerRow = sheet.createRow(0);
-        headerRow.createCell(0).setCellValue("Index");
-        headerRow.createCell(1).setCellValue("StudentNo");
-        headerRow.createCell(2).setCellValue("StudentName");
-        headerRow.createCell(3).setCellValue("Grade");
-        headerRow.createCell(4).setCellValue("ClassNo");
-        headerRow.createCell(5).setCellValue("ClassName");
+        // 设置响应头
+        response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+        response.setHeader("Content-Disposition", "attachment;filename=" + filenames);
+        response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+        response.setHeader("Pragma", "no-cache");
+        response.setHeader("Expires", "0");
 
-        // 填充学生信息
-        int rowIndex = 1;
-        for (StudentCourse sc : studentList) {
-            Row row = sheet.createRow(rowIndex++);
-            row.createCell(0).setCellValue(rowIndex - 1);
-            row.createCell(1).setCellValue(sc.getStudentNo());
-            row.createCell(2).setCellValue(studentService.selectByStudentNo(sc.getStudentNo()).getStudentName());
-            row.createCell(3).setCellValue(sc.getGrade());
-            String classNo = studentService.selectByStudentNo(sc.getStudentNo()).getClassNo();
-            row.createCell(4).setCellValue(classNo);
-            row.createCell(5).setCellValue(classService.selectByClassNo(classNo).getClassName());
+        // 创建 Excel 文件
+        XSSFWorkbook workbook = new XSSFWorkbook();
+        XSSFSheet sheet = workbook.createSheet("Student List");
+
+        // 添加表头
+        Row header = sheet.createRow(0);
+        header.createCell(0).setCellValue("Index");
+        header.createCell(1).setCellValue("StudentNo");
+        header.createCell(2).setCellValue("StudentName");
+        header.createCell(3).setCellValue("Grade");
+        header.createCell(4).setCellValue("ClassNo");
+        header.createCell(5).setCellValue("ClassName");
+
+        // 填充数据
+        for (int i = 0; i < studentList.size(); i++) {
+            StudentCourse student = studentList.get(i);
+            Row row = sheet.createRow(i + 1);
+            row.createCell(0).setCellValue(i + 1);
+            row.createCell(1).setCellValue(student.getStudentNo());
+            row.createCell(2).setCellValue(studentService.selectByStudentNo(student.getStudentNo()).getStudentName());
+            row.createCell(3).setCellValue(student.getGrade());
+            row.createCell(4).setCellValue(studentService.selectByStudentNo(student.getStudentNo()).getClassNo());
+            row.createCell(5).setCellValue(classService.selectByClassNo(studentService.selectByStudentNo(student.getStudentNo()).getClassNo()).getClassName());
         }
 
-        // 导出为 Excel 文件并返回为 byte[]
-        try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
-            workbook.write(outputStream);
-            byte[] content = outputStream.toByteArray();
+        // 将文件保存到服务器本地（用于调试）
+        String tempFilePath = "student_list_"+ System.currentTimeMillis() + ".xlsx";
+        FileOutputStream fos = new FileOutputStream(tempFilePath);
+        workbook.write(fos);
+        fos.close();
 
-            HttpHeaders headers = new HttpHeaders();
-            headers.add("Content-Disposition", "attachment; filename=student_list.xlsx");
-            headers.add("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-
-            // 直接返回 byte 数组
-            return new ResponseEntity<>(content, headers, HttpStatus.OK);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        // 写入响应流
+        ServletOutputStream outputStream = response.getOutputStream();
+        workbook.write(outputStream);
+        outputStream.flush();
+        workbook.close();
     }
 
 

@@ -155,6 +155,10 @@ public class NoteController {
 
             int size = noteService.selectAllNote().size() + 1;
             String newNoteNo = "N" + size;
+            while (noteService.selectByNoteNo(newNoteNo)!= null){
+                size++;
+                newNoteNo = "N"+size;
+            }
 
 
             // 插入文件记录到数据库

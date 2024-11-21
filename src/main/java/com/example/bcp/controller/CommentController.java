@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,42 +27,48 @@ public class CommentController {
      * 查询某个帖子的所有评论
      * */
     @GetMapping(value = "/all")
-    public Result getAllComments(@RequestParam String discussionId,HttpServletRequest request){
+    public Result getAllComments(@RequestParam String discussionId, HttpServletRequest request) {
         List<Comment> comments = commentService.selectByDiscussionId(discussionId);
+
+        // 根据 PostingTime 进行排序，最近的时间在最前面
+        comments.sort((c1, c2) -> c2.getCommentPostingTime().compareTo(c1.getCommentPostingTime()));
+
         String username = request.getAttribute("username").toString();
-
         Map<String, Object> responseData = new HashMap<>();
-        int i = 1;
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        int index = 1;
 
-        for(Comment c : comments){
+        for (Comment c : comments) {
             Map<String, Object> commentInfo = new HashMap<>();
-            commentInfo.put("Index",i);
-            commentInfo.put("CommentId",c.getCommentId());
-            commentInfo.put("Information",c.getCommentInformation());
-            commentInfo.put("PostingTime",c.getCommentPostingTime());
-            commentInfo.put("Likes",c.getLikesNumber());
-            commentInfo.put("DiscussionId",c.getDiscussionId());
-            commentInfo.put("commentUsername",studentService.selectByStudentNo(c.getPostStudent()).getStudentName());
+            commentInfo.put("Index", index);
+            commentInfo.put("CommentId", c.getCommentId());
+            commentInfo.put("Information", c.getCommentInformation());
+            commentInfo.put("PostingTime", c.getCommentPostingTime().format(formatter));
+            commentInfo.put("Likes", c.getLikesNumber());
+            commentInfo.put("DiscussionId", c.getDiscussionId());
+            commentInfo.put("commentUsername", studentService.selectByStudentNo(c.getPostStudent()).getStudentName());
 
-            responseData.put("comment"+i,commentInfo);
-            i++;
+            // 动态生成 key，以从最近到最远排序
+            responseData.put("comment" + index, commentInfo);
+            index++;
         }
-        responseData.put("username", username);
+
         return Result.success(responseData);
     }
+
 
     /**
      *  给某条帖子插入评论
      */
-    @RequestMapping(value = "/insert" , method = RequestMethod.POST)
-    public Result insertComment(@RequestBody Map<String,String> requestData,HttpServletRequest request){
+    @PostMapping(value = "/insert" , consumes = "multipart/form-data")
+    public Result insertComment(@RequestParam String discussionId,
+                                @RequestParam String commentInfo,
+                                @RequestParam String imgUrl,
+                                @RequestParam String mentionedUser,
+                                HttpServletRequest request){
         String userNo = request.getAttribute("username").toString() ;
         int size = commentService.selectAllComments().size()+1;
         String CommentId = "C"+size;
-        String DiscussionId = requestData.get("discussionId");
-        String CommentInfo = requestData.get("commentInfo");
-        String imgUrl = requestData.get("imgUrl");
-        String mentionedUser = requestData.get("mentionedUser");
         int LikesNumber = 0;
         LocalDateTime postingTime = LocalDateTime.now();
 
@@ -76,7 +83,7 @@ public class CommentController {
 
         String message;
         try {
-            commentService.insertComment(CommentId,DiscussionId,CommentInfo,
+            commentService.insertComment(CommentId,discussionId,commentInfo,
                     LikesNumber,postingTime,imgUrl,mentionedUser,userNo);
             message = "评论成功！";
         }catch (Exception e){

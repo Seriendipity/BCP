@@ -43,9 +43,10 @@ public class FavoriteService {
     }
 
     public void insertFavoriteOwn(String FavoriteNo,String StudentNo,
-                               String FavoriteInformationNo,String FavoriteTitle,int Authority){
+                               String FavoriteInformationNo,String FavoriteTitle,
+                                  int Authority,String FromStudentNo){
         favoriteMapper.insertFavoriteOwn(FavoriteNo,StudentNo,
-                FavoriteInformationNo,FavoriteTitle,Authority);
+                FavoriteInformationNo,FavoriteTitle,Authority,FromStudentNo);
     }
     public void insertFavoriteOthers(String FavoriteNo,String StudentNo,
                                      String FavoriteInformationNo,String FavoriteTitle,String FromStudentNo){

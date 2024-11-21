@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -37,12 +38,13 @@ DiscussionController {
 
         Map<String, Object> responseData = new HashMap<>();
         int i = 1;
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         for(Discussion d : discussions){
             Map<String , Object> discussionInfo = new HashMap<>();
             discussionInfo.put("index",i);
             discussionInfo.put("DiscussionId",d.getDiscussionId());
             discussionInfo.put("Information",d.getDiscussionInformation());
-            discussionInfo.put("PostingTime",d.getDiscussionPostingTime());
+            discussionInfo.put("PostingTime",d.getDiscussionPostingTime().format(formatter));
             discussionInfo.put("studentNo",d.getStudentNo());
             discussionInfo.put("username",studentService.selectByStudentNo(d.getStudentNo()).getStudentName());
             discussionInfo.put("imgUrl",d.getImageUrl());
@@ -53,7 +55,6 @@ DiscussionController {
             responseData.put("discussion" + i,discussionInfo);
             i++;
         }
-        responseData.put("username", username);
         return Result.success(responseData);
     }
 
@@ -61,12 +62,15 @@ DiscussionController {
      *  查询某个帖子的信息
      */
     @GetMapping(value = "/getOneDiscussion" )
-    public Result getOneDiscussion(@RequestParam String discussionId, HttpServletRequest request){
+    public Result getOneDiscussion(@RequestParam String discussionId){
+        System.out.println(12345);
+        System.out.println(discussionId);
         Discussion d = discussionService.selectByDiscussionId(discussionId);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         Map<String , Object> discussionInfo = new HashMap<>();
-        discussionInfo.put("DiscussionId",d.getDiscussionId());
+        discussionInfo.put("discussionId",d.getDiscussionId());
         discussionInfo.put("Information",d.getDiscussionInformation());
-        discussionInfo.put("PostingTime",d.getDiscussionPostingTime());
+        discussionInfo.put("PostingTime",d.getDiscussionPostingTime().format(formatter));
         discussionInfo.put("studentNo",d.getStudentNo());
         discussionInfo.put("username",studentService.selectByStudentNo(d.getStudentNo()).getStudentName());
         discussionInfo.put("imgUrl",d.getImageUrl());
@@ -86,12 +90,13 @@ DiscussionController {
         List<Discussion> discussions = discussionService.selectByCidAndStudentNo(studentNo,cid);
         Map<String, Object> responseData = new HashMap<>();
         int i = 1;
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         for(Discussion d : discussions){
             Map<String , Object> discussionInfo = new HashMap<>();
             discussionInfo.put("index",i);
             discussionInfo.put("DiscussionId",d.getDiscussionId());
             discussionInfo.put("Information",d.getDiscussionInformation());
-            discussionInfo.put("PostingTime",d.getDiscussionPostingTime());
+            discussionInfo.put("PostingTime",d.getDiscussionPostingTime().format(formatter));
             discussionInfo.put("studentNo",d.getStudentNo());
             discussionInfo.put("imgUrl",d.getImageUrl());
             discussionInfo.put("mentionedUser",d.getMentionedUser());
@@ -113,12 +118,13 @@ DiscussionController {
         List<Discussion> discussions = discussionService.selectByCidAndTopic(topic,cid);
         Map<String, Object> responseData = new HashMap<>();
         int i = 1;
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         for(Discussion d : discussions){
             Map<String , Object> discussionInfo = new HashMap<>();
             discussionInfo.put("index",i);
             discussionInfo.put("DiscussionId",d.getDiscussionId());
             discussionInfo.put("Information",d.getDiscussionInformation());
-            discussionInfo.put("PostingTime",d.getDiscussionPostingTime());
+            discussionInfo.put("PostingTime",d.getDiscussionPostingTime().format(formatter));
             discussionInfo.put("studentNo",d.getStudentNo());
             discussionInfo.put("imgUrl",d.getImageUrl());
             discussionInfo.put("mentionedUser",d.getMentionedUser());
@@ -138,13 +144,14 @@ DiscussionController {
         String username = request.getAttribute("username").toString();
         List<Discussion> discussions = discussionService.selectByCidAndMentioned(username,cid);
         Map<String, Object> responseData = new HashMap<>();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         int i = 1;
         for(Discussion d : discussions){
             Map<String , Object> discussionInfo = new HashMap<>();
             discussionInfo.put("index",i);
             discussionInfo.put("DiscussionId",d.getDiscussionId());
             discussionInfo.put("Information",d.getDiscussionInformation());
-            discussionInfo.put("PostingTime",d.getDiscussionPostingTime());
+            discussionInfo.put("PostingTime",d.getDiscussionPostingTime().format(formatter));
             discussionInfo.put("studentNo",d.getStudentNo());
             discussionInfo.put("imgUrl",d.getImageUrl());
             discussionInfo.put("mentionedUser",d.getMentionedUser());
@@ -163,13 +170,14 @@ DiscussionController {
         String username = request.getAttribute("username").toString();
         List<Discussion> discussions = discussionService.selectByMentioned(username);
         Map<String, Object> responseData = new HashMap<>();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         int i = 1;
         for(Discussion d : discussions){
             Map<String , Object> discussionInfo = new HashMap<>();
             discussionInfo.put("index",i);
             discussionInfo.put("DiscussionId",d.getDiscussionId());
             discussionInfo.put("Information",d.getDiscussionInformation());
-            discussionInfo.put("PostingTime",d.getDiscussionPostingTime());
+            discussionInfo.put("PostingTime",d.getDiscussionPostingTime().format(formatter));
             discussionInfo.put("studentNo",d.getStudentNo());
             discussionInfo.put("imgUrl",d.getImageUrl());
             discussionInfo.put("mentionedUser",d.getMentionedUser());
