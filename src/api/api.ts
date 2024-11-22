@@ -54,6 +54,7 @@ enum API {
   DELETE_STAR = "/favorite/deleteFavorite",
   //TODO 
   UPDATE_HOMEWORKCHECK = "/homework/assignHomework",
+  ADD_PEER_GRADE = "/peerAssignment/updatePeerGrade"
 }
 //登录接口
 export const reqLogin = (data: any) => request.post<any, any>(API.LOGIN_URL, data);
@@ -158,3 +159,5 @@ export const deleteStar = (data: any) => request.post<any, any>(API.DELETE_STAR,
 // export const awardPost = (data: any) => request.post<any>(API.AWARD_POST, data);
 //更新作业互评状态
 export const updateHomeworkCheckStatus = (data: any) => request.post<any, any>(API.UPDATE_HOMEWORKCHECK, data);
+//学生互评打分
+export const addPeerGrade = (data:any) =>request.post<any,any>(API.ADD_PEER_GRADE,data);

@@ -34,7 +34,7 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 // import { useRouter } from 'vue-router';
-import { reqSendHomeworkbystu } from '@/api/api';
+import { addPeerGrade, reqSendHomeworkbystu } from '@/api/api';
 import { ElNotification } from 'element-plus';
 import { ElMessage } from 'element-plus'
 import { useRouter } from 'vue-router';
@@ -78,20 +78,16 @@ const mockHomeworks = ref([
 //   }
 // });
 
-// 初始化题目，并加载第一道题
-if (homeworks.value.length > 0) {
-  //currentgrade.value = homeworks.value.map(q => ({ question_id: q.question_id, grade: null }))
-  loadHomework()
-} else {
-  ElMessage.error('没有加载到任何试题')
-}
+
 
 
 
 // 加载当前题目
 const loadHomework = () => {
   //TODO //应该是这个地方的问题，预览显示不出来
-  currenthomework.value = homeworks.value[currentIndex.value].homeworkPath;
+  console.log(currentIndex.value)
+  console.log(homeworks.value[currentIndex.value])
+  currenthomework.value = homeworks.value[currentIndex.value].homeworkPath.split('/').pop();;
 }
 
 // 跳转到指定题目
@@ -100,15 +96,7 @@ const goTohomework = (index) => {
   currentIndex.value = index
 }
 
-//   // 切换到下一题
-//   const nextHomework = () => {
-//   if (grades.value[currentIndex.value].grade === null) {
-//     ElMessage.warning('请选择一个答案')
-//     return
-//   }
-//   currentIndex.value++
-//   loadHomework()
-// }
+
 
 
 
@@ -119,16 +107,29 @@ const submit = async () => {
   formData.append('comment', currentreply)
   formData.append('homeworkNo', homeworkNo)
   formData.append('revieweeNo', homeworks.value[currentIndex.value].reviewee)
-  if (currentgrade.value === null)
+  if (currentgrade.value === '')
     ElMessage.warning('请填写一个成绩');
   else {
+    try{
+      const response = await addPeerGrade(formData)
+      if(response.code===0){
+        ElMessage.success('提交成功')
+      }
+    }catch(error){
+      console.log(error)
+      ElNotification({
+      type: 'error',
+      message: '提交失败',
+    });
+    }
     currentgrade.value = '';
     currentreply.value = '';
-    currentIndex.value++;
-    if (currentIndex.value > homeworks.value.length) {
+    if (currentIndex.value === homeworks.value.length-1) {
       $router.push({ name: 'homeworkCheckbystuEND' })
     } else {
+      currentIndex.value++
       loadHomework()
+    
     }
 
   }
@@ -137,10 +138,12 @@ const submit = async () => {
 
 onMounted(async () => {
   try {
-    const homeworkNo = localStorage.getItem('HomeworkNO')
+    const homeworkNo = localStorage.getItem('homeworkNO')
+    console.log(homeworkNo)
     const homeworkbystuResponse = await reqSendHomeworkbystu(homeworkNo);
+    console.log(homeworkbystuResponse.data)
     if (homeworkbystuResponse.code === 0) {
-      homeworks.value = homeworkbystuResponse.data;
+      homeworks.value = Object.values(homeworkbystuResponse.data);
       loadHomework()
     }
   } catch (error) {
