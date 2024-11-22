@@ -9,7 +9,9 @@ import com.example.bcp.service.PeerReviewAssignmentService;
 import com.example.bcp.mapper.StudentHomeworkMapper;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.DateFormat;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -68,6 +70,7 @@ public class PeerReviewAssignmentController {
     @GetMapping("/studentPeerAssignment")
     public Result assignHomework(@RequestParam String homeworkNo, HttpServletRequest request) {
         String userNo = request.getAttribute("username").toString();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         if (userNo.startsWith("S")) {
             try {
                 List<PeerReviewAssignment> peerReviewAssignments = peerReviewAssignmentService.selectByReviewerAndHomework(userNo, homeworkNo);
@@ -93,14 +96,20 @@ public class PeerReviewAssignmentController {
         } else if (userNo.startsWith("T")) {
                 try {
                     Homework homework = homeworkService.selectByHomeworkNo(homeworkNo);
+                    if (homework == null) {
+                        System.out.println("No homework found for homeworkNo: " + homeworkNo);
+                        return Result.error("找不到作业");
+                    }
                     List<StudentHomework> studentHomeworks;
-                    if(homework.getPeerView() == true) {
+                    if(homework.getPeerReView() == true) {
                         studentHomeworks = studentHomeworkService.selectByIsTeacherAndHomeworkNo(homeworkNo);
                     }else{
                         studentHomeworks = studentHomeworkService.selectByHomeworkNo(homeworkNo);
                     }
+                    System.out.println("success");
                     Map<String, Object> responseData = new HashMap<>();
                     int sequence = 1;
+                    boolean status;
                     for (StudentHomework pa : studentHomeworks) {
                         Map<String, Object> pa1 = new HashMap<>();
                         pa1.put("sequence", sequence);
@@ -110,6 +119,15 @@ public class PeerReviewAssignmentController {
                         pa1.put("studentName", student.getStudentName());//姓名
                         pa1.put("homeworkPath",pa.getSubmitPath());
                         pa1.put("path", pa.getSubmitPath());
+                        pa1.put("grade",pa.getSubmitGrade()==0?"教师未批改":pa.getSubmitGrade());
+                        pa1.put("status",pa.getSubmitGrade()==0?false:true);
+                        LocalDateTime time = pa.getCorrectTime();
+                        if(time == null){
+                            pa1.put("correctTime","null");
+                        }else{
+                            pa1.put("correctTime",pa.getCorrectTime().format(formatter));
+                        }
+
                         responseData.put("studentHomework" + sequence, pa1);
                         sequence++;
                     }

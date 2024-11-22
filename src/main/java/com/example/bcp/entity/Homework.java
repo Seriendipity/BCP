@@ -38,16 +38,16 @@ public class Homework {
     @Column(name = "homeworkInfo" , columnDefinition = "text")
     private String homeworkInfo;
 
-    public Boolean getPeerView() {
-        return isPeerView;
+    public Boolean getPeerReView() {
+        return isPeerReView;
     }
 
     public void setPeerView(Boolean peerView) {
-        isPeerView = peerView;
+        isPeerReView = peerView;
     }
 
-    @Column(name = "isPeerView")
-    private Boolean isPeerView;
+    @Column(name = "isPeerReView")
+    private Boolean isPeerReView;
 
     public String getHomeworkInfo() {
         return homeworkInfo;

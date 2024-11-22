@@ -30,8 +30,8 @@ public interface StudentHomeworkMapper {
     @Select("Select * from StudentHomework Where StudentNo = #{StudentNo} and HomeworkNo = #{HomeworkNo}")
     StudentHomework selectByStudentNoAndHomeworkNo(String StudentNo, String HomeworkNo);
 
-    @Insert("Insert into StudentHomework(StudentNo,HomeworkNo,SubmitDescription,SubmitPath,SubmitTime,SubmitGrade,Comment)" +
-            " values(#{StudentNo},#{HomeworkNo},#{SubmitDescription},#{SubmitPath},#{SubmitTime},null,#{Comment})")
+    @Insert("Insert into StudentHomework(StudentNo,HomeworkNo,SubmitDescription,SubmitPath,SubmitTime,SubmitGrade,Comment,CorrectTime)" +
+            " values(#{StudentNo},#{HomeworkNo},#{SubmitDescription},#{SubmitPath},#{SubmitTime},null,#{Comment},Now())")
     void insertStudentHomework(String StudentNo, String HomeworkNo, String SubmitDescription,
                                String SubmitPath , LocalDateTime SubmitTime,String Comment);
 

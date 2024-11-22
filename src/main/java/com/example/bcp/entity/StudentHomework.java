@@ -37,6 +37,17 @@ public class StudentHomework {
     @Column(name = "isTeacherGrade")
     private boolean isTeacherGrade;
 
+    @Column(name = "CorrectTime")
+    private LocalDateTime CorrectTime;
+
+    public LocalDateTime getCorrectTime() {
+        return CorrectTime;
+    }
+
+    public void setCorrectTime(LocalDateTime correctTime) {
+        CorrectTime = correctTime;
+    }
+
     public boolean isTeacherGrade() {
         return isTeacherGrade;
     }
