@@ -131,6 +131,9 @@ public class PeerReviewAssignmentController {
             String studentNo = sh.getStudentNo();
             List<PeerReviewAssignment> assignments = peerReviewAssignmentService.selectByRevieweeAndHomework(studentNo, homeworkNo);
             for (PeerReviewAssignment pa : assignments) {
+                if(pa.getReviewStatus() == false){//改作业学生没有评
+                    continue;
+                }
                 sumBias += sh.getSubmitGrade() - pa.getGrade();
             }
             size += assignments.size();
@@ -140,6 +143,9 @@ public class PeerReviewAssignmentController {
             if (sh.getIsTeacherGrade() == false) {//没有教师评分
                 int grade = 0;
                 for (PeerReviewAssignment pa : peerReviewAssignmentService.selectByRevieweeNo(sh.getStudentNo())) {
+                    if(pa.getReviewStatus() == false){
+                        continue;
+                    }
                     grade += pa.getGrade();
                 }
                 grade = grade / peerReviewAssignmentService.selectByRevieweeNo(sh.getStudentNo()).size();
@@ -177,4 +183,8 @@ public class PeerReviewAssignmentController {
         }
         return Result.success(responsedata);
     }
+
+
+    //返回没有学生互评的作业交给教师评
+
 }
