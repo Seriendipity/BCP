@@ -1,13 +1,11 @@
 package com.example.bcp.controller;
 
 import com.example.bcp.entity.*;
-import com.example.bcp.service.StudentService;
+import com.example.bcp.service.*;
 import jakarta.persistence.Entity;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.example.bcp.service.PeerReviewAssignmentService;
-import com.example.bcp.service.PeerReviewAssignmentService;
-import com.example.bcp.service.StudentHomeworkService;
 import com.example.bcp.mapper.StudentHomeworkMapper;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,6 +25,9 @@ public class PeerReviewAssignmentController {
 
     @Autowired
     private StudentService studentService;
+
+    @Autowired
+    private HomeworkService homeworkService;
 
     //同伴打分以及写评论
     @PostMapping("/updatePeerGrade")
@@ -90,26 +91,32 @@ public class PeerReviewAssignmentController {
                 return Result.error("失败");
             }
         } else if (userNo.startsWith("T")) {
-            try {
-                List<StudentHomework> studentHomeworks = studentHomeworkService.selectByIsTeacherAndHomeworkNo(homeworkNo);
-                Map<String, Object> responseData = new HashMap<>();
-                int sequence = 1;
-                for (StudentHomework pa : studentHomeworks) {
-                    Map<String, Object> pa1 = new HashMap<>();
-                    pa1.put("sequence", sequence);
-                    pa1.put("homeworkNo", pa.getHomeworkNo());
-                    pa1.put("studentNo", pa.getStudentNo());
-                    Student student = studentService.selectByStudentNo(pa.getStudentNo());
-                    pa1.put("studentName", student.getStudentName());//姓名
-                    pa1.put("homeworkPath",pa.getSubmitPath());
-                    pa1.put("path", pa.getSubmitPath());
-                    responseData.put("studentHomework" + sequence, pa1);
-                    sequence++;
+                try {
+                    Homework homework = homeworkService.selectByHomeworkNo(homeworkNo);
+                    List<StudentHomework> studentHomeworks;
+                    if(homework.getPeerView() == true) {
+                        studentHomeworks = studentHomeworkService.selectByIsTeacherAndHomeworkNo(homeworkNo);
+                    }else{
+                        studentHomeworks = studentHomeworkService.selectByHomeworkNo(homeworkNo);
+                    }
+                    Map<String, Object> responseData = new HashMap<>();
+                    int sequence = 1;
+                    for (StudentHomework pa : studentHomeworks) {
+                        Map<String, Object> pa1 = new HashMap<>();
+                        pa1.put("sequence", sequence);
+                        pa1.put("homeworkNo", pa.getHomeworkNo());
+                        pa1.put("studentNo", pa.getStudentNo());
+                        Student student = studentService.selectByStudentNo(pa.getStudentNo());
+                        pa1.put("studentName", student.getStudentName());//姓名
+                        pa1.put("homeworkPath",pa.getSubmitPath());
+                        pa1.put("path", pa.getSubmitPath());
+                        responseData.put("studentHomework" + sequence, pa1);
+                        sequence++;
+                    }
+                    return Result.success(responseData);
+                } catch (Exception e) {
+                    return Result.error("失败");
                 }
-                return Result.success(responseData);
-            } catch (Exception e) {
-                return Result.error("失败");
-            }
         }else{
             return Result.error("失败");
         }
