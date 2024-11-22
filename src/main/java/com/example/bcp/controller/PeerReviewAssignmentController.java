@@ -76,6 +76,9 @@ public class PeerReviewAssignmentController {
                     Map<String, Object> pa1 = new HashMap<>();
                     pa1.put("sequence", sequence);
                     pa1.put("homeworkNo", pa.getHomeworkNo());
+                    pa1.put("reviewee",pa.getRevieweeNo());
+                    StudentHomework sh = studentHomeworkService.selectByStudentNoAndHomeworkNo(pa.getRevieweeNo(),pa.getHomeworkNo());
+                    pa1.put("homeworkPath",sh.getSubmitPath());
                     pa1.put("reviewStatus", pa.getReviewStatus());
                     pa1.put("startTime", pa.getStartTime());
                     pa1.put("endTime", pa.getEndTime());
@@ -96,6 +99,9 @@ public class PeerReviewAssignmentController {
                     pa1.put("sequence", sequence);
                     pa1.put("homeworkNo", pa.getHomeworkNo());
                     pa1.put("studentNo", pa.getStudentNo());
+                    Student student = studentService.selectByStudentNo(pa.getStudentNo());
+                    pa1.put("studentName", student.getStudentName());//姓名
+                    pa1.put("homeworkPath",pa.getSubmitPath());
                     pa1.put("path", pa.getSubmitPath());
                     responseData.put("studentHomework" + sequence, pa1);
                     sequence++;
