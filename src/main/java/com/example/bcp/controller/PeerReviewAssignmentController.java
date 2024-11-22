@@ -122,12 +122,7 @@ public class PeerReviewAssignmentController {
                         pa1.put("grade",pa.getSubmitGrade()==0?"教师未批改":pa.getSubmitGrade());
                         pa1.put("status",pa.getSubmitGrade()==0?false:true);
                         LocalDateTime time = pa.getCorrectTime();
-                        if(time == null){
-                            pa1.put("correctTime","null");
-                        }else{
-                            pa1.put("correctTime",pa.getCorrectTime().format(formatter));
-                        }
-
+                        pa1.put("submitTime",pa.getSubmitTime().format(formatter));
                         responseData.put("studentHomework" + sequence, pa1);
                         sequence++;
                     }
