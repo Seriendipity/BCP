@@ -19,7 +19,7 @@
       <el-table-column prop="endtime" label="作业结束时间" width="180px">
       </el-table-column>
       <el-table-column label="是否互评" v-slot="scope" width="100px">
-        <el-switch v-model="scope.row.checkbystuStatus" active-color="#13ce66" inactive-color="#ff4949"
+        <el-switch v-model="scope.row.isPeerReview" active-color="#13ce66" inactive-color="#ff4949"
           @click="handleCheckbystu(scope.$index, scope.row)">
         </el-switch>
       </el-table-column>
@@ -54,17 +54,17 @@
 <script>
 import { ref, onMounted } from 'vue';
 import { ElNotification, ElMessage } from 'element-plus';
-import { requireTeacherSendHomework, updateHomeworkStatus ,updateHomeworkCheckStatus} from '@/api/api';
+import { requireTeacherSendHomework, updateHomeworkStatus, updateHomeworkCheckStatus } from '@/api/api';
 import { useRouter } from 'vue-router';
 
 const sendHomework = {
   setup() {
     let $router = useRouter()
     const SendHomeworkData = ref([
-      { homeworkNO: 'H001', sendStatus: false, name: '感知机1', starttime: '2024-05-02 10:00:00', endtime: '2024-05-02 10:00:00', number: 44, submitted: 3, judge: '未完成' ,checkbystuStatus: false},
-      { homeworkNO: 'H002', sendStatus: false, name: '感知机2', starttime: '2024-05-02 10:00:00', endtime: '2024-05-02 10:00:00', number: 45, submitted: 45, judge: '已完成' ,checkbystuStatus: false},
-      { homeworkNO: 'H003', sendStatus: false, name: '感知机3', starttime: '2024-05-02 10:00:00', endtime: '2024-05-02 10:00:00', number: 45, submitted: 44, judge: '已完成' ,checkbystuStatus: false},
-      { homeworkNO: 'H004', sendStatus: true, name: '感知机4', starttime: '2024-05-02 10:00:00', endtime: '2024-05-02 10:00:00', number: 45, submitted: 45, judge: '已完成' ,checkbystuStatus: true}
+      { homeworkNO: 'H001', sendStatus: false, name: '感知机1', starttime: '2024-05-02 10:00:00', endtime: '2024-05-02 10:00:00', number: 44, submitted: 3, judge: '未完成', checkbystuStatus: false },
+      { homeworkNO: 'H002', sendStatus: false, name: '感知机2', starttime: '2024-05-02 10:00:00', endtime: '2024-05-02 10:00:00', number: 45, submitted: 45, judge: '已完成', checkbystuStatus: false },
+      { homeworkNO: 'H003', sendStatus: false, name: '感知机3', starttime: '2024-05-02 10:00:00', endtime: '2024-05-02 10:00:00', number: 45, submitted: 44, judge: '已完成', checkbystuStatus: false },
+      { homeworkNO: 'H004', sendStatus: true, name: '感知机4', starttime: '2024-05-02 10:00:00', endtime: '2024-05-02 10:00:00', number: 45, submitted: 45, judge: '已完成', checkbystuStatus: true }
     ]);
     onMounted(async () => {
       try {
@@ -82,6 +82,7 @@ const sendHomework = {
             number: homework.studentNumbers,
             judge: homework.correctStatus,
             file: homework.file,
+            isPeerReview: homework.isPeerReview,
           }));
         } else {
           ElNotification({
@@ -140,8 +141,11 @@ const sendHomework = {
     };
     const handleCheckbystu = async (index, row) => {
       // 更新作业互评状态
+      const currentDate = new Date()
       const formData = new FormData()
-      formData.append('homeworkNo', row.homeworkNO)
+      formData.append('HomeworkNo', row.homeworkNO)
+      formData.append('StartTime', currentDate)
+      formData.append('EndTime', currentDate)
       try {
         const response = await updateHomeworkCheckStatus(formData)
         if (response.code === 0) {

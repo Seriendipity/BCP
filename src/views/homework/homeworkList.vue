@@ -23,18 +23,15 @@
             }}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="操作" v-slot="scope" width="240px">
+      <el-table-column label="操作" v-slot="scope" width="320px">
         <el-button size="mini" type="success" @click="handlePreview(scope.$index, scope.row)">预览</el-button>
         <el-button size="mini" type="primary" @click="handleUpload(scope.$index, scope.row)"
           style="margin-left: 10px;">上传</el-button>
-<<<<<<< HEAD
         <el-button size="mini" type="success" @click="checkBystu(scope.$index, scope.row)"
           style="margin-left: 10px;">互评</el-button>
-=======
         <el-button size="mini" type="Info" @click="goToInfo(scope.$index, scope.row)"
           style="margin-left: 10px;">详情</el-button>
 
->>>>>>> 609dd2af184cff8666da076a494b3a0e38b57da9
       </el-table-column>
 
     </el-table>
@@ -64,7 +61,7 @@
 <script>
 import { requireStudentHomework, reqUploadHomework } from '@/api/api';
 import { ref, onMounted } from 'vue';
-import { ElMessage, ElNotification,ElMessageBox } from 'element-plus';
+import { ElMessage, ElNotification, ElMessageBox } from 'element-plus';
 import { useRouter } from 'vue-router';
 
 
@@ -201,16 +198,16 @@ const homeworkList = {
       // console.log(selectedHomeworkNo.value)
       // dialogVisible.value = true;
       //TODO: 互评传输作业数据并跳转
-      if (row.checkbystuStatus == true){
+      if (row.checkbystuStatus == true) {
         router.push('/homework/hwCheckBystuInfo');
-      }else{
+      } else {
         // 使用ElMessageBox来弹出提醒
-    ElMessageBox.alert('这次作业不需互评', '提醒', {
-      confirmButtonText: '确定',
-      type: 'warning',
-    });
+        ElMessageBox.alert('这次作业不需互评', '提醒', {
+          confirmButtonText: '确定',
+          type: 'warning',
+        });
       }
-      
+
     };
 
     onMounted(async () => {
@@ -228,7 +225,7 @@ const homeworkList = {
             number: homework.studentNumbers,
             grade: homework.grade,
             ifsubmit: homework.status,
-            homeworkPath:homework.homeworkPath,
+            homeworkPath: homework.homeworkPath,
           }));
         } else {
           ElNotification({

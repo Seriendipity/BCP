@@ -1,23 +1,23 @@
 <template>
-    <div class="bg-end">
-        <el-result  title="互评完成" icon="success">
+  <div class="bg-end">
+    <el-result title="互评完成" icon="success">
 
-      </el-result>
-      
-      <el-button @click="goBack" type="primary" style="float: right; margin-right: 20px;">返回作业列表</el-button>
+    </el-result>
 
-    </div>
+    <el-button @click="goBack" type="primary" style="float: right; margin-right: 20px;">返回作业列表</el-button>
+
+  </div>
 </template>
 
 <script setup>
- import { useRouter } from 'vue-router'
- const props = defineProps(['score'])
-  const score = props.score
-  console.log(score)
-  const router = useRouter()
+import { useRouter } from 'vue-router'
+const props = defineProps(['score'])
+const score = props.score
+console.log(score)
+const router = useRouter()
 const goBack = () => {
-    router.push('/homework/homeworkList')
-  }
+  router.push({ name: 'homeworkList' })
+}
 </script>
 
 <style>
