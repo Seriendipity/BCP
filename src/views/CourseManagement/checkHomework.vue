@@ -4,11 +4,11 @@
       <div class="homework-scrollable">
           <div  v-for="homework in homeworks" :key="homework.homeworkNo">
             <el-row :gutter="20">
-          <el-col :span="24" >
-                <h2 class="homework-nameid">{{ homework.homeworkstuName }} {{ homework.homeworkstuID }}</h2>
-                <p class="homework-time" style="margin-top: 10px;">{{ homework.homeworkUpdateTime }} 提交</p>
-              <el-tag :type="homework.homeworkCheckState === '已批改' ? 'success' : 'warning'" style="margin-top: 5px;float: right;">
-                {{ homework.homeworkCheckState }}:{{ homework.homeworkGrade }}
+          <el-col :span="24"@click="updateSrc(homework.studentNo)" >
+                <h2 class="homework-nameid">{{ homework.studentName }} {{ homework.studentNo }}</h2>
+                <p class="homework-time" style="margin-top: 10px;">{{ homework.submitTime }} 提交</p>
+              <el-tag :type="homework.status === true ? 'success' : 'warning'" style="margin-top: 5px;float: right;">
+                {{ homework.status === true ? '已批改' : '未批改' }}:{{ homework.grade }}
               </el-tag>
               <el-divider style="margin-top: 40px;"></el-divider>
           </el-col>
@@ -23,21 +23,18 @@
       
       <div class="bg-reply">
         <h1 class="word-reply">评语</h1>
-        <textarea class="reply-input " v-model="question" />
-      <div>
-        <el-button type="primary" style="margin-top: 5px; float: right;">保存</el-button>
-      </div>
+        <textarea class="reply-input " v-model="currentreply" />
       </div>
       <div style="margin-top: 60px;"></div>
       <!-- 分隔 -->
       <div class="bg-inputgrade">
         <h1 class="word-reply">打分</h1>
-        <textarea class="grade-input " v-model="question" />
+        <textarea class="grade-input " v-model="currentgrade" />
+      </div>
+      <el-button type="primary" style="margin-top: 5px; float: right;" @click="submit()">提交</el-button>
       <div>
-        <el-button type="primary" style="margin-top: 5px; float: right;">打分</el-button>
-      </div>
-      </div>
-      
+      <el-button type="primary" style="margin-top: 5px; float: right;" @click="goBackToSendHomework()">返回</el-button>
+    </div>
     </el-aside>
   </el-container>
 </template>
@@ -45,15 +42,17 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 // import { useRouter } from 'vue-router';
-import { reqSingleHomework,  requireTeacherSendHomework } from '@/api/api';
-import { ElNotification } from 'element-plus';
+import { reqSendHomeworkbystu,addGrade } from '@/api/api';
+import { ElNotification,ElMessage } from 'element-plus';
+import { useRouter } from 'vue-router';
 
 // const courses = ref([]);
 const userInfo = ref([]);
 // const currenthomework = ref({});
 const homeworks = ref([]); //显示的作业
-
-
+const currentreply = ref(''); // 存储当前的评语
+const currentgrade = ref(''); // 存储当前的成绩
+const $router = useRouter()
 
 const props = defineProps({
   previewSrc: {
@@ -63,70 +62,70 @@ const props = defineProps({
   }
 });
 
-const homeworkSrc = ref(props.previewSrc);
-
+let homeworkSrc = ref(props.previewSrc);
+let selectHomework = ref();
 // 模拟数据
 const mockDataHomework = ref([
   {
     homeworkNo: 1,
-    homeworkstuName: '姜天亦',
-    homeworkstuID: '22301149',
+    c: '姜天亦',
+    studentNo: '22301149',
     homeworkGrade: '99',
     homeworkUpdateTime: '2024-10-28 14:00',
     homeworkCheckState: '已批改',
   },
   {
     homeworkNo: 2,
-    homeworkstuName: '马海博',
-    homeworkstuID: '22301157',
+    studentName: '马海博',
+    studentNo: '22301157',
     homeworkGrade: '98',
     homeworkUpdateTime: '2024-10-28 14:00',
     homeworkCheckState: '已批改',
   },
   {
     homeworkNo: 3,
-    homeworkstuName: '张学琛',
-    homeworkstuID: '22301168',
+    studentName: '张学琛',
+    studentNo: '22301168',
     homeworkGrade: '100',
     homeworkUpdateTime: '2024-10-28 14:00',
     homeworkCheckState: '已批改',
   },
   {
     homeworkNo: 4,
-    homeworkstuName: '郑宇煊',
-    homeworkstuID: '22301170',
+    studentName: '郑宇煊',
+    studentNo: '22301170',
     homeworkGrade: ' 0',
     homeworkUpdateTime: '2024-10-28 14:00',
     homeworkCheckState: '未批改',
   },
   {
     homeworkNo: 5,
-    homeworkstuName: '刘艺凡',
-    homeworkstuID: '22301153',
+    studentName: '刘艺凡',
+    studentNo: '22301153',
     homeworkGrade: '0 ',
     homeworkUpdateTime: '2024-10-28 14:00',
     homeworkCheckState: '未批改',
   },
   {
     homeworkNo: 6,
-    homeworkstuName: '张胤麟',
-    homeworkstuID: '22301153',
+    studentName: '张胤麟',
+    studentNo: '22301153',
     homeworkGrade: ' 0',
     homeworkUpdateTime: '2024-10-28 14:00',
     homeworkCheckState: '未批改',
   },
   {
     homeworkNo: 7,
-    homeworkstuName: '赵纾熳',
-    homeworkstuID: '22301153',
+    studentName: '赵纾熳',
+    studentNo: '22301153',
     homeworkGrade: '0 ',
     homeworkUpdateTime: '2024-10-28 14:00',
     homeworkCheckState: '未批改',
   },
   {
     homeworkNo: 8,
-    homeworkstuName: '马仕承',
-    homeworkstuID: '22301153',
+    studentName: '马仕承',
+    studentNo: '22301153',
     homeworkGrade: '95',
     homeworkUpdateTime: '2024-10-28 14:00',
     homeworkCheckState: '已批改',
@@ -141,7 +140,9 @@ const mockDataUser = {
   avatarUrl: 'src/assets/images/example.jpg'
 };
 
-
+const goBackToSendHomework = () =>{
+  $router.push({ name: 'sendHomework' })
+}
 // const fetchhomeworks = async () => {
 //   try {
 //     const courseId = localStorage.getItem('courseId')
@@ -157,16 +158,52 @@ const mockDataUser = {
 //   }
 // };
 
+const submit = async () => {
+  const formData = new FormData()
+  const homeworkNo = localStorage.getItem('homeworkNO')
+  formData.append('grade', currentgrade.value)
+  formData.append('comment', currentreply.value)
+  formData.append('homeworkNo', homeworkNo)
+  console.log(selectHomework[0])
+  formData.append('studentNo', selectHomework[0].studentNo)
+  if (currentgrade.value === '')
+    ElMessage.warning('请填写一个成绩');
+  else {
+    try{
+      const response = await addGrade(formData)
+      if(response.code===0){
+        ElMessage.success('提交成功')
+
+      }
+    }catch(error){
+      console.log(error)
+      ElNotification({
+      type: 'error',
+      message: '提交失败',
+    });
+    }
+    currentgrade.value = '';
+    currentreply.value = '';
+    
+
+  }
+}
+const updateSrc=  (studentNo) =>{
+  console.log('点击成功')
+  selectHomework =  homeworks.value.filter(item => item.studentNo === studentNo)
+  homeworkSrc.value =selectHomework[0].homeworkPath.split('/').pop();
+  console.log(selectHomework[0].homeworkPath.split().pop())
+} 
 
 // 获取用户信息和课程列表
 onMounted(async () => {
   try {
-    const homeworkResponse = await requireTeacherSendHomework();
-    homeworks.value = homeworkResponse.data;
-    localStorage.setItem('homeworkId');
-    const storedHomeworkId = localStorage.getItem('homeworkId');
-    const response = await reqSingleHomework(storedHomeworkId); // 获取后端日历URL
-    homeworkSrc.value = response.data.Homework || homeworkSrc.value;
+    const homeworkNo = localStorage.getItem('homeworkNO')
+    const homeworkResponse = await reqSendHomeworkbystu(homeworkNo);
+    console.log(homeworkResponse)
+    if(homeworkResponse.code===0){
+      homeworks.value = Object.values(homeworkResponse.data);
+    }
   } catch (error) {
     // console.log(error)
     homeworks.value = mockDataHomework.value;
@@ -174,7 +211,7 @@ onMounted(async () => {
     userInfo.value = mockDataUser;
     ElNotification({
       type: 'error',
-      message: '获取信息失败',
+      message: '获取批改作业列表失败',
     });
   }
 });

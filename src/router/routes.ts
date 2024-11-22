@@ -276,7 +276,7 @@ export const constantRoute = [
         name: 'checkHomework',
         meta: {
           title: '批改作业',
-          hidden: false,
+          hidden: true,
           icon: 'Reading',
         }
       },

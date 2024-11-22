@@ -29,9 +29,9 @@
         </template>
       </el-table-column>
       <el-table-column label="批改" v-slot="scope" width="100px">
-        <el-button size="mini" :type="scope.row.judge === '已批改' ? 'success' : 'danger'"
-          @click="handleDelete(scope.$index, scope.row)">
-          {{ scope.row.judge === 'true' ? '已批改' : '未批改' }}
+        <el-button size="mini" :type="scope.row.judge === true ? 'success' : 'danger'"
+          @click="handleReview(scope.$index, scope.row)">
+          {{ scope.row.judge === true ? '已批改' : '未批改' }}
         </el-button>
       </el-table-column>
       <el-table-column label="基本信息" v-slot="scope" width="100px">
@@ -116,6 +116,11 @@ const sendHomework = {
       localStorage.setItem('homeworkNO', row.homeworkNO)
       $router.push({ name: 'getHomeworkFinalGrade' });
     };
+    const handleReview = (index, row) => {
+      // 跳转到成绩页面，传递成绩的详细信息
+      localStorage.setItem('homeworkNO', row.homeworkNO)
+      $router.push({ name: 'checkHomework' });
+    };
     const handleFile = (index, row) => {
       // 跳转到附件预览页面
       localStorage.setItem('homeworkNO', row.homeworkNO)
@@ -168,6 +173,7 @@ const sendHomework = {
       handleSend,
       newHomework,
       handleCheckbystu,
+      handleReview,
     };
   }
 };

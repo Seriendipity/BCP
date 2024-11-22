@@ -17,13 +17,6 @@
         <textarea class="grade-input " v-model="currentgrade" />
       </div>
       <br><br><br><br><br>
-
-      <div class="navigation">
-        <el-button style="margin-left: 20px;" v-for="(homework, index) in homeworks" :key="index"
-          :type="homework.homeworkSrc !== null ? 'success' : 'info'" @click="goTohomework(index)">
-          题目 {{ index + 1 }}
-        </el-button>
-      </div>
       <el-button type="primary" style="margin-top: 5px; float: right;" @click="submit()">提交</el-button>
     </el-aside>
   </el-container>
@@ -43,7 +36,7 @@ let $router = useRouter()
 const currenthomework = ref({});//显示的作业
 const homeworks = ref([]);
 const currentreply = ref(''); // 存储当前的评语
-const currentgrade = ref(''); // 存储当前的答案
+const currentgrade = ref(''); // 存储当前的成绩
 //const grades = ref([]); // 存储用户的答案（{ homework_index, grade } 格式）
 let currentIndex = ref(0) // 当前题目索引
 const mockHomeworks = ref([
@@ -104,7 +97,7 @@ const submit = async () => {
   const formData = new FormData()
   const homeworkNo = localStorage.getItem('homeworkNO')
   formData.append('grade', currentgrade.value)
-  formData.append('comment', currentreply)
+  formData.append('comment', currentreply.value)
   formData.append('homeworkNo', homeworkNo)
   formData.append('revieweeNo', homeworks.value[currentIndex.value].reviewee)
   if (currentgrade.value === '')
