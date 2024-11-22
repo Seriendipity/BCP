@@ -9,18 +9,12 @@
       <div class="bg-reply">
         <h1 class="word-reply">评语</h1>
         <textarea class="reply-input " v-model="currentreply" />
-        <div>
-          <el-button type="primary" style="margin-top: 5px; float: right;" @click="submitReply">保存</el-button>
-        </div>
       </div>
       <div style="margin-top: 60px;"></div>
       <!-- 分隔 -->
       <div class="bg-inputgrade">
         <h1 class="word-reply">打分</h1>
         <textarea class="grade-input " v-model="currentgrade" />
-        <div>
-          <el-button type="primary" style="margin-top: 5px; float: right;" @click="submitGrades">打分</el-button>
-        </div>
       </div>
       <br><br><br><br><br>
 
@@ -97,8 +91,7 @@ if (homeworks.value.length > 0) {
 // 加载当前题目
 const loadHomework = () => {
   //TODO //应该是这个地方的问题，预览显示不出来
-
-  currenthomework.value = homeworks.value[currentIndex.value].homeworkSrc;
+  currenthomework.value = homeworks.value[currentIndex.value].homeworkPath;
 }
 
 // 跳转到指定题目
@@ -117,24 +110,16 @@ const goTohomework = (index) => {
 //   loadHomework()
 // }
 
-// 提交本题答案
-const submitGrades = async () => {
-  homeworks.value[currentIndex.value].grade = currentgrade.value;
-  //TODO //检测grade是否为空,明显现在还不行，原因未知
-  if (homeworks.value[currentIndex.value].grade === null)
-    ElMessage.warning('请填写一个成绩');
-  if (homeworks.value.grade(a => a.grade === null)) {
-    return
-  } else {
-    $router.push({ name: 'homeworkCheckbystuEND' })
-  }
-}
+
 
 const submit = async () => {
-  homeworks.value[currentIndex.value].grade = currentgrade.value;
-  homeworks.value[currentIndex.value].reply = currentreply.value;
-  //TODO //检测grade是否为空,明显现在还不行，原因未知
-  if (homeworks.value[currentIndex.value].grade === null)
+  const formData = new FormData()
+  const homeworkNo = localStorage.getItem('homeworkNO')
+  formData.append('grade', currentgrade.value)
+  formData.append('comment', currentreply)
+  formData.append('homeworkNo', homeworkNo)
+  formData.append('revieweeNo', homeworks.value[currentIndex.value].reviewee)
+  if (currentgrade.value === null)
     ElMessage.warning('请填写一个成绩');
   else {
     currentgrade.value = '';
@@ -148,18 +133,18 @@ const submit = async () => {
 
   }
 }
-// 提交本题评语
-const submitReply = async () => {
-  homeworks.value[currentIndex.value].reply = currentreply.value;
-}
 
 
 onMounted(async () => {
   try {
-    const homeworkbystuResponse = await reqSendHomeworkbystu();
-    homeworks.value = homeworkbystuResponse.data;
-    // homeworkSrc.value = response.data.Homework || homeworkSrc.value;
+    const homeworkNo = localStorage.getItem('HomeworkNO')
+    const homeworkbystuResponse = await reqSendHomeworkbystu(homeworkNo);
+    if (homeworkbystuResponse.code === 0) {
+      homeworks.value = homeworkbystuResponse.data;
+      loadHomework()
+    }
   } catch (error) {
+    console.log(error)
     homeworks.value = mockHomeworks.value;
     ElNotification({
       type: 'error',

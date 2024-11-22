@@ -50,9 +50,7 @@ enum API {
   ALL_LIKE_NOTE = "/favorite/selectByStarNoteFromOthers",
   ALL_LIKE_DISCUSSION = "/favorite/selectByStarDiscussionFromOthers",
   //TODO
-  GET_MYHOMEWORK_SRC = "1122334",
-  //TODO
-  GET_HOMEWORKBYSTU = "20000628",
+  GET_HOMEWORKBYSTU = "/peerAssignment/studentPeerAssignment",
   DELETE_STAR = "/favorite/deleteFavorite",
   //TODO 
   UPDATE_HOMEWORKCHECK = "/homework/assignHomework",
@@ -110,10 +108,8 @@ export const reqLikeNote = () => request.get<any, any>(API.ALL_LIKE_NOTE)
 //获得收藏的帖子
 export const reqLikeDiscussion = () => request.get<any, any>(API.ALL_LIKE_DISCUSSION)
 // export const awardInfo = () => request.get<any, any>(API.AWARD_GET);
-//获得作业的src //TODO
-export const reqHomework = () => request.get<any, any>(API.GET_MYHOMEWORK_SRC)
 //获得互评作业的内容 //TODO
-export const reqSendHomeworkbystu = () => request.get<any, any>(API.GET_HOMEWORKBYSTU)
+export const reqSendHomeworkbystu = (homeworkNo: any) => request.get<any, any>(API.GET_HOMEWORKBYSTU + `?homeworkNo=${homeworkNo}`)
 
 
 

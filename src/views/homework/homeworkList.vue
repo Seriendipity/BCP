@@ -193,12 +193,8 @@ const homeworkList = {
     };
 
     const checkBystu = (index, row) => {
-      console.log(row.homeworkNO)
-      // selectedHomeworkNo.value = row.homeworkNO
-      // console.log(selectedHomeworkNo.value)
-      // dialogVisible.value = true;
-      //TODO: 互评传输作业数据并跳转
-      if (row.checkbystuStatus == true) {
+      if (row.isPeerReview === true) {
+        localStorage.setItem('homeworkNO', row.homeworkNO)
         router.push('/homework/hwCheckBystuInfo');
       } else {
         // 使用ElMessageBox来弹出提醒
@@ -226,6 +222,7 @@ const homeworkList = {
             grade: homework.grade,
             ifsubmit: homework.status,
             homeworkPath: homework.homeworkPath,
+            isPeerReview: homework.isPeerReview,
           }));
         } else {
           ElNotification({
