@@ -192,15 +192,15 @@ DiscussionController {
      *  新增帖子
      */
     @PostMapping(value = "/insert")
-    public Result insertDiscussion(@RequestBody Map<String,String> requestData,
+    public Result insertDiscussion(@RequestParam String cid,
+                                   @RequestParam String information,
+                                   @RequestParam String mentionedUser,
+                                   @RequestParam String imgUrl,
+                                   @RequestParam String tag,
                                    HttpServletRequest request){
-        String cid = requestData.get("cid");
         String StudentNo = request.getAttribute("username").toString();
-        String DiscussionInfo = requestData.get("information");
+        String DiscussionInfo =information;
         System.out.println(DiscussionInfo);
-        String mentionedUser = requestData.get("mentionedUser");
-        String imgUrl = requestData.get("imgUrl");
-        String tag = requestData.get("tag");
         LocalDateTime postingTime  = LocalDateTime.now();
         int size = discussionService.selectAllDiscussion().size()+1;
         String DiscussionId = "D"+size;

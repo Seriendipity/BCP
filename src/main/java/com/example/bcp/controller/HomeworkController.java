@@ -44,19 +44,20 @@ public class HomeworkController {
     PeerReviewAssignmentService peerReviewAssignmentService;
 
     @SuppressWarnings({"checkstyle:LineLength", "checkstyle:Indentation"})
-    @PostMapping("/assignHomework")
-    public Result assignHomework(@RequestBody Map<String, Object> requestData) {
-        String homeworkNo = requestData.get("HomeworkNo").toString();
-        String startTime1 = requestData.get("StartTime").toString();
-        String endTime1 = requestData.get("EndTime").toString();
+    @PostMapping(value = "/assignHomework",consumes = "multipart/form-data")
+    public Result assignHomework(@RequestParam String HomeworkNo,
+                                 @RequestParam String StartTime,
+                                 @RequestParam String EndTime) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        String startTime1 = getLocalTime(StartTime);
+        String endTime1 = getLocalTime(EndTime);
         LocalDateTime startTime = LocalDateTime.parse(startTime1, formatter);
         LocalDateTime endTime = LocalDateTime.parse(endTime1, formatter);
 
-        homeworkService.updateIsPeerReview(true, homeworkNo);
+        homeworkService.updateIsPeerReview(true, HomeworkNo);
 
 
-        List<StudentHomework> studentHomeworks = studentHomeworkService.selectByHomeworkNo(homeworkNo);
+        List<StudentHomework> studentHomeworks = studentHomeworkService.selectByHomeworkNo(HomeworkNo);
         int studentCount = studentHomeworks.size();
 
         List<StudentHomework> allAssignments = new ArrayList<>();
@@ -75,12 +76,12 @@ public class HomeworkController {
             String assignedStudentNo = assignedHomework.getStudentNo();
             System.out.println("assignedStudentNo" + assignedStudentNo + "i:" + i);
 
-            if (i == 0 && peerReviewAssignmentService.selectByHomeworkNo(homeworkNo) != null) {
-                peerReviewAssignmentService.deleteByHomework(homeworkNo);
-                peerReviewAssignmentService.insertPeerReviewAssignment(assignedStudentNo, currentStudentNo, homeworkNo, startTime, endTime);
+            if (i == 0 && peerReviewAssignmentService.selectByHomeworkNo(HomeworkNo) != null) {
+                peerReviewAssignmentService.deleteByHomework(HomeworkNo);
+                peerReviewAssignmentService.insertPeerReviewAssignment(assignedStudentNo, currentStudentNo, HomeworkNo, startTime, endTime);
                 System.out.println("第一份：被评作业者：" + assignedStudentNo + "评审员：" + currentStudentNo);
             } else {
-                peerReviewAssignmentService.insertPeerReviewAssignment(assignedStudentNo, currentStudentNo, homeworkNo, startTime, endTime);
+                peerReviewAssignmentService.insertPeerReviewAssignment(assignedStudentNo, currentStudentNo, HomeworkNo, startTime, endTime);
             }
             //插入每个人的第二份互评作业
             StudentHomework nextHomework;
@@ -92,7 +93,7 @@ public class HomeworkController {
                 nextHomework = assignmentResults.get(studentCount - 1);
                 nextStudenNo = nextHomework.getStudentNo();
             }
-            peerReviewAssignmentService.insertPeerReviewAssignment(nextStudenNo, currentStudentNo, homeworkNo, startTime, endTime);
+            peerReviewAssignmentService.insertPeerReviewAssignment(nextStudenNo, currentStudentNo, HomeworkNo, startTime, endTime);
             System.out.println("第二份：" + "被评作业者：" + nextStudenNo + "评审员：" + currentStudentNo + "I:" + i);
         }
 
@@ -233,7 +234,7 @@ public class HomeworkController {
                 hw.put("homeworkStartTime", homework.getStartTime().format(formatter));
                 hw.put("homeworkEndTime", homework.getEndTime().format(formatter));
                 hw.put("homeworkInfo",homework.getHomeworkInfo());
-
+                hw.put("isPeerReview",homework.getPeerReview());
                 int studentNumbers = studentCourseService.selectByCid(cid).size();
                 int submitNumbers = studentHomeworkService.selectByHomeworkNo(homework.getHomeworkNo()).size();
                 hw.put("submitNumbers", submitNumbers);
@@ -268,7 +269,7 @@ public class HomeworkController {
                 hw.put("homeworkDescription", homework.getHomeworkDescription());
                 hw.put("homeworkStartTime", homework.getStartTime().format(formatter));
                 hw.put("homeworkEndTime", homework.getEndTime().format(formatter));
-
+                hw.put("isPeerReview",homework.getPeerReview());
                 int studentNumbers = studentCourseService.selectByCid(cid).size();
                 int submitNumbers = studentHomeworkService.selectByHomeworkNo(homework.getHomeworkNo()).size();
                 hw.put("submitNumbers", submitNumbers);
@@ -283,11 +284,20 @@ public class HomeworkController {
                     hw.put("postStatus", true);
                 }
 
-                if (correctingNumber == submitNumbers && correctingNumber != 0) {
-                    hw.put("correctStatus", true);
-                } else {
-                    hw.put("correctStatus", false);
+                if(homework.getPeerReview()){
+                    if (correctingNumber == Math.ceil(submitNumbers*0.15) && correctingNumber != 0) {
+                        hw.put("correctStatus", true);
+                    } else {
+                        hw.put("correctStatus", false);
+                    }
+                }else{
+                    if (correctingNumber == submitNumbers && correctingNumber != 0) {
+                        hw.put("correctStatus", true);
+                    } else {
+                        hw.put("correctStatus", false);
+                    }
                 }
+
                 responseData.put("homework" + index, hw);
                 index++;
             }

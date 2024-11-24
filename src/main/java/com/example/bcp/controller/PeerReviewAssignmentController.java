@@ -32,16 +32,17 @@ public class PeerReviewAssignmentController {
     private HomeworkService homeworkService;
 
     //同伴打分以及写评论
-    @PostMapping("/updatePeerGrade")
-    public Result updatePeerGrade(@RequestBody Map<String, Object> requestData, HttpServletRequest request) {
+    @PostMapping(value = "/updatePeerGrade",consumes = "multipart/form-data")
+    public Result updatePeerGrade(@RequestParam String grade,
+                                  @RequestParam String comment,
+                                  @RequestParam String homeworkNo,
+                                  @RequestParam String revieweeNo,
+                                  HttpServletRequest request) {
         String userNo = request.getAttribute("username").toString();
-        int grade = Integer.parseInt(requestData.get("grade").toString());
-        String comment = (String) requestData.get("comment");
-        String homeworkNo = (String) requestData.get("homeworkNo");
-        String revieweeNo = (String) requestData.get("revieweeNo");
+        int grades = Integer.parseInt(grade);
 
         try {
-            peerReviewAssignmentService.updateGradeAndComment(grade, comment, revieweeNo, userNo, homeworkNo);
+            peerReviewAssignmentService.updateGradeAndComment(grades, comment, revieweeNo, userNo, homeworkNo);
             peerReviewAssignmentService.updateReviewStatus(revieweeNo, userNo, homeworkNo, true);
             System.out.println("success");
             return Result.success("同伴打分成功");
@@ -52,13 +53,14 @@ public class PeerReviewAssignmentController {
 
     //教师打分（与studentHomework中一致？
     @PostMapping("/updateGrade")
-    public Result updateGrade(@RequestBody Map<String, Object> requestData, HttpServletRequest request) {
-        int grade = Integer.parseInt(requestData.get("grade").toString());
-        String comment = (String) requestData.get("comment");
-        String studentNo = (String) requestData.get("studentNo");
-        String homeworkNo = (String) requestData.get("homeworkNo");
+    public Result updateGrade(@RequestParam String comment,
+                              @RequestParam String studentNo,
+                              @RequestParam String grade,
+                              @RequestParam String homeworkNo,
+                              HttpServletRequest request) {
+        int grades = Integer.parseInt(grade);
         try {
-            studentHomeworkService.updateStudentHomeworkSubmitGrade(grade, studentNo, homeworkNo, comment);
+            studentHomeworkService.updateStudentHomeworkSubmitGrade(grades, studentNo, homeworkNo, comment);
             System.out.println("success");
             return Result.success("教师成功");
         } catch (Exception e) {
@@ -101,7 +103,7 @@ public class PeerReviewAssignmentController {
                         return Result.error("找不到作业");
                     }
                     List<StudentHomework> studentHomeworks;
-                    if(homework.getPeerReView() == true) {
+                    if(homework.getPeerReview()) {
                         studentHomeworks = studentHomeworkService.selectByIsTeacherAndHomeworkNo(homeworkNo);
                     }else{
                         studentHomeworks = studentHomeworkService.selectByHomeworkNo(homeworkNo);

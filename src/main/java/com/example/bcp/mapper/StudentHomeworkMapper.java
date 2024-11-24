@@ -24,7 +24,7 @@ public interface StudentHomeworkMapper {
     @Select("Select * from StudentHomework Where HomeworkNo = #{HomeworkNo}")
     List<StudentHomework> selectByHomeworkNo(String HomeworkNo);
 
-    @Select("Select * from StudentHomework Where HomeworkNo = #{HomeworkNo} and SubmitGrade is not null")
+    @Select("Select * from StudentHomework Where HomeworkNo = #{HomeworkNo} and SubmitGrade is not null and isTeacherGrade = 1")
     List<StudentHomework> selectCorrectingHomework(String HomeworkNo);
 
     @Select("Select * from StudentHomework Where StudentNo = #{StudentNo} and HomeworkNo = #{HomeworkNo}")

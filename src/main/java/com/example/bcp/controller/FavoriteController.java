@@ -260,15 +260,16 @@ public class FavoriteController {
     }
 
     @PostMapping("/insertDiscussionFavoriteOther")
-    public Result insertDiscussionFavoriteOther(@RequestBody Map<String, String> requestData, HttpServletRequest request) {
+    public Result insertDiscussionFavoriteOther(@RequestParam String favoriteInformationNo,
+                                                @RequestParam String favoriteTitle,
+                                                HttpServletRequest request) {
         String studentNo = request.getAttribute("username").toString();
-        String favoriteInformationNo = requestData.get("favoriteInformationNo");
+
         System.out.println(favoriteInformationNo);
         String FromStudentNo = discussionService.selectByDiscussionId(favoriteInformationNo).getStudentNo();
         System.out.println(FromStudentNo);
         String favoriteNo = "F" + FromStudentNo.substring(1);
         System.out.println(favoriteNo);
-        String favoriteTitle = requestData.get("favoriteTitle");
 
         try {
             if (favoriteService.selectByStudentNoAndFavoriteNoAndFavoriteInformationNo(studentNo, favoriteNo, favoriteInformationNo) != null) {
