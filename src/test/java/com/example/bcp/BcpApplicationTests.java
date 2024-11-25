@@ -55,90 +55,113 @@ class BcpApplicationTests {
     @Test
     void TestStudent(){
 //        List<Student> students = studentService.selectAllStudent();
-        List<Student> students = new ArrayList<>();
-        studentService.updateStudentPassword("aaaaaaa" , "S001");
-        students.add(studentService.selectByStudentNo("S001"));
-        for(Student s : students){
-            System.out.print(s.getStudentNo() + " ");
-            System.out.print(s.getStudentName()+" ");
-            System.out.print(s.getTotalCredit()+" ");
-            System.out.print(s.getPassword()+" ");
-            System.out.println();
-        }
+//        List<Student> students = new ArrayList<>();
+        studentService.updateStudentPassword("password123" , "S001");
+        studentService.updateStudentPicturePath("http://localhost:8081/file/download/test.jpg","S001");
+        studentService.selectByStudentNo("S001");
+//        students.add(studentService.selectByStudentNo("S001"));
+//        for(Student s : students){
+//            System.out.print(s.getStudentNo() + " ");
+//            System.out.print(s.getStudentName()+" ");
+//            System.out.print(s.getTotalCredit()+" ");
+//            System.out.print(s.getPassword()+" ");
+//            System.out.println();
+//        }
 
     }
 
     @Test
     void TestTeacher(){
 //        List<Teacher> teachers = teacherService.selectAllTeacher();
-        List<Teacher> teachers = new ArrayList<>();
-        teacherService.updateTeacherTitle("教授","T001");
-        teachers.add(teacherService.selectByTeacherNo("T001"));
-        for(Teacher t : teachers){
-            System.out.print(t.getTeacherNo()+" ");
-            System.out.print(t.getTeacherName()+" ");
-            System.out.print(t.getTeacherTitle()+" ");
-            System.out.print(t.getTeacherBirthday()+" ");
-            System.out.print(t.getPassword()+" ");
-            System.out.println();
-        }
+//        List<Teacher> teachers = new ArrayList<>();
+//        teacherService.updateTeacherTitle("教授","T001");
+//        teachers.add(teacherService.selectByTeacherNo("T001"));
+//        for(Teacher t : teachers){
+//            System.out.print(t.getTeacherNo()+" ");
+//            System.out.print(t.getTeacherName()+" ");
+//            System.out.print(t.getTeacherTitle()+" ");
+//            System.out.print(t.getTeacherBirthday()+" ");
+//            System.out.print(t.getPassword()+" ");
+//            System.out.println();
+//        }
+        teacherService.selectByTeacherNo("T001");
+        teacherService.updateTeacherPassword("password123","T001");
+        teacherService.updateTeacherPicturePath("/head_portait/T001.jpg","T001");
     }
 
     @Test
     void TestCourse(){
        // List<Course> courses = courseService.selectAllCourse();
-        List<Course> courses = new ArrayList<>();
-        courses.add(courseService.selectByCourseNo("CS101"));
-        for(Course c :courses){
-            System.out.print(c.getCourseNo() + " ");
-            System.out.print(c.getCourseName()+ " ");
-            System.out.print(c.getCourseCredit()+ " ");
-            System.out.println();
-        }
+//        List<Course> courses = new ArrayList<>();
+//        courses.add(courseService.selectByCourseNo("CS101"));
+//        for(Course c :courses){
+//            System.out.print(c.getCourseNo() + " ");
+//            System.out.print(c.getCourseName()+ " ");
+//            System.out.print(c.getCourseCredit()+ " ");
+//            System.out.println();
+//        }
+        courseService.selectByCourseNo("CS101");
     }
 
     @Test
     void TestTeaching(){
 //     List<Teaching>  teachings = teachingService.selectAllTeaching();
        // List<Teaching> teachings = teachingService.selectByTeacherNoAndCourseNo("T001","CS101");
-       List<Teaching> teachings = new ArrayList<>();
-       teachings.add(teachingService.selectByCid("T001_CS101"));
-        for(Teaching t : teachings){
-            System.out.print(t.getCourseNo()+" ");
-            System.out.print(t.getTeacherNo()+" ");
-            System.out.print(t.getSyllabus()+" ");
-            System.out.print(t.getCid()+" ");
-            System.out.print(t.getTeachingCalendar()+" ");
-            System.out.print(t.getLanguage()+" ");
-            System.out.print(t.getSemester()+" ");
-            System.out.println();
-        }
+//       List<Teaching> teachings = new ArrayList<>();
+//       teachings.add(teachingService.selectByCid("T001_CS101"));
+//        for(Teaching t : teachings){
+//            System.out.print(t.getCourseNo()+" ");
+//            System.out.print(t.getTeacherNo()+" ");
+//            System.out.print(t.getSyllabus()+" ");
+//            System.out.print(t.getCid()+" ");
+//            System.out.print(t.getTeachingCalendar()+" ");
+//            System.out.print(t.getLanguage()+" ");
+//            System.out.print(t.getSemester()+" ");
+//            System.out.println();
+//        }
+        teachingService.selectByTeacherNo("T001");
+        teachingService.selectByCid("T001_CS101");
     }
 
     @Test
     void TestSC(){
-        List<StudentCourse> studentCourses = studentCourseService.selectByCid("T001_CS101");
-        for(StudentCourse sc: studentCourses){
-            System.out.print(sc.getStudentNo()+" ");
-            System.out.print(sc.getCid()+" ");
-            System.out.print(sc.getGrade()+" ");
-            System.out.println();
-        }
+//        List<StudentCourse> studentCourses = studentCourseService.selectByCid("T001_CS101");
+//        for(StudentCourse sc: studentCourses){
+//            System.out.print(sc.getStudentNo()+" ");
+//            System.out.print(sc.getCid()+" ");
+//            System.out.print(sc.getGrade()+" ");
+//            System.out.println();
+//        }
+        studentCourseService.selectAllStudentNo("T001_CS101");
+        studentCourseService.selectByStudentNo("S001");
+        studentCourseService.selectByCid("T001_CS101");
     }
 
     @Test
     void TestDiscussion(){
 //        discussionService.insertDiscussion("S003","T001_CS101","D003","test", LocalDateTime.now());
 //        discussionService.deleteDiscussion("D003");
-        List<Discussion> discussions = discussionService.selectByMentioned("S001");
-        for(Discussion d : discussions){
-            System.out.print(d.getCid() + " ");
-            System.out.print(d.getDiscussionId()+" ");
-            System.out.print(d.getDiscussionInformation()+" ");
-            System.out.print(d.getDiscussionPostingTime()+" ");
-            System.out.print(d.getStudentNo()+" ");
-            System.out.println();
-        }
+//        List<Discussion> discussions = discussionService.selectByMentioned("S001");
+//        for(Discussion d : discussions){
+//            System.out.print(d.getCid() + " ");
+//            System.out.print(d.getDiscussionId()+" ");
+//            System.out.print(d.getDiscussionInformation()+" ");
+//            System.out.print(d.getDiscussionPostingTime()+" ");
+//            System.out.print(d.getStudentNo()+" ");
+//            System.out.println();
+//        }
+        discussionService.selectAllDiscussion();
+        discussionService.selectByStudentNo("S001");
+        discussionService.selectByDiscussionId("D001");
+        discussionService.selectByCid("T001_CS101");
+        discussionService.selectByCidAndMentioned("S001","T001_CS101");
+        discussionService.insertDiscussion("S001","T001_CS101","D100","test",LocalDateTime.now(),"S002","test","test");
+        discussionService.updateDiscussionInfo("test","D100");
+        discussionService.selectByCidAndTopic("test","T001_CS101");
+        discussionService.selectByCidAndMentioned("S001","T001_CS101");
+        discussionService.selectByMentioned("S001");
+        discussionService.increaseStarTimes("D100");
+        discussionService.deleteDiscussion("D100");
     }
     @Autowired
     private CommentService commentService;
@@ -146,15 +169,24 @@ class BcpApplicationTests {
     void TestComment(){
 //        commentService.deleteComment("C003");
 //        List<Comment> comments = commentService.selectAllComments();
-        List<Comment> comments = commentService.selectByDiscussionId("D001");
-        for(Comment c : comments){
-            System.out.print(c.getCommentId()+" ");
-            System.out.print(c.getDiscussionId()+" ");
-            System.out.print(c.getCommentInformation()+" ");
-            System.out.print(c.getCommentPostingTime()+" ");
-            System.out.print(c.getLikesNumber()+" ");
-            System.out.println();
-        }
+//        List<Comment> comments = commentService.selectByDiscussionId("D001");
+//        for(Comment c : comments){
+//            System.out.print(c.getCommentId()+" ");
+//            System.out.print(c.getDiscussionId()+" ");
+//            System.out.print(c.getCommentInformation()+" ");
+//            System.out.print(c.getCommentPostingTime()+" ");
+//            System.out.print(c.getLikesNumber()+" ");
+//            System.out.println();
+//        }
+        commentService.selectAllComments();
+        commentService.selectByDiscussionId("D001");
+        commentService.selectByCommentId("C001");
+        commentService.insertComment("C100","D001","test",0,LocalDateTime.now(),"test","S002","S001");
+        commentService.commentTimes("D001");
+        commentService.updateCommentLikes(1,"C100");
+        commentService.updateCommentInfo("test","C100");
+        commentService.deleteComment("C100");
+
     }
 
     @Autowired
@@ -164,17 +196,26 @@ class BcpApplicationTests {
 //        List<Note> notes = noteService.selectByStudentNo("S001");
 
 //        noteService.updateNoteAuthority("N001",true);
-        noteService.updateNoteInformation("Test","N001");
-        List<Note> notes = noteService.selectAllNote();
-
-        for(Note n : notes){
-            System.out.print(n.getNoteNo()+" ");
-            System.out.print(n.getNoteInformation()+" ");
-            System.out.print(n.getStudentNo()+" ");
-            System.out.print(n.getNotePath()+" ");
-            System.out.print(n.isAuthority()+" ");
-            System.out.println();
-        }
+//        noteService.updateNoteInformation("Test","N001");
+//        List<Note> notes = noteService.selectAllNote();
+//
+//        for(Note n : notes){
+//            System.out.print(n.getNoteNo()+" ");
+//            System.out.print(n.getNoteInformation()+" ");
+//            System.out.print(n.getStudentNo()+" ");
+//            System.out.print(n.getNotePath()+" ");
+//            System.out.print(n.isAuthority()+" ");
+//            System.out.println();
+//        }
+        noteService.selectAllNote();
+        noteService.selectByStudentNo("S001");
+        noteService.selectByNoteNo("N3");
+        noteService.selectAllPublicNote();
+        noteService.insertNote("N001","S001","Test","test",false);
+        noteService.updateNoteAuthority("N001",true);
+        noteService.updateNotePath("test","N001");
+        noteService.updateNoteInformation("test","N001");
+        noteService.deleteNote("N001");
     }
 
     @Autowired
@@ -195,9 +236,18 @@ class BcpApplicationTests {
 //        }
 //        favoriteService.deleteFavorite("F002","S001","N002");
 
-            String time = "Sat Nov 30 2024 00:00:00 GMT+0800 (中国标准时间)";
-
-
+//            String time = "Sat Nov 30 2024 00:00:00 GMT+0800 (中国标准时间)";
+            favoriteService.selectByStudentOthers("S001");
+            favoriteService.selectByStudentNoAndFavoriteNoAndFavoriteInformationNo("S001","F001","D001");
+            favoriteService.selectByStudentNo("S001");
+            favoriteService.selectByStudentNoAndFavoriteTitle("S001","学习");
+            favoriteService.selectByStudentNoAndFavoriteNo("S001","F001");
+            favoriteService.insertFavoriteOwn("F100","S001","D001","tttt",0,"S001");
+            favoriteService.insertFavoriteOthers("F101","S002","D001","test","S001");
+            favoriteService.updateFavoriteTitle("test","S001","F100","D001");
+            favoriteService.updateFavoriteAuthority("S001","F100","test");
+            favoriteService.deleteFavorite("F100","S001","D001");
+            favoriteService.deleteFavorite("F101","S002","D001");
         }
 
 

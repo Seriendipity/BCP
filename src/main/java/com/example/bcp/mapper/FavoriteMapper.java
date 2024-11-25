@@ -45,8 +45,8 @@ public interface FavoriteMapper {
     @Delete("Delete from Favorite Where FavoriteNo = #{FavoriteNo} and StudentNo = #{StudentNo} and FavoriteInformationNO = #{FavoriteInformationNO}")
     void deleteFavorite(String FavoriteNo, String StudentNo,String FavoriteInformationNO);
 
-    @Update("Update Favorite Set FavoriteTitle = #{FavoriteTitle} Where StudentNo=#{StudentNo} and FavoriteNo =#{FavoriteNo}")
-    void updateFavoriteTitle(String FavoriteTitle,String StudentNo , String FavoriteNo);
+    @Update("Update Favorite Set FavoriteTitle = #{FavoriteTitle} Where StudentNo=#{StudentNo} and FavoriteNo =#{FavoriteNo} and FavoriteInformationNO = #{FavoriteInformationNO}")
+    void  updateFavoriteTitle(String FavoriteTitle,String StudentNo , String FavoriteNo,String FavoriteInformationNO);
 
     @Update("Update Favorite Set Authority = 1-Authority Where FavoriteNo=#{FavoriteNo} and FavoriteInformationNO = #{FavoriteInformationNO} and StudentNo = #{StudentNo}")
     void updateFavoriteAuthority(String StudentNo,String FavoriteNo,String FavoriteInformationNO);

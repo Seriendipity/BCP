@@ -57,8 +57,8 @@ public class FavoriteService {
         favoriteMapper.deleteFavorite(FavoriteNo,StudentNo,FavoriteInformationNO);
     }
 
-    public void updateFavoriteTitle(String FavoriteTitle,String StudentNo , String FavoriteNo){
-        favoriteMapper.updateFavoriteTitle(FavoriteTitle,StudentNo,FavoriteNo);
+    public void updateFavoriteTitle(String FavoriteTitle,String StudentNo , String FavoriteNo,String FavoriteInformationNo){
+        favoriteMapper.updateFavoriteTitle(FavoriteTitle,StudentNo,FavoriteNo,FavoriteInformationNo);
     }
 
     public void updateFavoriteAuthority(String StudentNo,String FavoriteNo,String FavoriteInformationNO){

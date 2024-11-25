@@ -302,8 +302,8 @@ public class FavoriteController {
         String favoriteTitle = requestData.get("favoriteTitle");
         String studentNo = requestData.get("studentNo");
         String favoriteNo = requestData.get("favoriteNo");
-
-        favoriteService.updateFavoriteTitle(favoriteTitle, studentNo, favoriteNo);
+        String favoriteInformationNo = requestData.get("favoriteInfo");
+        favoriteService.updateFavoriteTitle(favoriteTitle, studentNo, favoriteNo,favoriteInformationNo);
         return Result.success();
     }
 
