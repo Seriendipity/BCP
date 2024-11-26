@@ -70,9 +70,9 @@
                   {{
                     posts.starTimes }}次收藏</h1>
               </el-col>
-              <el-col :span="2">
-                <el-button type="primary" style="margin-top: 10px;" @click="deletePostStar()">取消收藏</el-button>
-              </el-col>
+              <!-- <el-col :span="2">
+                <el-button type="primary" style="margin-top: 10px;" @click="deletePostStar(posts)">取消收藏</el-button>
+              </el-col> -->
             </el-row>
           </div>
           <el-scrollbar class="scrollbar-comment">
@@ -209,6 +209,7 @@ export default {
     const deletePostStar = async (post) => {
       // 取消收藏
       const formData = new FormData()
+      console.log( post.favoriteNo)
       formData.append('favoriteNo', post.favoriteNo)
       formData.append('favoriteInformationNo', post.DiscussionId)
       try {

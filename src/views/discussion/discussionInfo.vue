@@ -138,6 +138,7 @@ export default {
     const deleteReply = async (reply) => {
       try {
         const formData = new FormData()
+        console.log(reply.commentId)
         formData.append('commentId', reply.commentId)
         const response = await reqDeleteComment(formData); // 连接后端删除文件
         if (response.code === 0) {
@@ -161,7 +162,7 @@ export default {
     const deleteDiscussion = async (post) => {
       try {
         const formData = new FormData()
-        formData.append('discussionId', post.DiscussionId)
+        formData.append('discussionId', post.discussionId)
         const response = await reqDeleteDiscussion(formData); // 连接后端删除文件
         if (response.code === 0) {
           ElMessage.success("帖子删除成功");

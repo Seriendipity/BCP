@@ -10,7 +10,7 @@
               <h2 class="notification-title">{{ notification.notificationTitle }}</h2>
               <p class="notification-time">发布时间: {{ notification.notificationPostingTime }}</p>
             </div>
-            <el-tag :span="2" :type="notification.notificationState === '已读' ? 'success' : 'warning'">
+            <el-tag v-if="isStudent()" :span="2" :type="notification.notificationState === '已读' ? 'success' : 'warning'">
               {{ notification.notificationState }}
             </el-tag>
             <el-button :span="3" class="view-button" type="primary" size="small"
@@ -141,6 +141,11 @@ export default {
       const userId = localStorage.getItem('userId') || 'T001'
       return userId.startsWith('T')
     }
+
+    const isStudent = () => {
+      const userId = localStorage.getItem('userId') || 'T001'
+      return userId.startsWith('S')
+    }
     return {
       dialogVisible,
       currentNotification,
@@ -149,6 +154,7 @@ export default {
       closeDialog,
       deleteNotification,
       isTeacher,
+      isStudent,
     };
   },
 };
