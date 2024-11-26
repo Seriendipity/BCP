@@ -8,17 +8,23 @@
 
   <el-scrollbar max-height="615px">
     <div class="grid-content bg-white" style="padding-left: 10px;" v-for="post in posts" :key="post.index">
-      <el-row :gutter="20">
+      <el-row :gutter="24">
         <el-col :span="22" @click="goToDiscussionInfo(post.DiscussionId)">
           <h1 class="ziti03" style="margin-top: 10px;"> {{ post.username }} </h1>
           <h1 class="ziti04" style="line-height: 1.5 ;margin-top: 5px;"> {{ post.Information }} </h1>
           <h1 class="ziti04" style="color: gray;margin-top: 15px;">{{ post.PostingTime }} 上传</h1>
           <h1 class="ziti04" style="color: gray;margin-top: 5px;margin-bottom: 15px;">{{ post.commentTimes }}条回复 {{
-            post.starTimes }}次收藏</h1>
+            post.starTimes }}次收藏
+          </h1>
         </el-col>
-        <el-col :span="2">
-          <el-button type="primary" style="margin-top: 10px;" @click="starPost(post)">收藏</el-button>
+        <el-col :span="2" style="display: flex; flex-direction: column; justify-content: flex-start;">
+          <el-button type="primary" style="margin-top: 10px;margin-right: 10px; " @click="starPost(post)">收藏</el-button>
+          <el-button v-if="showDeleteDiscussionButton(post)" type="danger" @click="deleteDiscussion(post)"
+            style="margin-top:90%;margin-right: 10px;">
+            删除
+          </el-button>
         </el-col>
+
       </el-row>
     </div>
   </el-scrollbar>
@@ -28,7 +34,7 @@
 //TODO:添加主题，添加@其他人
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
-import { addLikeDiscussion } from '@/api/api'; // 假设这是更新帖子权限状态的API
+import { addLikeDiscussion, reqDeleteDiscussion } from '@/api/api'; // 假设这是更新帖子权限状态的API
 import { ElMessage, ElNotification } from 'element-plus';
 import { reqDiscussionList } from '@/api/api';
 
@@ -116,6 +122,29 @@ export default {
       // 假设更新操作成功，可以在这里更新界面显示或者状态
     };
 
+    const showDeleteDiscussionButton = (discussion) => {
+      const userName = localStorage.getItem('userName') || '郑宇煊'
+      return userName === discussion.username
+    }
+
+    const deleteDiscussion = async (post) => {
+      try {
+        const formData = new FormData()
+        formData.append('discussionId', post.DiscussionId)
+        const response = await reqDeleteDiscussion(formData); // 连接后端删除文件
+        if (response.code === 0) {
+          ElMessage.success("帖子删除成功");
+          window.location.reload();
+        }
+      } catch (error) {
+        console.error('删除帖子失败', error);
+        ElNotification({
+          message: '删除帖子失败，请重试',
+          type: 'error',
+        });
+      }
+    };
+
 
     onMounted(async () => {
       try {
@@ -149,6 +178,8 @@ export default {
       courseName,
       goToDiscussionInfo,
       newDiscussion,
+      showDeleteDiscussionButton,
+      deleteDiscussion,
     };
   },
 };

@@ -80,14 +80,17 @@
               <div v-for="reply in comments" :key="reply.index">
                 <h1 class="ziti04" style="margin-top: 5px;font-weight: bold;"> {{ reply.commentUsername }} </h1>
                 <h1 class="ziti04" style="line-height: 1.5 ;margin-top: 5px;"> {{ reply.Information }} </h1>
-                <h1 class="ziti04" style="color: gray;margin-top: 5px;margin-bottom: 5px;">{{ reply.PostingTime }}</h1>
+                <h1 class="ziti04" style="color: gray;margin-top: 5px;margin-bottom: 5px;">{{ reply.PostingTime }}
+                  <el-button v-if="showDeleteButton(reply)" type="danger" class="btn" @click="deleteReply(reply)"
+                    style="float: right;">删除</el-button>
+                </h1>
                 <el-divider></el-divider>
               </div>
             </div>
           </el-scrollbar>
           <div class="main_content_footer">
             <div class="input_box" width="100%">
-              <textarea class="chat-input no-border" v-model="newMessage" ></textarea>
+              <textarea class="chat-input no-border" v-model="newMessage"></textarea>
             </div>
             <div class="btn_box">
               <el-button type="primary" class="btn" @click="returnDiscussion(newMessage)"
@@ -105,7 +108,7 @@
 
 <script>
 import { ref, onMounted } from 'vue';
-import { reqUserInfo, addComment, reqOneDiscussion, reqAllComment, deleteStar,requireAvatar } from '@/api/api'; // 假设这是更新帖子权限状态的API
+import { reqUserInfo, addComment, reqOneDiscussion, reqAllComment, deleteStar, requireAvatar, reqDeleteComment } from '@/api/api'; // 假设这是更新帖子权限状态的API
 import { ElNotification, ElMessage } from 'element-plus';
 import { useRouter } from 'vue-router';
 
@@ -173,8 +176,6 @@ export default {
     const newMessage = ref(""); // 输入框的绑定值
 
     const addOneComment = async (val) => {
-      const userName = localStorage.getItem("userName") || "默认用户";
-      const currentTime = new Date()
       const discussionId = localStorage.getItem('discussionId')
       const formData = new FormData()
       formData.append('discussionId', discussionId)
@@ -225,6 +226,28 @@ export default {
       }
     };
 
+    const showDeleteButton = (reply) => {
+      const userName = localStorage.getItem('userName') || '郑宇煊'
+      return userName === reply.commentUsername
+    }
+
+    const deleteReply = async (reply) => {
+      try {
+        const formData = new FormData()
+        formData.append('commentId', reply.commentId)
+        const response = await reqDeleteComment(formData); // 连接后端删除文件
+        if (response.code === 0) {
+          ElMessage.success("评论删除成功");
+          window.location.reload();
+        }
+      } catch (error) {
+        console.error('删除评论失败', error);
+        ElNotification({
+          message: '删除评论失败，请重试',
+          type: 'error',
+        });
+      }
+    }
 
     onMounted(async () => {
       try {
@@ -262,7 +285,8 @@ export default {
       comments,
       returnDiscussion,
       deletePostStar,
-
+      showDeleteButton,
+      deleteReply,
     };
   },
 };

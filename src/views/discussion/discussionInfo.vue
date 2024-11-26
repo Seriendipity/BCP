@@ -1,16 +1,21 @@
 <template>
 
   <div class="grid-content bg-white" style="padding: 10px;">
-    <el-row :gutter="20">
+    <el-row :gutter="24">
       <el-col :span="22">
         <h1 class="ziti03"> {{ posts.username }} </h1>
         <h1 class="ziti04" style="line-height: 1.5 ;margin-top: 5px;"> {{ posts.Information }} </h1>
         <h1 class="ziti04" style="color: gray;margin-top: 15px;">{{ posts.PostingTime }} 上传</h1>
         <h1 class="ziti04" style="color: gray;margin-top: 5px;margin-bottom: 15px;">{{ posts.commentTimes }}条回复 {{
-          posts.starTimes }}次收藏</h1>
+          posts.starTimes }}次收藏
+        </h1>
       </el-col>
-      <el-col :span="2">
+      <el-col :span="2" style="display: flex; flex-direction: column; justify-content: flex-start;">
         <el-button type="primary" style="margin-top: 10px;" @click="starPost()">收藏</el-button>
+        <el-button v-if="showDeleteDiscussionButton(posts)" type="danger" @click="deleteDiscussion(posts)"
+          style="margin-top: 90%;">
+          删除
+        </el-button>
       </el-col>
     </el-row>
   </div>
@@ -19,14 +24,18 @@
       <div v-for="reply in comments" :key="reply.index">
         <h1 class="ziti04" style="margin-top: 5px;font-weight: bold;"> {{ reply.commentUsername }} </h1>
         <h1 class="ziti04" style="line-height: 1.5 ;margin-top: 5px;"> {{ reply.Information }} </h1>
-        <h1 class="ziti04" style="color: gray;margin-top: 5px;margin-bottom: 5px;">{{ reply.PostingTime }}</h1>
+        <h1 class="ziti04" style="color: gray;margin-top: 5px;margin-bottom: 5px;">{{ reply.PostingTime }}
+          <el-button v-if="showDeleteButton(reply)" type="danger" class="btn" @click="deleteReply(reply)"
+            style="float: right;">删除</el-button>
+        </h1>
+
         <el-divider></el-divider>
       </div>
     </div>
   </el-scrollbar>
   <div class="main_content_footer">
     <div class="input_box" width="100%">
-      <textarea class="chat-input no-border" v-model="newMessage" ></textarea>
+      <textarea class="chat-input no-border" v-model="newMessage"></textarea>
     </div>
     <div class="btn_box">
       <el-button type="primary" class="btn" @click="returnDiscussion(newMessage)" style="float: right;">返回</el-button>
@@ -38,7 +47,7 @@
 <script>
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
-import { reqAllComment, reqOneDiscussion, addComment, addLikeDiscussion } from '@/api/api'; // 假设这是更新帖子权限状态的API
+import { reqAllComment, reqOneDiscussion, addComment, addLikeDiscussion, reqDeleteComment, reqDeleteDiscussion } from '@/api/api'; // 假设这是更新帖子权限状态的API
 import { ElNotification, ElMessage } from 'element-plus';
 
 export default {
@@ -59,31 +68,31 @@ export default {
       {
         index: 1,
         Information: 'line-height的值应该大于或等于文本的字体大小，以确保行间距生效。如果文本的字体大小小于line-height的值，行间距将不会显示出来。如果你的文本字体大小小于1.25或1.5，你可能需要调整line-height的值或字体大小以得到期望的行间距效果。',
-        commentUserName: '郑宇煊',
+        commentUsername: '郑宇煊',
         PostingTime: '2024-11-11',
       },
       {
         index: 2,
         Information: 'line-height的值应该大于或等于文本的字体大小，以确保行间距生效。如果文本的字体大小小于line-height的值，行间距将不会显示出来。如果你的文本字体大小小于1.25或1.5，你可能需要调整line-height的值或字体大小以得到期望的行间距效果。',
-        commentUserName: 'zxc',
+        commentUsername: 'zxc',
         PostingTime: '2024-11-12',
       },
       {
         index: 3,
         Information: 'line-height的值应该大于或等于文本的字体大小，以确保行间距生效。如果文本的字体大小小于line-height的值，行间距将不会显示出来。如果你的文本字体大小小于1.25或1.5，你可能需要调整line-height的值或字体大小以得到期望的行间距效果。',
-        commentUserName: '爱学习',
+        commentUsername: '爱学习',
         PostingTime: '2024-11-14',
       },
       {
         index: 4,
         Information: 'line-height的值应该大于或等于文本的字体大小，以确保行间距生效。如果文本的字体大小小于line-height的值，行间距将不会显示出来。如果你的文本字体大小小于1.25或1.5，你可能需要调整line-height的值或字体大小以得到期望的行间距效果。line-height的值应该大于或等于文本的字体大小，以确保行间距生效。如果文本的字体大小小于line-height的值，行间距将不会显示出来。如果你的文本字体大小小于1.25或1.5，你可能需要调整line-height的值或字体大小以得到期望的行间距效果。line-height的值应该大于或等于文本的字体大小，以确保行间距生效。如果文本的字体大小小于line-height的值，行间距将不会显示出来。如果你的文本字体大小小于1.25或1.5，你可能需要调整line-height的值或字体大小以得到期望的行间距效果。',
-        commentUserName: '爱学习',
+        commentUsername: '爱学习',
         PostingTime: '2024-11-14',
       },
       {
         index: 5,
         Information: 'line-height的值应该大于或等于文本的字体大小，以确保行间距生效。如果文本的字体大小小于line-height的值，行间距将不会显示出来。如果你的文本字体大小小于1.25或1.5，你可能需要调整line-height的值或字体大小以得到期望的行间距效果。',
-        commentUserName: '爱学习',
+        commentUsername: '爱学习',
         PostingTime: '2024-11-14',
       },
     ]);
@@ -94,8 +103,6 @@ export default {
     const title = ref('测试1')
 
     const addOneComment = async (val) => {
-      const userName = localStorage.getItem("userName") || "默认用户";
-      const currentTime = new Date()
       const discussionId = localStorage.getItem('discussionId')
       const formData = new FormData()
       formData.append('discussionId', discussionId)
@@ -122,6 +129,54 @@ export default {
         });
       }
     };
+
+    const showDeleteButton = (reply) => {
+      const userName = localStorage.getItem('userName') || '郑宇煊'
+      return userName === reply.commentUsername
+    }
+
+    const deleteReply = async (reply) => {
+      try {
+        const formData = new FormData()
+        formData.append('commentId', reply.commentId)
+        const response = await reqDeleteComment(formData); // 连接后端删除文件
+        if (response.code === 0) {
+          ElMessage.success("评论删除成功");
+          window.location.reload();
+        }
+      } catch (error) {
+        console.error('删除评论失败', error);
+        ElNotification({
+          message: '删除评论失败，请重试',
+          type: 'error',
+        });
+      }
+    }
+
+    const showDeleteDiscussionButton = (discussion) => {
+      const userName = localStorage.getItem('userName') || '郑宇煊'
+      return userName === discussion.username
+    }
+
+    const deleteDiscussion = async (post) => {
+      try {
+        const formData = new FormData()
+        formData.append('discussionId', post.DiscussionId)
+        const response = await reqDeleteDiscussion(formData); // 连接后端删除文件
+        if (response.code === 0) {
+          ElMessage.success("帖子删除成功");
+          $router.push({ name: 'discussionArea' })
+        }
+      } catch (error) {
+        console.error('删除帖子失败', error);
+        ElNotification({
+          message: '删除帖子失败，请重试',
+          type: 'error',
+        });
+      }
+    };
+
+
     onMounted(async () => {
       try {
         const discussionId = localStorage.getItem('discussionId')
@@ -171,6 +226,10 @@ export default {
       starPost,
       addOneComment,
       returnDiscussion,
+      showDeleteButton,
+      deleteReply,
+      showDeleteDiscussionButton,
+      deleteDiscussion,
     };
   },
 };

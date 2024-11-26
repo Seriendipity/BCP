@@ -1,7 +1,7 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <template>
   <div class="file-layout">
-    <el-row :gutter="20">
+    <el-row :gutter="20" v-if="isTeacher()">
       <el-col :span="6" :offset="18" class="upload-col">
         <form id="uploadForm" @submit.prevent="handleSubmit">
           <div class="file-input-container">
@@ -32,6 +32,8 @@
               <Download />
             </el-icon>
           </el-button>
+          <el-button v-if="isTeacher()" type="danger" class="delete-button" size="small"
+            @click="deleteFile(resource)">删除</el-button>
         </div>
       </el-col>
     </el-row>
@@ -40,7 +42,7 @@
 
 <script lang="ts" setup>
 import { ref, onMounted } from 'vue';
-import { reqFileList, reqUploadFile } from '@/api/api'; // 引入 API
+import { reqDeleteFile, reqFileList, reqUploadFile } from '@/api/api'; // 引入 API
 import { ElMessage, ElNotification } from 'element-plus';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -122,7 +124,30 @@ const handleSubmit = async () => {
     });
   }
 };
+const isTeacher = () => {
+  const userId = localStorage.getItem('userId') || 'T001'
+  return userId.startsWith('T')
+}
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const deleteFile = async (resource: any) => {
+  try {
+    //TODO:课程资源删除
+    const formData = new FormData()
+    formData.append('courseResourceNo', resource.courseResourceNo)
+    const response = await reqDeleteFile(formData); // 连接后端删除文件
+    if (response.code === 0) {
+      ElMessage.success("文件删除成功");
+      window.location.reload();
+    }
+  } catch (error) {
+    console.error('删除文件失败', error);
+    ElNotification({
+      message: '删除文件失败，请重试',
+      type: 'error',
+    });
+  }
+}
 // 下载文件
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const downloadFile = (resource: any) => {
@@ -196,6 +221,23 @@ input[type="file"] {
 
 .download-button:hover {
   background: linear-gradient(90deg, #409eff, #66b1ff);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+.delete-button {
+  background: linear-gradient(90deg, #f41703, #cb340a);
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.delete-button:hover {
+  background: linear-gradient(90deg, #cb340a, #f41703);
   transform: translateY(-2px);
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
 }

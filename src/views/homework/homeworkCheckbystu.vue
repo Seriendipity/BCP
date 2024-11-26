@@ -80,14 +80,9 @@ const loadHomework = () => {
   //TODO //应该是这个地方的问题，预览显示不出来
   console.log(currentIndex.value)
   console.log(homeworks.value[currentIndex.value])
-  currenthomework.value = homeworks.value[currentIndex.value].homeworkPath.split('/').pop();;
+  currenthomework.value = homeworks.value[currentIndex.value].homeworkPath.split('/').pop();
 }
 
-// 跳转到指定题目
-const goTohomework = (index) => {
-  if (index < 0 || index >= homeworks.value.length) return
-  currentIndex.value = index
-}
 
 
 
@@ -103,26 +98,26 @@ const submit = async () => {
   if (currentgrade.value === '')
     ElMessage.warning('请填写一个成绩');
   else {
-    try{
+    try {
       const response = await addPeerGrade(formData)
-      if(response.code===0){
+      if (response.code === 0) {
         ElMessage.success('提交成功')
       }
-    }catch(error){
+    } catch (error) {
       console.log(error)
       ElNotification({
-      type: 'error',
-      message: '提交失败',
-    });
+        type: 'error',
+        message: '提交失败',
+      });
     }
     currentgrade.value = '';
     currentreply.value = '';
-    if (currentIndex.value === homeworks.value.length-1) {
+    if (currentIndex.value === homeworks.value.length - 1) {
       $router.push({ name: 'homeworkCheckbystuEND' })
     } else {
       currentIndex.value++
       loadHomework()
-    
+
     }
 
   }

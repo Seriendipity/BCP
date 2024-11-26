@@ -23,7 +23,7 @@
             }}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="操作" v-slot="scope" width="320px">
+      <el-table-column label="操作" v-slot="scope" width="400px">
         <el-button size="mini" type="success" @click="handlePreview(scope.$index, scope.row)">预览</el-button>
         <el-button size="mini" type="primary" @click="handleUpload(scope.$index, scope.row)"
           style="margin-left: 10px;">上传</el-button>
@@ -31,7 +31,6 @@
           style="margin-left: 10px;">互评</el-button>
         <el-button size="mini" type="Info" @click="goToInfo(scope.$index, scope.row)"
           style="margin-left: 10px;">详情</el-button>
-
       </el-table-column>
 
     </el-table>
@@ -205,6 +204,7 @@ const homeworkList = {
       }
 
     };
+
 
     onMounted(async () => {
       try {

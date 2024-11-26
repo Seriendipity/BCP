@@ -3,18 +3,20 @@
   <el-main height="600px">
     <h1 style="text-align: left; font-weight: bold; margin-bottom: 10px; font-size: large; margin-top: -12px;">通知列表</h1>
     <div class="notification-scrollable">
-      <el-row :gutter="20">
-        <el-col :span="24" v-for="(notification, index) in notifications" :key="index">
-          <div class="notification-bar">
-            <div class="notification-info">
+      <el-row>
+        <el-col v-for="(notification, index) in notifications" :key="index">
+          <div :gutter="24" class="notification-bar">
+            <div :span="16" class="notification-info">
               <h2 class="notification-title">{{ notification.notificationTitle }}</h2>
               <p class="notification-time">发布时间: {{ notification.notificationPostingTime }}</p>
             </div>
-            <el-tag :type="notification.notificationState === '已读' ? 'success' : 'warning'">
+            <el-tag :span="2" :type="notification.notificationState === '已读' ? 'success' : 'warning'">
               {{ notification.notificationState }}
             </el-tag>
-            <el-button class="view-button" type="primary" size="small"
+            <el-button :span="3" class="view-button" type="primary" size="small"
               @click="viewNotification(notification)">查看通知</el-button>
+            <el-button :span="1" v-if="isTeacher()" class="view-button" type="danger" size="small"
+              @click="deleteNotification(notification)">删除</el-button>
           </div>
         </el-col>
       </el-row>
@@ -37,8 +39,8 @@
 
 <script>
 import { ref, onMounted } from 'vue';
-import { reqNotificationStudent, updateNotificationState } from '@/api/api'; // 确保有这个API接口
-import { ElNotification } from 'element-plus';
+import { reqDeleteNotification, reqNotificationStudent, updateNotificationState } from '@/api/api'; // 确保有这个API接口
+import { ElNotification, ElMessage } from 'element-plus';
 
 export default {
   setup() {
@@ -89,6 +91,23 @@ export default {
       fetchNotifications(); // 组件挂载时获取通知数据
     });
 
+    const deleteNotification = async (notification) => {
+      try {
+        const formData = new FormData()
+        formData.append('notificationId', notification.notificationId)
+        const response = await reqDeleteNotification(formData); // 连接后端删除文件
+        if (response.code === 0) {
+          ElMessage.success("通知删除成功");
+          window.location.reload();
+        }
+      } catch (error) {
+        console.error('删除通知失败', error);
+        ElNotification({
+          message: '删除通知失败，请重试',
+          type: 'error',
+        });
+      }
+    }
     // 查看通知详情
     const viewNotification = async (notification) => {
       currentNotification.value = notification; // 设置当前通知
@@ -118,12 +137,18 @@ export default {
       dialogVisible.value = false; // 关闭弹出框
     };
 
+    const isTeacher = () => {
+      const userId = localStorage.getItem('userId') || 'T001'
+      return userId.startsWith('T')
+    }
     return {
       dialogVisible,
       currentNotification,
       notifications,
       viewNotification,
       closeDialog,
+      deleteNotification,
+      isTeacher,
     };
   },
 };
@@ -166,10 +191,6 @@ export default {
 
 .notification-time {
   color: #999;
-}
-
-.view-button {
-  margin-left: 10px;
 }
 
 /* 弹出框样式 */

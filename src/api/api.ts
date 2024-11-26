@@ -49,13 +49,16 @@ enum API {
   ADD_DISCUSSION = "/discussion/insert",
   ALL_LIKE_NOTE = "/favorite/selectByStarNoteFromOthers",
   ALL_LIKE_DISCUSSION = "/favorite/selectByStarDiscussionFromOthers",
-  //TODO
   GET_HOMEWORKBYSTU = "/peerAssignment/studentPeerAssignment",
   DELETE_STAR = "/favorite/deleteFavorite",
-  //TODO 
   UPDATE_HOMEWORKCHECK = "/homework/assignHomework",
   ADD_PEER_GRADE = "/peerAssignment/updatePeerGrade",
   ADD_TEACHER_GRADE = "/peerAssignment/updateGrade",
+  DELETE_COMMENT = "/comment/delete",
+  DELETE_DISCUSSION = "/discussion/delete",
+  DELETE_HOMEWORK = "/homework/delete",
+  DELETE_COURSERESOURCE = "/file/delete",
+  DELETE_NOTIFICATION = "/notifications/delete"
 }
 //登录接口
 export const reqLogin = (data: any) => request.post<any, any>(API.LOGIN_URL, data);
@@ -161,6 +164,16 @@ export const deleteStar = (data: any) => request.post<any, any>(API.DELETE_STAR,
 //更新作业互评状态
 export const updateHomeworkCheckStatus = (data: any) => request.post<any, any>(API.UPDATE_HOMEWORKCHECK, data);
 //评分
-export const addPeerGrade = (data:any) =>request.post<any,any>(API.ADD_PEER_GRADE,data);
+export const addPeerGrade = (data: any) => request.post<any, any>(API.ADD_PEER_GRADE, data);
 //老师评分
-export const addGrade = (data:any)=>request.post<any,any>(API.ADD_TEACHER_GRADE,data);
+export const addGrade = (data: any) => request.post<any, any>(API.ADD_TEACHER_GRADE, data);
+//删除帖子评论
+export const reqDeleteComment = (data: any) => request.post<any, any>(API.DELETE_COMMENT, data);
+//删除帖子
+export const reqDeleteDiscussion = (data: any) => request.post<any, any>(API.DELETE_DISCUSSION, data);
+//删除作业
+export const reqDeleteHomework = (data: any) => request.post<any, any>(API.DELETE_HOMEWORK, data);
+//删除课程资源
+export const reqDeleteFile = (data: any) => request.post<any, any>(API.DELETE_COURSERESOURCE, data);
+//删除通知
+export const reqDeleteNotification = (data: any) => request.post<any, any>(API.DELETE_NOTIFICATION, data);

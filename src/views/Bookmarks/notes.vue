@@ -78,7 +78,7 @@
           </el-row>
           <div class="grid-content bg-white" style="height: 75px;" v-for="note in notes" :key="note.noteNo">
             <el-row :gutter="20">
-              <el-col :span="13">
+              <el-col :span="11">
                 <h1 class="ziti03" style="margin-top: 5px;">{{ note.noteInfo }}</h1>
                 <h1 class="ziti04" style="color: gray;margin-top: 15px;">{{ note.uploadDate }}上传</h1>
               </el-col>
@@ -93,8 +93,11 @@
               <el-col :span="2">
                 <el-button type="primary" style="margin-top: 20px;" plain @click="updateNote(note)">更新</el-button>
               </el-col>
-              <el-col :span="3">
+              <el-col :span="2">
                 <el-button type="primary" style="margin-top: 20px;" plain @click="previewNote(note)">查看</el-button>
+              </el-col>
+              <el-col :span="3">
+                <el-button type="danger" style="margin-top: 20px;" plain @click="deleteNote(note)">删除</el-button>
               </el-col>
             </el-row>
           </div>
@@ -156,7 +159,7 @@
 
 <script lang="js" setup>
 import { ref, onMounted } from 'vue';
-import { requireAvatar, reqUserInfo, requireMyNote, reqAddNote, reqUpdateVisible, reqUpdateNote } from '@/api/api';
+import { requireAvatar, reqUserInfo, requireMyNote, reqAddNote, reqUpdateVisible, reqUpdateNote, reqDeleteNote } from '@/api/api';
 import { ElNotification, ElMessage } from 'element-plus';
 
 const props = defineProps({
@@ -205,18 +208,18 @@ const handleChange = (event) => {
   console.log(selectedFile.value)
 };
 
-const cancelUpload = () =>{
- 
+const cancelUpload = () => {
+
   newNoteInfo.value = '';
   selectedFile.value = null;
   dialogVisible.value = false;
 
 }
-const cancelUpdateUpload = () =>{
- 
- newNoteInfo.value = '';
- selectedFile.value = null;
- dialogUpdateVisible.value = false;
+const cancelUpdateUpload = () => {
+
+  newNoteInfo.value = '';
+  selectedFile.value = null;
+  dialogUpdateVisible.value = false;
 
 }
 
@@ -268,6 +271,24 @@ const updateNote = (note) => {
   console.log(nowNoteInfo.value)
 
   // 更新逻辑
+};
+
+const deleteNote = async (note) => {
+  try {
+    const formData = new FormData()
+    formData.append('noteNo', note.noteNo)
+    const response = await reqDeleteNote(formData); // 连接后端删除文件
+    if (response.code === 0) {
+      ElMessage.success("笔记删除成功");
+      window.location.reload();
+    }
+  } catch (error) {
+    console.error('删除笔记失败', error);
+    ElNotification({
+      message: '删除笔记失败，请重试',
+      type: 'error',
+    });
+  }
 };
 
 const uploadNewFile = async () => {

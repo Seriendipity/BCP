@@ -35,15 +35,17 @@
         </el-button>
       </el-table-column>
       <el-table-column label="基本信息" v-slot="scope" width="100px">
-        <el-button size="mini" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+        <el-button size="mini" type="primary" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
       </el-table-column>
       <el-table-column label="成绩" v-slot="scope" width="100px">
-        <el-button size="mini" @click="handleGrade(scope.$index, scope.row)">获取</el-button>
+        <el-button size="mini" type="success" @click="handleGrade(scope.$index, scope.row)">获取</el-button>
       </el-table-column>
       <el-table-column label="附件" v-slot="scope" width="100px">
-        <el-button size="mini" @click="handleFile(scope.$index, scope.row)">预览</el-button>
+        <el-button size="mini" type="primary" @click="handleFile(scope.$index, scope.row)">预览</el-button>
       </el-table-column>
-
+      <el-table-column label="删除" v-slot="scope" width="100px">
+        <el-button size="mini" type="danger" @click="deleteHomework(scope.$index, scope.row)">删除</el-button>
+      </el-table-column>
     </el-table>
 
 
@@ -54,7 +56,7 @@
 <script>
 import { ref, onMounted } from 'vue';
 import { ElNotification, ElMessage } from 'element-plus';
-import { requireTeacherSendHomework, updateHomeworkStatus, updateHomeworkCheckStatus } from '@/api/api';
+import { requireTeacherSendHomework, updateHomeworkStatus, updateHomeworkCheckStatus, reqDeleteHomework } from '@/api/api';
 import { useRouter } from 'vue-router';
 
 const sendHomework = {
@@ -164,6 +166,23 @@ const sendHomework = {
         });
       }
     };
+    const deleteHomework = async (index, row) => {
+      try {
+        const formData = new FormData()
+        formData.append('homeworkNo', row.homeworkNO)
+        const response = await reqDeleteHomework(formData); // 连接后端删除文件
+        if (response.code === 0) {
+          ElMessage.success("作业删除成功");
+          window.location.reload();
+        }
+      } catch (error) {
+        console.error('删除作业失败', error);
+        ElNotification({
+          message: '删除作业失败，请重试',
+          type: 'error',
+        });
+      }
+    }
     return {
       SendHomeworkData,
       search,
@@ -174,6 +193,7 @@ const sendHomework = {
       newHomework,
       handleCheckbystu,
       handleReview,
+      deleteHomework,
     };
   }
 };
