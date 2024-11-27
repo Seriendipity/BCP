@@ -39,10 +39,21 @@ public class CourseResourceController {
             courseResource.put("index",index);
             courseResource.put("url",cr.getCourseResourcePath());
             courseResource.put("type",cr.getResourceType());
+            courseResource.put("courseResourceNo",cr.getCourseResourceNo());
             responseData.put("CourseResource"+index,courseResource);
             index++;
         }
         return Result.success(responseData);
+    }
+
+    @PostMapping("/delete")
+    public Result delete(@RequestParam String courseResourceNo){
+        try{
+            courseResourceService.deleteCourseResource(courseResourceNo);
+            return Result.success("删除成功");
+        }catch (Exception e){
+            return Result.error("删除失败");
+        }
     }
 
 
@@ -72,7 +83,10 @@ public class CourseResourceController {
 
             int size = courseResourceService.selectAllCourseResource().size() + 1;
             String newCId = "R" + size;
-
+            while (courseResourceService.selectByCid(newCId) != null){
+                size++;
+                newCId = "R"+size;
+            }
 
             // 插入文件记录到数据库
             String url = "http://" + ip + ":" + port + "/file/download/" + savedFilePath;

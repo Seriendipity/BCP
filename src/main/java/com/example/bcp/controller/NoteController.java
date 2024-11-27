@@ -1,8 +1,10 @@
 package com.example.bcp.controller;
 
 import cn.hutool.core.io.FileUtil;
+import com.example.bcp.entity.Favorite;
 import com.example.bcp.entity.Note;
 import com.example.bcp.entity.Result;
+import com.example.bcp.service.FavoriteService;
 import com.example.bcp.service.NoteService;
 import com.example.bcp.service.StudentService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -30,6 +32,8 @@ public class NoteController {
     @Autowired
     StudentService studentService;
 
+    @Autowired
+    FavoriteService favoriteService;
 
     @GetMapping("/getStudentAllNote")
     public Result getStudentAllNote(HttpServletRequest request) {
@@ -71,9 +75,12 @@ public class NoteController {
     }
 
     @PostMapping("/deleteNote")
-    public Result deleteNote(@RequestBody Map<String, String> requestData) {
-        String noteNo = requestData.get("noteNo");
+    public Result deleteNote(@RequestParam String noteNo) {
         try {
+            List<Favorite> favorites = favoriteService.selectByFavoriteInformationNo(noteNo);
+           for(Favorite f : favorites){
+               favoriteService.deleteFavorite(f.getFavoriteNo(),f.getStudentNo(),noteNo);
+           }
             noteService.deleteNote(noteNo);
             return Result.success("删除笔记成功");
         } catch (Exception e) {

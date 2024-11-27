@@ -1,11 +1,9 @@
 package com.example.bcp.controller;
 
-import com.example.bcp.entity.Comment;
-import com.example.bcp.entity.Discussion;
-import com.example.bcp.entity.Note;
-import com.example.bcp.entity.Result;
+import com.example.bcp.entity.*;
 import com.example.bcp.service.CommentService;
 import com.example.bcp.service.DiscussionService;
+import com.example.bcp.service.FavoriteService;
 import com.example.bcp.service.StudentService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +25,8 @@ DiscussionController {
     private CommentService commentService;
     @Autowired
     private StudentService studentService;
+    @Autowired
+    private FavoriteService favoriteService;
 
     /**
     * 查询某门课程的所有帖子
@@ -229,23 +229,26 @@ DiscussionController {
      *  删除帖子
      */
     @RequestMapping(value = "/delete" , method = RequestMethod.POST)
-    public Result deleteDiscussion(@RequestBody Map<String,String> requestData,HttpServletRequest request){
+    public Result deleteDiscussion(@RequestParam String discussionId,HttpServletRequest request){
        String username = request.getAttribute("username").toString();
-       if (username.startsWith("T")){
-           String DiscussionId =requestData.get("discussionId");
+
            String message ;
            try{
-               discussionService.deleteDiscussion(DiscussionId);
+               List<Favorite> favorites = favoriteService.selectByFavoriteInformationNo(discussionId);
+               List<Comment> comments = commentService.selectByDiscussionId(discussionId);
+               for(Favorite f : favorites){
+                   favoriteService.deleteFavorite(f.getFavoriteNo(),f.getStudentNo(),discussionId);
+               }
+               for(Comment c : comments){
+                   commentService.deleteComment(c.getCommentId());
+               }
+               discussionService.deleteDiscussion(discussionId);
                message = "帖子删除成功！";
            }catch (Exception e){
                message = "帖子删除失败，请重试";
                return Result.error(message);
            }
            return Result.success(message);
-       }else {
-           String log = "无删除权限";
-           return Result.error(log);
-       }
 
     }
 

@@ -53,6 +53,9 @@ public class FavoriteService {
         favoriteMapper.insertFavoriteOthers(FavoriteNo,StudentNo,FavoriteInformationNo,
                 FavoriteTitle,FromStudentNo);
     }
+    public List<Favorite> selectByFavoriteInformationNo(String FavoriteInformationNO){
+        return favoriteMapper.selectByFavoriteInformationNo(FavoriteInformationNO);
+    }
     public void deleteFavorite(String FavoriteNo, String StudentNo,String FavoriteInformationNO){
         favoriteMapper.deleteFavorite(FavoriteNo,StudentNo,FavoriteInformationNO);
     }

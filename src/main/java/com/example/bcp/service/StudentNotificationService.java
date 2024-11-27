@@ -29,6 +29,9 @@ public class StudentNotificationService {
     public List<StudentNotification> selectByNotificationState(String NotificationState){
         return studentNotificationMapper.selectByNotificationState(NotificationState);
     }
+    public  List<StudentNotification> selectByNotificationNo(String NotificationNo){
+        return studentNotificationMapper.selectByNotificationNo(NotificationNo);
+    }
 
     public void insertStudentNotification(String StudentNo, String NotificationNo) {
         studentNotificationMapper.insertStudentNotification(StudentNo, NotificationNo);

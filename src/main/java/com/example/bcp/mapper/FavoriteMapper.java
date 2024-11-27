@@ -19,6 +19,9 @@ public interface FavoriteMapper {
     @Select("Select * from Favorite Where StudentNo = #{StudentNo} and IsOwn = 1")
     List<Favorite> selectByStudentOwn(String StudentNo);
 
+    @Select("Select * from Favorite Where FavoriteInformationNO = #{FavoriteInformationNO}")
+    List<Favorite> selectByFavoriteInformationNo(String FavoriteInformationNO);
+
     @Select("Select * from Favorite Where StudentNo = #{StudentNo} and IsOwn = 0")
     List<Favorite> selectByStudentOthers(String StudentNo);
 

@@ -257,13 +257,16 @@ class BcpApplicationTests {
     void TestAssistant(){
 //        List<Assistant> assistants = assistantService.selectByCid("T001_CS101");
 //        assistantService.insertAssistant("A003","T001_CS101");
-        assistantService.deleteAssistant("A003");
-        List<Assistant> assistants = assistantService.selectAllAssistant();
-        for(Assistant a : assistants){
-            System.out.print(a.getAssistantNo()+" ");
-            System.out.print(a.getCid()+" ");
-            System.out.println();
-        }
+//        assistantService.deleteAssistant("A003");
+//        List<Assistant> assistants = assistantService.selectAllAssistant();
+//        for(Assistant a : assistants){
+//            System.out.print(a.getAssistantNo()+" ");
+//            System.out.print(a.getCid()+" ");
+//            System.out.println();
+//        }
+        assistantService.selectByAssistantNo("A001");
+        assistantService.updateAssistantPassword("password123","A001");
+        assistantService.updateAssistantPicturePath("test","A001");
     }
 
     @Autowired
@@ -272,7 +275,7 @@ class BcpApplicationTests {
     void TestNotification(){
 //       notificationService.deleteNotification("N003");
 //        List<Notification> notifications = notificationService.selectAllNotification();
-        notificationService.insertNotification("N004","T001_CS101","T002","New Test","New Title");
+//        notificationService.insertNotification("N004","T001_CS101","T002","New Test","New Title");
         //        List<Notification> notifications = new ArrayList<>();
 //         notifications.add(notificationService.selectByNotificationNo("N002"));
 //        for(Notification n : notifications){
@@ -282,21 +285,33 @@ class BcpApplicationTests {
 //            System.out.print(n.getNotificationInformation());
 //            System.out.println();
 //        }
+        notificationService.selectAllNotification();
+        notificationService.selectByCid("T001_CS101");
+        notificationService.selectBySendNo("T001");
+        notificationService.selectByNotificationNo("N001");
+        notificationService.insertNotification("N100","T001_CS101","T001","test","test");
+        notificationService.updateNotificationInformation("N100","test","test");
+        notificationService.deleteNotification("N100");
     }
 
     @Autowired
     private StudentNotificationService studentNotificationService;
     @Test
     void TestStudentNotification(){
-        studentNotificationService.deleteStudentNotification("S001","N001");
-        List<StudentNotification> sns = studentNotificationService.selectAllStudentNotification();
-        for(StudentNotification sn : sns){
-            System.out.print(sn.getNotificationNo()+" ");
-            System.out.print(sn.getStudentNo()+" ");
-            System.out.print(sn.isNotificationState()+" ");
-            System.out.print(sn.getNotificationDate()+" ");
-            System.out.println();
-        }
+//        studentNotificationService.deleteStudentNotification("S001","N001");
+//        List<StudentNotification> sns = studentNotificationService.selectAllStudentNotification();
+//        for(StudentNotification sn : sns){
+//            System.out.print(sn.getNotificationNo()+" ");
+//            System.out.print(sn.getStudentNo()+" ");
+//            System.out.print(sn.isNotificationState()+" ");
+//            System.out.print(sn.getNotificationDate()+" ");
+//            System.out.println();
+//        }
+        studentNotificationService.selectByStudentNo("S001");
+        studentNotificationService.selectByStudentNoAndNotificationNo("S001","N001");
+        studentNotificationService.insertStudentNotification("S002","N9");
+        studentNotificationService.updateStudentNotificationState("S002","N9");
+        studentNotificationService.deleteStudentNotification("S001","N9");
     }
 
     @Autowired

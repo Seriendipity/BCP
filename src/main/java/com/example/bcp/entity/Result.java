@@ -22,6 +22,8 @@ public class Result<T> {
         return new Result(0, "操作成功", null);
     }
 
+    public static Result s(){return new Result(2,"",null);}
+
     public static Result error(String message) {
         return new Result(1, message, null);
     }

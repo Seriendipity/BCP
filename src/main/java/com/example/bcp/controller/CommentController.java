@@ -41,7 +41,7 @@ public class CommentController {
         for (Comment c : comments) {
             Map<String, Object> commentInfo = new HashMap<>();
             commentInfo.put("Index", index);
-            commentInfo.put("CommentId", c.getCommentId());
+            commentInfo.put("commentId", c.getCommentId());
             commentInfo.put("Information", c.getCommentInformation());
             commentInfo.put("PostingTime", c.getCommentPostingTime().format(formatter));
             commentInfo.put("Likes", c.getLikesNumber());
@@ -97,10 +97,10 @@ public class CommentController {
      *  删除指定帖子下面的评论
      */
     @RequestMapping(value = "/delete" , method = RequestMethod.POST)
-    public Result deleteComment(@RequestBody Map<String,String> requestData ,HttpServletRequest request){
+    public Result deleteComment(@RequestParam String commentId ,HttpServletRequest request){
         String username = request.getAttribute("username").toString();
-        if (username.startsWith("T")){
-            String CommentId = requestData.get("commentId");
+
+            String CommentId = commentId;
             String message ;
             try {
                 commentService.deleteComment(CommentId);
@@ -110,10 +110,7 @@ public class CommentController {
                 return Result.error(message);
             }
             return Result.success(message);
-        }else{
-            String log = "无权限操作，请联系管理员";
-            return Result.error(log);
-        }
+
 
     }
 

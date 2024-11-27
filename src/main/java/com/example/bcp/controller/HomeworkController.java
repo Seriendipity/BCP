@@ -453,6 +453,19 @@ public class HomeworkController {
 
     }
 
+    @PostMapping("/delete")
+    public Result deleteHomework(@RequestParam String homeworkNo){
+        try{
+            if(studentHomeworkService.selectByHomeworkNo(homeworkNo) != null){
+                return Result.s();
+            }
+            homeworkService.deleteHomework(homeworkNo);
+            return Result.success("删除成功");
+        }catch (Exception e){
+            return Result.error("删除失败，请重试");
+        }
+    }
+
     //-------------------------------作业文件上传下载(教师端）---------------------------------
 
     @Value("${ip:localhost}")

@@ -1,5 +1,6 @@
 package com.example.bcp.mapper;
 
+import com.example.bcp.entity.Student;
 import com.example.bcp.entity.StudentNotification;
 import org.apache.ibatis.annotations.*;
 
@@ -16,6 +17,9 @@ public interface StudentNotificationMapper {
 
     @Select("Select * from StudentNotification Where StudentNo = #{StudentNo} and NotificationNo = #{NotificationNo}")
     StudentNotification selectByStudentNoAndNotificationNo(String StudentNo , String NotificationNo);
+
+    @Select("Select * from StudentNotification WHere NotificationNo = #{NotificationNo}")
+    List<StudentNotification> selectByNotificationNo(String NotificationNo);
 
     @Select("Select * from StudentNotification Where NotificationState = #{NotificationState}")
     List<StudentNotification> selectByNotificationState(String NotificationState);

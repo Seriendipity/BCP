@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import com.example.bcp.entity.Result;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @RestController
@@ -187,6 +188,7 @@ public class NotificationController {
     public Result getAllNotificationOfStudent(HttpServletRequest request){
         String studentNo = request.getAttribute("username").toString();
         Map<String,Object> responseData = new HashMap<>();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         List<StudentNotification> sns = studentNotificationService.selectByStudentNo(studentNo);
         int i = 1;
         for(StudentNotification sn : sns){
@@ -211,7 +213,7 @@ public class NotificationController {
             }
             notification.put("sendName",sendName);
             notification.put("courseName",courseName);
-            notification.put("notificationPostingTime",n.getPostingTime());
+            notification.put("notificationPostingTime",n.getPostingTime().format(formatter));
             String state = "未读";
             if(sn.isNotificationState()) state = "已读";
             notification.put("notificationState",state);
@@ -232,6 +234,7 @@ public class NotificationController {
     public Result getNotification(@RequestParam String cid , HttpServletRequest request){
         String username = request.getAttribute("username").toString();
         Map<String,Object> responseData = new HashMap<>();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         if (username.startsWith("S")){
             List<Notification> notifications = notificationService.selectByCid(cid);
             int i = 1;
@@ -244,7 +247,7 @@ public class NotificationController {
                     notification.put("notificationInfo",n.getNotificationInformation());
                     notification.put("notificationTitle",n.getNotificationTitle());
                     notification.put("sendNo",n.getSendNo());
-                    notification.put("notificationPostingTime",n.getPostingTime());
+                    notification.put("notificationPostingTime",n.getPostingTime().format(formatter));
                     String state = "未读";
                     if(se.isNotificationState()) state = "已读";
                     notification.put("notificationState",state);
@@ -264,7 +267,7 @@ public class NotificationController {
                 notification.put("index",i);
                 notification.put("notificationInfo",n.getNotificationInformation());
                 notification.put("notificationTitle",n.getNotificationTitle());
-                notification.put("notificationPostingTime",n.getPostingTime());
+                notification.put("notificationPostingTime",n.getPostingTime().format(formatter));
                 notification.put("sendNo",n.getSendNo());
                 notification.put("notificationId",n.getNotificationNo());
                 responseData.put("Notification"+i,notification);
@@ -295,6 +298,31 @@ public class NotificationController {
         return Result.success(responseData);
     }
 
+    @PostMapping("/delete")
+    public Result deleteNotification(@RequestParam String notificationId,
+                                     HttpServletRequest request){
+        String username = request.getAttribute("username").toString();
+        if (username.startsWith("T")){
+            try{
+                List<StudentNotification> studentNotifications = studentNotificationService.selectByNotificationNo(notificationId);
+                for(StudentNotification sn : studentNotifications){
+                    studentNotificationService.deleteStudentNotification(sn.getStudentNo(),notificationId);
+                }
+                notificationService.deleteNotification(notificationId);
+                return Result.success("删除通知成功");
+            }catch (Exception e){
+                return Result.error("删除通知失败");
+            }
+        }else{
+            try {
+                studentNotificationService.deleteStudentNotification(username,notificationId);;
+                return Result.success("删除通知成功");
+            }catch (Exception e){
+                return Result.error("删除通知失败");
+            }
+        }
+
+    }
     // 查看所有通知
 //    @GetMapping("/")
 //    public List<Notification> getAllNotifications() {
