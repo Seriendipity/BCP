@@ -54,36 +54,13 @@ class BcpApplicationTests {
     }
     @Test
     void TestStudent(){
-//        List<Student> students = studentService.selectAllStudent();
-//        List<Student> students = new ArrayList<>();
         studentService.updateStudentPassword("password123" , "S001");
         studentService.updateStudentPicturePath("http://localhost:8081/file/download/test.jpg","S001");
         studentService.selectByStudentNo("S001");
-//        students.add(studentService.selectByStudentNo("S001"));
-//        for(Student s : students){
-//            System.out.print(s.getStudentNo() + " ");
-//            System.out.print(s.getStudentName()+" ");
-//            System.out.print(s.getTotalCredit()+" ");
-//            System.out.print(s.getPassword()+" ");
-//            System.out.println();
-//        }
-
     }
 
     @Test
     void TestTeacher(){
-//        List<Teacher> teachers = teacherService.selectAllTeacher();
-//        List<Teacher> teachers = new ArrayList<>();
-//        teacherService.updateTeacherTitle("教授","T001");
-//        teachers.add(teacherService.selectByTeacherNo("T001"));
-//        for(Teacher t : teachers){
-//            System.out.print(t.getTeacherNo()+" ");
-//            System.out.print(t.getTeacherName()+" ");
-//            System.out.print(t.getTeacherTitle()+" ");
-//            System.out.print(t.getTeacherBirthday()+" ");
-//            System.out.print(t.getPassword()+" ");
-//            System.out.println();
-//        }
         teacherService.selectByTeacherNo("T001");
         teacherService.updateTeacherPassword("password123","T001");
         teacherService.updateTeacherPicturePath("/head_portait/T001.jpg","T001");
@@ -91,47 +68,17 @@ class BcpApplicationTests {
 
     @Test
     void TestCourse(){
-       // List<Course> courses = courseService.selectAllCourse();
-//        List<Course> courses = new ArrayList<>();
-//        courses.add(courseService.selectByCourseNo("CS101"));
-//        for(Course c :courses){
-//            System.out.print(c.getCourseNo() + " ");
-//            System.out.print(c.getCourseName()+ " ");
-//            System.out.print(c.getCourseCredit()+ " ");
-//            System.out.println();
-//        }
         courseService.selectByCourseNo("CS101");
     }
 
     @Test
     void TestTeaching(){
-//     List<Teaching>  teachings = teachingService.selectAllTeaching();
-       // List<Teaching> teachings = teachingService.selectByTeacherNoAndCourseNo("T001","CS101");
-//       List<Teaching> teachings = new ArrayList<>();
-//       teachings.add(teachingService.selectByCid("T001_CS101"));
-//        for(Teaching t : teachings){
-//            System.out.print(t.getCourseNo()+" ");
-//            System.out.print(t.getTeacherNo()+" ");
-//            System.out.print(t.getSyllabus()+" ");
-//            System.out.print(t.getCid()+" ");
-//            System.out.print(t.getTeachingCalendar()+" ");
-//            System.out.print(t.getLanguage()+" ");
-//            System.out.print(t.getSemester()+" ");
-//            System.out.println();
-//        }
         teachingService.selectByTeacherNo("T001");
         teachingService.selectByCid("T001_CS101");
     }
 
     @Test
     void TestSC(){
-//        List<StudentCourse> studentCourses = studentCourseService.selectByCid("T001_CS101");
-//        for(StudentCourse sc: studentCourses){
-//            System.out.print(sc.getStudentNo()+" ");
-//            System.out.print(sc.getCid()+" ");
-//            System.out.print(sc.getGrade()+" ");
-//            System.out.println();
-//        }
         studentCourseService.selectAllStudentNo("T001_CS101");
         studentCourseService.selectByStudentNo("S001");
         studentCourseService.selectByCid("T001_CS101");
@@ -139,17 +86,6 @@ class BcpApplicationTests {
 
     @Test
     void TestDiscussion(){
-//        discussionService.insertDiscussion("S003","T001_CS101","D003","test", LocalDateTime.now());
-//        discussionService.deleteDiscussion("D003");
-//        List<Discussion> discussions = discussionService.selectByMentioned("S001");
-//        for(Discussion d : discussions){
-//            System.out.print(d.getCid() + " ");
-//            System.out.print(d.getDiscussionId()+" ");
-//            System.out.print(d.getDiscussionInformation()+" ");
-//            System.out.print(d.getDiscussionPostingTime()+" ");
-//            System.out.print(d.getStudentNo()+" ");
-//            System.out.println();
-//        }
         discussionService.selectAllDiscussion();
         discussionService.selectByStudentNo("S001");
         discussionService.selectByDiscussionId("D001");
@@ -167,22 +103,11 @@ class BcpApplicationTests {
     private CommentService commentService;
     @Test
     void TestComment(){
-//        commentService.deleteComment("C003");
-//        List<Comment> comments = commentService.selectAllComments();
-//        List<Comment> comments = commentService.selectByDiscussionId("D001");
-//        for(Comment c : comments){
-//            System.out.print(c.getCommentId()+" ");
-//            System.out.print(c.getDiscussionId()+" ");
-//            System.out.print(c.getCommentInformation()+" ");
-//            System.out.print(c.getCommentPostingTime()+" ");
-//            System.out.print(c.getLikesNumber()+" ");
-//            System.out.println();
-//        }
         commentService.selectAllComments();
-        commentService.selectByDiscussionId("D001");
+        commentService.selectByDiscussionId("D002");
         commentService.selectByCommentId("C001");
-        commentService.insertComment("C100","D001","test",0,LocalDateTime.now(),"test","S002","S001");
-        commentService.commentTimes("D001");
+        commentService.insertComment("C100","D002","test",0,LocalDateTime.now(),"test","S002","S001");
+        commentService.commentTimes("D002");
         commentService.updateCommentLikes(1,"C100");
         commentService.updateCommentInfo("test","C100");
         commentService.deleteComment("C100");
@@ -193,20 +118,6 @@ class BcpApplicationTests {
     private NoteService noteService;
     @Test
     void TestNote(){
-//        List<Note> notes = noteService.selectByStudentNo("S001");
-
-//        noteService.updateNoteAuthority("N001",true);
-//        noteService.updateNoteInformation("Test","N001");
-//        List<Note> notes = noteService.selectAllNote();
-//
-//        for(Note n : notes){
-//            System.out.print(n.getNoteNo()+" ");
-//            System.out.print(n.getNoteInformation()+" ");
-//            System.out.print(n.getStudentNo()+" ");
-//            System.out.print(n.getNotePath()+" ");
-//            System.out.print(n.isAuthority()+" ");
-//            System.out.println();
-//        }
         noteService.selectAllNote();
         noteService.selectByStudentNo("S001");
         noteService.selectByNoteNo("N3");
@@ -222,32 +133,17 @@ class BcpApplicationTests {
     private FavoriteService favoriteService;
     @Test
     void TestFavorite(){
-//        favoriteService.insertFavorite("F003","S003","Test","Study");
-//        favoriteService.deleteFavorite("F003","S003");
-//        favoriteService.updateFavoriteTitle("Test","S001","F001");
-//        List<Favorite> favorites = favoriteService.selectByStudentNo("S001");
-//        for(Favorite f : favorites){
-//            System.out.print(f.getFavoriteNo()+" ");
-//            System.out.print(f.getFavoriteInformationNO()+" ");
-//            System.out.print(f.getFavoriteTitle()+" ");
-//            System.out.print(f.getStudentNo()+" ");
-//            System.out.println(f.getAuthority());
-//            System.out.println();
-//        }
-//        favoriteService.deleteFavorite("F002","S001","N002");
-
-//            String time = "Sat Nov 30 2024 00:00:00 GMT+0800 (中国标准时间)";
             favoriteService.selectByStudentOthers("S001");
-            favoriteService.selectByStudentNoAndFavoriteNoAndFavoriteInformationNo("S001","F001","D001");
+            favoriteService.selectByStudentNoAndFavoriteNoAndFavoriteInformationNo("S001","F001","D002");
             favoriteService.selectByStudentNo("S001");
             favoriteService.selectByStudentNoAndFavoriteTitle("S001","学习");
             favoriteService.selectByStudentNoAndFavoriteNo("S001","F001");
-            favoriteService.insertFavoriteOwn("F100","S001","D001","tttt",0,"S001");
-            favoriteService.insertFavoriteOthers("F101","S002","D001","test","S001");
-            favoriteService.updateFavoriteTitle("test","S001","F100","D001");
+            favoriteService.insertFavoriteOwn("F100","S001","D002","tttt",0,"S001");
+            favoriteService.insertFavoriteOthers("F101","S002","D002","test","S001");
+            favoriteService.updateFavoriteTitle("test","S001","F100","D002");
             favoriteService.updateFavoriteAuthority("S001","F100","test");
-            favoriteService.deleteFavorite("F100","S001","D001");
-            favoriteService.deleteFavorite("F101","S002","D001");
+            favoriteService.deleteFavorite("F100","S001","D002");
+            favoriteService.deleteFavorite("F101","S002","D002");
         }
 
 
@@ -255,15 +151,6 @@ class BcpApplicationTests {
     private AssistantService assistantService;
     @Test
     void TestAssistant(){
-//        List<Assistant> assistants = assistantService.selectByCid("T001_CS101");
-//        assistantService.insertAssistant("A003","T001_CS101");
-//        assistantService.deleteAssistant("A003");
-//        List<Assistant> assistants = assistantService.selectAllAssistant();
-//        for(Assistant a : assistants){
-//            System.out.print(a.getAssistantNo()+" ");
-//            System.out.print(a.getCid()+" ");
-//            System.out.println();
-//        }
         assistantService.selectByAssistantNo("A001");
         assistantService.updateAssistantPassword("password123","A001");
         assistantService.updateAssistantPicturePath("test","A001");
@@ -273,18 +160,6 @@ class BcpApplicationTests {
     private NotificationService notificationService;
     @Test
     void TestNotification(){
-//       notificationService.deleteNotification("N003");
-//        List<Notification> notifications = notificationService.selectAllNotification();
-//        notificationService.insertNotification("N004","T001_CS101","T002","New Test","New Title");
-        //        List<Notification> notifications = new ArrayList<>();
-//         notifications.add(notificationService.selectByNotificationNo("N002"));
-//        for(Notification n : notifications){
-//            System.out.print(n.getCid()+" ");
-//            System.out.print(n.getNotificationNo()+" ");
-//            System.out.print(n.getSendNo()+" ");
-//            System.out.print(n.getNotificationInformation());
-//            System.out.println();
-//        }
         notificationService.selectAllNotification();
         notificationService.selectByCid("T001_CS101");
         notificationService.selectBySendNo("T001");
@@ -298,75 +173,56 @@ class BcpApplicationTests {
     private StudentNotificationService studentNotificationService;
     @Test
     void TestStudentNotification(){
-//        studentNotificationService.deleteStudentNotification("S001","N001");
-//        List<StudentNotification> sns = studentNotificationService.selectAllStudentNotification();
-//        for(StudentNotification sn : sns){
-//            System.out.print(sn.getNotificationNo()+" ");
-//            System.out.print(sn.getStudentNo()+" ");
-//            System.out.print(sn.isNotificationState()+" ");
-//            System.out.print(sn.getNotificationDate()+" ");
-//            System.out.println();
-//        }
         studentNotificationService.selectByStudentNo("S001");
         studentNotificationService.selectByStudentNoAndNotificationNo("S001","N001");
-        studentNotificationService.insertStudentNotification("S002","N9");
-        studentNotificationService.updateStudentNotificationState("S002","N9");
-        studentNotificationService.deleteStudentNotification("S001","N9");
+        studentNotificationService.insertStudentNotification("S002","N7");
+        studentNotificationService.updateStudentNotificationState("S002","N7");
+        studentNotificationService.deleteStudentNotification("S002","N7");
     }
 
     @Autowired
     private CourseResourceService crs;
     @Test
     void TestCourseResource(){
-//        crs.insertCourseResource("R003","T001_CS101","PPT","test");
-//        crs.updateCourseResource("I love you","R003");
-        crs.deleteCourseResource("R003");
-        List<CourseResource> courseResources = crs.selectAllCourseResource();
-        for(CourseResource cr: courseResources){
-            System.out.print(cr.getCid()+" ");
-            System.out.print(cr.getCourseResourceNo()+" ");
-            System.out.print(cr.getCourseResourcePath()+" ");
-            System.out.print(cr.getResourceType()+" ");
-            System.out.println();
-        }
+        crs.selectAllCourseResource();
+        crs.selectByCid("T001_CS101");
+        crs.insertCourseResource("R100","T001_CS101","test","test");
+        crs.deleteCourseResource("R100");
     }
 
     @Autowired
     private HomeworkService homeworkService;
     @Test
     void TestHomework(){
-//        homeworkService.insertHomework("H003","T001_CS101","Test",LocalDateTime.now(),LocalDateTime.now(),100);
-//        homeworkService.updateHomeworkEndTime(LocalDateTime.parse("2024-11-11T11:11:11"),"H003");
-        homeworkService.deleteHomework("H003");
-        List<Homework> homeworks = homeworkService.selectAllHomework();
-        for(Homework h : homeworks){
-            System.out.print(h.getCid()+" ");
-            System.out.print(h.getHomeworkNo()+" ");
-            System.out.print(h.getHomeworkDescription()+" ");
-            System.out.print(h.getHomeworkGrade()+" ");
-            System.out.print(h.getStartTime()+" ");
-            System.out.print(h.getEndTime()+" ");
-            System.out.println();
-        }
+        homeworkService.selectAllHomework();
+        homeworkService.selectByHomeworkNo("H001");
+        homeworkService.selectByCid("T001_CS101");
+        homeworkService.selectByCidAndVisible("T001_CS101");
+        homeworkService.insertHomework("T001_CS101","H100","test",LocalDateTime.now(),LocalDateTime.now(),100,"test","test");
+        homeworkService.updateHomeworkEndTime(LocalDateTime.now(),"H100");
+        homeworkService.updateHomeworkStartTime(LocalDateTime.now(),"H100");
+        homeworkService.updateHomeworkInfo("test","H100");
+        homeworkService.updateHomeworkDescription("test","H100");
+        homeworkService.updateHomeworkPath("test","H100");
+        homeworkService.updateHomeworkIsVisible("H100");
+        homeworkService.updateHomeworkGrade(30,"H100");
+        homeworkService.updateIsPeerReview(true,"H100");
+        homeworkService.deleteHomework("H100");
     }
 
     @Autowired
     private StudentHomeworkService studentHomeworkService;
     @Test
     void TestStudentHomework(){
-//        studentHomeworkService.insertStudentHomework("S002","H001","Test","/test",LocalDateTime.now(),"作业提交错误");
-////        studentHomeworkService.updateStudentHomeworkPath("/tttttt","S001","H002");
-////        studentHomeworkService.updateStudentHomeworkSubmitGrade(60,"S001","H002");
-//        List<StudentHomework> studentHomeworks =studentHomeworkService.selectAllStudentHomework();
-//        for(StudentHomework h : studentHomeworks){
-//            System.out.print(h.getHomeworkNo()+" ");
-//            System.out.print(h.getStudentNo()+" ");
-//            System.out.print(h.getSubmitPath()+" ");
-//            System.out.print(h.getSubmitGrade()+" ");
-//            System.out.print(h.getSubmitDescription()+" ");
-//            System.out.print(h.getSubmitTime()+" ");
-//            System.out.println();
-//        }
-        studentHomeworkService.updateVisible("H001");
+        studentHomeworkService.selectAllStudentHomework();
+        studentHomeworkService.selectByHomeworkNo("H001");
+        studentHomeworkService.selectCorrectingHomework("H001");
+        studentHomeworkService.selectByStudentNoAndHomeworkNo("S001","H001");
+        studentHomeworkService.insertStudentHomework("S001","H6","test","test",LocalDateTime.now(),"test");
+        studentHomeworkService.updateStudentHomeworkPath("test","S001","H6");
+        studentHomeworkService.updateIsTeacherGrade(true,"S001","H6");
+        studentHomeworkService.updateVisible("H6");
+        studentHomeworkService.selectByIsTeacherAndHomeworkNo("H6");
+        studentHomeworkService.updateStudentHomeworkSubmitGrade(20,"S001","H6","test");
     }
 }
