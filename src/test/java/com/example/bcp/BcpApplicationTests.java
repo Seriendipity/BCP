@@ -37,6 +37,8 @@ class BcpApplicationTests {
     private StudentCourseService studentCourseService;
     @Autowired
     private DiscussionService discussionService;
+    @Autowired
+    private PeerReviewAssignmentService peerReviewAssignmentService;
     @Test
     void contextLoads() {
 //        List<Class> classes = classService.selectAllClass();
@@ -133,18 +135,18 @@ class BcpApplicationTests {
     private FavoriteService favoriteService;
     @Test
     void TestFavorite(){
-            favoriteService.selectByStudentOthers("S001");
-            favoriteService.selectByStudentNoAndFavoriteNoAndFavoriteInformationNo("S001","F001","D002");
-            favoriteService.selectByStudentNo("S001");
-            favoriteService.selectByStudentNoAndFavoriteTitle("S001","学习");
-            favoriteService.selectByStudentNoAndFavoriteNo("S001","F001");
-            favoriteService.insertFavoriteOwn("F100","S001","D002","tttt",0,"S001");
-            favoriteService.insertFavoriteOthers("F101","S002","D002","test","S001");
-            favoriteService.updateFavoriteTitle("test","S001","F100","D002");
-            favoriteService.updateFavoriteAuthority("S001","F100","test");
-            favoriteService.deleteFavorite("F100","S001","D002");
-            favoriteService.deleteFavorite("F101","S002","D002");
-        }
+        favoriteService.selectByStudentOthers("S001");
+        favoriteService.selectByStudentNoAndFavoriteNoAndFavoriteInformationNo("S001","F001","D002");
+        favoriteService.selectByStudentNo("S001");
+        favoriteService.selectByStudentNoAndFavoriteTitle("S001","学习");
+        favoriteService.selectByStudentNoAndFavoriteNo("S001","F001");
+        favoriteService.insertFavoriteOwn("F100","S001","D002","tttt",0,"S001");
+        favoriteService.insertFavoriteOthers("F101","S002","D002","test","S001");
+        favoriteService.updateFavoriteTitle("test","S001","F100","D002");
+        favoriteService.updateFavoriteAuthority("S001","F100","test");
+        favoriteService.deleteFavorite("F100","S001","D002");
+        favoriteService.deleteFavorite("F101","S002","D002");
+    }
 
 
     @Autowired
@@ -224,5 +226,16 @@ class BcpApplicationTests {
         studentHomeworkService.updateVisible("H6");
         studentHomeworkService.selectByIsTeacherAndHomeworkNo("H6");
         studentHomeworkService.updateStudentHomeworkSubmitGrade(20,"S001","H6","test");
+    }
+
+    @Test
+    void TestPeerReviewAssignment(){
+        peerReviewAssignmentService.insertPeerReviewAssignment("S001","S002","H001",LocalDateTime.now(),LocalDateTime.now());
+        peerReviewAssignmentService.updateReviewStatus("S001","S002","H001",true);
+        peerReviewAssignmentService.selectByHomeworkNo("H001");
+        //peerReviewAssignmentService.updateGradeAndComment(10,"test","S001","S002","H001");
+        peerReviewAssignmentService.selectByRevieweeNo("S001");
+        peerReviewAssignmentService.selectByReviewerNo("S002");
+        peerReviewAssignmentService.deleteByHomework("H002");
     }
 }
