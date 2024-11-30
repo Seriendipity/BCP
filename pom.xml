@@ -41,6 +41,8 @@
             <scope>test</scope>
         </dependency>
 
+
+
         <!--mybatis引入-->
         <dependency>
             <groupId>org.mybatis.spring.boot</groupId>
@@ -100,26 +102,32 @@
             <version>2.16.2</version>
         </dependency>
 
-        <!-- swagger -->
+        <!--swagger3-->
         <dependency>
-            <groupId>io.springfox</groupId>
-            <artifactId>springfox-spring-web</artifactId>
-            <version>2.9.2</version>
+            <groupId>com.github.xiaoymin</groupId>
+            <artifactId>knife4j-openapi3-jakarta-spring-boot-starter</artifactId>
+            <version>4.1.0</version>
         </dependency>
-        <dependency>
-            <groupId>io.springfox</groupId>
-            <artifactId>springfox-swagger2</artifactId>
-            <version>2.9.2</version>
-        </dependency>
-        <dependency>
-            <groupId>io.springfox</groupId>
-            <artifactId>springfox-swagger-ui</artifactId>
-            <version>2.9.2</version>
-        </dependency>
-
-
 
     </dependencies>
+
+
+    <repositories>
+        <!--阿里云镜像-->
+        <repository>
+            <id>alimaven</id>
+            <name>aliyun maven</name>
+            <url>https://maven.aliyun.com/nexus/content/groups/public/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+
+
 
     <build>
         <plugins>
@@ -171,6 +179,8 @@
                         </configuration>
                     </execution>
                 </executions>
+
+
             </plugin>
 
         </plugins>
