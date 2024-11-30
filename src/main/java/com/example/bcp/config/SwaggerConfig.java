@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Configuration;
 /**
  * swagger配置类
  *
- * @author zyx
+ *
  * @since 2024/11/30
  */
 @Configuration
@@ -21,13 +21,13 @@ public class SwaggerConfig {
     @Bean
     public OpenAPI springShopOpenAPI() {
         return new OpenAPI()
-                .info(new Info().title("标题")
+                .info(new Info().title("BCP文档")
                         .contact(new Contact())
-                        .description("我的API文档")
+                        .description("BCP项目接口文档")
                         .version("v1")
-                        .license(new License().name("Apache 2.0").url("http://springdoc.org")))
+                        .license(new License().name("Apache 2.0许可").url("http://springdoc.org")))
                 .externalDocs(new ExternalDocumentation()
-                        .description("外部文档")
-                        .url("https://springshop.wiki.github.org/docs"));
+                        .description("github项目链接")
+                        .url("https://github.com/Seriendipity/BCP"));
     }
 }

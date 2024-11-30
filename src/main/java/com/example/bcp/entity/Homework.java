@@ -1,5 +1,6 @@
 package com.example.bcp.entity;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -13,6 +14,7 @@ public class Homework {
     @Id
     @Column(name = "HomeworkNo" , length = 10)
     private String HomeworkNo;
+
 
     @Column(name = "Cid" , length = 10)
     private String Cid;

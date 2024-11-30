@@ -1,5 +1,6 @@
 package com.example.bcp.entity;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -9,6 +10,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "Notification")
+@Schema(name = "Notification", description = "$!{这是通知}")
 public class Notification {
     @Id
     @Column(name = "NotificationNo" , length = 10)
