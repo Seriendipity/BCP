@@ -1,7 +1,51 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <template>
   <el-container>
-    <el-header class="head">
+    <el-header class="teacher-head" v-if="isTeacher()">
+      <el-row :gutter="20">
+        <el-col :span="18">
+          <div class="grid-content">
+            <router-link to="/firstpage" style="text-decoration: none; ">
+              <h1 class="zitihead">智慧课程平台</h1>
+            </router-link>
+          </div>
+        </el-col>
+        <el-col :span="1">
+          <div class="grid-content ">
+            <router-link to="/notes" style="text-decoration: none;">
+              <h1 style="font-size:larger;margin-top: 21px;color: aliceblue;font-weight: 550;">笔记
+              </h1>
+            </router-link>
+          </div>
+        </el-col>
+        <el-col :span="2">
+          <div class="grid-content ">
+            <router-link to="/firstpage" style="text-decoration: none;">
+              <h1
+                style="font-size:x-large;margin-top: 17px;color: white;text-shadow: 2px 3px rgba(0, 0, 0, 0.5);font-weight: 550;">
+                收藏夹
+              </h1>
+            </router-link>
+          </div>
+        </el-col>
+        <el-col :span="1">
+          <div class="grid-content ">
+            <router-link to="/myinformation" style="text-decoration: none;">
+              <div style="margin-top: 10px"><el-avatar :size="40" :src="userInfo.avatarUrl"></el-avatar></div>
+            </router-link>
+          </div>
+        </el-col>
+        <el-col :span="2">
+          <router-link to="/myinformation" style="text-decoration: none;">
+            <h1 style="font-size: medium;margin-top: 21px;color: aliceblue;font-weight: 550;">{{ userInfo.userName }}
+            </h1>
+          </router-link>
+        </el-col>
+      </el-row>
+    </el-header>
+
+
+    <el-header class="student-head" v-else>
       <el-row :gutter="20">
         <el-col :span="18">
           <div class="grid-content">
@@ -175,6 +219,12 @@ export default {
     const comments = ref([]);//界面展示的
     const newMessage = ref(""); // 输入框的绑定值
 
+    const isTeacher = () => {
+      const currentUserId = userInfo.value.userId || 'S001'
+      console.log(currentUserId)
+      return currentUserId.startsWith('T')
+
+    }
     const addOneComment = async (val) => {
       const discussionId = localStorage.getItem('discussionId')
       const formData = new FormData()
@@ -209,7 +259,7 @@ export default {
     const deletePostStar = async (post) => {
       // 取消收藏
       const formData = new FormData()
-      console.log( post.favoriteNo)
+      console.log(post.favoriteNo)
       formData.append('favoriteNo', post.favoriteNo)
       formData.append('favoriteInformationNo', post.DiscussionId)
       try {
@@ -288,6 +338,7 @@ export default {
       deletePostStar,
       showDeleteButton,
       deleteReply,
+      isTeacher,
     };
   },
 };
@@ -302,10 +353,16 @@ export default {
   height: 280px;
 }
 
-.head {
+.student-head {
   background-color: #005bac;
 
 }
+
+.teacher-head {
+  background-color: #7c0406;
+
+}
+
 
 .backmain1 {
   height: 705px;

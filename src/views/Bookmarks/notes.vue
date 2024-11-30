@@ -1,7 +1,50 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <template>
   <el-container>
-    <el-header class="head">
+    <el-header class="teacher-head" v-if="isTeacher()">
+      <el-row :gutter="20">
+        <el-col :span="17">
+          <div class="grid-content">
+            <router-link to="/firstpage" style="text-decoration: none; ">
+              <h1 class="zitihead">智慧课程平台</h1>
+            </router-link>
+          </div>
+        </el-col>
+        <el-col :span="2">
+          <div class="grid-content" style="text-align: right;">
+            <router-link to="/firstpage" style="text-decoration: none;">
+              <h1
+                style="font-size:x-large;margin-top: 17px;color: white;text-shadow: 2px 3px rgba(0, 0, 0, 0.5);font-weight: 550;">
+                笔记
+              </h1>
+            </router-link>
+          </div>
+        </el-col>
+        <el-col :span="2">
+          <div class="grid-content ">
+            <router-link to="/bookmarks" style="text-decoration: none;">
+              <h1 style="font-size:larger;margin-top: 21px;color: aliceblue;font-weight: 550;">收藏夹
+              </h1>
+            </router-link>
+          </div>
+        </el-col>
+        <el-col :span="1">
+          <div class="grid-content">
+            <router-link to="/myinformation" style="text-decoration: none;">
+              <div style="margin-top: 10px"><el-avatar :size="40" :src="userInfo.avatarUrl"></el-avatar></div>
+            </router-link>
+          </div>
+        </el-col>
+        <el-col :span="2">
+          <router-link to="/myinformation" style="text-decoration: none;">
+            <h1 style="font-size: medium;margin-top: 21px;color: aliceblue;font-weight: 550;">{{ userInfo.userName }}
+            </h1>
+          </router-link>
+        </el-col>
+      </el-row>
+    </el-header>
+
+    <el-header class="student-head" v-else>
       <el-row :gutter="20">
         <el-col :span="17">
           <div class="grid-content">
@@ -182,7 +225,7 @@ const nowNoteInfo = ref('');
 
 const mockData = {
   userName: '张三',
-  userId: '20220001',
+  userId: 'T20220001',
   dept: '计算机科学与技术',
   email: 'zhangsan@example.com',
   avatarUrl: 'src/assets/images/example.jpg'
@@ -340,6 +383,12 @@ const updateNoteStatus = async (note) => {
   }
 }
 
+const isTeacher = () => {
+  const currentUserId = userInfo.value.userId || 'S001'
+  console.log(currentUserId)
+  return currentUserId.startsWith('T')
+
+}
 // 获取用户信息和课程列表
 onMounted(async () => {
   try {
@@ -367,8 +416,13 @@ onMounted(async () => {
 
 
 <style>
-.head {
+.student-head {
   background-color: #005bac;
+
+}
+
+.teacher-head {
+  background-color: #7c0406;
 
 }
 
