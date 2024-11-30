@@ -311,11 +311,14 @@ public class HomeworkController {
 //        String username = request.getAttribute("username").toString();
         List<StudentHomework> studentHomeworks = studentHomeworkMapper.selectByHomeworkNo(homeworkNo);
         Map<String, Object> responseData = new HashMap<>();
+        int index = 1;
         for (StudentHomework studentHomework : studentHomeworks) {
             Map<String, Object> sh = new HashMap<>();
             sh.put("StudentNo", studentHomework.getStudentNo());
-            sh.put("StudentDescription()", studentHomework.getSubmitDescription());
+            sh.put("StudentDescription", studentHomework.getSubmitDescription());
             sh.put("StudentHomeworkSubmitTime", studentHomework.getSubmitTime());
+            responseData.put("Homework"+index ,sh);
+            index++;
         }
 
         return Result.success(responseData);

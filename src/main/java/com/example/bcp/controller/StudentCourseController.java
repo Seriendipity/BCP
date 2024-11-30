@@ -150,7 +150,7 @@ public class StudentCourseController {
         header.createCell(0).setCellValue("Index");
         header.createCell(1).setCellValue("StudentNo");
         header.createCell(2).setCellValue("StudentName");
-        header.createCell(3).setCellValue("Grade");
+       // header.createCell(3).setCellValue("Grade");
         header.createCell(4).setCellValue("ClassNo");
         header.createCell(5).setCellValue("ClassName");
 
@@ -161,9 +161,9 @@ public class StudentCourseController {
             row.createCell(0).setCellValue(i + 1);
             row.createCell(1).setCellValue(student.getStudentNo());
             row.createCell(2).setCellValue(studentService.selectByStudentNo(student.getStudentNo()).getStudentName());
-            row.createCell(3).setCellValue(student.getGrade());
-            row.createCell(4).setCellValue(studentService.selectByStudentNo(student.getStudentNo()).getClassNo());
-            row.createCell(5).setCellValue(classService.selectByClassNo(studentService.selectByStudentNo(student.getStudentNo()).getClassNo()).getClassName());
+        //    row.createCell(3).setCellValue(student.getGrade());
+            row.createCell(3).setCellValue(studentService.selectByStudentNo(student.getStudentNo()).getClassNo());
+            row.createCell(4).setCellValue(classService.selectByClassNo(studentService.selectByStudentNo(student.getStudentNo()).getClassNo()).getClassName());
         }
 
         // 将文件保存到服务器本地（用于调试）

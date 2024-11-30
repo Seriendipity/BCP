@@ -104,7 +104,7 @@ DiscussionController {
             responseData.put("discussion" + i,discussionInfo);
             i++;
         }
-        responseData.put("username", request.getAttribute("username").toString());
+       // responseData.put("username", request.getAttribute("username").toString());
         return Result.success(responseData);
     }
 

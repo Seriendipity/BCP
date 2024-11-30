@@ -83,7 +83,7 @@ public class CourseResourceController {
 
             int size = courseResourceService.selectAllCourseResource().size() + 1;
             String newCId = "R" + size;
-            while (courseResourceService.selectByCid(newCId) != null){
+            while (courseResourceService.selectByCourseResourceNo(newCId) != null){
                 size++;
                 newCId = "R"+size;
             }

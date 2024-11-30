@@ -220,6 +220,11 @@ alter table Favorite add column FromStudentNo varchar(10); -- 收藏自他人收
 
 alter table note add column loadTime DATETIME;
 
+alter table discussion
+    drop foreign key discussion_ibfk_1;
+
+
+
 -- 插入 Class 表数据
 INSERT INTO Class (ClassNo, ClassName, ClassDepartment, ClassMajor, StudentNumber) VALUES
                                                                                        ('C001', '计算机科学', '计算机学院', '计算机科学与技术', 30),

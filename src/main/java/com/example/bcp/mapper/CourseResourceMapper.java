@@ -1,6 +1,7 @@
 package com.example.bcp.mapper;
 
 import com.example.bcp.entity.CourseResource;
+import com.example.bcp.service.CourseResourceService;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
@@ -12,6 +13,9 @@ public interface CourseResourceMapper {
 
     @Select("Select * from CourseResource Where Cid = #{Cid}")
     List<CourseResource> selectByCid(String Cid);
+
+    @Select("Select * from CourseResource Where CourseResourceNo = #{CourseResourceNo}")
+    CourseResource selectByCourseResourceNo(String CourseResourceNo);
 
     @Insert("Insert into CourseResource(CourseResourceNo,Cid,ResourceType,CourseResourcePath)" +
             " values(#{CourseResourceNo},#{Cid},#{ResourceType},#{CourseResourcePath})")

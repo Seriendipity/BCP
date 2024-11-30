@@ -19,6 +19,9 @@ public class CourseResourceService {
     public List<CourseResource> selectByCid(String Cid){
         return courseResourceMapper.selectByCid(Cid);
     }
+    public CourseResource selectByCourseResourceNo(String CourseResourceNo){
+        return courseResourceMapper.selectByCourseResourceNo(CourseResourceNo);
+    }
 
     public void insertCourseResource(String CourseResourceNo,String Cid,
                                      String ResourceType,String CourseResourcePath){
