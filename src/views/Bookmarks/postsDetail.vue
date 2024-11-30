@@ -162,7 +162,7 @@ export default {
 
     const mockData = {
       userName: '张三',
-      userId: '20220001',
+      userId: 'T20220001',
       dept: '计算机科学与技术',
       email: 'zhangsan@example.com',
       avatarUrl: 'src/assets/images/example.jpg'
