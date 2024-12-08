@@ -1,0 +1,1703 @@
+{
+	"info": {
+		"_postman_id": "3784060b-690e-423f-a1ba-65144d7a26c3",
+		"name": "TestStudent",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "30415475"
+	},
+	"item": [
+		{
+			"name": "login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\":\"S001\",\r\n    \"password\":\"password123\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8081/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "allStudent",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyTmFtZSI6IlMwMDEiLCJwYXNzd29yZCI6InBhc3N3b3JkMTIzIiwiZXhwIjoxNzMyOTAwODI3LCJpYXQiOjE3MzI4NzkyMjd9.NSHD2p5EEF5hTuiE4hsOEytLTvCidOgIGpcGHannfl4",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "cid",
+							"value": "T001_CS101",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8081/StudentCourse/allStudent",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"StudentCourse",
+						"allStudent"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "allCourseS",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyTmFtZSI6IlMwMDEiLCJwYXNzd29yZCI6InBhc3N3b3JkMTIzIiwiZXhwIjoxNzMyOTAwODI3LCJpYXQiOjE3MzI4NzkyMjd9.NSHD2p5EEF5hTuiE4hsOEytLTvCidOgIGpcGHannfl4",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8081/StudentCourse/allCourse",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"StudentCourse",
+						"allCourse"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "comment",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyTmFtZSI6IlMwMDEiLCJwYXNzd29yZCI6InBhc3N3b3JkMTIzIiwiZXhwIjoxNzMyOTAwODI3LCJpYXQiOjE3MzI4NzkyMjd9.NSHD2p5EEF5hTuiE4hsOEytLTvCidOgIGpcGHannfl4",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "discussionId",
+							"value": "D002",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8081/comment/all",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"comment",
+						"all"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "insertComment",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyTmFtZSI6IlMwMDEiLCJwYXNzd29yZCI6InBhc3N3b3JkMTIzIiwiZXhwIjoxNzMyOTAwODI3LCJpYXQiOjE3MzI4NzkyMjd9.NSHD2p5EEF5hTuiE4hsOEytLTvCidOgIGpcGHannfl4",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "discussionId",
+							"value": "D002",
+							"type": "text"
+						},
+						{
+							"key": "commentInfo",
+							"value": "这是一个测试评论",
+							"type": "text"
+						},
+						{
+							"key": "imgUrl",
+							"value": "/Test",
+							"type": "text"
+						},
+						{
+							"key": "mentionedUser",
+							"value": "S002,S003",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8081/comment/insert",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"comment",
+						"insert"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "updateCommentInfo",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyTmFtZSI6IlMwMDEiLCJwYXNzd29yZCI6InBhc3N3b3JkMTIzIiwiZXhwIjoxNzMyOTAwODI3LCJpYXQiOjE3MzI4NzkyMjd9.NSHD2p5EEF5hTuiE4hsOEytLTvCidOgIGpcGHannfl4",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"updateInfo\":\"updateInfo is\",\r\n    \"commentId\":\"C5\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8081/comment/updateInfo",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"comment",
+						"updateInfo"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "increaseCommentLikes",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyTmFtZSI6IlMwMDEiLCJwYXNzd29yZCI6InBhc3N3b3JkMTIzIiwiZXhwIjoxNzMyOTAwODI3LCJpYXQiOjE3MzI4NzkyMjd9.NSHD2p5EEF5hTuiE4hsOEytLTvCidOgIGpcGHannfl4",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"commentId\":\"C5\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8081/comment/increaseLikes",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"comment",
+						"increaseLikes"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "deleteCommentLikes",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyTmFtZSI6IlMwMDEiLCJwYXNzd29yZCI6InBhc3N3b3JkMTIzIiwiZXhwIjoxNzMyOTAwODI3LCJpYXQiOjE3MzI4NzkyMjd9.NSHD2p5EEF5hTuiE4hsOEytLTvCidOgIGpcGHannfl4",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"commentId\":\"C5\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8081/comment/deleteLikes",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"comment",
+						"deleteLikes"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyTmFtZSI6IlMwMDEiLCJwYXNzd29yZCI6InBhc3N3b3JkMTIzIiwiZXhwIjoxNzMyOTAwODI3LCJpYXQiOjE3MzI4NzkyMjd9.NSHD2p5EEF5hTuiE4hsOEytLTvCidOgIGpcGHannfl4",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "commentId",
+							"value": "C5",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8081/comment/delete",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"comment",
+						"delete"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "discussion",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyTmFtZSI6IlMwMDEiLCJwYXNzd29yZCI6InBhc3N3b3JkMTIzIiwiZXhwIjoxNzMyOTAwODI3LCJpYXQiOjE3MzI4NzkyMjd9.NSHD2p5EEF5hTuiE4hsOEytLTvCidOgIGpcGHannfl4",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "cid",
+							"value": "T001_CS101",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8081/discussion/all",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"discussion",
+						"all"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "oneDiscussion",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyTmFtZSI6IlMwMDEiLCJwYXNzd29yZCI6InBhc3N3b3JkMTIzIiwiZXhwIjoxNzMyOTAwODI3LCJpYXQiOjE3MzI4NzkyMjd9.NSHD2p5EEF5hTuiE4hsOEytLTvCidOgIGpcGHannfl4",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "discussionId",
+							"value": "D002",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8081/discussion/getOneDiscussion",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"discussion",
+						"getOneDiscussion"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "all_student",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyTmFtZSI6IlMwMDEiLCJwYXNzd29yZCI6InBhc3N3b3JkMTIzIiwiZXhwIjoxNzMyOTAwODI3LCJpYXQiOjE3MzI4NzkyMjd9.NSHD2p5EEF5hTuiE4hsOEytLTvCidOgIGpcGHannfl4",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "cid",
+							"value": "T001_CS101",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8081/discussion/student_all",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"discussion",
+						"student_all"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "discussionTopic",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyTmFtZSI6IlMwMDEiLCJwYXNzd29yZCI6InBhc3N3b3JkMTIzIiwiZXhwIjoxNzMyOTAwODI3LCJpYXQiOjE3MzI4NzkyMjd9.NSHD2p5EEF5hTuiE4hsOEytLTvCidOgIGpcGHannfl4",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "cid",
+							"value": "T001_CS101",
+							"type": "text"
+						},
+						{
+							"key": "topic",
+							"value": "游戏",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8081/discussion/topic",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"discussion",
+						"topic"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "discussionMentioned",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyTmFtZSI6IlMwMDEiLCJwYXNzd29yZCI6InBhc3N3b3JkMTIzIiwiZXhwIjoxNzMyOTAwODI3LCJpYXQiOjE3MzI4NzkyMjd9.NSHD2p5EEF5hTuiE4hsOEytLTvCidOgIGpcGHannfl4",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "cid",
+							"value": "T001_CS101",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8081/discussion/cid_mentioned",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"discussion",
+						"cid_mentioned"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "discussionMentionedAll",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyTmFtZSI6IlMwMDEiLCJwYXNzd29yZCI6InBhc3N3b3JkMTIzIiwiZXhwIjoxNzMyOTAwODI3LCJpYXQiOjE3MzI4NzkyMjd9.NSHD2p5EEF5hTuiE4hsOEytLTvCidOgIGpcGHannfl4",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8081/discussion/mentioned",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"discussion",
+						"mentioned"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "insertDiscussion",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyTmFtZSI6IlMwMDEiLCJwYXNzd29yZCI6InBhc3N3b3JkMTIzIiwiZXhwIjoxNzMyOTAwODI3LCJpYXQiOjE3MzI4NzkyMjd9.NSHD2p5EEF5hTuiE4hsOEytLTvCidOgIGpcGHannfl4",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "cid",
+							"value": "T001_CS101",
+							"type": "text"
+						},
+						{
+							"key": "information",
+							"value": "学生测试帖子",
+							"type": "text"
+						},
+						{
+							"key": "mentionedUser",
+							"value": "S002,S003",
+							"type": "text"
+						},
+						{
+							"key": "imgUrl",
+							"value": "/Test",
+							"type": "text"
+						},
+						{
+							"key": "tag",
+							"value": "Test",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8081/discussion/insert",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"discussion",
+						"insert"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "updateDiscussionInfo",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyTmFtZSI6IlMwMDEiLCJwYXNzd29yZCI6InBhc3N3b3JkMTIzIiwiZXhwIjoxNzMyOTAwODI3LCJpYXQiOjE3MzI4NzkyMjd9.NSHD2p5EEF5hTuiE4hsOEytLTvCidOgIGpcGHannfl4",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"discussionInfo\":\"Test\",\r\n    \"discussionId\":\"D5\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8081/discussion/updateInfo",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"discussion",
+						"updateInfo"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "deleteDiscussion",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyTmFtZSI6IlMwMDEiLCJwYXNzd29yZCI6InBhc3N3b3JkMTIzIiwiZXhwIjoxNzMyOTAwODI3LCJpYXQiOjE3MzI4NzkyMjd9.NSHD2p5EEF5hTuiE4hsOEytLTvCidOgIGpcGHannfl4",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "discussionId",
+							"value": "D5",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8081/discussion/delete",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"discussion",
+						"delete"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "favoriteByStudentNo",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyTmFtZSI6IlMwMDEiLCJwYXNzd29yZCI6InBhc3N3b3JkMTIzIiwiZXhwIjoxNzMyOTAwODI3LCJpYXQiOjE3MzI4NzkyMjd9.NSHD2p5EEF5hTuiE4hsOEytLTvCidOgIGpcGHannfl4",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8081/favorite/selectByStudentNo",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"favorite",
+						"selectByStudentNo"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "favoriteSelectByStarNoteFromOthers",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyTmFtZSI6IlMwMDEiLCJwYXNzd29yZCI6InBhc3N3b3JkMTIzIiwiZXhwIjoxNzMyOTAwODI3LCJpYXQiOjE3MzI4NzkyMjd9.NSHD2p5EEF5hTuiE4hsOEytLTvCidOgIGpcGHannfl4",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8081/favorite/selectByStarNoteFromOthers",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"favorite",
+						"selectByStarNoteFromOthers"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "selectByStarDiscussionFromOthers",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyTmFtZSI6IlMwMDEiLCJwYXNzd29yZCI6InBhc3N3b3JkMTIzIiwiZXhwIjoxNzMyOTAwODI3LCJpYXQiOjE3MzI4NzkyMjd9.NSHD2p5EEF5hTuiE4hsOEytLTvCidOgIGpcGHannfl4",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8081/favorite/selectByStarDiscussionFromOthers",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"favorite",
+						"selectByStarDiscussionFromOthers"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "selectByStudentNoAndFavoriteTitle",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyTmFtZSI6IlMwMDEiLCJwYXNzd29yZCI6InBhc3N3b3JkMTIzIiwiZXhwIjoxNzMyOTAwODI3LCJpYXQiOjE3MzI4NzkyMjd9.NSHD2p5EEF5hTuiE4hsOEytLTvCidOgIGpcGHannfl4",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "favoriteTitle",
+							"value": "学习",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8081/favorite/selectByStudentNoAndFavoriteTitle",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"favorite",
+						"selectByStudentNoAndFavoriteTitle"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "selectByStudentNoAndFavoriteNo",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyTmFtZSI6IlMwMDEiLCJwYXNzd29yZCI6InBhc3N3b3JkMTIzIiwiZXhwIjoxNzMyOTAwODI3LCJpYXQiOjE3MzI4NzkyMjd9.NSHD2p5EEF5hTuiE4hsOEytLTvCidOgIGpcGHannfl4",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "favoriteNo",
+							"value": "F001",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8081/favorite/selectByStudentNoAndFavoriteNo",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"favorite",
+						"selectByStudentNoAndFavoriteNo"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "insertFavoriteOwn",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyTmFtZSI6IlMwMDEiLCJwYXNzd29yZCI6InBhc3N3b3JkMTIzIiwiZXhwIjoxNzMyOTAwODI3LCJpYXQiOjE3MzI4NzkyMjd9.NSHD2p5EEF5hTuiE4hsOEytLTvCidOgIGpcGHannfl4",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"favoriteInformationNo\":\"D4\",\r\n    \"favoriteTitle\":\"学习\",\r\n    \"authority\":1\r\n\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8081/favorite/insertFavoriteOwn",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"favorite",
+						"insertFavoriteOwn"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "updateFavoriteAuthority",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyTmFtZSI6IlMwMDEiLCJwYXNzd29yZCI6InBhc3N3b3JkMTIzIiwiZXhwIjoxNzMyOTAwODI3LCJpYXQiOjE3MzI4NzkyMjd9.NSHD2p5EEF5hTuiE4hsOEytLTvCidOgIGpcGHannfl4",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"favoriteNo\":\"F001\",\r\n    \"favoriteInfoNo\":\"D4\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8081/favorite/updateFavoriteAuthority",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"favorite",
+						"updateFavoriteAuthority"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "insertFavoriteOther",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyTmFtZSI6IlMwMDEiLCJwYXNzd29yZCI6InBhc3N3b3JkMTIzIiwiZXhwIjoxNzMyOTAwODI3LCJpYXQiOjE3MzI4NzkyMjd9.NSHD2p5EEF5hTuiE4hsOEytLTvCidOgIGpcGHannfl4",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"favoriteInformationNo\":\"N5\",\r\n    \"favoriteTitle\":\"学习\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8081/favorite/insertFavoriteOther",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"favorite",
+						"insertFavoriteOther"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "insertDiscussionFavoriteOther",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyTmFtZSI6IlMwMDEiLCJwYXNzd29yZCI6InBhc3N3b3JkMTIzIiwiZXhwIjoxNzMyOTAwODI3LCJpYXQiOjE3MzI4NzkyMjd9.NSHD2p5EEF5hTuiE4hsOEytLTvCidOgIGpcGHannfl4",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "favoriteInformationNo",
+							"value": "D002",
+							"type": "text"
+						},
+						{
+							"key": "favoriteTitle",
+							"value": "学习",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8081/favorite/insertDiscussionFavoriteOther",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"favorite",
+						"insertDiscussionFavoriteOther"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "updateFavoriteTitle",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyTmFtZSI6IlMwMDEiLCJwYXNzd29yZCI6InBhc3N3b3JkMTIzIiwiZXhwIjoxNzMyOTAwODI3LCJpYXQiOjE3MzI4NzkyMjd9.NSHD2p5EEF5hTuiE4hsOEytLTvCidOgIGpcGHannfl4",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"favoriteTitle\":\"test\",\r\n    \"studentNo\":\"S001\",\r\n    \"favoriteNo\":\"F001\",\r\n    \"favoriteInfo\":\"D4\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8081/favorite/updateFavoriteTitle",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"favorite",
+						"updateFavoriteTitle"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "deleteFavorite",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyTmFtZSI6IlMwMDEiLCJwYXNzd29yZCI6InBhc3N3b3JkMTIzIiwiZXhwIjoxNzMyOTAwODI3LCJpYXQiOjE3MzI4NzkyMjd9.NSHD2p5EEF5hTuiE4hsOEytLTvCidOgIGpcGHannfl4",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "favoriteNo",
+							"value": "F001",
+							"type": "text"
+						},
+						{
+							"key": "favoriteInformationNo",
+							"value": "D4",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8081/favorite/deleteFavorite",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"favorite",
+						"deleteFavorite"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "oneHomework",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyTmFtZSI6IlMwMDEiLCJwYXNzd29yZCI6InBhc3N3b3JkMTIzIiwiZXhwIjoxNzMyOTAwODI3LCJpYXQiOjE3MzI4NzkyMjd9.NSHD2p5EEF5hTuiE4hsOEytLTvCidOgIGpcGHannfl4",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "homeworkNO",
+							"value": "H001",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8081/homework/oneHomework",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"homework",
+						"oneHomework"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "allCidHomework",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyTmFtZSI6IlMwMDEiLCJwYXNzd29yZCI6InBhc3N3b3JkMTIzIiwiZXhwIjoxNzMyOTAwODI3LCJpYXQiOjE3MzI4NzkyMjd9.NSHD2p5EEF5hTuiE4hsOEytLTvCidOgIGpcGHannfl4",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "cid",
+							"value": "T001_CS101",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8081/homework/allCidHomework",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"homework",
+						"allCidHomework"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getAllUnfinishedHomework",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyTmFtZSI6IlMwMDEiLCJwYXNzd29yZCI6InBhc3N3b3JkMTIzIiwiZXhwIjoxNzMyOTAwODI3LCJpYXQiOjE3MzI4NzkyMjd9.NSHD2p5EEF5hTuiE4hsOEytLTvCidOgIGpcGHannfl4",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8081/studentHomework/getAllUnfinishedHomework",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"studentHomework",
+						"getAllUnfinishedHomework"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "uploadSH",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyTmFtZSI6IlMwMDEiLCJwYXNzd29yZCI6InBhc3N3b3JkMTIzIiwiZXhwIjoxNzMyOTAwODI3LCJpYXQiOjE3MzI4NzkyMjd9.NSHD2p5EEF5hTuiE4hsOEytLTvCidOgIGpcGHannfl4",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "file",
+							"type": "file",
+							"src": "/C:/Users/MHB/Desktop/应聘算法岗位_马海博_北京交通大学_15590203039.pdf"
+						},
+						{
+							"key": "studentNo",
+							"value": "S002",
+							"type": "text"
+						},
+						{
+							"key": "homeworkNo",
+							"value": "H6",
+							"type": "text"
+						},
+						{
+							"key": "submitDescription",
+							"value": "Test",
+							"type": "text"
+						},
+						{
+							"key": "submitTime",
+							"value": "2024-11-05 17:52:06",
+							"type": "text"
+						},
+						{
+							"key": "comment",
+							"value": "未批改",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8081/studentHomework/upload",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"studentHomework",
+						"upload"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "downloadSH",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8081/studentHomework/download/10.pdf",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"studentHomework",
+						"download",
+						"10.pdf"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getAllTeaching",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyTmFtZSI6IlMwMDEiLCJwYXNzd29yZCI6InBhc3N3b3JkMTIzIiwiZXhwIjoxNzMyOTAwODI3LCJpYXQiOjE3MzI4NzkyMjd9.NSHD2p5EEF5hTuiE4hsOEytLTvCidOgIGpcGHannfl4",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "cid",
+							"value": "T001_CS101",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8081/teaching/getCourseInfo",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"teaching",
+						"getCourseInfo"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getSyllabus",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyTmFtZSI6IlMwMDEiLCJwYXNzd29yZCI6InBhc3N3b3JkMTIzIiwiZXhwIjoxNzMyOTAwODI3LCJpYXQiOjE3MzI4NzkyMjd9.NSHD2p5EEF5hTuiE4hsOEytLTvCidOgIGpcGHannfl4",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "cid",
+							"value": "T001_CS101",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8081/teaching/getSyllabus",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"teaching",
+						"getSyllabus"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getCalendar",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyTmFtZSI6IlMwMDEiLCJwYXNzd29yZCI6InBhc3N3b3JkMTIzIiwiZXhwIjoxNzMyOTAwODI3LCJpYXQiOjE3MzI4NzkyMjd9.NSHD2p5EEF5hTuiE4hsOEytLTvCidOgIGpcGHannfl4",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "cid",
+							"value": "T001_CS101",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8081/teaching/getCalendar",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"teaching",
+						"getCalendar"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getTeacherInfo",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyTmFtZSI6IlMwMDEiLCJwYXNzd29yZCI6InBhc3N3b3JkMTIzIiwiZXhwIjoxNzMyOTAwODI3LCJpYXQiOjE3MzI4NzkyMjd9.NSHD2p5EEF5hTuiE4hsOEytLTvCidOgIGpcGHannfl4",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "cid",
+							"value": "T001_CS101",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8081/teaching/getTeacherInfo",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"teaching",
+						"getTeacherInfo"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getStudentAllNote",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyTmFtZSI6IlMwMDEiLCJwYXNzd29yZCI6InBhc3N3b3JkMTIzIiwiZXhwIjoxNzMyOTAwODI3LCJpYXQiOjE3MzI4NzkyMjd9.NSHD2p5EEF5hTuiE4hsOEytLTvCidOgIGpcGHannfl4",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8081/note/getStudentAllNote",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"note",
+						"getStudentAllNote"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "allPublicNote",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyTmFtZSI6IlMwMDEiLCJwYXNzd29yZCI6InBhc3N3b3JkMTIzIiwiZXhwIjoxNzMyOTAwODI3LCJpYXQiOjE3MzI4NzkyMjd9.NSHD2p5EEF5hTuiE4hsOEytLTvCidOgIGpcGHannfl4",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8081/note/allPublicNote",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"note",
+						"allPublicNote"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "uploadNote",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyTmFtZSI6IlMwMDEiLCJwYXNzd29yZCI6InBhc3N3b3JkMTIzIiwiZXhwIjoxNzMyOTAwODI3LCJpYXQiOjE3MzI4NzkyMjd9.NSHD2p5EEF5hTuiE4hsOEytLTvCidOgIGpcGHannfl4",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "file",
+							"type": "file",
+							"src": "/C:/Users/MHB/Desktop/应聘算法岗位_马海博_北京交通大学_15590203039.pdf"
+						},
+						{
+							"key": "noteInfo",
+							"value": "Test",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8081/note/upload",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"note",
+						"upload"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "downloadNote",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8081/note/download/3.pdf",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"note",
+						"download",
+						"3.pdf"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "updateNoteInformation",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyTmFtZSI6IlMwMDEiLCJwYXNzd29yZCI6InBhc3N3b3JkMTIzIiwiZXhwIjoxNzMyOTAwODI3LCJpYXQiOjE3MzI4NzkyMjd9.NSHD2p5EEF5hTuiE4hsOEytLTvCidOgIGpcGHannfl4",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "noteNo",
+							"value": "N4",
+							"type": "text"
+						},
+						{
+							"key": "noteInfo",
+							"value": "TTTT",
+							"type": "text"
+						},
+						{
+							"key": "notePath",
+							"type": "file",
+							"src": "/C:/Users/MHB/Desktop/应聘算法岗位_马海博_北京交通大学_15590203039.pdf"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8081/note/updateNoteInformation",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"note",
+						"updateNoteInformation"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "updateNoteAuthority",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyTmFtZSI6IlMwMDEiLCJwYXNzd29yZCI6InBhc3N3b3JkMTIzIiwiZXhwIjoxNzMyOTAwODI3LCJpYXQiOjE3MzI4NzkyMjd9.NSHD2p5EEF5hTuiE4hsOEytLTvCidOgIGpcGHannfl4",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"noteNo\":\"N4\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8081/note/updateNoteAuthority",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"note",
+						"updateNoteAuthority"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "deleteNote",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyTmFtZSI6IlMwMDEiLCJwYXNzd29yZCI6InBhc3N3b3JkMTIzIiwiZXhwIjoxNzMyOTAwODI3LCJpYXQiOjE3MzI4NzkyMjd9.NSHD2p5EEF5hTuiE4hsOEytLTvCidOgIGpcGHannfl4",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "noteNo",
+							"value": "N4",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8081/note/deleteNote",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"note",
+						"deleteNote"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getAllNotification",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyTmFtZSI6IlMwMDEiLCJwYXNzd29yZCI6InBhc3N3b3JkMTIzIiwiZXhwIjoxNzMyOTAwODI3LCJpYXQiOjE3MzI4NzkyMjd9.NSHD2p5EEF5hTuiE4hsOEytLTvCidOgIGpcGHannfl4",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8081/notifications/getAllNotification",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"notifications",
+						"getAllNotification"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getNotification",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyTmFtZSI6IlMwMDEiLCJwYXNzd29yZCI6InBhc3N3b3JkMTIzIiwiZXhwIjoxNzMyOTAwODI3LCJpYXQiOjE3MzI4NzkyMjd9.NSHD2p5EEF5hTuiE4hsOEytLTvCidOgIGpcGHannfl4",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "cid",
+							"value": "T001_CS101",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8081/notifications/getNotification",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"notifications",
+						"getNotification"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

@@ -1,0 +1,103 @@
+{
+	"info": {
+		"_postman_id": "3784060b-690e-423f-a1ba-65144d7a26c3",
+		"name": "Test",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "30415475"
+	},
+	"item": [
+		{
+			"name": "login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\":\"T001\",\r\n    \"password\":\"password123\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8081/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "allStudent",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyTmFtZSI6IlMwMDEiLCJwYXNzd29yZCI6InBhc3N3b3JkMTIzIiwiZXhwIjoxNzMyODg3MjA3LCJpYXQiOjE3MzI4NjU2MDd9.-hJXOLfkUExWeBZIGL2fIiRt6amHtbKH0uG-U3CzWCM",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "cid",
+							"value": "T001_CS101",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8081/StudentCourse/allStudent",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"StudentCourse",
+						"allStudent"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "allCourseS",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyTmFtZSI6IlMwMDEiLCJwYXNzd29yZCI6InBhc3N3b3JkMTIzIiwiZXhwIjoxNzMyODg3MjA3LCJpYXQiOjE3MzI4NjU2MDd9.-hJXOLfkUExWeBZIGL2fIiRt6amHtbKH0uG-U3CzWCM",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8081/StudentCourse/allCourse",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"StudentCourse",
+						"allCourse"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

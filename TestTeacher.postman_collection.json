@@ -1,0 +1,1280 @@
+{
+	"info": {
+		"_postman_id": "e822b0d5-6fc3-4b3e-80a5-2eeb5769e35e",
+		"name": "TestTeacher",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "30415475"
+	},
+	"item": [
+		{
+			"name": "send",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyTmFtZSI6IlQwMDEiLCJwYXNzd29yZCI6InBhc3N3b3JkMTIzIiwiZXhwIjoxNzMyOTAwODkxLCJpYXQiOjE3MzI4NzkyOTF9.JSDKKgOthDz1_DvTbU5NdQjou3K0WXlwN1ImnDEspQM",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"cid\":\"T001_CS101\",\r\n    \"notificationInformation\":\"TTTTT\",\r\n    \"notificationTitle\":\"aaaa\",\r\n    \"users\":\"S001,S002\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8081/notifications/send",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"notifications",
+						"send"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "updateHomework",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyTmFtZSI6IlQwMDEiLCJwYXNzd29yZCI6InBhc3N3b3JkMTIzIiwiZXhwIjoxNzMyOTAwODkxLCJpYXQiOjE3MzI4NzkyOTF9.JSDKKgOthDz1_DvTbU5NdQjou3K0WXlwN1ImnDEspQM",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "newEndTime",
+							"value": "2024-11-19 18:07:04",
+							"type": "text"
+						},
+						{
+							"key": "newStartTime",
+							"value": "2024-11-19 18:07:04",
+							"type": "text"
+						},
+						{
+							"key": "scores",
+							"value": "12",
+							"type": "text"
+						},
+						{
+							"key": "homeworkNo",
+							"value": "H6",
+							"type": "text"
+						},
+						{
+							"key": "homeworkInfo",
+							"value": "11111",
+							"type": "text"
+						},
+						{
+							"key": "homeworkDesc",
+							"value": "1111",
+							"type": "text"
+						},
+						{
+							"key": "file",
+							"type": "file",
+							"src": "/C:/Users/MHB/Desktop/应聘算法岗位_马海博_北京交通大学_15590203039.pdf"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8081/homework/updateHomework",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"homework",
+						"updateHomework"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "allStudentHomework",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyTmFtZSI6IlQwMDEiLCJwYXNzd29yZCI6InBhc3N3b3JkMTIzIiwiZXhwIjoxNzMyOTAwODkxLCJpYXQiOjE3MzI4NzkyOTF9.JSDKKgOthDz1_DvTbU5NdQjou3K0WXlwN1ImnDEspQM",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "homeworkNo",
+							"value": "H001",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8081/homework/allStudentHomework",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"homework",
+						"allStudentHomework"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\":\"T001\",\r\n    \"password\":\"password123\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8081/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "allCourseT",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyTmFtZSI6IlQwMDEiLCJwYXNzd29yZCI6InBhc3N3b3JkMTIzIiwiZXhwIjoxNzMyOTAwODkxLCJpYXQiOjE3MzI4NzkyOTF9.JSDKKgOthDz1_DvTbU5NdQjou3K0WXlwN1ImnDEspQM",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8081/StudentCourse/allCourse",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"StudentCourse",
+						"allCourse"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "exportStudentLIst",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "cid",
+							"value": "T001_CS101",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8081/StudentCourse/exportStudentList",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"StudentCourse",
+						"exportStudentList"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "comment",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyTmFtZSI6IlQwMDEiLCJwYXNzd29yZCI6InBhc3N3b3JkMTIzIiwiZXhwIjoxNzMyOTAwODkxLCJpYXQiOjE3MzI4NzkyOTF9.JSDKKgOthDz1_DvTbU5NdQjou3K0WXlwN1ImnDEspQM",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "discussionId",
+							"value": "D002",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8081/comment/all",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"comment",
+						"all"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "insertComment",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyTmFtZSI6IlQwMDEiLCJwYXNzd29yZCI6InBhc3N3b3JkMTIzIiwiZXhwIjoxNzMyOTAwODkxLCJpYXQiOjE3MzI4NzkyOTF9.JSDKKgOthDz1_DvTbU5NdQjou3K0WXlwN1ImnDEspQM",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "discussionId",
+							"value": "D002",
+							"type": "text"
+						},
+						{
+							"key": "commentInfo",
+							"value": "老师的评论",
+							"type": "text"
+						},
+						{
+							"key": "imgUrl",
+							"value": "/test",
+							"type": "text"
+						},
+						{
+							"key": "mentionedUser",
+							"value": "S001,S002,S003",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8081/comment/insert",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"comment",
+						"insert"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "updateCommentInfo",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyTmFtZSI6IlQwMDEiLCJwYXNzd29yZCI6InBhc3N3b3JkMTIzIiwiZXhwIjoxNzMyOTAwODkxLCJpYXQiOjE3MzI4NzkyOTF9.JSDKKgOthDz1_DvTbU5NdQjou3K0WXlwN1ImnDEspQM",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"updateInfo\":\"new Info\",\r\n    \"commentId\":\"C6\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8081/comment/updateInfo",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"comment",
+						"updateInfo"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "increaseCommentLikes",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyTmFtZSI6IlQwMDEiLCJwYXNzd29yZCI6InBhc3N3b3JkMTIzIiwiZXhwIjoxNzMyOTAwODkxLCJpYXQiOjE3MzI4NzkyOTF9.JSDKKgOthDz1_DvTbU5NdQjou3K0WXlwN1ImnDEspQM",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"commentId\":\"C6\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8081/comment/increaseLikes",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"comment",
+						"increaseLikes"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "deleteCommentLike",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyTmFtZSI6IlQwMDEiLCJwYXNzd29yZCI6InBhc3N3b3JkMTIzIiwiZXhwIjoxNzMyOTAwODkxLCJpYXQiOjE3MzI4NzkyOTF9.JSDKKgOthDz1_DvTbU5NdQjou3K0WXlwN1ImnDEspQM",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"commentId\":\"C6\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8081/comment/deleteLikes",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"comment",
+						"deleteLikes"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "deleteComment",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyTmFtZSI6IlQwMDEiLCJwYXNzd29yZCI6InBhc3N3b3JkMTIzIiwiZXhwIjoxNzMyOTAwODkxLCJpYXQiOjE3MzI4NzkyOTF9.JSDKKgOthDz1_DvTbU5NdQjou3K0WXlwN1ImnDEspQM",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "commentId",
+							"value": "C6",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8081/comment/delete",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"comment",
+						"delete"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "discussion",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyTmFtZSI6IlQwMDEiLCJwYXNzd29yZCI6InBhc3N3b3JkMTIzIiwiZXhwIjoxNzMyOTAwODkxLCJpYXQiOjE3MzI4NzkyOTF9.JSDKKgOthDz1_DvTbU5NdQjou3K0WXlwN1ImnDEspQM",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "cid",
+							"value": "T001_CS101",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8081/discussion/all",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"discussion",
+						"all"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "oneDiscussion",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyTmFtZSI6IlQwMDEiLCJwYXNzd29yZCI6InBhc3N3b3JkMTIzIiwiZXhwIjoxNzMyOTAwODkxLCJpYXQiOjE3MzI4NzkyOTF9.JSDKKgOthDz1_DvTbU5NdQjou3K0WXlwN1ImnDEspQM",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "discussionId",
+							"value": "D002",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8081/discussion/getOneDiscussion",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"discussion",
+						"getOneDiscussion"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "discussionTopic",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyTmFtZSI6IlQwMDEiLCJwYXNzd29yZCI6InBhc3N3b3JkMTIzIiwiZXhwIjoxNzMyOTAwODkxLCJpYXQiOjE3MzI4NzkyOTF9.JSDKKgOthDz1_DvTbU5NdQjou3K0WXlwN1ImnDEspQM",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "cid",
+							"value": "T001_CS101",
+							"type": "text"
+						},
+						{
+							"key": "topic",
+							"value": "游戏",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8081/discussion/topic",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"discussion",
+						"topic"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "discussionMentioned",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyTmFtZSI6IlQwMDEiLCJwYXNzd29yZCI6InBhc3N3b3JkMTIzIiwiZXhwIjoxNzMyOTAwODkxLCJpYXQiOjE3MzI4NzkyOTF9.JSDKKgOthDz1_DvTbU5NdQjou3K0WXlwN1ImnDEspQM",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "cid",
+							"value": "T001_CS101",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8081/discussion/cid_mentioned",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"discussion",
+						"cid_mentioned"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "discussionMentionedAll",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyTmFtZSI6IlQwMDEiLCJwYXNzd29yZCI6InBhc3N3b3JkMTIzIiwiZXhwIjoxNzMyOTAwODkxLCJpYXQiOjE3MzI4NzkyOTF9.JSDKKgOthDz1_DvTbU5NdQjou3K0WXlwN1ImnDEspQM",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8081/discussion/mentioned",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"discussion",
+						"mentioned"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "insertDiscussion",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyTmFtZSI6IlQwMDEiLCJwYXNzd29yZCI6InBhc3N3b3JkMTIzIiwiZXhwIjoxNzMyOTAwODkxLCJpYXQiOjE3MzI4NzkyOTF9.JSDKKgOthDz1_DvTbU5NdQjou3K0WXlwN1ImnDEspQM",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "cid",
+							"value": "T001_CS101",
+							"type": "text"
+						},
+						{
+							"key": "information",
+							"value": "教师测试帖子",
+							"type": "text"
+						},
+						{
+							"key": "mentionedUser",
+							"value": "S001,S002,all",
+							"type": "text"
+						},
+						{
+							"key": "imgUrl",
+							"value": "/Teest",
+							"type": "text"
+						},
+						{
+							"key": "tag",
+							"value": "test",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8081/discussion/insert",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"discussion",
+						"insert"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "updateDiscussionInfo",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyTmFtZSI6IlQwMDEiLCJwYXNzd29yZCI6InBhc3N3b3JkMTIzIiwiZXhwIjoxNzMyOTAwODkxLCJpYXQiOjE3MzI4NzkyOTF9.JSDKKgOthDz1_DvTbU5NdQjou3K0WXlwN1ImnDEspQM",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"discussionInfo\":\"Test\",\r\n    \"discussionId\":\"D6\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8081/discussion/updateInfo",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"discussion",
+						"updateInfo"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "deleteDiscussion",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyTmFtZSI6IlQwMDEiLCJwYXNzd29yZCI6InBhc3N3b3JkMTIzIiwiZXhwIjoxNzMyOTAwODkxLCJpYXQiOjE3MzI4NzkyOTF9.JSDKKgOthDz1_DvTbU5NdQjou3K0WXlwN1ImnDEspQM",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "discussionId",
+							"value": "D6",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8081/discussion/delete",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"discussion",
+						"delete"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "fileLook",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyTmFtZSI6IlQwMDEiLCJwYXNzd29yZCI6InBhc3N3b3JkMTIzIiwiZXhwIjoxNzMyOTAwODkxLCJpYXQiOjE3MzI4NzkyOTF9.JSDKKgOthDz1_DvTbU5NdQjou3K0WXlwN1ImnDEspQM",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "cid",
+							"value": "T001_CS101",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8081/file/allCourseSource",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"file",
+						"allCourseSource"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "uploadCourseResorce",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "file",
+							"type": "file",
+							"src": "/C:/Users/MHB/Desktop/（2016-2021）试题.pdf"
+						},
+						{
+							"key": "cid",
+							"value": "T001_CS101",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8081/file/upload",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"file",
+						"upload"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "downloadCR",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8081/file/download/14.pdf",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"file",
+						"download",
+						"14.pdf"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "deleteCR",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "courseResourceNo",
+							"value": "R14",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8081/file/delete",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"file",
+						"delete"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "oneHomework",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyTmFtZSI6IlQwMDEiLCJwYXNzd29yZCI6InBhc3N3b3JkMTIzIiwiZXhwIjoxNzMyOTAwODkxLCJpYXQiOjE3MzI4NzkyOTF9.JSDKKgOthDz1_DvTbU5NdQjou3K0WXlwN1ImnDEspQM",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "homeworkNO",
+							"value": "H001",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8081/homework/oneHomework",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"homework",
+						"oneHomework"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "allCidHomework",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyTmFtZSI6IlQwMDEiLCJwYXNzd29yZCI6InBhc3N3b3JkMTIzIiwiZXhwIjoxNzMyOTAwODkxLCJpYXQiOjE3MzI4NzkyOTF9.JSDKKgOthDz1_DvTbU5NdQjou3K0WXlwN1ImnDEspQM",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "cid",
+							"value": "T001_CS101",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8081/homework/allCidHomework",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"homework",
+						"allCidHomework"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "updateGrade",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyTmFtZSI6IlQwMDEiLCJwYXNzd29yZCI6InBhc3N3b3JkMTIzIiwiZXhwIjoxNzMyOTAwODkxLCJpYXQiOjE3MzI4NzkyOTF9.JSDKKgOthDz1_DvTbU5NdQjou3K0WXlwN1ImnDEspQM",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"grade\":\"88\",\r\n    \"StudentNo\":\"S001\",\r\n    \"HomeworkNo\":\"H6\",\r\n    \"comment\":\"做得好\"   \r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8081/homework/updateGrade",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"homework",
+						"updateGrade"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "updateVisible",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyTmFtZSI6IlQwMDEiLCJwYXNzd29yZCI6InBhc3N3b3JkMTIzIiwiZXhwIjoxNzMyOTAwODkxLCJpYXQiOjE3MzI4NzkyOTF9.JSDKKgOthDz1_DvTbU5NdQjou3K0WXlwN1ImnDEspQM",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "homeworkNo",
+							"value": "H6",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8081/homework/updateVisible",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"homework",
+						"updateVisible"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "uploadHomework",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyTmFtZSI6IlQwMDEiLCJwYXNzd29yZCI6InBhc3N3b3JkMTIzIiwiZXhwIjoxNzMyOTAwODkxLCJpYXQiOjE3MzI4NzkyOTF9.JSDKKgOthDz1_DvTbU5NdQjou3K0WXlwN1ImnDEspQM",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "file",
+							"type": "file",
+							"src": "/C:/Users/MHB/Desktop/（2016-2021）试题.pdf"
+						},
+						{
+							"key": "Cid",
+							"value": "T001_CS101",
+							"type": "text"
+						},
+						{
+							"key": "homeworkDescription",
+							"value": "测试作业",
+							"type": "text"
+						},
+						{
+							"key": "startTime",
+							"value": "Thu Nov 07 2024 11:43:02 GMT+0800 (中国标准时间)",
+							"type": "text"
+						},
+						{
+							"key": "endTime",
+							"value": "Thu Nov 07 2024 11:43:02 GMT+0800 (中国标准时间)",
+							"type": "text"
+						},
+						{
+							"key": "homeworkGrade",
+							"value": "100",
+							"type": "text"
+						},
+						{
+							"key": "homeworkInfo",
+							"value": "测试",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8081/homework/upload",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"homework",
+						"upload"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "downloadHomework",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8081/homework/download/7.pdf",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"homework",
+						"download",
+						"7.pdf"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "deleteHomework",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyTmFtZSI6IlQwMDEiLCJwYXNzd29yZCI6InBhc3N3b3JkMTIzIiwiZXhwIjoxNzMyOTAwODkxLCJpYXQiOjE3MzI4NzkyOTF9.JSDKKgOthDz1_DvTbU5NdQjou3K0WXlwN1ImnDEspQM",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "homeworkNo",
+							"value": "H7",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8081/homework/delete",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"homework",
+						"delete"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "updateHomeworkVisible",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyTmFtZSI6IlQwMDEiLCJwYXNzd29yZCI6InBhc3N3b3JkMTIzIiwiZXhwIjoxNzMyOTAwODkxLCJpYXQiOjE3MzI4NzkyOTF9.JSDKKgOthDz1_DvTbU5NdQjou3K0WXlwN1ImnDEspQM",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "homeworkNo",
+							"value": "H6",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8081/studentHomework/updateVisible",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"studentHomework",
+						"updateVisible"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getAllUnfinishedHomework",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyTmFtZSI6IlQwMDEiLCJwYXNzd29yZCI6InBhc3N3b3JkMTIzIiwiZXhwIjoxNzMyOTAwODkxLCJpYXQiOjE3MzI4NzkyOTF9.JSDKKgOthDz1_DvTbU5NdQjou3K0WXlwN1ImnDEspQM",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8081/studentHomework/getAllUnfinishedHomework",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"studentHomework",
+						"getAllUnfinishedHomework"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getNotification",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyTmFtZSI6IlQwMDEiLCJwYXNzd29yZCI6InBhc3N3b3JkMTIzIiwiZXhwIjoxNzMyOTAwODkxLCJpYXQiOjE3MzI4NzkyOTF9.JSDKKgOthDz1_DvTbU5NdQjou3K0WXlwN1ImnDEspQM",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "cid",
+							"value": "T001_CS101",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8081/notifications/getNotification",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"notifications",
+						"getNotification"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

@@ -117,7 +117,7 @@ export const reqLikeDiscussion = () => request.get<any, any>(API.ALL_LIKE_DISCUS
 //获得互评作业的内容 //TODO
 export const reqSendHomeworkbystu = (homeworkNo: any) => request.get<any, any>(API.GET_HOMEWORKBYSTU + `?homeworkNo=${homeworkNo}`)
 //获得选课所有学生人名用于讨论区
-export const reqStudentName = (data: any) => request.get<any, any>(API.COURSE_USERNAME, data)
+export const reqStudentName = (courseId: any) => request.get<any, any>(API.COURSE_USERNAME+`?cid=${courseId}`)
 
 
 

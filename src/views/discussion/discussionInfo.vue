@@ -35,7 +35,7 @@
   </el-scrollbar>
   <div class="main_content_footer">
     <div class="input_box" width="100%">
-      <el-mention class="discuss-chat-input no-border" v-model="newMessage" type="textarea" :options="options"
+      <el-mention class="discuss-chat-input no-border":loading="loading" v-model="newMessage" type="textarea" :options="options"@search="handleSearch"
         placeholder="Please input" />
     </div>
     <div class="btn_box">
@@ -46,10 +46,11 @@
 </template>
 
 <script>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted ,onBeforeMount} from 'vue';
 import { useRouter } from 'vue-router';
 import { reqAllComment, reqOneDiscussion, addComment, addLikeDiscussion, reqDeleteComment, reqDeleteDiscussion, reqStudentName } from '@/api/api'; // 假设这是更新帖子权限状态的API
-import { ElNotification, ElMessage } from 'element-plus';
+import { ElNotification, ElMessage} from 'element-plus';
+
 
 export default {
   setup() {
@@ -116,12 +117,32 @@ export default {
         value: 'btea',
       },
     ])
+    const loading = ref(false)
     const options = ref([])
     const posts = ref([]);//界面展示的
     const $router = useRouter(); // 获取路由实例
     const comments = ref([]);//界面展示的
     const newMessage = ref(""); // 输入框的绑定值
     const title = ref('测试1')
+    let timer = null;
+
+  
+const handleSearch =  (pattern) => {
+  if (timer) clearTimeout(timer)
+  loading.value = true
+  timer = setTimeout(async() => {
+    const courseId = localStorage.getItem('courseId')
+    const commentUser = await reqStudentName(courseId)
+    options.value = commentUser.map(
+      (item) => ({
+        label: pattern + item,
+        value: pattern + item,
+      })
+    )
+    loading.value = false
+  }, 1500)
+};
+
 
     const addOneComment = async (val) => {
       console.log(val)
@@ -203,20 +224,16 @@ export default {
     onMounted(async () => {
       try {
         const discussionId = localStorage.getItem('discussionId')
+        const courseId = localStorage.getItem('courseId')
         const postResponse = await reqOneDiscussion(discussionId);
         const commentResponse = await reqAllComment(discussionId);
-        const formData = new FormData()
-        const courseId = localStorage.getItem('courseId')
-        formData.append('cid', courseId)
-        const commentUser = await reqStudentName(formData)
+        
         posts.value = postResponse.data;
         comments.value = commentResponse.data;
-        options.value = commentUser.data;
       } catch (error) {
         console.log(error)
         posts.value = mockPost;
         comments.value = mockReply.value;
-        options.value = MockOptions.value;
         ElNotification({
           type: 'error',
           message: '获取帖子详细信息失败',
@@ -260,6 +277,7 @@ export default {
       showDeleteDiscussionButton,
       deleteDiscussion,
       options,
+      handleSearch,
     };
   },
 };
@@ -300,7 +318,7 @@ export default {
   resize: none;
   font-size: 14px;
   color: #606266;
-  /* box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05); */
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
   transition: border-color 0.3s, box-shadow 0.3s;
   margin-top: 10px;
 }
