@@ -59,7 +59,8 @@ enum API {
   DELETE_HOMEWORK = "/homework/delete",
   DELETE_COURSERESOURCE = "/file/delete",
   DELETE_NOTIFICATION = "/notifications/delete",
-  COURSE_USERNAME = "/discussion/all_student"
+  COURSE_USERNAME = "/discussion/all_student",
+  ALL_MENTIONED = "/mentioned/all",
 }
 //登录接口
 export const reqLogin = (data: any) => request.post<any, any>(API.LOGIN_URL, data);
@@ -117,7 +118,9 @@ export const reqLikeDiscussion = () => request.get<any, any>(API.ALL_LIKE_DISCUS
 //获得互评作业的内容 //TODO
 export const reqSendHomeworkbystu = (homeworkNo: any) => request.get<any, any>(API.GET_HOMEWORKBYSTU + `?homeworkNo=${homeworkNo}`)
 //获得选课所有学生人名用于讨论区
-export const reqStudentName = (courseId: any) => request.get<any, any>(API.COURSE_USERNAME+`?cid=${courseId}`)
+export const reqStudentName = (courseId: any) => request.get<any, any>(API.COURSE_USERNAME + `?cid=${courseId}`)
+//首页获取被@的信息
+export const reqMentioned = () => request.get<any, any>(API.ALL_MENTIONED)
 
 
 

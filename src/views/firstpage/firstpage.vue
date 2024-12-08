@@ -139,6 +139,7 @@
           <div class="whiteback3">
             <h1 style="text-align: left; font-weight: bold;margin-bottom: 10px;">通知公告</h1>
             <div class="notification-scrollable">
+              <h1 style="text-align: left; font-weight: bold;margin-bottom: 10px;">课程通知</h1>
               <el-row :gutter="20">
                 <el-col :span="24" v-for="(notification, index) in notifications" :key="index">
                   <div class="notification-bar">
@@ -150,6 +151,20 @@
                     <el-tag :type="notification.notificationState === '已读' ? 'success' : 'warning'">
                       {{ notification.notificationState }}
                     </el-tag>
+                  </div>
+                </el-col>
+              </el-row>
+            </div>
+            <div class="mention-scrollable">
+              <h1 style="text-align: left; font-weight: bold;margin-bottom: 10px;">讨论区被@</h1>
+              <el-row :gutter="20">
+                <el-col :span="24" v-for="(mention, index) in mentions" :key="index">
+                  <div class="notification-bar">
+                    <div class="notification-info" @click="viewMention(mention)">
+                      <h2 class="notification-lesson">{{ mention.courseName }}</h2>
+                      <h2 class="notification-title">{{ mention.discussionInfo }}</h2>
+                      <p class="notification-time">{{ mention.postName }}</p>
+                    </div>
                   </div>
                 </el-col>
               </el-row>
@@ -179,7 +194,7 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
-import { reqUserInfo, reqCourseList, reqCourseIntro, reqNotificationAll, updateNotificationState, reqUnfinishedHomework } from '@/api/api';
+import { reqUserInfo, reqCourseList, reqCourseIntro, reqNotificationAll, updateNotificationState, reqUnfinishedHomework, reqMentioned } from '@/api/api';
 import { ElNotification } from 'element-plus';
 import { requireAvatar } from '../../api/api';
 
@@ -190,9 +205,33 @@ const dialogVisible = ref(false);
 const currentNotification = ref({});
 const notifications = ref([]);
 const homeworks = ref([]);
+const mentions = ref([]);
 
 
 // 模拟数据
+const mockMentions = ref([
+  {
+    courseName: '人工智能基础',
+    discussionInfo: '今天我们学习了神经网络的基本原理，回顾了经典的反向传播算法。',
+    postName: '张三',
+  },
+  {
+    courseName: '数据结构与算法',
+    discussionInfo: '今天讲解了树的遍历，重点讲解了深度优先和广度优先搜索的实现。',
+    postName: '李四',
+  },
+  {
+    courseName: '数据库系统',
+    discussionInfo: '本节课介绍了关系型数据库的基本概念及其架构，讲解了SQL的基本操作。',
+    postName: '王五',
+  },
+  {
+    courseName: '操作系统',
+    discussionInfo: '本节课讲解了进程管理和内存管理的基本概念，重点介绍了分页和分段。',
+    postName: '赵六',
+  },
+]);
+
 const mockDataNotify = [
   {
     courseName: '数据库系统',
@@ -269,14 +308,17 @@ const fetchNotifications = async () => {
   try {
     const response = await reqNotificationAll(); // 获取通知数据
     const homeworkResponse = await reqUnfinishedHomework();
+    const mentionResponse = await reqMentioned();
     notifications.value = response.data || []; // 更新通知数据
     homeworks.value = homeworkResponse.data || [];
+    mentions.value = mentionResponse.data || [];
   } catch (err) {
     console.log(err);
     // 捕获错误并使用模拟数据
     notifications.value = mockDataNotify;
     console.log(mockDataHomework);
     homeworks.value = mockDataHomework;
+    mentions.value = mockMentions.value;
     console.log(homeworks)
     console.log(err)
     ElNotification({
@@ -322,7 +364,17 @@ const viewNotification = async (notification) => {
   }
 };
 
-
+const viewMention = async (mention) => {
+  const cid = mention.cid || 'T001_S001';
+  localStorage.setItem('discussionId', mention.discussionId)
+  localStorage.setItem('courseId', cid)
+  router.push({
+    path: '/discussion/discussionInfo',
+    query: {
+      cid
+    }
+  })
+}
 // 关闭弹出框
 const closeDialog = () => {
   dialogVisible.value = false; // 关闭弹出框
@@ -522,10 +574,19 @@ body>.el-container {
   border-radius: 15px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   width: 100%;
-  height: 600px;
+  height: 300px;
   overflow-y: auto;
 }
 
+.mention-scrollable {
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 15px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  height: 300px;
+  overflow-y: auto;
+}
 
 .notification-bar {
   display: flex;
