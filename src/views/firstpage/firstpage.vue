@@ -194,8 +194,8 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
-import { reqUserInfo, reqCourseList, reqCourseIntro, reqNotificationAll, updateNotificationState, reqUnfinishedHomework, reqMentioned } from '@/api/api';
-import { ElNotification } from 'element-plus';
+import { reqUserInfo, reqCourseList, reqCourseIntro, reqNotificationAll, updateNotificationState, reqUnfinishedHomework, reqMentioned, updateMentioned } from '@/api/api';
+import { ElMessage, ElNotification } from 'element-plus';
 import { requireAvatar } from '../../api/api';
 
 const courses = ref([]);
@@ -368,6 +368,20 @@ const viewMention = async (mention) => {
   const cid = mention.cid || 'T001_S001';
   localStorage.setItem('discussionId', mention.discussionId)
   localStorage.setItem('courseId', cid)
+  const formData = new FormData()
+  formData.append('commentId', mention.commentId)
+  try {
+    const updateMention = await updateMentioned(formData)
+    if (updateMention.code === 0) {
+      ElMessage.success('')
+    }
+  } catch (error) {
+    console.log(error)
+    ElNotification({
+      type: 'error',
+      message: '跳转失败',
+    });
+  }
   router.push({
     path: '/discussion/discussionInfo',
     query: {

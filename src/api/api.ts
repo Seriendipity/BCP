@@ -61,6 +61,7 @@ enum API {
   DELETE_NOTIFICATION = "/notifications/delete",
   COURSE_USERNAME = "/discussion/all_student",
   ALL_MENTIONED = "/mentioned/all",
+  UPDATE_MENTIONED = "/mentioned/update",
 }
 //登录接口
 export const reqLogin = (data: any) => request.post<any, any>(API.LOGIN_URL, data);
@@ -182,3 +183,5 @@ export const reqDeleteHomework = (data: any) => request.post<any, any>(API.DELET
 export const reqDeleteFile = (data: any) => request.post<any, any>(API.DELETE_COURSERESOURCE, data);
 //删除通知
 export const reqDeleteNotification = (data: any) => request.post<any, any>(API.DELETE_NOTIFICATION, data);
+//更新@
+export const updateMentioned = (data: any) => request.post<any, any>(API.UPDATE_MENTIONED, data)
