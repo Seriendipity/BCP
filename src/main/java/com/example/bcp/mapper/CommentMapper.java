@@ -20,6 +20,17 @@ public interface CommentMapper {
     @Select("Select * from Comment Where CommentInformation Like concat('%', #{SelectInfo}, '%') and DiscussionId = #{DiscussionId}")
     List<Comment> fuzzyQuery(String SelectInfo,String DiscussionId);
 
+    @Select("SELECT * FROM Comment c, Discussion d " +
+            "WHERE c.mentionedUser LIKE CONCAT('%', #{StudentNo}, '%') " +
+            "AND c.DiscussionId = d.DiscussionId " +
+            "AND d.Cid = #{Cid}")
+    List<Comment> mentionedComment(String StudentNo,String Cid);
+
+    @Select("SELECT * FROM Comment c, Discussion d " +
+            "WHERE c.mentionedUser LIKE CONCAT('%', #{StudentNo}, '%') " +
+            "AND c.DiscussionId = d.DiscussionId ")
+    List<Comment> allMentionedComment(String StudentNo);
+
     @Select("Select count(*) from Comment WHere DiscussionId = #{DiscussionId}  ")
     int commentTimes(String DiscussionId);
 

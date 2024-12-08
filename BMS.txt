@@ -158,6 +158,15 @@ Create table StudentHomework(
                                 FOREIGN KEY (HomeworkNo) references Homework(HomeworkNo)
 );
 
+create table mentioned (
+    CommentId VARCHAR(8),
+    MentionedUser VARCHAR(8),
+    Status BOOLEAN default false,
+    primary key (CommentId,MentionedUser),
+    foreign key (CommentId) references comment(CommentId)
+ )
+
+
 CREATE TABLE PeerReviewAssignment(
     RevieweeNo   varchar(10),                   -- 作业提交者的学号
     ReviewerNo   varchar(10),                   -- 评分者的学号
@@ -171,6 +180,12 @@ CREATE TABLE PeerReviewAssignment(
     FOREIGN KEY (ReviewerNo) REFERENCES Student (StudentNo),
     FOREIGN KEY (HomeworkNo, RevieweeNo) REFERENCES StudentHomework (HomeworkNo, StudentNo)
 );
+
+create table mentioned (
+    CommentId VARCHAR(8),
+    MentionedUser VARCHAR(8),
+    Status BOOLEAN default false
+)
 
 #
 

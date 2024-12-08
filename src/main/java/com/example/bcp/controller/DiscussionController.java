@@ -1,16 +1,14 @@
 package com.example.bcp.controller;
 
 import com.example.bcp.entity.*;
-import com.example.bcp.service.CommentService;
-import com.example.bcp.service.DiscussionService;
-import com.example.bcp.service.FavoriteService;
-import com.example.bcp.service.StudentService;
+import com.example.bcp.service.*;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,6 +25,26 @@ DiscussionController {
     private StudentService studentService;
     @Autowired
     private FavoriteService favoriteService;
+    @Autowired
+    private StudentCourseService studentCourseService;
+    @Autowired
+    private TeacherService teacherService;
+
+
+    /**
+     * 返回某门课程的所有学生
+     */
+    @GetMapping(value = "/all_student")
+    public Result getAllDiscussion(@RequestParam String cid){
+        List<String> studentCourses = studentCourseService.selectAllStudentNo(cid);
+        List<String> usernames = new ArrayList<>();
+        for(String studentNo : studentCourses){
+            usernames.add(studentService.selectByStudentNo(studentNo).getStudentName()+studentNo);
+        }
+        return Result.success(usernames);
+
+    }
+
 
     /**
     * 查询某门课程的所有帖子
@@ -35,7 +53,7 @@ DiscussionController {
     public Result getAllDiscussion(@RequestParam String cid, HttpServletRequest request){
         List<Discussion> discussions = discussionService.selectByCid(cid);
         String username = request.getAttribute("username").toString();
-
+        //System.out.println(discussions);
         Map<String, Object> responseData = new HashMap<>();
         int i = 1;
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
@@ -46,7 +64,12 @@ DiscussionController {
             discussionInfo.put("Information",d.getDiscussionInformation());
             discussionInfo.put("PostingTime",d.getDiscussionPostingTime().format(formatter));
             discussionInfo.put("studentNo",d.getStudentNo());
-            discussionInfo.put("username",studentService.selectByStudentNo(d.getStudentNo()).getStudentName());
+            if(d.getStudentNo().startsWith("S")){
+                discussionInfo.put("username",studentService.selectByStudentNo(d.getStudentNo()).getStudentName());
+            }else if(d.getStudentNo().startsWith("T")){
+                discussionInfo.put("username",teacherService.selectByTeacherNo(d.getStudentNo()).getTeacherName());
+            }
+
             discussionInfo.put("imgUrl",d.getImageUrl());
             discussionInfo.put("mentionedUser",d.getMentionedUser());
             discussionInfo.put("topic",d.getTopic());

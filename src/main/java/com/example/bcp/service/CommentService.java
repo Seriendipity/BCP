@@ -17,6 +17,9 @@ public class CommentService {
         return commentMapper.selectAllComments();
     }
 
+    public List<Comment> mentionedComment(String StudentNo,String Cid){
+        return commentMapper.mentionedComment(StudentNo,Cid);
+    }
     public List<Comment> selectByDiscussionId(String DiscussionId){
         return commentMapper.selectByDiscussionId(DiscussionId);
     }

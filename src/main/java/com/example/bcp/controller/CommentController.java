@@ -2,8 +2,11 @@ package com.example.bcp.controller;
 
 
 import com.example.bcp.entity.Comment;
+import com.example.bcp.entity.Discussion;
 import com.example.bcp.entity.Result;
 import com.example.bcp.service.CommentService;
+import com.example.bcp.service.DiscussionService;
+import com.example.bcp.service.MentionedService;
 import com.example.bcp.service.StudentService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,9 +14,12 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @RestController
 @RequestMapping("/comment")
@@ -22,6 +28,10 @@ public class CommentController {
     private CommentService commentService;
     @Autowired
     private StudentService studentService;
+    @Autowired
+    private DiscussionService discussionService;
+    @Autowired
+    private MentionedService mentionedService;
 
     /**
      * 查询某个帖子的所有评论
@@ -64,7 +74,6 @@ public class CommentController {
     public Result insertComment(@RequestParam String discussionId,
                                 @RequestParam String commentInfo,
                                 @RequestParam String imgUrl,
-                                @RequestParam String mentionedUser,
                                 HttpServletRequest request){
         String userNo = request.getAttribute("username").toString() ;
         int size = commentService.selectAllComments().size()+1;
@@ -81,16 +90,76 @@ public class CommentController {
             }
         }
 
-        String message;
+        String message = "1";
+
+        String regex = "@([\\w\u4e00-\u9fa5]+)";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(commentInfo);
+        String mentionedUserName = "";
+
+        // 查找所有匹配项并拼接用户名
+        while (matcher.find()) {
+            // 如果不是第一个匹配，先加上逗号分隔符
+            if (mentionedUserName.length() > 0) {
+                mentionedUserName += ",";  // 使用+进行拼接
+            }
+            mentionedUserName += matcher.group(1);  // 添加用户名
+        }
+        System.out.println(mentionedUserName);
+
+        // 第二个正则表达式：匹配学号（以S开头后跟数字）
+        String regexs = "S\\d+";
+        Pattern patterns = Pattern.compile(regexs);
+        Matcher matchers = patterns.matcher(mentionedUserName);
+
+        // 使用String来拼接学号
+        String studentIds = "";
+        // 查找所有匹配项并拼接学号
+        while (matchers.find()) {
+            // 如果不是第一个匹配，先加上逗号分隔符
+            if (studentIds.length() > 0) {
+                studentIds += ",";
+            }
+            studentIds += matchers.group();  // 使用matchers而不是matcher
+        }
+
+        // 输出最终拼接的学号字符串
+        System.out.println("提到的学号：" + studentIds);
         try {
             commentService.insertComment(CommentId,discussionId,commentInfo,
-                    LikesNumber,postingTime,imgUrl,mentionedUser,userNo);
+                    LikesNumber,postingTime,imgUrl,studentIds,userNo);
+            String[] names= studentIds.split(",");
+            for(String name : names){
+                mentionedService.insertMentioned(CommentId,name,false);
+            }
             message = "评论成功！";
         }catch (Exception e){
             message = "评论失败，请重试！";
             return Result.error(message);
         }
         return Result.success(message);
+    }
+
+
+
+    /**
+     * 返回自己被@的所有评论
+     * @param cid
+     * @param request
+     * @return
+     */
+    @GetMapping("/get_all_cid_mentioned")
+    public Result getAllMentioned(@RequestParam String cid,
+                                  HttpServletRequest request){
+        String username = request.getAttribute("username").toString();
+        Map<String,Object> responseData = new HashMap<>();
+        List<Comment> comments = commentService.mentionedComment(username,cid);
+        int index= 1;
+        for(Comment c : comments){
+            responseData.put("c"+index,c);
+            index++;
+        }
+        return Result.success(responseData);
     }
 
     /**

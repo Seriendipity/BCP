@@ -34,6 +34,7 @@ public class JwtFilterConfig {
         registrationBean.addUrlPatterns("/homework/updateVisible");
         registrationBean.addUrlPatterns("/peerAssignment/*");
         registrationBean.addUrlPatterns("/file/allCourseSource");
+        registrationBean.addUrlPatterns("/mentioned/*");
         return registrationBean;
     }
 }
