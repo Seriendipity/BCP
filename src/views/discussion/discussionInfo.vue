@@ -35,8 +35,8 @@
   </el-scrollbar>
   <div class="main_content_footer">
     <div class="input_box" width="100%">
-      <el-mention class="discuss-chat-input no-border":loading="loading" v-model="newMessage" type="textarea" :options="options"@search="handleSearch"
-        placeholder="Please input" />
+      <el-mention class="discuss-chat-input no-border" :loading="loading" v-model="newMessage" type="textarea"
+        :options="options" @search="handleSearch" placeholder="Please input" />
     </div>
     <div class="btn_box">
       <el-button type="primary" class="btn" @click="returnDiscussion(newMessage)" style="float: right;">返回</el-button>
@@ -44,19 +44,15 @@
     </div>
   </div>
 </template>
-
 <script>
-import { ref, onMounted ,onBeforeMount} from 'vue';
+import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
-import { reqAllComment, reqOneDiscussion, addComment, addLikeDiscussion, reqDeleteComment, reqDeleteDiscussion, reqStudentName } from '@/api/api'; // 假设这是更新帖子权限状态的API
-import { ElNotification, ElMessage} from 'element-plus';
-
+import { reqAllComment, reqOneDiscussion, addComment, addLikeDiscussion, reqDeleteComment, reqDeleteDiscussion, reqStudentName } from '@/api/api';
+import { ElNotification, ElMessage } from 'element-plus';
 
 export default {
   setup() {
-    // 使用ref创建响应式数据
-    const mockPost =
-    {
+    const mockPost = {
       postNo: 1,
       postLesson: '人工智能基础',
       Information: 'line-height的值应该大于或等于文本的字体大小，以确保行间距生效。如果文本的字体大小小于line-height的值，行间距将不会显示出来。如果你的文本字体大小小于1.25或1.5，你可能需要调整line-height的值或字体大小以得到期望的行间距效果。',
@@ -79,159 +75,54 @@ export default {
         commentUsername: 'zxc',
         PostingTime: '2024-11-12',
       },
-      {
-        index: 3,
-        Information: 'line-height的值应该大于或等于文本的字体大小，以确保行间距生效。如果文本的字体大小小于line-height的值，行间距将不会显示出来。如果你的文本字体大小小于1.25或1.5，你可能需要调整line-height的值或字体大小以得到期望的行间距效果。',
-        commentUsername: '爱学习',
-        PostingTime: '2024-11-14',
-      },
-      {
-        index: 4,
-        Information: 'line-height的值应该大于或等于文本的字体大小，以确保行间距生效。如果文本的字体大小小于line-height的值，行间距将不会显示出来。如果你的文本字体大小小于1.25或1.5，你可能需要调整line-height的值或字体大小以得到期望的行间距效果。line-height的值应该大于或等于文本的字体大小，以确保行间距生效。如果文本的字体大小小于line-height的值，行间距将不会显示出来。如果你的文本字体大小小于1.25或1.5，你可能需要调整line-height的值或字体大小以得到期望的行间距效果。line-height的值应该大于或等于文本的字体大小，以确保行间距生效。如果文本的字体大小小于line-height的值，行间距将不会显示出来。如果你的文本字体大小小于1.25或1.5，你可能需要调整line-height的值或字体大小以得到期望的行间距效果。',
-        commentUsername: '爱学习',
-        PostingTime: '2024-11-14',
-      },
-      {
-        index: 5,
-        Information: 'line-height的值应该大于或等于文本的字体大小，以确保行间距生效。如果文本的字体大小小于line-height的值，行间距将不会显示出来。如果你的文本字体大小小于1.25或1.5，你可能需要调整line-height的值或字体大小以得到期望的行间距效果。',
-        commentUsername: '爱学习',
-        PostingTime: '2024-11-14',
-      },
     ]);
 
-    const MockOptions = ref([
-      {
-        label: 'Fuphoenixes',
-        value: 'Fuphoenixes',
-      },
-      {
-        label: 'kooriookami',
-        value: 'kooriookami',
-      },
-      {
-        label: 'Jeremy',
-        value: 'Jeremy',
-      },
-      {
-        label: 'btea',
-        value: 'btea',
-      },
-    ])
-    const loading = ref(false)
-    const options = ref([])
-    const posts = ref([]);//界面展示的
-    const $router = useRouter(); // 获取路由实例
-    const comments = ref([]);//界面展示的
-    const newMessage = ref(""); // 输入框的绑定值
-    const title = ref('测试1')
+    const loading = ref(false);
+    const options = ref([]);
+    const posts = ref([]);
+    const $router = useRouter();
+    const comments = ref([]);
+    const newMessage = ref("");
+    const title = ref('测试1');
     let timer = null;
 
-  
-const handleSearch =  (pattern) => {
-  if (timer) clearTimeout(timer)
-  loading.value = true
-  timer = setTimeout(async() => {
-    const courseId = localStorage.getItem('courseId')
-    const commentUser = await reqStudentName(courseId)
-    options.value = commentUser.map(
-      (item) => ({
-        label: pattern + item,
-        value: pattern + item,
-      })
-    )
-    loading.value = false
-  }, 1500)
-};
+    const handleSearch = async (pattern) => {
+      if (timer) clearTimeout(timer);
 
-
-    const addOneComment = async (val) => {
-      console.log(val)
-      const discussionId = localStorage.getItem('discussionId')
-      const formData = new FormData()
-      formData.append('discussionId', discussionId)
-      formData.append('commentInfo', val)
-      //TODO:添加评论图片和@其他人
-      formData.append('imgUrl', null)
-      formData.append('mentionedUser', null)
-      try {
-        if (val.trim()) {
-          const response = await addComment(formData)
-          if (response.code === 0) {
-            ElMessage.success('评论成功')
-            newMessage.value = ""; // 发送消息后清空输入框
-            window.location.reload();
-          }
-        } else {
-          ElMessage.warning("不能发送空白消息");
+      loading.value = true;
+      timer = setTimeout(async () => {
+        try {
+          const courseId = localStorage.getItem('courseId');
+          const commentUser = await reqStudentName(courseId);
+          options.value = commentUser.map(
+            (item) => ({
+              label: pattern + item,
+              value: pattern + item,
+            })
+          );
+        } catch (error) {
+          console.error("获取评论用户失败:", error);
+          ElNotification({
+            message: '获取评论用户失败，请重试。',
+            type: 'error',
+          });
+        } finally {
+          loading.value = false;
         }
-      } catch (error) {
-        console.log(error)
-        ElNotification({
-          message: '发送失败，请重试',
-          type: 'error',
-        });
-      }
+      }, 1500);
     };
 
-    const showDeleteButton = (reply) => {
-      const userName = localStorage.getItem('userName') || '郑宇煊'
-      return userName === reply.commentUsername
-    }
-
-    const deleteReply = async (reply) => {
-      try {
-        const formData = new FormData()
-        console.log(reply.commentId)
-        formData.append('commentId', reply.commentId)
-        const response = await reqDeleteComment(formData); // 连接后端删除文件
-        if (response.code === 0) {
-          ElMessage.success("评论删除成功");
-          window.location.reload();
-        }
-      } catch (error) {
-        console.error('删除评论失败', error);
-        ElNotification({
-          message: '删除评论失败，请重试',
-          type: 'error',
-        });
-      }
-    }
-
-    const showDeleteDiscussionButton = (discussion) => {
-      const userName = localStorage.getItem('userName') || '郑宇煊'
-      return userName === discussion.username
-    }
-
-    const deleteDiscussion = async (post) => {
-      try {
-        const formData = new FormData()
-        formData.append('discussionId', post.discussionId)
-        const response = await reqDeleteDiscussion(formData); // 连接后端删除文件
-        if (response.code === 0) {
-          ElMessage.success("帖子删除成功");
-          $router.push({ name: 'discussionArea' })
-        }
-      } catch (error) {
-        console.error('删除帖子失败', error);
-        ElNotification({
-          message: '删除帖子失败，请重试',
-          type: 'error',
-        });
-      }
-    };
-
-
+    // 获取评论和帖子内容
     onMounted(async () => {
       try {
-        const discussionId = localStorage.getItem('discussionId')
-        const courseId = localStorage.getItem('courseId')
+        const discussionId = localStorage.getItem('discussionId');
         const postResponse = await reqOneDiscussion(discussionId);
         const commentResponse = await reqAllComment(discussionId);
-        
+
         posts.value = postResponse.data;
         comments.value = commentResponse.data;
       } catch (error) {
-        console.log(error)
+        console.log(error);
         posts.value = mockPost;
         comments.value = mockReply.value;
         ElNotification({
@@ -241,47 +132,116 @@ const handleSearch =  (pattern) => {
       }
     });
 
-    const starPost = async () => {
-      const formData = new FormData()
-      const discussionId = localStorage.getItem('discussionId')
-      formData.append('favoriteInformationNo', discussionId)
-      formData.append('favoriteTitle', title.value)
+    const addOneComment = async (val) => {
+      const discussionId = localStorage.getItem('discussionId');
+      const formData = new FormData();
+      formData.append('discussionId', discussionId);
+      formData.append('commentInfo', val);
+      // TODO: 添加评论图片和 @ 其他人
+      formData.append('imgUrl', null);
+      formData.append('mentionedUser', null);
+
       try {
-        const response = await addLikeDiscussion(formData)
-        if (response.code === 0) {
-          ElMessage.success('收藏成功')
+        if (val.trim()) {
+          const response = await addComment(formData);
+          if (response.code === 0) {
+            ElMessage.success('评论成功');
+            newMessage.value = ""; // 清空输入框
+            window.location.reload();
+          }
+        } else {
+          ElMessage.warning("不能发送空白消息");
         }
       } catch (error) {
-        console.error('收藏失败:', error);
+        console.error(error);
         ElNotification({
+          message: '发送失败，请重试',
           type: 'error',
-          message: '收藏失败，请重试。',
         });
       }
-      // 假设更新操作成功，可以在这里更新界面显示或者状态
     };
 
-    const returnDiscussion = () => {
-      $router.push({ name: 'discussionArea' })
-    }
+    const starPost = async () => {
+      const formData = new FormData();
+      const discussionId = localStorage.getItem('discussionId');
+      formData.append('favoriteInformationNo', discussionId);
+      formData.append('favoriteTitle', title.value);
+
+      try {
+        const response = await addLikeDiscussion(formData);
+        if (response.code === 0) {
+          ElMessage.success('收藏成功');
+          window.location.reload();
+        }
+      } catch (error) {
+        console.error(error);
+        ElNotification({
+          message: '收藏失败，请重试',
+          type: 'error',
+        });
+      }
+    };
+
+    const deleteReply = async (reply) => {
+      const replyId = reply.index;
+      try {
+        const response = await reqDeleteComment(replyId);
+        if (response.code === 0) {
+          ElMessage.success('删除评论成功');
+          window.location.reload();
+        }
+      } catch (error) {
+        console.error(error);
+        ElNotification({
+          message: '删除评论失败',
+          type: 'error',
+        });
+      }
+    };
+
+    const deleteDiscussion = async (post) => {
+      const discussionId = post.postNo;
+      try {
+        const response = await reqDeleteDiscussion(discussionId);
+        if (response.code === 0) {
+          ElMessage.success('删除帖子成功');
+          $router.push('/discussion-list');
+        }
+      } catch (error) {
+        console.error(error);
+        ElNotification({
+          message: '删除帖子失败',
+          type: 'error',
+        });
+      }
+    };
+
+    const showDeleteDiscussionButton = (post) => {
+      return post.username === '郑宇煊'; // 这里只是一个示例，根据需求调整
+    };
+
+    const showDeleteButton = (reply) => {
+      return reply.commentUsername === '郑宇煊'; // 这里只是一个示例，根据需求调整
+    };
 
     return {
       posts,
-      newMessage,
       comments,
-      starPost,
-      addOneComment,
-      returnDiscussion,
-      showDeleteButton,
-      deleteReply,
-      showDeleteDiscussionButton,
-      deleteDiscussion,
+      newMessage,
+      loading,
       options,
       handleSearch,
+      addOneComment,
+      starPost,
+      deleteReply,
+      deleteDiscussion,
+      showDeleteDiscussionButton,
+      showDeleteButton,
     };
   },
 };
 </script>
+
 
 
 
