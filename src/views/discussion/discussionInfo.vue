@@ -224,6 +224,9 @@ export default {
       return reply.commentUsername === '郑宇煊'; // 这里只是一个示例，根据需求调整
     };
 
+    const returnDiscussion = () => {
+      $router.push({ name: 'discussionArea' })
+    }
     return {
       posts,
       comments,
@@ -237,6 +240,7 @@ export default {
       deleteDiscussion,
       showDeleteDiscussionButton,
       showDeleteButton,
+      returnDiscussion,
     };
   },
 };

@@ -213,7 +213,7 @@ export const constantRoute = [
         name: 'discussionInfo',
         meta: {
           title: '讨论详情',
-          hidden: false,
+          hidden: true,
           icon: 'Files',
         }
       },
