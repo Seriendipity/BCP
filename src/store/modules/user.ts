@@ -4,7 +4,7 @@ import { reqLogin, reqUserInfo } from "@/api/api";
 import type { UserState } from "./types/type";
 import { GET_TOKEN, SET_TOKEN } from "@/utils/token";
 import { constantRoute } from "@/router/routes";
-
+import { ElNotification } from "element-plus";
 let useUserStore = defineStore('User', {
   //小仓库存储数据
   state: (): UserState => {
@@ -22,11 +22,13 @@ let useUserStore = defineStore('User', {
       let result: any = await reqLogin(data);
       console.log(result);
       //console.log(result);
-      if (result.code == 0) {
+      if (result.code === 0) {
         this.token = (result.data);
         SET_TOKEN(result.data)
         //console.log('success');
-        return 'ok';
+        return 0;
+      } else if (result.code === 1) {
+        return 1;
       }
       // else {
       //   return Promise.reject(new Error(result.data));

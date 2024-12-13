@@ -93,8 +93,8 @@
             <h1 class="ziti02" style="text-align: left;padding-left: 15px;">学院：{{ userInfo.dept }}</h1>
             <h1 class="ziti02" style="text-align: left;padding-left: 15px;">邮箱：{{ userInfo.email }}</h1>
           </div>
-          <div class="whiteback2">
-            <h1 style="text-align: left; font-weight: bold;margin-bottom: 5px;">课程作业提醒</h1>
+          
+            <h1 style="text-align: left; font-weight: bold;margin-bottom: 10px;margin-top: 20px;margin-left: 5px;">课程作业提醒</h1>
             <div class="homework-scrollable">
               <el-row :gutter="20">
                 <el-col :span="24" v-for="(homework, index) in homeworks" :key="index">
@@ -102,7 +102,7 @@
                     <div class="homework-info">
                       <h2 class="homework-lesson">{{ homework.courseName }}</h2>
                       <h2 class="homework-title">{{ homework.homeworkDesc }}</h2>
-                      <p class="homework-time">起始时间：{{ homework.homeworkStartTime }}</p>
+                      <p class="homework-time" style=" font-size: 14;">起始时间：{{ homework.homeworkStartTime }}</p>
                       <p class="homework-time">终止时间：{{ homework.homeworkEndTime }}</p>
                     </div>
                     <el-tag :type="'warning'">
@@ -112,7 +112,7 @@
                 </el-col>
               </el-row>
             </div>
-          </div>
+          
         </el-aside>
 
         <el-main height="600px">
@@ -136,7 +136,7 @@
         </el-main>
 
         <el-aside class="backright">
-          <div class="whiteback3">
+          
             <h1 style="text-align: left; font-weight: bold;margin-bottom: 10px;">通知公告</h1>
             <div class="notification-scrollable">
               <h1 style="text-align: left; font-weight: bold;margin-bottom: 10px;">课程通知</h1>
@@ -155,6 +155,7 @@
                 </el-col>
               </el-row>
             </div>
+            <br>
             <div class="mention-scrollable">
               <h1 style="text-align: left; font-weight: bold;margin-bottom: 10px;">讨论区被@</h1>
               <el-row :gutter="20">
@@ -169,7 +170,7 @@
                 </el-col>
               </el-row>
             </div>
-          </div>
+          
 
         </el-aside>
       </el-container>
@@ -510,6 +511,7 @@ const goToCourseInfo = async (courseId) => {
   width: 360px;
   height: 650px;
   background-color: #eaf6ff;
+  overflow-x: hidden;
 }
 
 .backright {
@@ -628,6 +630,23 @@ body>.el-container {
 
 .homework-bar:hover {
   background: #f5f7fa;
+}
+
+.homework-lesson{
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.homework-title{
+  font-size: 14px;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.homework-time{
+  font-size: 14px;
+  margin-bottom: 5px;
 }
 
 .notification-info {
