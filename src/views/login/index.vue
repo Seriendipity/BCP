@@ -41,12 +41,20 @@ const login = async () => {
   //开始加载的效果
   loading.value = true;
   try {
-    await useStore.userLogin(loginForm);
-    $router.push('/firstpage');
-    ElNotification({
-      type: 'success',
-      message: '登陆成功'
-    })
+    const response = await useStore.userLogin(loginForm);
+    if (response === 0) {
+      $router.push('/firstpage');
+      ElNotification({
+        type: 'success',
+        message: '登陆成功'
+      })
+    } else {
+      ElNotification({
+        type: 'error',
+        message: '登陆失败，密码与账户不匹配'
+      })
+    }
+
   } catch (error) {
     ElNotification({
       type: 'error',
