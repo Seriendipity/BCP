@@ -132,6 +132,10 @@
 
               <el-col :span="3">
                 <el-button type="primary" style="margin-top: 10px;" @click="deletePostStar(post)">取消收藏</el-button>
+                <el-button v-if="showDeleteDiscussionButton(post)" type="danger" @click="deleteDiscussion(post)"
+                  style="margin-top:90%;margin-right: 10px;">
+                  删除
+                </el-button>
               </el-col>
             </el-row>
           </div>
@@ -144,7 +148,7 @@
 
 <script>
 import { ref, onMounted } from 'vue';
-import { deleteStar, reqLikeDiscussion, reqUserInfo, requireAvatar } from '@/api/api'; // 假设这是更新帖子权限状态的API
+import { deleteStar, reqLikeDiscussion, reqUserInfo, requireAvatar, reqDeleteDiscussion } from '@/api/api'; // 假设这是更新帖子权限状态的API
 import { ElMessage, ElNotification } from 'element-plus';
 import { useRouter } from 'vue-router';
 
@@ -226,7 +230,28 @@ export default {
       $router.push({ name: 'postsDetail' })
     }
 
+    const showDeleteDiscussionButton = (discussion) => {
+      const userName = localStorage.getItem('userName') || '郑宇煊'
+      return userName === discussion.username
+    }
 
+    const deleteDiscussion = async (post) => {
+      try {
+        const formData = new FormData()
+        formData.append('discussionId', post.DiscussionId)
+        const response = await reqDeleteDiscussion(formData); // 连接后端删除文件
+        if (response.code === 0) {
+          ElMessage.success("帖子删除成功");
+          window.location.reload();
+        }
+      } catch (error) {
+        console.error('删除帖子失败', error);
+        ElNotification({
+          message: '删除帖子失败，请重试',
+          type: 'error',
+        });
+      }
+    };
 
     onMounted(async () => {
       try {
@@ -256,7 +281,8 @@ export default {
       userInfo,
       goToDiscussionInfo,
       isTeacher,
-
+      deleteDiscussion,
+      showDeleteDiscussionButton,
     };
   },
 };

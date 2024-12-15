@@ -114,9 +114,13 @@
                   {{
                     posts.starTimes }}次收藏</h1>
               </el-col>
-              <!-- <el-col :span="2">
+              <el-col :span="2" style="display: flex; flex-direction: column; justify-content: flex-start;">
                 <el-button type="primary" style="margin-top: 10px;" @click="deletePostStar(posts)">取消收藏</el-button>
-              </el-col> -->
+                <el-button v-if="showDeleteDiscussionButton(posts)" type="danger" @click="deleteDiscussion(posts)"
+                  style="margin-top: 90%;">
+                  删除
+                </el-button>
+              </el-col>
             </el-row>
           </div>
           <el-scrollbar class="scrollbar-comment">
@@ -134,7 +138,8 @@
           </el-scrollbar>
           <div class="main_content_footer">
             <div class="input_box" width="100%">
-              <textarea class="chat-input no-border" v-model="newMessage"></textarea>
+              <el-mention class="discuss-chat-input no-border" :loading="loading" v-model="newMessage" type="textarea"
+                :options="options" @search="handleSearch" placeholder="Please input" />
             </div>
             <div class="btn_box">
               <el-button type="primary" class="btn" @click="returnDiscussion(newMessage)"
@@ -152,7 +157,7 @@
 
 <script>
 import { ref, onMounted } from 'vue';
-import { reqUserInfo, addComment, reqOneDiscussion, reqAllComment, deleteStar, requireAvatar, reqDeleteComment } from '@/api/api'; // 假设这是更新帖子权限状态的API
+import { reqUserInfo, addComment, reqOneDiscussion, reqAllComment, deleteStar, requireAvatar, reqDeleteComment, reqDeleteDiscussion, reqStudentName } from '@/api/api'; // 假设这是更新帖子权限状态的API
 import { ElNotification, ElMessage } from 'element-plus';
 import { useRouter } from 'vue-router';
 
@@ -218,7 +223,34 @@ export default {
     const $router = useRouter(); // 获取路由实例
     const comments = ref([]);//界面展示的
     const newMessage = ref(""); // 输入框的绑定值
+    let timer = null;
+    const options = ref([]);
+    const loading = ref(false);
+    const handleSearch = async (pattern) => {
+      if (timer) clearTimeout(timer);
 
+      loading.value = true;
+      timer = setTimeout(async () => {
+        try {
+          const courseId = localStorage.getItem('courseId');
+          const commentUser = await reqStudentName(courseId);
+          options.value = commentUser.map(
+            (item) => ({
+              label: pattern + item,
+              value: pattern + item,
+            })
+          );
+        } catch (error) {
+          console.error("获取评论用户失败:", error);
+          ElNotification({
+            message: '获取评论用户失败，请重试。',
+            type: 'error',
+          });
+        } finally {
+          loading.value = false;
+        }
+      }, 1500);
+    };
     const isTeacher = () => {
       const currentUserId = userInfo.value.userId || 'S001'
       console.log(currentUserId)
@@ -277,10 +309,31 @@ export default {
       }
     };
 
+    const showDeleteDiscussionButton = (post) => {
+      const username = localStorage.getItem('userName') || '郑宇煊'
+      return post.username === username; // 这里只是一个示例，根据需求调整
+    };
     const showDeleteButton = (reply) => {
       const userName = localStorage.getItem('userName') || '郑宇煊'
       return userName === reply.commentUsername
     }
+
+    const deleteDiscussion = async (post) => {
+      const discussionId = post.postNo;
+      try {
+        const response = await reqDeleteDiscussion(discussionId);
+        if (response.code === 0) {
+          ElMessage.success('删除帖子成功');
+          $router.push('/discussion-list');
+        }
+      } catch (error) {
+        console.error(error);
+        ElNotification({
+          message: '删除帖子失败',
+          type: 'error',
+        });
+      }
+    };
 
     const deleteReply = async (reply) => {
       try {
@@ -339,6 +392,9 @@ export default {
       showDeleteButton,
       deleteReply,
       isTeacher,
+      showDeleteDiscussionButton,
+      deleteDiscussion,
+      handleSearch,
     };
   },
 };
@@ -451,11 +507,10 @@ export default {
   width: 100%
 }
 
-.chat-input {
+.discuss-chat-input {
   width: 100%;
   height: 80px;
   padding: 12px 16px;
-  border: 1px solid #dcdfe6;
   border-radius: 8px;
   resize: none;
   font-size: 14px;
@@ -464,7 +519,6 @@ export default {
   transition: border-color 0.3s, box-shadow 0.3s;
   margin-top: 10px;
 }
-
 
 .scrollable {
   height: 290px;
