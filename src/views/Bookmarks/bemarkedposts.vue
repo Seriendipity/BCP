@@ -95,7 +95,7 @@
             <div style="margin-top: 20px;text-align: center; "><el-avatar :size="100"
                 :src="userInfo.avatarUrl"></el-avatar>
             </div>
-            <h1 class="ziti01">学生</h1>
+            <h1 class="ziti01">{{ userInfo.userIdentity }}</h1>
             <h1 class="ziti02" style="text-align: left;padding-left: 15px;">姓名：{{ userInfo.userName }}</h1>
             <h1 class="ziti02" style="text-align: left;padding-left: 15px;">学号：{{ userInfo.userId }}</h1>
             <h1 class="ziti02" style="text-align: left;padding-left: 15px;">学院：{{ userInfo.dept }}</h1>
@@ -188,6 +188,7 @@ export default {
     const mockData = {
       userName: '张三',
       userId: 'T20220001',
+      userIdentity:'学生',
       dept: '计算机科学与技术',
       email: 'zhangsan@example.com',
       avatarUrl: 'src/assets/images/example.jpg'
