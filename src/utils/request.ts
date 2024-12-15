@@ -21,7 +21,9 @@ request.interceptors.response.use(
   },
   (error) => {
     let message = "";
+    console.log(error)
     let status = error.response.status;
+    console.log(status)
     switch (status) {
       case 401:
         message = "token过期";
