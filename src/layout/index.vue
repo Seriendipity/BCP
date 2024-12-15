@@ -202,7 +202,7 @@ export default {
 
 .out_header {
   position: relative;
-  background: url(head-background.png) no-repeat;
+  background: url(trianglify-lowres1.png) no-repeat;
   background-size: cover;
   box-shadow: --el-box-shadow-light;
 }
