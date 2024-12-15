@@ -217,11 +217,13 @@ export default {
     };
 
     const showDeleteDiscussionButton = (post) => {
-      return post.username === '郑宇煊'; // 这里只是一个示例，根据需求调整
+      const username = localStorage.getItem('userName') || '郑宇煊'
+      return post.username === username; // 这里只是一个示例，根据需求调整
     };
 
     const showDeleteButton = (reply) => {
-      return reply.commentUsername === '郑宇煊'; // 这里只是一个示例，根据需求调整
+      const username = localStorage.getItem('userName') || '郑宇煊'
+      return reply.commentUsername === username; // 这里只是一个示例，根据需求调整
     };
 
     const returnDiscussion = () => {
