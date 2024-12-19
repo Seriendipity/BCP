@@ -93,26 +93,47 @@
             <h1 class="ziti02" style="text-align: left;padding-left: 15px;">学院：{{ userInfo.dept }}</h1>
             <h1 class="ziti02" style="text-align: left;padding-left: 15px;">邮箱：{{ userInfo.email }}</h1>
           </div>
-          
-            <h1 style="text-align: left; font-weight: bold;margin-bottom: 10px;margin-top: 20px;margin-left: 5px;">课程作业提醒</h1>
-            <div class="homework-scrollable">
-              <el-row :gutter="20">
-                <el-col :span="24" v-for="(homework, index) in homeworks" :key="index">
-                  <div class="homework-bar">
-                    <div class="homework-info">
-                      <h2 class="homework-lesson">{{ homework.courseName }}</h2>
-                      <h2 class="homework-title">{{ homework.homeworkDesc }}</h2>
-                      <p class="homework-time" style=" font-size: 14;">起始时间：{{ homework.homeworkStartTime }}</p>
-                      <p class="homework-time">终止时间：{{ homework.homeworkEndTime }}</p>
-                    </div>
-                    <el-tag :type="'warning'">
-                      未完成
-                    </el-tag>
+
+          <h1 v-if="isTeacher()"
+            style="text-align: left; font-weight: bold;margin-bottom: 10px;margin-top: 20px;margin-left: 5px;">作业批改提醒
+          </h1>
+          <h1 v-else style="text-align: left; font-weight: bold;margin-bottom: 10px;margin-top: 20px;margin-left: 5px;">
+            课程作业提醒
+          </h1>
+          <div class="homework-scrollable" v-if="isTeacher()">
+            <el-row :gutter="20">
+              <el-col :span="24" v-for="(homework, index) in homeworks" :key="index">
+                <div class="homework-bar">
+                  <div class="homework-info">
+                    <h2 class="homework-lesson">{{ homework.courseName }}</h2>
+                    <h2 class="homework-title">{{ homework.homeworkDesc }}</h2>
                   </div>
-                </el-col>
-              </el-row>
-            </div>
-          
+                  <el-tag :type="'warning'">
+                    未批改
+                  </el-tag>
+                </div>
+              </el-col>
+            </el-row>
+          </div>
+
+          <div class="homework-scrollable" v-else>
+            <el-row :gutter="20">
+              <el-col :span="24" v-for="(homework, index) in homeworks" :key="index">
+                <div class="homework-bar">
+                  <div class="homework-info">
+                    <h2 class="homework-lesson">{{ homework.courseName }}</h2>
+                    <h2 class="homework-title">{{ homework.homeworkDesc }}</h2>
+                    <p class="homework-time" style=" font-size: 14;">起始时间：{{ homework.homeworkStartTime }}</p>
+                    <p class="homework-time">终止时间：{{ homework.homeworkEndTime }}</p>
+                  </div>
+                  <el-tag :type="'warning'">
+                    未完成
+                  </el-tag>
+                </div>
+              </el-col>
+            </el-row>
+          </div>
+
         </el-aside>
 
         <el-main height="600px">
@@ -136,41 +157,41 @@
         </el-main>
 
         <el-aside class="backright">
-          
-            <h1 style="text-align: left; font-weight: bold;margin-bottom: 10px;">通知公告</h1>
-            <div class="notification-scrollable">
-              <h1 style="text-align: left; font-weight: bold;margin-bottom: 10px;">课程通知</h1>
-              <el-row :gutter="20">
-                <el-col :span="24" v-for="(notification, index) in notifications" :key="index">
-                  <div class="notification-bar">
-                    <div class="notification-info" @click="viewNotification(notification)">
-                      <h2 class="notification-lesson">{{ notification.courseName }}</h2>
-                      <h2 class="notification-title">{{ notification.notificationTitle }}</h2>
-                      <p class="notification-time">{{ notification.notificationPostingTime }}</p>
-                    </div>
-                    <el-tag :type="notification.notificationState === '已读' ? 'success' : 'warning'">
-                      {{ notification.notificationState }}
-                    </el-tag>
+
+          <h1 style="text-align: left; font-weight: bold;margin-bottom: 10px;">通知公告</h1>
+          <div class="notification-scrollable">
+            <h1 style="text-align: left; font-weight: bold;margin-bottom: 10px;">课程通知</h1>
+            <el-row :gutter="20">
+              <el-col :span="24" v-for="(notification, index) in notifications" :key="index">
+                <div class="notification-bar">
+                  <div class="notification-info" @click="viewNotification(notification)">
+                    <h2 class="notification-lesson">{{ notification.courseName }}</h2>
+                    <h2 class="notification-title">{{ notification.notificationTitle }}</h2>
+                    <p class="notification-time">{{ notification.notificationPostingTime }}</p>
                   </div>
-                </el-col>
-              </el-row>
-            </div>
-            <br>
-            <div class="mention-scrollable">
-              <h1 style="text-align: left; font-weight: bold;margin-bottom: 10px;">讨论区被@</h1>
-              <el-row :gutter="20">
-                <el-col :span="24" v-for="(mention, index) in mentions" :key="index">
-                  <div class="notification-bar">
-                    <div class="notification-info" @click="viewMention(mention)">
-                      <h2 class="notification-lesson">{{ mention.courseName }}</h2>
-                      <h2 class="notification-title">{{ mention.discussionInfo }}</h2>
-                      <p class="notification-time">{{ mention.postName }}</p>
-                    </div>
+                  <el-tag :type="notification.notificationState === '已读' ? 'success' : 'warning'">
+                    {{ notification.notificationState }}
+                  </el-tag>
+                </div>
+              </el-col>
+            </el-row>
+          </div>
+          <br>
+          <div class="mention-scrollable">
+            <h1 style="text-align: left; font-weight: bold;margin-bottom: 10px;">讨论区被@</h1>
+            <el-row :gutter="20">
+              <el-col :span="24" v-for="(mention, index) in mentions" :key="index">
+                <div class="notification-bar">
+                  <div class="notification-info" @click="viewMention(mention)">
+                    <h2 class="notification-lesson">{{ mention.courseName }}</h2>
+                    <h2 class="notification-title">{{ mention.discussionInfo }}</h2>
+                    <p class="notification-time">{{ mention.postName }}</p>
                   </div>
-                </el-col>
-              </el-row>
-            </div>
-          
+                </div>
+              </el-col>
+            </el-row>
+          </div>
+
 
         </el-aside>
       </el-container>
@@ -632,19 +653,19 @@ body>.el-container {
   background: #f5f7fa;
 }
 
-.homework-lesson{
+.homework-lesson {
   font-size: 16px;
   font-weight: bold;
   margin-bottom: 5px;
 }
 
-.homework-title{
+.homework-title {
   font-size: 14px;
   font-weight: bold;
   margin-bottom: 5px;
 }
 
-.homework-time{
+.homework-time {
   font-size: 14px;
   margin-bottom: 5px;
 }
