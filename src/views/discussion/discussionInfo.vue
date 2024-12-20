@@ -94,7 +94,7 @@ export default {
         try {
           const courseId = localStorage.getItem('courseId');
           const commentUser = await reqStudentName(courseId);
-          options.value = commentUser.map(
+          options.value = Object.values(commentUser.data).map(
             (item) => ({
               label: pattern + item,
               value: pattern + item,

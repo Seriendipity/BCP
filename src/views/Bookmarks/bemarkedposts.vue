@@ -95,7 +95,7 @@
             <div style="margin-top: 20px;text-align: center; "><el-avatar :size="100"
                 :src="userInfo.avatarUrl"></el-avatar>
             </div>
-            <h1 class="ziti01">学生</h1>
+            <h1 class="ziti01">{{ userInfo.userIdentity }}</h1>
             <h1 class="ziti02" style="text-align: left;padding-left: 15px;">姓名：{{ userInfo.userName }}</h1>
             <h1 class="ziti02" style="text-align: left;padding-left: 15px;">学号：{{ userInfo.userId }}</h1>
             <h1 class="ziti02" style="text-align: left;padding-left: 15px;">学院：{{ userInfo.dept }}</h1>
@@ -123,7 +123,7 @@
             :key="post.postNo">
             <el-row :gutter="20">
 
-              <el-col :span="21" @click="goToDiscussionInfo(post.discussionId)">
+              <el-col :span="21" @click="goToDiscussionInfo(post)">
                 <h1 class="ziti03" style="margin-top: 5px;">{{ post.fromCourseName }} </h1>
                 <h1 class="ziti04" style="line-height: 1.5"> {{ post.discussionInfo }} </h1>
                 <h1 class="ziti04" style="color: gray;margin-top: 15px;margin-bottom: 15px;">{{ post.discussionPt }} {{
@@ -188,6 +188,7 @@ export default {
     const mockData = {
       userName: '张三',
       userId: 'T20220001',
+      userIdentity:'学生',
       dept: '计算机科学与技术',
       email: 'zhangsan@example.com',
       avatarUrl: 'src/assets/images/example.jpg'
@@ -225,8 +226,10 @@ export default {
       }
     };
 
-    const goToDiscussionInfo = async (discussionId) => {
-      localStorage.setItem('discussionId', discussionId)
+    const goToDiscussionInfo = async (post) => {
+      console.log(post)
+      localStorage.setItem('courseId',post.cid)
+      localStorage.setItem('discussionId', post.discussionId)
       $router.push({ name: 'postsDetail' })
     }
 
