@@ -29,6 +29,8 @@ DiscussionController {
     private StudentCourseService studentCourseService;
     @Autowired
     private TeacherService teacherService;
+    @Autowired
+    private TeachingService teachingService;
 
 
     /**
@@ -41,6 +43,8 @@ DiscussionController {
         for(String studentNo : studentCourses){
             usernames.add(studentService.selectByStudentNo(studentNo).getStudentName()+studentNo);
         }
+        String teacherNo = teachingService.selectByCid(cid).getTeacherNo();
+        usernames.add(teacherService.selectByTeacherNo(teacherNo).getTeacherName()+teacherNo);
         return Result.success(usernames);
 
     }

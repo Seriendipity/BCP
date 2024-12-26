@@ -54,7 +54,8 @@ public class HomeworkController {
         LocalDateTime startTime = LocalDateTime.parse(startTime1, formatter);
         LocalDateTime endTime = LocalDateTime.parse(endTime1, formatter);
 
-        homeworkService.updateIsPeerReview(true, HomeworkNo);
+        Homework h = homeworkService.selectByHomeworkNo(HomeworkNo);
+        homeworkService.updateIsPeerReview(!h.getPeerReview(), HomeworkNo);
 
 
         List<StudentHomework> studentHomeworks = studentHomeworkService.selectByHomeworkNo(HomeworkNo);
@@ -181,7 +182,7 @@ public class HomeworkController {
         // 随机选择学生作业
         Random random = new Random();
         Set<String> selectedStudentNo = new HashSet<>();
-        int numToSelect = (int) Math.ceil(studentHomeworks.size() * 0.15); // 选择15%
+        int numToSelect = (int) Math.ceil(studentHomeworks.size() ); // 选择15%
 
         while (selectedStudentNo.size() < numToSelect) {
             index = random.nextInt(studentHomeworks.size());

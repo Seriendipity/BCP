@@ -3,21 +3,16 @@ package com.example.bcp.controller;
 
 import com.example.bcp.entity.Comment;
 import com.example.bcp.entity.Discussion;
+import com.example.bcp.entity.Mentioned;
 import com.example.bcp.entity.Result;
-import com.example.bcp.service.CommentService;
-import com.example.bcp.service.DiscussionService;
-import com.example.bcp.service.MentionedService;
-import com.example.bcp.service.StudentService;
+import com.example.bcp.service.*;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -32,12 +27,15 @@ public class CommentController {
     private DiscussionService discussionService;
     @Autowired
     private MentionedService mentionedService;
+    @Autowired
+    private TeacherService teacherService;
 
     /**
      * 查询某个帖子的所有评论
      * */
     @GetMapping(value = "/all")
     public Result getAllComments(@RequestParam String discussionId, HttpServletRequest request) {
+        System.out.println("dis "+discussionId);
         List<Comment> comments = commentService.selectByDiscussionId(discussionId);
 
         // 根据 PostingTime 进行排序，最近的时间在最前面
@@ -56,7 +54,11 @@ public class CommentController {
             commentInfo.put("PostingTime", c.getCommentPostingTime().format(formatter));
             commentInfo.put("Likes", c.getLikesNumber());
             commentInfo.put("DiscussionId", c.getDiscussionId());
-            commentInfo.put("commentUsername", studentService.selectByStudentNo(c.getPostStudent()).getStudentName());
+            if(c.getPostStudent().startsWith("S")){
+                commentInfo.put("commentUsername", studentService.selectByStudentNo(c.getPostStudent()).getStudentName());
+            } else if (c.getPostStudent().startsWith("T")) {
+                commentInfo.put("commentUsername",teacherService.selectByTeacherNo(c.getPostStudent()).getTeacherName());
+            }
 
             // 动态生成 key，以从最近到最远排序
             responseData.put("comment" + index, commentInfo);
@@ -123,6 +125,16 @@ public class CommentController {
             studentIds += matchers.group();  // 使用matchers而不是matcher
         }
 
+        regexs = "T\\d+";
+        patterns = Pattern.compile(regexs);
+        matchers = patterns.matcher(mentionedUserName);
+        while(matchers.find()){
+            if (studentIds.length() > 0) {
+                studentIds += ",";
+            }
+            studentIds += matchers.group();  // 使用matchers而不是matcher
+        }
+
         // 输出最终拼接的学号字符串
         System.out.println("提到的学号：" + studentIds);
         try {
@@ -132,6 +144,7 @@ public class CommentController {
             for(String name : names){
                 mentionedService.insertMentioned(CommentId,name,false);
             }
+            System.out.println(Arrays.toString(names));
             message = "评论成功！";
         }catch (Exception e){
             message = "评论失败，请重试！";
@@ -168,10 +181,12 @@ public class CommentController {
     @RequestMapping(value = "/delete" , method = RequestMethod.POST)
     public Result deleteComment(@RequestParam String commentId ,HttpServletRequest request){
         String username = request.getAttribute("username").toString();
-
-            String CommentId = commentId;
-            String message ;
+        System.out.println("CommentId"+commentId);
+        String CommentId = commentId;
+        String message ;
+       // List<Mentioned> mentioneds = mentionedService.selectCommentId(CommentId);
             try {
+                mentionedService.delete(CommentId);
                 commentService.deleteComment(CommentId);
                 message = "删除评论成功！";
             }catch (Exception e){

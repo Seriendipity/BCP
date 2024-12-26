@@ -14,12 +14,17 @@ public class MentionedService {
     public List<Mentioned> selectAllMentioned(String StudentNo){
        return mentionedMapper.selectAllMentioned(StudentNo);
     }
-
+    public List<Mentioned> selectCommentId(String commentId){
+        return mentionedMapper.selectCommentId(commentId);
+    }
    public void insertMentioned(String CommentId,String MentionedUser,Boolean Status){
         mentionedMapper.insertMentioned(CommentId,MentionedUser,Status);
    }
 
    public void updateStatus(String CommentId,String MentionedUser){
         mentionedMapper.updateStatus(CommentId,MentionedUser);
+   }
+   public void delete(String commentId){
+        mentionedMapper.delete(commentId);
    }
 }

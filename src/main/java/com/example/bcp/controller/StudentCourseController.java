@@ -49,8 +49,11 @@ public class StudentCourseController {
      */
     @GetMapping("/allStudent")
     public Result allStudent(@RequestParam String cid,HttpServletRequest request) {
+        System.out.println("cid: "+cid);
         List<StudentCourse> studentList = studentCourseService.selectByCid(cid);
         String username = request.getAttribute("username").toString();
+        System.out.println("username: "+username);
+
         Map<String, Object> responseData = new HashMap<>();
         int i = 1;
         String studentNo,studentName,classNo,className;

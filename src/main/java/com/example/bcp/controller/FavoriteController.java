@@ -117,6 +117,7 @@ public class FavoriteController {
                 favorite.put("imageUrl", d.getImageUrl());
                 favorite.put("topic", d.getTopic());
                 String cid = d.getCid();
+                favorite.put("cid",cid);
                 String courseNo = teachingService.selectByCid(cid).getCourseNo();
                 String courseName = courseService.selectByCourseNo(courseNo).getCourseName();
                 favorite.put("fromCourseName",courseName);

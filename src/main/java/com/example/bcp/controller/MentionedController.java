@@ -34,6 +34,7 @@ public class MentionedController {
         String username = request.getAttribute("username").toString();
         List<Mentioned> mentioneds = mentionedService.selectAllMentioned(username);
         Map<String,Object> responseData = new HashMap<>();
+        System.out.println(mentioneds);
         int index = 1;
         for(Mentioned m : mentioneds ){
             Map<String,Object> mentioned = new HashMap<>();
